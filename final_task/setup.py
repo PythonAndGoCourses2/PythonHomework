@@ -7,7 +7,7 @@ with open(path.join(here, 'README.md')) as f:
     long_description = f.read()
 
 setup(
-    name='calc',
+    name='pycalc',
     version='0.1.0',
     description='A pure-python command-line calculator',
     long_description=long_description,
