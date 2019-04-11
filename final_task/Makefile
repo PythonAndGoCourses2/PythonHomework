@@ -2,30 +2,33 @@
 
 PROGRAMM_NAME := pycalc
 SRC_FOLDER := $(PROGRAMM_NAME)
-INSTALLED_EXECUTABLE_PATH := ~/.local/bin
+INSTALLED_EXECUTABLE_DIR := ~/.local/bin
 
+PYTHON := python3
+
+PIP := pip3
 PIP_LOCAL := --user
 
 run:
-	$(INSTALLED_EXECUTABLE_PATH)/$(PROGRAMM_NAME)
+	$(INSTALLED_EXECUTABLE_DIR)/$(PROGRAMM_NAME)
 
-
-# run from the source folder
 run-source:
-	python3 -m $(SRC_FOLDER)
+	$(PYTHON) -m $(SRC_FOLDER)
 
-# locally
 install:
 	@echo "Installing..."
-	pip3 install $(PIP_LOCAL) .
+	$(PIP) install $(PIP_LOCAL) .
 
 install-dev:
 	@echo "Installing in the development mode..."
-	pip3 install $(PIP_LOCAL) --editable .
+	$(PIP) install $(PIP_LOCAL) --editable .
 
 uninstall:
 	@echo "Uninstalling..."
-	pip3 uninstall $(PROGRAMM_NAME) -y
+	$(PIP) uninstall $(PROGRAMM_NAME) -y
 
 show:
-	pip3 show $(PROGRAMM_NAME)
+	$(PIP) show $(PROGRAMM_NAME)
+
+pycodestyle:
+	pycodestyle $(PROGRAMM_NAME)/*
