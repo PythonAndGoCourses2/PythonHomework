@@ -6,6 +6,8 @@ d={ "log10": math.log10,
     "sin":math.sin,
     "cos":math.cos,
     "tan":math.tan,
+    "abs":abs,
+    "round":round
     
 }
 

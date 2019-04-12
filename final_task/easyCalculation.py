@@ -41,12 +41,17 @@ def calculation(expr):
     return sum
 
 def calc(expr):
-    
+    expr.replace("//","&")
     while "(" in expr:
         
         end=expr.find(")")
-       #проверка на множитель перед и после скобок
+        if end!=len(expr)-1 and expr[end+1] not in operators.operators:
+            Exception("no operator after brackets")
+
+        #проверка на множитель перед и после скобок
         begin=expr[:end].rfind("(")
+        if begin!=0 and expr[begin-1] not in operators.operators and expr[begin-1]!='-' and expr[begin-1]!='+' :
+            raise Exception("no operators before brackets")
         rezult=calculation(expr[begin+1:end])
        
         expr=expr[:begin]+str(rezult)+expr[end+1:]    

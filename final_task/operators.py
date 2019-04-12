@@ -18,6 +18,6 @@ operators = {
 "*":multiply,
 "/":division,
 "%":remainder,
-"&":noremainer
+"&":noremainer,
 }
 
