@@ -11,18 +11,85 @@ args = ap.parse_args()
 ##print(args.MODULE)
 xpr = args.EXPRESSION
 show = args.PRINT
+#show = 'y'
 
-##modstr=args.MODULE
-##
-##mod = __import__(modstr)
-##print (modstr,'=',mod.myfunc(3))
+##xpr = modstr=args.MODULE
+##xpr = 
+##xpr = mod = __import__(modstr)
+##xpr = print (modstr,'=',mod.myfunc(3))
 
 
-#xpr = 'sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)'
-#xpr='++++6'
-#xpr='abs(-(6^2)//(-sin(-4-4)))'
+##  Unary operators
+##xpr = "-13"
+##xpr = "6-(-13)"
+##xpr = "1---1"
+##xpr = "-+---+-1"
+##  Operation priority
+##xpr = "1+2*2"
+##xpr = "1+(2+3*2)*3"
+##xpr = "10*(2+1)"
+##xpr = "10^(2+1)"
+##xpr = "100/3^2"
+##xpr = "100/3%2^2"
+##  Functions and constants
+##xpr = "pi+e"
+##xpr = "log(e)"
+##xpr = "sin(pi/2)"
+##xpr = "log10(100)"
+##xpr = "sin(pi/2)*111*6"
+##xpr = "2*sin(pi/2)"
+##xpr = "abs(-5)"
+##xpr = "round(123.456789)"
+##xpr = Associative
+##xpr = "102%12%7"
+##xpr = "100/4/3"
+##xpr = "2^3^4"
+##  Comparison operators
+##xpr = "1+2*3==1+2*3"
+##xpr = "e^5>=e^5+1"
+##xpr = "1+2*4/3+1!=1+2*4/3+2"
+##  Common tests
+##xpr = "(100)"
+##xpr = "666"
+##xpr = "-.1"
+##xpr = "1/3"
+##xpr = "1.0/3.0"
+##xpr = ".1 * 2.0^56.0"
+##xpr = "e^34"
+##xpr = "(2.0^(pi/pi+e/e+2.0^0.0))"
+##xpr = "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)"
+##xpr = "sin(pi/2^1) + log(1*4+2^2+1, 3^2)"
+##xpr = "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"
+##xpr = "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"
+##xpr = "2.0^(2.0^2.0*2.0^2.0)"
+## ошибка ? "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
+##xpr = "sin(e^log(e^e^sin(23.0)*45.0) + cos(3.0+log10(e^-e)))"
+##xpr = Error cases
+##xpr = ""
+##xpr = "+"
+##xpr = "1-"
+##xpr = "1 2"
+##xpr = "ee"
+##xpr = "==7"
+##xpr = "1 + 2(3 * 4))"
+##xpr = "((1+2)"
+##xpr = "1 + 1 2 3 4 5 6 "
+##xpr = "log100(100)"
+##xpr = "------"
+##xpr = "5 > = 6"
+##xpr = "5 / / 6"
+##xpr = "6 < = 6"
+##xpr = "6 * * 6"
+##xpr = "((((("
+##xpr = “pow(2, 3, 4)”
 
-#print(xpr)
+## EVAL TEST
+##test=xpr
+##test=test.replace('^','**')
+##test=test.replace(' ','')
+##test=test.replace(',','.')
+##print ('EVAL:',test,'=',eval(test))
+##print(xpr)
 
 oper = ('!','^','//','/','*','%','-','+','(',')','==','<=','>=','<','>','!=','=')
 digit = ('1','2','3','4','5','6','7','8','9','0','.')
@@ -94,7 +161,7 @@ def parse(stroka):
         if spisok[i] == '!' and spisok[i + 1] == '=':
             spisok[i] = '!='
             spisok.pop(i + 1)
-        if spisok[i] == '-' and spisok[i - 1] in oper and type(spisok[i + 1]) == float:
+        if spisok[i] == '-' and spisok[i - 1] in ('^','//','/','*','%','-','+','==','<=','>=','<','>','!=','=') and type(spisok[i + 1]) == float:
             spisok[i + 1] = spisok[i + 1]* - 1
             spisok.pop(i)
         if (spisok[i] == '-' and i == 0) or(spisok[i] == '-' and spisok[i - 1] in('*','^','+','-','(','<','>','=') ):
@@ -227,7 +294,7 @@ def calculate(spisok):
     result = spisok[0]
     if len(spisok) > 1:
         print('ERROR: missed operator')
-        exit(0)
+        #exit(0)
     return(result)
 
 #очистка списка от пустых значений ''
