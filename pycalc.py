@@ -324,36 +324,37 @@ def brktindx(spisok):
     return(bl + 1,br)
 
 
-#начало основной программы
+# основная функция
+def calc(xpr):
+    #проверка скобок в строке
+    if xpr.count('(') != xpr.count(')'):
+        print('ERROR: brackets are not balanced')
+        exit(0)
 
-#проверка скобок в строке
-if xpr.count('(') != xpr.count(')'):
-    print('ERROR: brackets are not balanced')
-    exit(0)
-
-#разбор строики в список
-spisok = parse(xpr)
-#print(*spisok,sep=',')
-
-
+    #разбор строики в список
+    spisok = parse(xpr)
+    #print(*spisok,sep=',')
 
 
 
-#поиск скобок и вычисление в скобках
-while '(' in spisok:
-    a,b = brktindx(spisok)
-    #print('in brackets: ',*spisok[a:b],sep='')
-    spisok[a - 1] = calculate(spisok[a:b])
-    while a < b + 1:
-        spisok[a] = ''
-        a = a + 1
-    wipe(spisok)
-    #print(*spisok,sep='')
-
-#вычисление без скобок
-result = calculate(spisok)
-print(result)
 
 
+    #поиск скобок и вычисление в скобках
+    while '(' in spisok:
+        a,b = brktindx(spisok)
+        #print('in brackets: ',*spisok[a:b],sep='')
+        spisok[a - 1] = calculate(spisok[a:b])
+        while a < b + 1:
+            spisok[a] = ''
+            a = a + 1
+        wipe(spisok)
+        #print(*spisok,sep='')
+
+    #вычисление без скобок
+    result = calculate(spisok)
+    #print(result)
+    return (result)
+
+print (calc(xpr))
 
 
