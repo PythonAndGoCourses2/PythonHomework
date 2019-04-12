@@ -1,5 +1,5 @@
 import re
-import calc
+import easyCalculation as calc
 import functions
 
 
@@ -24,6 +24,7 @@ def correctBrackets(expr):
             raise Exception("check brackets! ")  
         else: print("okey")
     return
+
 
 
 def expressionSearch(expr):

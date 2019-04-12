@@ -5,7 +5,8 @@ import operators
 def calculation(expr):    
 
     for i in operators.operators:   
-        place=expr.rfind(i) 
+        place=expr.rfind(i)
+     
 
         while place!=-1:
 
@@ -14,7 +15,8 @@ def calculation(expr):
            
 
             if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
-                raise Exception("the expression should be written in the following form 'number operator number'")
+               raise Exception("the expression should be written in the following form 'number operator number'")
+               
             rezult=str( operators.operators[i](float(findBefore[0][::-1]),float(findAfter[0])))
             begin=expr[:place-len(findBefore[0])]
             expr=begin+rezult+expr[findAfter.end()+place:]
@@ -36,17 +38,10 @@ def calculation(expr):
     sum =0
     for each in all:
         sum+=float(each)
-
-
-
     return sum
 
-
-
-
-
 def calc(expr):
-  
+    
     while "(" in expr:
         
         end=expr.find(")")
@@ -59,7 +54,4 @@ def calc(expr):
         rezult=calculation(expr)
 
         return rezult
-
-
-
 
