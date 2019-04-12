@@ -83,7 +83,7 @@ def findreplacement(func,expr):
 
 
 
-j="""___o8o_____________________oo 
+helper="""___o8o_____________________oo 
 ___8**o__________________o**88 
 __$8*8888_____________88$8*_88 
 __$8*888$888$$$$$$$$88888***$8 
@@ -112,7 +112,7 @@ while True:
         if a!="--help":
             correctBrackets(a)
             a=expressionSearch(a)
-        else: print (j)
+        else: print (helper)
 
     except Exception as e:
         print("Error:  " + str(e))
