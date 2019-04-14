@@ -78,13 +78,15 @@ def str_parse(ex_str: str) -> list:
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    expression = re.compile(r'[+\-*%^()]|[0-9a-zA-Z]+|[a-zA-Z]+|[/<=!>]+|[0-9]+[.][0-9]+|[0-9]+')
+    expression = re.compile(r'[+\-*%^()]|[0-9]+[.][0-9]+|[0-9a-zA-Z]+|[a-zA-Z]+|[/<=!>]+|[0-9]+')
     negative = re.compile(r'[^0-9)a-zA-Z][\-][0-9]+|[^0-9)a-zA-Z][\-][a-zA-Z]+')
     positive = re.compile(r'[^0-9)a-zA-Z][+][0-9]+|[^0-9)a-zA-Z][+][a-zA-Z]+')
     float_val = re.compile(r'[^0-9][.][0-9]+')
     start_string_float_val = re.compile(r'^[.][0-9]+')
     extra_operators = re.compile(r'[+\-]{2,}')
-    start_of_string_operator = re.compile(r'^[+\-][0-9]+[.][0-9]+|^[+\-][0-9]+')
+    start_of_string_operator = re.compile(r'^[+\-][0-9]+[.][0-9]+|^[+\-][0-9]+|^[+\-][a-zA-Z]+')
+
+    ex_str = ex_str.replace('--', '+')
 
     if start_string_float_val.findall(ex_str):
             ex_str = ex_str.replace(ex_str, '0' + ex_str)
@@ -162,7 +164,8 @@ def polish_notation(expression_list: list, methods: dict) -> list:
             # if we found mathematical operation
             operation_list.append(expression)
 
-        if constants.RE_FLOATS.findall(expression) or constants.RE_INTS.findall(expression):
+        if constants.RE_FLOATS.findall(expression) or constants.RE_INTS.findall(expression) \
+                and not constants.RE_FUNCTIONS.findall(expression) :
             # if we found number
             output_expression.append(expression)
             continue
@@ -212,7 +215,7 @@ def ex_calc(polish_list: list, methods: dict) -> float:
     """
     output_list = []
     for ex in polish_list:
-        if constants.RE_FLOATS.findall(ex) or constants.RE_INTS.findall(ex):
+        if constants.RE_FLOATS.findall(ex) or constants.RE_INTS.findall(ex) and not constants.RE_FUNCTIONS.findall(ex):
             output_list.append(ex)
             continue
 

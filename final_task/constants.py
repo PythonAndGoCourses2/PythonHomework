@@ -31,7 +31,7 @@ HIGHEST_PRIORITY = 4
 
 RE_INTS = re.compile(r'[0-9]+')
 RE_FLOATS = re.compile(r'[0-9]+.[0-9]+')
-RE_FUNCTIONS = re.compile(r'[a-zA-Z]+')
+RE_FUNCTIONS = re.compile(r'[a-zA-Z]+[0-9]+|[a-zA-Z]+')
 RE_OPERATIONS = re.compile(r'[(<=!>+\-*/%^]+')
 
 imports = ['builtins', 'math']
