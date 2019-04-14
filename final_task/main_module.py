@@ -5,7 +5,7 @@ from math import *
 
 argparse.ArgumentParser()
 
-pycalc = mainclass.PyCalc(constants.imports)
+pycalc = mainclass.calculator(constants.imports)
 
 print(pycalc.calculate(str(input())))
-print((2.0**(pi/pi+e/e+2.0**0.0))**(1.0/3.0))
+print(------6)

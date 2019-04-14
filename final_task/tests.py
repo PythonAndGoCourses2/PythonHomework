@@ -15,7 +15,7 @@ pycodestyle.maximum_line_length = 120
 
 logic.import_usr_imports(constants.imports)
 
-pycalc = mainclass.PyCalc()
+pycalc = mainclass.calculator()
 
 
 class LogicTests(unittest.TestCase):

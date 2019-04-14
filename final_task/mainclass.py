@@ -12,9 +12,9 @@ from typing import Any
 pycodestyle.maximum_line_length = 120
 
 
-class PyCalc:
+class calculator:
 
-    def __init__(self, user_imports=[]):
+    def __init__(self, user_imports=None):
         try:
             constants.imports.extend(user_imports)
             logic.import_usr_imports(constants.imports)
