@@ -6,7 +6,7 @@ def calculation(expr):
 
     for i in operators.operators:   
         place=expr.rfind(i)
-     
+     #поиск в обратную сторону только для ^^
 
         while place!=-1:
 

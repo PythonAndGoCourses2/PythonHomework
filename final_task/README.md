@@ -42,7 +42,7 @@ ERROR: unknown function 'func'
 ### Non-functional requirements
 * It is mandatory to use `argparse` module.
 * Codebase must be covered with unit tests with at least 70% coverage.
-* Usage of external modules is prohibited (python standard library only).
+* Usage of external modules is prohibi.ted (python standard library only).
 * Usage of **eval** and **exec** is prohibited.
 * Usage of **ast** and **tokenize** modules is prohibited.
 

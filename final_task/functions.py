@@ -7,12 +7,20 @@ d={ "log10": math.log10,
     "cos":math.cos,
     "tan":math.tan,
     "abs":abs,
-    "round":round
+    "round":round,
+   
     
 }
 
+twoarg={
+
+ "pow":pow
+
+}
+
+
 const={
-    "Pi":math.pi,
+    "pi":math.pi,
     "e":math.e
 }
 
