@@ -1,11 +1,25 @@
 #!python
+import argparse
+
+
+def createArgParser():
+
+    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
+    parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
+
+    return parser
+
+
+parser = createArgParser()
+line = parser.parse_args().EXPRESSION
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
 
 
-line = input()
+#line = input()
 z = 0
 numbers = "0123456789."
 mat = ('+', '-', '/', '*', '//', '**', '^', '%')
@@ -225,8 +239,8 @@ def eval_(formula):
     return calc(shunting_yard(parse(formula)))
 
 
-def start_calc():
-    print(eval_(line))
+def start_calc(inpt_usr):
+    print(eval_(inpt_usr))
 
 
-start_calc()
+start_calc(line)
