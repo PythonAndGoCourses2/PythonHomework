@@ -10,8 +10,8 @@ def create_arg_parser():
     return parser
 
 
-args = create_arg_parser()
-line = args.parse_args().EXPRESSION
+create_arg_parser()
+line = parser.parse_args().EXPRESSION
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
