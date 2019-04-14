@@ -33,42 +33,47 @@ operator_dict = {
 }
 
 
-a = "-pi+3-((-60/2^2-1)/(2+3)^(-3))"
-# a = "100/3%2^2"
-# a = ".1 * 2.0^56.0"
-a = '60/2^2---1+-(+e)'
-# a = '(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)'
-# a = "102%12%7"
-# a = "666"
-# a = 'sin(pi)+e*round(2+9)'
-a= "sin(pi/2+cos(e)^2)*111*6"
-# a = "1--1"
-# a = "6-(-+-+13)"
-# a= "-+---+-1"
-# a = "-13"
-# a = "2.0^(2.0^2.0*2.0^2.0)"
-a = "sin(e^log(e^e^sin(23.0)*45.0) + cos(3.0+log10(e^-e)))"
-# a = ('6')
-a = "sin(pi/2^1) + log10(1*4+2^2+1)"
-# a = "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0"
-# a = "log10(e)"
-a = "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"
-# a = "log10(.4 -5/ (-0.1)-10)"
-# a = ".4 -5/ (-0.1)-10"
-# a = "1+2*4/3+1!=1+2*4/3+2"
-# a = "8//3"
-a = 'sin(log(-sin(23.0),45.0)^2 + log(-sin(23.0),45.0)^3)'
-# a= 'log(-sin(23.0),45.0)'
-# a = 'sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))'
-
-unary_operators = [
+example = [
     "-13",
     "6-(-13)",
     "1---1",
     "-+---+-1",
+    "1+2*2",
+    "1+(2+3*2)*3",
+    "10*(2+1)",
+    "10^(2+1)",
+    "100/3^2",
+    "100/3%2^2",
+    "pi+e",
+    "log(e)",
+    "sin(pi/2)",
+    "log10(100)",
+    "sin(pi/2)*111*6",
+    "2*sin(pi/2)",
+    "abs(-5)",
+    "round(123.45689)",
+    "102%12%7",
+    "100/4/3",
+    "2^3^4",
+    "1+2*3==1+2*3",
+    "e^5>=e^5+1",
+    "1+2*4/3+1!=1+2*4/3+2",
+    "(100)",
+    "666",
+    "-.1",
+    "1/3",
+    "1.0/3.0",
+    ".1 * 2.0^56.0",
+    "e^34",
+    "(2.0^(pi/pi+e/e+2.0^0.0))",
+    "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)",
+    "sin(pi/2^1) + log(1*4+2^2+1, 3^2)",
+    "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5",
+    "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)",
+    "2.0^(2.0^2.0*2.0^2.0)",
+    "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
 
 ]
-print(a)
 
 
 def number_parser(number):
@@ -83,6 +88,7 @@ def function_parser(function_name):
         return function_dict[function_name]['operator']
     return function_name
 
+
 def split_operators(s):
     parsing_list = []
     last_number = ""
@@ -91,7 +97,6 @@ def split_operators(s):
     for i in s:
         if i == " ":
             continue
-
         if i.isnumeric() or i is '.':
             if last_symbol:
                 parsing_list.append(last_symbol)
@@ -119,12 +124,6 @@ def split_operators(s):
     elif last_letter:
         parsing_list.append(function_parser(last_letter))
     return parsing_list
-
-l_expr = split_operators(a)
-print(l_expr)
-# for i in l_expr:
-#     print(i)
-# exit()
 
 
 def clean_add_sub_operators(last_item, converted_list):
@@ -185,19 +184,7 @@ def converter(parsing_list):
                 converted_list.append(operator_dict['-'])
                 last_item = ""
             converted_list.append(i)
-
     return converted_list
-
-
-converted_list = converter(l_expr)
-# for i in converted_list:
-#     print(i)
-
-
-# exit()
-
-
-
 
 
 class OperandStack():
@@ -221,12 +208,6 @@ class OperandStack():
             return False
 
 
-operands = OperandStack()
-function = OperandStack()
-
-def print_calc_on_stack(*args):
-    print(args)
-
 def calc_on_stack():
     operator_on_stack = function.take_from_stack()
     global func_argments
@@ -236,11 +217,11 @@ def calc_on_stack():
             first_operand = operands.take_from_stack()
             current_result = operator_on_stack['operator'](first_operand, second_operand)
             func_argments = False
-            print_calc_on_stack(first_operand, second_operand,operator_on_stack, current_result)
+            # print_calc_on_stack(first_operand, second_operand,operator_on_stack, current_result)
         else:
             first_operand = operands.take_from_stack()
             current_result = operator_on_stack['operator'](first_operand)
-            print_calc_on_stack(first_operand, operator_on_stack,current_result)
+            # print_calc_on_stack(first_operand, operator_on_stack,current_result)
     elif operator_on_stack in operator_dict.values():
         if len(operands.stack) == 1:
             second_operand = operands.take_from_stack()
@@ -249,7 +230,7 @@ def calc_on_stack():
             second_operand = operands.take_from_stack()
             first_operand = operands.take_from_stack()
         current_result = operator_on_stack['operator'](first_operand, second_operand)
-        print_calc_on_stack(first_operand, second_operand, operator_on_stack,current_result)
+        # print_calc_on_stack(first_operand, second_operand, operator_on_stack,current_result)
     elif operator_on_stack == '(':
         return
     operands.put_on_stack(current_result)
@@ -259,68 +240,131 @@ def calc_on_stack():
     return current_result
 
 
+def calculacte(converted_list):
+    global operands, function, func_argments, current_operator, current_result
+    operands = OperandStack()
+    function = OperandStack()
+    func_argments = False
+    for item in converted_list:
+        if type(item) is float or type(item) is int:
+            operands.put_on_stack(item)
+        elif item in operator_dict.values() or item in function_dict.values():
+            current_operator = item
+            if function.is_empty():
+                function.put_on_stack(current_operator)
+            else:
+                if function.top() is '(' or current_operator['priority'] < function.top()['priority'] or \
+                        current_operator == operator_dict['^'] and function.top() == operator_dict['^']:
+                    function.put_on_stack(current_operator)
+                else:
+                    current_result = calc_on_stack()
+
+                    function.put_on_stack(current_operator)
+        elif item is '(':
+            function.put_on_stack(item)
+        elif item is ')' and function.top() == '(':
+            function.take_from_stack()
+        else:
+            for i in range(len(function.stack)):
+                if item is ',' and function.top() is '(':
+                    func_argments = True
+                    break
+                elif func_argments:
+                    calc_on_stack()
+                else:
+                    func_argments = False
+                current_result = calc_on_stack()
+
+                if item is ')':
+                    if function.top() is '(':
+                        function.take_from_stack()
+                        break
+    if function.is_empty():
+        current_result = operands.take_from_stack()
+    elif len(function.stack) == 1:
+        current_result = calc_on_stack()
+    else:
+        for i in range(len(function.stack)):
+            current_operator = function.top()
+            current_result = calc_on_stack()
+            if not len(function.stack):
+                break
+
 
 operands = OperandStack()
 function = OperandStack()
-func_argments = False
-for item in converted_list:
-    if type(item) is float or type(item) is int:
-        operands.put_on_stack(item)
-    elif item in operator_dict.values() or item in function_dict.values():
-        current_operator = item
-        if function.is_empty():
-           function.put_on_stack(current_operator)
+
+for expression in example:
+    string = ''
+    for i in expression:
+        if i == '^':
+            string += '**'
         else:
-            if function.top() is '(' or current_operator['priority'] < function.top()['priority'] or \
-                    current_operator == operator_dict['^'] and function.top() == operator_dict['^']:
-                function.put_on_stack(current_operator)
-            else:
-                current_result = calc_on_stack()
+            string +=i
+    try:
+        calculacte(converter(split_operators(expression)))
+    except:
+        print('fault')
+    if current_result != eval(string):
+        print(expression)
+        print(current_result, current_result == eval(string))
+        print('\n')
 
-                function.put_on_stack(current_operator)
-    elif item is '(':
-        function.put_on_stack(item)
-    elif item is ')' and function.top() == '(':
-        function.take_from_stack()
-    else:
-        for i in range(len(function.stack)):
-            if item is ',' and function.top() is '(':
-                func_argments = True
-                break
-            elif func_argments:
-                calc_on_stack()
-            else:
-                func_argments = False
-            current_result = calc_on_stack()
-
-            if item is ')':
-                if function.top() is '(':
-                    function.take_from_stack()
-                    break
-
-if function.is_empty():
-    current_result = operands.take_from_stack()
-elif len(function.stack) == 1:
-    current_result = calc_on_stack()
-else:
-    for i in range(len(function.stack)):
-        current_operator = function.top()
-        current_result = calc_on_stack()
-        if not len(function.stack):
-            break
-print(current_result)
-
-
-
-
-
-
-
+# operands = OperandStack()
+# function = OperandStack()
 #
-# for i in range(self.operator_stack.length):
-#     current_result = self.calculate_on_stack()
-#     if self.operator_stack.length == 0:
-#         return current_result
+# func_argments = False
+# for item in converted_list:
+#     if type(item) is float or type(item) is int:
+#         operands.put_on_stack(item)
+#     elif item in operator_dict.values() or item in function_dict.values():
+#         current_operator = item
+#         if function.is_empty():
+#            function.put_on_stack(current_operator)
+#         else:
+#             if function.top() is '(' or current_operator['priority'] < function.top()['priority'] or \
+#                     current_operator == operator_dict['^'] and function.top() == operator_dict['^']:
+#                 function.put_on_stack(current_operator)
+#             else:
+#                 current_result = calc_on_stack()
+#
+#                 function.put_on_stack(current_operator)
+#     elif item is '(':
+#         function.put_on_stack(item)
+#     elif item is ')' and function.top() == '(':
+#         function.take_from_stack()
+#     else:
+#         for i in range(len(function.stack)):
+#             if item is ',' and function.top() is '(':
+#                 func_argments = True
+#                 break
+#             elif func_argments:
+#                 calc_on_stack()
+#             else:
+#                 func_argments = False
+#             current_result = calc_on_stack()
+#
+#             if item is ')':
+#                 if function.top() is '(':
+#                     function.take_from_stack()
+#                     break
+#
+# if function.is_empty():
+#     current_result = operands.take_from_stack()
+# elif len(function.stack) == 1:
+#     current_result = calc_on_stack()
+# else:
+#     for i in range(len(function.stack)):
+#         current_operator = function.top()
+#         current_result = calc_on_stack()
+#         if not len(function.stack):
+#             break
+
+
+
+
+
+
 
 # print(-20+34-50*6-11*2/2)
 # print(54-300+22)
@@ -332,7 +376,7 @@ print(current_result)
 # print(function.stack)
 # print(math.sin(math.pi/2+math.cos(math.e)**2)*111*6)
 # print(sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(43.0))))+cos(sin(sin(34.0-2.0**2.0))))--cos(1.0)--cos(0.0)**3.0)
-# print(100/3%2**2)
+# print(sin(-cos(-sin(3.0)-cos(-sin(-3.0**5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0**2.0))))--cos(1.0)--cos(0.0)**3.0))
 # print((2.0**(math.pi/math.pi+math.e/math.e+2.0**0.0))**(1.0/3.0))
 # print(.1*2.0**56.0)
 # print(math.sin(/math.pi)+math.e*round(2+9))
@@ -345,7 +389,9 @@ print(current_result)
 # print(1+2*4/3+1>1+2*4/3+2)
 # print(sin(e**log(e**e**sin(23.0),45.0) + log(e**e**sin(23.0),45.0)))
 # print(sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e))))
-print(sin(log(-sin(23.0),45.0)**2 + log(-sin(23.0),45.0)**3))
+# print(sin(log(-sin(23.0),45.0)**2 + log(-sin(23.0),45.0)**3))
 # print(log(-sin(23.0),45.0))
+
+
 
 
