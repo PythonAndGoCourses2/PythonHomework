@@ -16,25 +16,27 @@ for k,v in math.__dict__.items():
 
 
 operator_dict = {
-    '+': {'operator': operator.add, 'priority': 4},
-    '-': {'operator': operator.sub, 'priority': 4},
-    '/': {'operator': operator.truediv, 'priority': 3},
-    '*': {'operator': operator.mul, 'priority': 3},
-    '%': {'operator': operator.mod, 'priority': 3},
-    '//': {'operator': operator.floordiv, 'priority': 3},
+    '+': {'operator': operator.add, 'priority': 3},
+    '-': {'operator': operator.sub, 'priority': 3},
+    '/': {'operator': operator.truediv, 'priority': 2},
+    '*': {'operator': operator.mul, 'priority': 2},
+    '%': {'operator': operator.mod, 'priority': 2},
+    '//': {'operator': operator.floordiv, 'priority': 2},
     '^': {'operator': operator.pow, 'priority': 1},
-    '==': {'operator': operator.eq, 'priority': 9},
-    '!=': {'operator': operator.ne, 'priority': 9},
-    '>': {'operator': operator.gt, 'priority': 9},
-    '<': {'operator': operator.lt, 'priority': 9},
-    '>=': {'operator': operator.ge, 'priority': 9},
-    '<=': {'operator': operator.le, 'priority': 9},
+    '==': {'operator': operator.eq, 'priority': 4},
+    '!=': {'operator': operator.ne, 'priority': 4},
+    '>': {'operator': operator.gt, 'priority': 4},
+    '<': {'operator': operator.lt, 'priority': 4},
+    '>=': {'operator': operator.ge, 'priority': 4},
+    '<=': {'operator': operator.le, 'priority': 4},
 
 }
 
+# example = "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"
 
 example = [
     "-13",
+    "8//3",
     "6-(-13)",
     "1---1",
     "-+---+-1",
@@ -110,6 +112,14 @@ def split_operators(s):
                 parsing_list.append(last_symbol)
                 last_symbol = ""
             last_letter += i
+        elif i in "!=<>/":
+            if last_number:
+                parsing_list.append(number_parser(last_number))
+                last_number = ""
+            if last_letter:
+                parsing_list.append(function_parser(last_letter))
+                last_letter = ""
+            last_symbol += i
         else:
             if last_number:
                 parsing_list.append(number_parser(last_number))
@@ -117,6 +127,8 @@ def split_operators(s):
             if last_letter:
                 parsing_list.append(function_parser(last_letter))
                 last_letter = ""
+            # if i in str(operator_dict.keys()):
+            #     last_symbol += i
             if i:
                 parsing_list.append(i)
     if last_number:
@@ -289,10 +301,18 @@ def calculacte(converted_list):
             current_result = calc_on_stack()
             if not len(function.stack):
                 break
+    return current_result
 
 
 operands = OperandStack()
 function = OperandStack()
+
+# print('example: {}'.format(example))
+# parser = split_operators(example)
+# print(parser)
+# converted_list = converter(parser)
+# result = calculacte(converted_list)
+# print(result)
 
 for expression in example:
     string = ''
@@ -304,8 +324,8 @@ for expression in example:
     try:
         calculacte(converter(split_operators(expression)))
     except:
-        print('fault')
-    if current_result != eval(string):
+        print('fault on {} \n'.format(expression))
+    if current_result == eval(string):
         print(expression)
         print(current_result, current_result == eval(string))
         print('\n')
