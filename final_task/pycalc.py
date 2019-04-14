@@ -3,23 +3,25 @@ import argparse
 
 
 def createArgParser():
-
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
-    parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
-    parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
-
+    parser.add_argument('EXPRESSION', help='expression string to evalute')
+    parser.add_argument('-m', '--MODULE', help='use modules MODULE [MODULE...] additional modules to use')
     return parser
 
 
 parser = createArgParser()
-line = parser.parse_args().EXPRESSION
+if parser.parse_args().EXPRESSION.find(' '):
+    print('ERROR: Invalid string')
+    quit()
+else:
+    line = parser.parse_args().EXPRESSION
+
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
 
 
-#line = input()
 z = 0
 numbers = "0123456789."
 mat = ('+', '-', '/', '*', '//', '**', '^', '%')
@@ -35,7 +37,7 @@ def matched(str):
         elif i == ")":
             count -= 1
         if count < 0:
-            print('opening bracket not found')
+            print('ERROR: opening bracket not found')
             quit()
     return count == 0
 
@@ -48,7 +50,7 @@ def only_letters(tested_string):
         if sign not in letters:
             continue
         else:
-            print("In the entered expression are not only numbers and math.")
+            print("ERROR: In the entered expression are not only numbers and math.")
             quit()
 
 
@@ -56,16 +58,16 @@ only_letters(line)
 
 
 if line[0] in mat:
-    print('The first value cannot be early ' + line[0])
+    print('ERROR: The first value cannot be early ' + line[0])
     quit()
 if line[-1] in mat:
-    print('The last value cannot be early ' + line[-1])
+    print('ERROR: The last value cannot be early ' + line[-1])
     quit()
 if line[0] == ')':
-    print('The first value cannot be early ' + line[0])
+    print('ERROR: The first value cannot be early ' + line[0])
     quit()
 if line[-1] == '(':
-    print('The last value cannot be early ' + line[-1])
+    print('ERROR: The last value cannot be early ' + line[-1])
     quit()
 
 
@@ -74,17 +76,17 @@ for bracket in line:
         x = line.index('(')
         y = line[x + 1]
         if y in mat:
-            print('after the sign ( must be a number')
+            print('ERROR: after the sign ( must be a number')
             quit()
         elif line.find(')') == -1:
-            print('a character was entered \'(\' but the character was not entered \')\'')
+            print('ERROR: a character was entered \'(\' but the character was not entered \')\'')
             quit()
         else:
             continue
 
 
 if set(line).isdisjoint(mat):
-    print('The entered expression does not contain mathematical operations.')
+    print('ERROR: The entered expression does not contain mathematical operations.')
     quit()
 
 
@@ -147,10 +149,10 @@ for idx, stack in enumerate(line):
             y = line[idx + 2]
             y_ind = idx + 2
             if y == stack:
-                print('not known mathematical action ***')
+                print('ERROR: not known mathematical action ***')
                 quit()
             elif y in mat:
-                print('not known mathematical action **' + y)
+                print('ERROR: not known mathematical action **' + y)
                 quit()
             else:
                 z = int(x) ** int(y)
@@ -172,7 +174,7 @@ for idx, stack in enumerate(line):
             y = line[idx + 2]
             y_ind = idx + 2
             if y == stack:
-                print('not known mathematical action ///')
+                print('ERROR: not known mathematical action ///')
                 quit()
             else:
                 z = int(x) // int(y)
@@ -228,7 +230,7 @@ def eval_(formula):
             if token in OPERATORS:
                 y, x = stack.pop(), stack.pop()
                 if y == 0 and token == '/':
-                    print('0 cannot be divided')
+                    print('ERROR: 0 cannot be divided')
                     quit()
                 else:
                     stack.append(OPERATORS[token][1](x, y))
