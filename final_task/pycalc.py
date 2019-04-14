@@ -32,10 +32,12 @@ def matched(str):
             count += 1
         elif i == ")":
             count -= 1
-        if count < 0:
-            print('ERROR: opening bracket not found')
-            quit()
-    return count == 0
+    if int(count) == 0:
+        return count == 0
+    else:
+        print('ERROR: the number of open and closed brackets is not equal')
+        quit()
+
 
 
 matched(line)
