@@ -57,6 +57,9 @@ a = "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"
 # a = ".4 -5/ (-0.1)-10"
 # a = "1+2*4/3+1!=1+2*4/3+2"
 # a = "8//3"
+a = 'sin(log(-sin(23.0),45.0)^2 + log(-sin(23.0),45.0)^3)'
+# a= 'log(-sin(23.0),45.0)'
+# a = 'sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))'
 
 unary_operators = [
     "-13",
@@ -85,7 +88,6 @@ def split_operators(s):
     last_number = ""
     last_letter = ""
     last_symbol = ""
-    arguments_list = []
     for i in s:
         if i == " ":
             continue
@@ -103,46 +105,14 @@ def split_operators(s):
                 parsing_list.append(last_symbol)
                 last_symbol = ""
             last_letter += i
-        # elif i in operator_dict.keys():
-        #     last_symbol += i
-
-        # elif last_letter:
-        #     parsing_list.append(function_parser(last_letter))
-        #     last_letter = ""
-        #     if parsing_list and parsing_list[-1] in function_dict.keys():
-        #         parsing_list.append(list())
-        #     # parsing_list.append(arguments_list)
-        #     arguments_list.append(i)
-        #     continue
         else:
-            # if arguments_list and arguments_list.count('(') != arguments_list.count(')'):
-            #     if last_number:
-            #         arguments_list.append(last_number)
-            #         arguments_list.append(i)
-            #         last_number = ""
-            #         continue
-            #     if last_letter and function_parser(last_letter) not in function_dict.keys():
-            #         arguments_list.append(function_parser(last_letter))
-            #         arguments_list.append(i)
-            #         last_letter = ""
-            #         continue
             if last_number:
                 parsing_list.append(number_parser(last_number))
                 last_number = ""
             if last_letter:
                 parsing_list.append(function_parser(last_letter))
                 last_letter = ""
-            #     if parsing_list and parsing_list[-1] in function_dict.keys():
-            #         # arguments_list = []
-            #         parsing_list.append(arguments_list)
-            #         arguments_list.append(i)
-            #         continue
-            # if last_symbol:
-            #     last_symbol += i
-            #     parsing_list.append(last_symbol)
-            #     last_symbol = ""
             if i:
-                # last_symbol += i
                 parsing_list.append(i)
     if last_number:
         parsing_list.append(number_parser(last_number))
@@ -163,7 +133,6 @@ def clean_add_sub_operators(last_item, converted_list):
             last_item= ""
         else:
             last_item = '+'
-            # converted_list.append(operator_dict['+'])
     else:
         last_item = '-'
     return last_item
@@ -186,7 +155,7 @@ def converter(parsing_list):
                 converted_list.append(operator_dict['+'])
                 converted_list.append(-i)
                 last_item = ""
-            elif last_item == '-': #and converted_list[-1] == '(':
+            elif last_item == '-':
                 converted_list.append(-i)
                 last_item = ""
             else:
@@ -221,8 +190,8 @@ def converter(parsing_list):
 
 
 converted_list = converter(l_expr)
-for i in converted_list:
-    print(i)
+# for i in converted_list:
+#     print(i)
 
 
 # exit()
@@ -246,9 +215,6 @@ class OperandStack():
         return self.stack.pop()
 
     def is_empty(self):
-        """
-        Returns True if no items on a stack, otherwise returns False
-        """
         if len(self.stack) == 0:
             return True
         else:
@@ -258,12 +224,23 @@ class OperandStack():
 operands = OperandStack()
 function = OperandStack()
 
+def print_calc_on_stack(*args):
+    print(args)
 
 def calc_on_stack():
     operator_on_stack = function.take_from_stack()
+    global func_argments
     if operator_on_stack in function_dict.values():
-        first_operand = operands.take_from_stack()
-        current_result = operator_on_stack['operator'](first_operand)
+        if func_argments:
+            second_operand = operands.take_from_stack()
+            first_operand = operands.take_from_stack()
+            current_result = operator_on_stack['operator'](first_operand, second_operand)
+            func_argments = False
+            print_calc_on_stack(first_operand, second_operand,operator_on_stack, current_result)
+        else:
+            first_operand = operands.take_from_stack()
+            current_result = operator_on_stack['operator'](first_operand)
+            print_calc_on_stack(first_operand, operator_on_stack,current_result)
     elif operator_on_stack in operator_dict.values():
         if len(operands.stack) == 1:
             second_operand = operands.take_from_stack()
@@ -272,6 +249,9 @@ def calc_on_stack():
             second_operand = operands.take_from_stack()
             first_operand = operands.take_from_stack()
         current_result = operator_on_stack['operator'](first_operand, second_operand)
+        print_calc_on_stack(first_operand, second_operand, operator_on_stack,current_result)
+    elif operator_on_stack == '(':
+        return
     operands.put_on_stack(current_result)
     if len(function.stack) and function.top() is not '(':
         if current_operator['priority'] >= function.top()['priority']:
@@ -282,7 +262,7 @@ def calc_on_stack():
 
 operands = OperandStack()
 function = OperandStack()
-
+func_argments = False
 for item in converted_list:
     if type(item) is float or type(item) is int:
         operands.put_on_stack(item)
@@ -304,7 +284,15 @@ for item in converted_list:
         function.take_from_stack()
     else:
         for i in range(len(function.stack)):
+            if item is ',' and function.top() is '(':
+                func_argments = True
+                break
+            elif func_argments:
+                calc_on_stack()
+            else:
+                func_argments = False
             current_result = calc_on_stack()
+
             if item is ')':
                 if function.top() is '(':
                     function.take_from_stack()
@@ -324,7 +312,7 @@ print(current_result)
 
 
 
-# for i in unary_operators:
+
 
 
 
@@ -352,77 +340,12 @@ print(current_result)
 # print(2.0**(2.0**2.0**2.0**2.0))
 # print(math.sin(math.e**math.log(math.e**math.e**math.sin(23.0),45.0) + math.cos(3.0+math.log10(math.e**-math.e))))
 # print(sin(pi/2**1) + log10(1*4+2**2+1))
-print(10*e**0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5)
+# print(10*e**0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5)
 # print(.4-5/-0.1-10)
 # print(1+2*4/3+1>1+2*4/3+2)
+# print(sin(e**log(e**e**sin(23.0),45.0) + log(e**e**sin(23.0),45.0)))
+# print(sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e))))
+print(sin(log(-sin(23.0),45.0)**2 + log(-sin(23.0),45.0)**3))
+# print(log(-sin(23.0),45.0))
 
 
-
-# def split_operators(s):
-#     expr = []
-#     last_number = ""
-#     last_letter = ""
-#     for i in s:
-#         # if i == ' ':
-#         #     continue
-#         # elif i is '-':
-#         #     if last_number:
-#         #         last_number = float(last_number)
-#         #         expr.append(last_number)
-#         #         last_number = ''
-#         #     if last_letter:
-#         #         expr.append(func_dict[last_letter])
-#         #         last_letter = ""
-#         #     if expr:
-#         #         expr.append(d['+'])
-#         #         expr.append(-1.0)
-#         #         expr.append(d['*'])
-#         #         last_number = ''
-#         #     else:
-#         #         expr.append(-1.0)
-#         #         expr.append(d['*'])
-#         if i.isnumeric() or i is '.':
-#             last_number += i
-#         elif i.isalpha():
-#             last_letter += i
-#         else:
-#             if last_number and last_number is not '-':
-#                 last_number = float(last_number)
-#                 expr.append(last_number)
-#                 last_number = ""
-#             if last_letter:
-#                 if last_letter == 'e' or last_letter == 'pi':
-#                     expr.append(func_dict[last_letter]['operator'])
-#                 else:
-#                     expr.append(func_dict[last_letter])
-#                 last_letter = ""
-#             if i:
-#                 if i in d.keys():
-#                     expr.append(d[i])
-#                 elif i in func_dict.keys():
-#                     expr.append(func_dict[last_letter])
-#                 else:
-#                     expr.append(i)
-#     if last_number:
-#         last_number = float(last_number)
-#         expr.append(last_number)
-#     elif last_letter:
-#         expr.append(func_dict[last_letter])
-#     return expr
-
-# d = {
-#     '+': '+',
-#     '-': '-',
-#     '/': '/',
-#     '*': '*',
-#     '%': {'operator': operator.mod, 'priority': 3},
-#     '//': {'operator': operator.floordiv, 'priority': 3},
-#     '^': {'operator': operator.pow, 'priority': 1},
-#     '==': {'operator': operator.eq, 'priority': 9},
-#     '!=': {'operator': operator.ne, 'priority': 9},
-#     '>': {'operator': operator.gt, 'priority': 9},
-#     '<': {'operator': operator.lt, 'priority': 9},
-#     '>=': {'operator': operator.ge, 'priority': 9},
-#     '<=': {'operator': operator.le, 'priority': 9},
-#
-# }
