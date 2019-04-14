@@ -10,7 +10,6 @@ def create_arg_parser():
     return parser
 
 
-# createArgParser()
 args = create_arg_parser()
 line = args.parse_args().EXPRESSION
 
@@ -59,6 +58,9 @@ def only_letters(tested_string):
 
 only_letters(line)
 
+if line is None:
+    print('ERROR: The first value cannot be early ' + line[0])
+    quit()
 if line[0] in mat:
     print('ERROR: The first value cannot be early ' + line[0])
     quit()
