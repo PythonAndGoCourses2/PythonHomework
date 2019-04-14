@@ -1,3 +1,8 @@
+"""
+
+module which contains methods which make up base logic of the calculator
+
+"""
 import re
 import inspect
 import importlib
@@ -93,10 +98,6 @@ def str_parse(ex_str: str) -> list:
 
     while float_val.findall(ex_str):
         for element in float_val.findall(ex_str):
-            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
-
-    while negative.findall(ex_str):
-        for element in negative.findall(ex_str):
             ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
 
     while negative.findall(ex_str):

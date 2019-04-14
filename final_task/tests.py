@@ -1,3 +1,9 @@
+"""
+
+module which contains unit tests for calculating methods
+
+"""
+
 import logic
 import constants
 import unittest

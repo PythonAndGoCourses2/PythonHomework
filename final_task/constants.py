@@ -1,3 +1,9 @@
+"""
+
+module which contains base constant values which uses for calculating expressions
+
+"""
+
 import re
 import operator
 

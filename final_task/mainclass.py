@@ -1,3 +1,9 @@
+"""
+
+module which contains class of calculator which will be used for easy calculating expression
+
+"""
+
 import logic
 import constants
 import pycodestyle
