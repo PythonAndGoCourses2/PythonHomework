@@ -10,11 +10,7 @@ def createArgParser():
 
 
 parser = createArgParser()
-if parser.parse_args().EXPRESSION.find(' '):
-    print('ERROR: Invalid string')
-    quit()
-else:
-    line = parser.parse_args().EXPRESSION
+line = parser.parse_args().EXPRESSION
 
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
