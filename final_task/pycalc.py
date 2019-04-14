@@ -2,21 +2,21 @@
 import argparse
 
 
-def createArgParser():
+def create_arg_parser():
+    global parser
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
     parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
     parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
     return parser
 
 
-parser = createArgParser()
-line = parser.parse_args().EXPRESSION
-
+# createArgParser()
+args = create_arg_parser()
+line = args.parse_args().EXPRESSION
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
-
 
 z = 0
 numbers = "0123456789."
@@ -26,34 +26,38 @@ result = 0
 
 
 def matched(str):
-    count = 0
-    for i in str:
-        if i == "(":
-            count += 1
-        elif i == ")":
-            count -= 1
-    if int(count) == 0:
-        return count == 0
-    else:
-        print('ERROR: the number of open and closed brackets is not equal')
-        quit()
-
+    try:
+        count = 0
+        for i in str:
+            if i == "(":
+                count += 1
+            elif i == ")":
+                count -= 1
+        if int(count) == 0:
+            return count == 0
+        else:
+            print('ERROR: the number of open and closed brackets is not equal')
+            quit()
+    except Exception:
+        print('fail func matched')
 
 
 matched(line)
 
 
 def only_letters(tested_string):
-    for sign in tested_string:
-        if sign not in letters:
-            continue
-        else:
-            print("ERROR: In the entered expression are not only numbers and math.")
-            quit()
+    try:
+        for sign in tested_string:
+            if sign not in letters:
+                continue
+            else:
+                print("ERROR: In the entered expression are not only numbers and math.")
+                quit()
+    except Exception:
+        print('fail func only_letters')
 
 
 only_letters(line)
-
 
 if line[0] in mat:
     print('ERROR: The first value cannot be early ' + line[0])
@@ -68,20 +72,21 @@ if line[-1] == '(':
     print('ERROR: The last value cannot be early ' + line[-1])
     quit()
 
-
-for bracket in line:
-    if bracket == '(':
-        x = line.index('(')
-        y = line[x + 1]
-        if y in mat:
-            print('ERROR: after the sign ( must be a number')
-            quit()
-        elif line.find(')') == -1:
-            print('ERROR: a character was entered \'(\' but the character was not entered \')\'')
-            quit()
-        else:
-            continue
-
+try:
+    for bracket in line:
+        if bracket == '(':
+            x = line.index('(')
+            y = line[x + 1]
+            if y in mat:
+                print('ERROR: after the sign ( must be a number')
+                quit()
+            elif line.find(')') == -1:
+                print('ERROR: a character was entered \'(\' but the character was not entered \')\'')
+                quit()
+            else:
+                continue
+except Exception:
+    print('fail bracket_in_line')
 
 if set(line).isdisjoint(mat):
     print('ERROR: The entered expression does not contain mathematical operations.')
@@ -89,24 +94,26 @@ if set(line).isdisjoint(mat):
 
 
 def split_operators(s):
-    doker = []
-    last_number = ""
-    for c in s:
-        if c in numbers:
-            last_number += c
-        else:
-            if last_number:
-                doker.append(last_number)
-                last_number = ""
-            if c:
-                doker.append(c)
-    if last_number:
-        doker.append(last_number)
-    return doker
+    try:
+        doker = []
+        last_number = ""
+        for c in s:
+            if c in numbers:
+                last_number += c
+            else:
+                if last_number:
+                    doker.append(last_number)
+                    last_number = ""
+                if c:
+                    doker.append(c)
+        if last_number:
+            doker.append(last_number)
+        return doker
+    except Exception:
+        print('fail func split_operators')
 
 
 line = split_operators(line)
-
 
 for idx, stack in enumerate(line):
     if stack == '(':
@@ -135,9 +142,7 @@ for idx, stack in enumerate(line):
         else:
             continue
 
-
 line = "".join(str(item) for item in line)
-
 
 for idx, stack in enumerate(line):
     if stack == '*':
@@ -155,14 +160,12 @@ for idx, stack in enumerate(line):
             else:
                 z = int(x) ** int(y)
                 line = split_operators(line)
-                line[x_ind:y_ind+1] = [z]
+                line[x_ind:y_ind + 1] = [z]
                 break
         elif line[idx + 1] != stack:
             continue
 
-
 line = "".join(str(item) for item in line)
-
 
 for idx, stack in enumerate(line):
     if stack == '/':
@@ -177,68 +180,75 @@ for idx, stack in enumerate(line):
             else:
                 z = int(x) // int(y)
                 line = split_operators(line)
-                line[x_ind:y_ind+1] = [z]
+                line[x_ind:y_ind + 1] = [z]
                 break
         elif line[idx + 1] != stack:
             continue
-
 
 line = "".join(str(item) for item in line)
 
 
 def eval_(formula):
     def parse(formula_string):
-        number = ''
-        for s in formula_string:
-            if s in '1234567890.':
-                number += s
-            elif number:
+        try:
+            number = ''
+            for s in formula_string:
+                if s in '1234567890.':
+                    number += s
+                elif number:
+                    yield float(number)
+                    number = ''
+                if s in OPERATORS or s in "()":
+                    yield s
+            if number:
                 yield float(number)
-                number = ''
-            if s in OPERATORS or s in "()":
-                yield s
-        if number:
-            yield float(number)
+        except Exception:
+            print('fail func eval_parse')
 
     def shunting_yard(parsed_formula):
-        stack = []
-        for token in parsed_formula:
-            if token in OPERATORS:
-                while stack and stack[-1] != "(" and OPERATORS[token][0] <= OPERATORS[stack[-1]][0]:
-                    yield stack.pop()
-                stack.append(token)
-            elif token == ")":
-                while stack:
-                    x = stack.pop()
-                    if x == "(":
-                        break
-                    yield x
-            elif token == "(":
-                stack.append(token)
-            elif token == '**':
-                stack.append(token)
-            else:
-                yield token
-        while stack:
-            yield stack.pop()
+        try:
+            stack = []
+            for token in parsed_formula:
+                if token in OPERATORS:
+                    while stack and stack[-1] != "(" and OPERATORS[token][0] <= OPERATORS[stack[-1]][0]:
+                        yield stack.pop()
+                    stack.append(token)
+                elif token == ")":
+                    while stack:
+                        x = stack.pop()
+                        if x == "(":
+                            break
+                        yield x
+                elif token == "(":
+                    stack.append(token)
+                elif token == '**':
+                    stack.append(token)
+                else:
+                    yield token
+            while stack:
+                yield stack.pop()
+        except Exception:
+            print('fail func eval_shuting')
 
     def calc(polish):
-        stack = []
-        for token in polish:
-            if token in OPERATORS:
-                y, x = stack.pop(), stack.pop()
-                if y == 0 and token == '/':
-                    print('ERROR: 0 cannot be divided')
-                    quit()
+        try:
+            stock = []
+            for token in polish:
+                if token in OPERATORS:
+                    y, x = stock.pop(), stock.pop()
+                    if y == 0 and token == '/':
+                        print('ERROR: 0 cannot be divided')
+                        quit()
+                    else:
+                        stock.append(OPERATORS[token][1](x, y))
                 else:
-                    stack.append(OPERATORS[token][1](x, y))
-            else:
-                stack.append(token)
-        return stack[0]
+                    stock.append(token)
+            return stock[0]
+        except Exception:
+            print('fail func eval_calc')
 
     final_result = calc(shunting_yard(parse(formula)))
     print(final_result)
-#    return final_result
 
 
 def start_calc(inp_line):
