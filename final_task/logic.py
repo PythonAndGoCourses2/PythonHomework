@@ -78,11 +78,44 @@ def str_parse(ex_str: str) -> list:
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    expression = re.compile(r'[+\-*%^(),]|[a-zA-Z]+|[/<=!>]+|[0-9]+[.][0-9]+|[0-9]+')
-    negative = re.compile(r'[^0-9)][\-][0-9]+')
+    expression = re.compile(r'[+\-*%^()]|[a-zA-Z]+|[/<=!>]+|[0-9]+[.][0-9]+|[0-9]+')
+    negative = re.compile(r'[^0-9)a-zA-Z][\-][0-9]+|[^0-9)a-zA-Z][\-][a-zA-Z]+')
+    positive = re.compile(r'[^0-9)a-zA-Z][+][0-9]+|[^0-9)a-zA-Z][+][a-zA-Z]+')
+    float_val = re.compile(r'[^0-9][.][0-9]+')
+    start_string_float_val = re.compile(r'^[.][0-9]+')
+    extra_operators = re.compile(r'[+\-]{2,}')
+    start_of_string_operator = re.compile(r'^[+\-][0-9]+[.][0-9]+|^[+\-][0-9]+')
 
-    for element in negative.findall(ex_str):
-        ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+    if start_string_float_val.findall(ex_str):
+            ex_str = ex_str.replace(ex_str, '0' + ex_str)
+
+    while float_val.findall(ex_str):
+        for element in float_val.findall(ex_str):
+            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+    while negative.findall(ex_str):
+        for element in negative.findall(ex_str):
+            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+    while negative.findall(ex_str):
+        for element in negative.findall(ex_str):
+            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+    while positive.findall(ex_str):
+        for element in positive.findall(ex_str):
+            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+    while extra_operators.findall(ex_str):
+        while negative.findall(ex_str):
+            for element in negative.findall(ex_str):
+                ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+        while positive.findall(ex_str):
+            for element in positive.findall(ex_str):
+                ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+
+    if start_of_string_operator.findall(ex_str):
+        ex_str = ex_str.replace(ex_str, '0' + ex_str)
 
     return expression.findall(ex_str)
 
@@ -210,7 +243,7 @@ def ex_calc(polish_list: list, methods: dict) -> float:
             first_val = _get_item_by_type(output_list.pop(), methods)
             output_list.append(constants.operator[ex](first_val, second_val))
 
-    return output_list[0]
+    return _get_item_by_type(output_list[0], methods)
 
 # goals for weekend
 

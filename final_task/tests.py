@@ -3,12 +3,13 @@ import constants
 import unittest
 import pycodestyle
 import mainclass
+import pycalc_checker
 
 pycodestyle.maximum_line_length = 120
 
 logic.import_usr_imports(constants.imports)
 
-pycalc = mainclass.PyCalc(['user_import_test_case'])
+pycalc = mainclass.PyCalc()
 
 
 class LogicTests(unittest.TestCase):
@@ -35,9 +36,10 @@ class LogicTests(unittest.TestCase):
         self.assertEqual(logic.polish_notation(['(', '2', '*', '3', '-', '4', ')', '/', '(', '5', '+', '2', ')'],
                                                logic.get_imports_attrs(constants.imports)),
                          ['2', '3', '*', '4', '-', '5', '2', '+', '/'])
-        self.assertEqual(logic.polish_notation(['(', '2', '+', '3', ')', '/', 'abs', '(', '-', '5', ')', '-', 'sqrt', '(', '4', ')'],
-                                               logic.get_imports_attrs(constants.imports)),
-                         ['2', '3', '+', '5', '-', 'abs', '/', '4', 'sqrt', '-'])
+        self.assertEqual(
+            logic.polish_notation(['(', '2', '+', '3', ')', '/', 'abs', '(', '-', '5', ')', '-', 'sqrt', '(', '4', ')'],
+                                  logic.get_imports_attrs(constants.imports)),
+            ['2', '3', '+', '5', '-', 'abs', '/', '4', 'sqrt', '-'])
 
     def test_ex_calc(self):
         self.assertEqual(logic.ex_calc(['2', '2', '+'], logic.get_imports_attrs(constants.imports)), 4)
@@ -47,10 +49,11 @@ class LogicTests(unittest.TestCase):
         self.assertEqual(logic.ex_calc(['True', 'True', '+'], logic.get_imports_attrs(constants.imports)), 2)
 
     def test_calculate(self):
+        self.assertEqual(pycalc.calculate('-+---+-1'), -+---+-1)
+        self.assertEqual(pycalc.calculate('2---2'), 2 - --2)
         self.assertEqual(pycalc.calculate('2+2'), 4)
         self.assertEqual(pycalc.calculate('True + True'), 2)
         self.assertEqual(pycalc.calculate('2*3+(((4+5)*2)+4)*5'), 116)
         self.assertEqual(pycalc.calculate('5*abs(-2)/round(5.3)'), 2)
         self.assertEqual(pycalc.calculate('5*abs(-2)/round(5.3)+2.2'), 4.2)
         self.assertEqual(pycalc.calculate('5*abs(-2)/round(5.3)==2.2^3'), False)
-        self.assertEqual(pycalc.calculate('sin(4)'), 4)
