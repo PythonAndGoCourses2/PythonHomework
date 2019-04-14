@@ -78,7 +78,7 @@ def str_parse(ex_str: str) -> list:
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    expression = re.compile(r'[+\-*%^()]|[a-zA-Z]+|[/<=!>]+|[0-9]+[.][0-9]+|[0-9]+')
+    expression = re.compile(r'[+\-*%^()]|[0-9a-zA-Z]+|[a-zA-Z]+|[/<=!>]+|[0-9]+[.][0-9]+|[0-9]+')
     negative = re.compile(r'[^0-9)a-zA-Z][\-][0-9]+|[^0-9)a-zA-Z][\-][a-zA-Z]+')
     positive = re.compile(r'[^0-9)a-zA-Z][+][0-9]+|[^0-9)a-zA-Z][+][a-zA-Z]+')
     float_val = re.compile(r'[^0-9][.][0-9]+')
