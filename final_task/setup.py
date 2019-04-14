@@ -1,10 +1,5 @@
 from setuptools import setup
 
-setup(
-    name='pycalc',
-    version='1.0',
-    author='Molchanov Nikita',
-    author_email='molchanovnik7@gmail.com',
-    py_modules=['pycalc'],
-)
-
+setup(name='pycalc', version='1.0', author='Molchanov Nikita', author_email='molchanovnik7@gmail.com',
+      entry_points={'console_scripts': ['pycalc = final_task.pycalc:start_calc']},
+      platforms='any', py_modules=['pycalc'],)

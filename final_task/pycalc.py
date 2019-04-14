@@ -1,3 +1,5 @@
+#!python
+
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
@@ -211,12 +213,11 @@ def eval_(formula):
         for token in polish:
             if token in OPERATORS:
                 y, x = stack.pop(), stack.pop()
-                if y == 0:
-                    if token == '/':
-                        print('0 cannot be divided')
-                        quit()
-                    else:
-                        stack.append(OPERATORS[token][1](x, y))
+                if y == 0 and token == '/':
+                    print('0 cannot be divided')
+                    quit()
+                else:
+                    stack.append(OPERATORS[token][1](x, y))
             else:
                 stack.append(token)
         return stack[0]
@@ -224,4 +225,8 @@ def eval_(formula):
     return calc(shunting_yard(parse(formula)))
 
 
-print(eval_(line))
+def start_calc():
+    print(eval_(line))
+
+
+start_calc()
