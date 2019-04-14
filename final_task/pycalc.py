@@ -4,8 +4,8 @@ import argparse
 
 def createArgParser():
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
-    parser.add_argument('EXPRESSION', help='expression string to evalute')
-    parser.add_argument('-m', '--MODULE', help='use modules MODULE [MODULE...] additional modules to use')
+    parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
+    parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
     return parser
 
 
@@ -234,11 +234,13 @@ def eval_(formula):
                 stack.append(token)
         return stack[0]
 
-    return calc(shunting_yard(parse(formula)))
+    final_result = calc(shunting_yard(parse(formula)))
+    print(final_result)
+#    return final_result
 
 
-def start_calc(inpt_usr):
-    print(eval_(inpt_usr))
+def start_calc(inp_line):
+    eval_(inp_line)
 
 
 start_calc(line)
