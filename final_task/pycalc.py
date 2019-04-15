@@ -24,10 +24,30 @@ letters = "abcdefghjklmnopqrstuvwxyz &$#@абвгдежзиклмнопрсту�
 result = 0
 
 
-def matched(str):
+def split_operators(s):
+    try:
+        doker = []
+        last_number = ""
+        for c in s:
+            if c in numbers:
+                last_number += c
+            else:
+                if last_number:
+                    doker.append(last_number)
+                    last_number = ""
+                if c:
+                    doker.append(c)
+        if last_number:
+            doker.append(last_number)
+        return doker
+    except Exception:
+        print('fail func split_operators')
+
+
+def matched(lines):
     try:
         count = 0
-        for i in str:
+        for i in lines:
             if i == "(":
                 count += 1
             elif i == ")":
@@ -58,21 +78,34 @@ def only_letters(tested_string):
 
 only_letters(line)
 
-if line is None:
-    print('ERROR: The first value cannot be early ' + line[0])
-    quit()
-if line[0] in mat:
-    print('ERROR: The first value cannot be early ' + line[0])
-    quit()
-if line[-1] in mat:
-    print('ERROR: The last value cannot be early ' + line[-1])
-    quit()
-if line[0] == ')':
-    print('ERROR: The first value cannot be early ' + line[0])
-    quit()
-if line[-1] == '(':
-    print('ERROR: The last value cannot be early ' + line[-1])
-    quit()
+
+def check_line(oneline):
+    if oneline[0] == '-':
+        line.insert(0, '0')
+        return oneline
+    elif oneline is None:
+        print('ERROR: The first value cannot be early ' + oneline[0])
+        quit()
+    elif oneline[0] in mat:
+        print('ERROR: The first value cannot be early ' + oneline[0])
+        quit()
+    elif oneline[-1] in mat:
+        print('ERROR: The last value cannot be early ' + oneline[-1])
+        quit()
+    elif oneline[0] == ')':
+        print('ERROR: The first value cannot be early ' + oneline[0])
+        quit()
+    elif oneline[-1] == '(':
+        print('ERROR: The last value cannot be early ' + oneline[-1])
+        quit()
+
+
+line = split_operators(line)
+
+check_line(line)
+
+line = "".join(str(item) for item in line)
+
 
 try:
     for bracket in line:
@@ -91,28 +124,8 @@ except Exception:
     print('fail bracket_in_line')
 
 if set(line).isdisjoint(mat):
-    print('ERROR: The entered expression does not contain mathematical operations.')
+    print(line)
     quit()
-
-
-def split_operators(s):
-    try:
-        doker = []
-        last_number = ""
-        for c in s:
-            if c in numbers:
-                last_number += c
-            else:
-                if last_number:
-                    doker.append(last_number)
-                    last_number = ""
-                if c:
-                    doker.append(c)
-        if last_number:
-            doker.append(last_number)
-        return doker
-    except Exception:
-        print('fail func split_operators')
 
 
 line = split_operators(line)
