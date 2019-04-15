@@ -4,7 +4,8 @@ import argparse
 
 def create_arg_parser():
     global parser
-    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    parser = argparse.ArgumentParser(prog='pycalc', usage=None, description='Pure-python command-line calculator.',
+                                     formatter_class=argparse.HelpFormatter, conflict_handler='error', add_help=True)
     parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
     parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
     return parser
@@ -19,7 +20,7 @@ OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
 
 z = 0
 numbers = "0123456789."
-mat = ('+', '-', '/', '*', '//', '**', '^', '%')
+mat = ('+', '-', '/', '*', '//', '**', '^', '%', '=')
 letters = "abcdefghjklmnopqrstuvwxyz &$#@абвгдежзиклмнопрстухцчюшщуыывюяё"
 result = 0
 
