@@ -1,11 +1,12 @@
 #!python
 import argparse
 
+
 def create_arg_parser():
     global parser
     parser = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.',
-                                     usage=None, conflict_handler='error', add_help=True,
-                                     formatter_class=argparse.HelpFormatter)
+                                     conflict_handler='resolve', add_help=True,
+                                     formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
     parser.add_argument('-m', '--modules', type=str, help='MODULE [MODULE...] additional modules to use')
     return parser
@@ -244,7 +245,7 @@ def eval_(formula):
             while stack:
                 yield stack.pop()
         except Exception:
-            print('fail func eval_shuting')
+            print('fail func eval_shunting')
 
     def calc(polish):
         try:
