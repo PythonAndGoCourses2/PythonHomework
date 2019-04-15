@@ -68,3 +68,11 @@ class ComplexCalc():
             raise Exception("Indefined function")
         return str(a)
 
+
+"""d=ComplexCalc()
+while True:
+    a=input()
+    try:
+        print(d.expressionSearch(a))
+    except Exception:
+        print(Exception)"""
