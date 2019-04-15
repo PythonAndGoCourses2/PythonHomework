@@ -9,21 +9,8 @@ def exp(a):
     return math.exp(a)
 
 
-
-functions = {
-    "+": lambda a, b: a+b,
-    "-": lambda a, b: a-b,
-    "*": lambda a, b: a*b,
-    "^": lambda a, b: a**b,
-    "/": lambda a, b: a/b,
-    "//": lambda a, b: a//b,
-    "unary-": lambda a: -a,
-    "unary+": lambda a: +a,
-    "log": log,
-    "exp": exp,
-    "pi": math.pi,
-    "abs": abs
-}
+functions = {attr: getattr(math, attr) for attr in dir(math) if callable(
+    getattr(math, attr)) or type(getattr(math, attr)) == float}
 priorities = {
     "==": 0,
     "!=": 0,
@@ -41,3 +28,5 @@ priorities = {
     "unary+": 4,
     "^": 5
 }
+
+regexSpecialSymbols = ["*", "+", "^"]
