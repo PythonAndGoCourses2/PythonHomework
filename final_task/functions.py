@@ -1,5 +1,5 @@
 import math
-
+#math_functions = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
 
 d={ "log10": math.log10,
     "log":math.log,

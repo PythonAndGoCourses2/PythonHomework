@@ -1,4 +1,6 @@
 import difcalc
+import CheckAndChange
+import argparse
 
 helper="""___o8o_____________________oo 
 ___8**o__________________o**88 
@@ -22,18 +24,28 @@ _______8$***$$8**$8*$$****$88$8$8*8**888888
 _____8$***$$$****8$$$******88*__*888888* 
 ______8888$$88888$$8888$$$88 
 ____________************* """
+calculator=difcalc.ComplexCalc()
+cheker=CheckAndChange.CandC()
+parser = argparse.ArgumentParser(description='Calculation')
+parser.add_argument('a', type=str, help='input your expression')
+args = parser.parse_args()
 
-while True:
-    try:
-        a=input()
-        if a!="--help":
-            difcalc.correctBrackets(a)
-            a=difcalc.expressionSearch(a)
+
+try:
+    
+        if args.a!="--help":
+            cheker.doAllCh(args.a)
+            a=calculator.expressionSearch(args.a)
+        
         else: print (helper)
 
-    except Exception as e:
+except Exception as e:
         print("Error:  " + str(e))
-    else: print(a)
+else: print(a)
 
 
 
+
+
+    
+    
