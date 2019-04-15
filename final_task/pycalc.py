@@ -1,13 +1,13 @@
 #!python
 import argparse
 
-
 def create_arg_parser():
     global parser
-    parser = argparse.ArgumentParser(prog='pycalc', usage=None, description='Pure-python command-line calculator.',
-                                     formatter_class=argparse.HelpFormatter, conflict_handler='error', add_help=True)
-    parser.add_argument('EXPRESSION', type=str, help='expression string to evalute')
-    parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
+    parser = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.',
+                                     usage=None, conflict_handler='error', add_help=True,
+                                     formatter_class=argparse.HelpFormatter)
+    parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
+    parser.add_argument('-m', '--modules', type=str, help='MODULE [MODULE...] additional modules to use')
     return parser
 
 
