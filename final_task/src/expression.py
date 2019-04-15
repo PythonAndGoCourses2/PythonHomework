@@ -7,15 +7,15 @@ import math
 from inspect import signature
 # TODO check exceptions
 class Expression:
-    def __init__(self, expression = None):
+    def __init__(self, expression):
         """Initialization of expression object, optional parameter [expression] defines expression string"""
-        self.expression = expression
         self.ppnExpression = []
         self._operatorsStack = Stack()
         self.definedFuncs = Functions(functions)
         self.prevPriority = 0
-
-    # TODO fix names and work with list, nit queue
+        if not expression:
+            raise ValueError("Expression is empty")
+        self._parseToPPN(expression)
 
     def _pushBracket(self, bracket):
         if bracket == "(":
@@ -43,30 +43,28 @@ class Expression:
         self._operatorsStack.push(function)
         self.prevPriority = funcPrior
     
-    def parseToPPN(self, expression = None):
-        if expression:
-            self.expression = expression
-        if not self.expression:
-            raise ValueError("Expression is None. (Empty string was passed to Expression object)")
+    def _parseToPPN(self, expression):
         funcRegexp = Functions(functions).getFuncCompiledRegexp()# regular expression for ALL functions
         numRegexp = re.compile('[0-9]+[.]?[0-9]*') # regular expression for numbers
         searchPos = 0 # use this variable to track last position regular expressions were applied
-        while searchPos < len(self.expression):
-            if self.expression[searchPos] in {'(', ')'}:
-                self._pushBracket(self.expression[searchPos]) # pushing bracket in operators stack
+        while searchPos < len(expression):
+            if expression[searchPos] in {'(', ')'}:
+                self._pushBracket(expression[searchPos]) # pushing bracket in operators stack
                 searchPos+=1
             else:
-                match = numRegexp.match(self.expression, searchPos) # match is used futher for changing searchPos
+                match = numRegexp.match(expression, searchPos) # match is used futher for changing searchPos
                 if match:
                     self.ppnExpression.append(float(match.string[match.start():match.end()]))
                 else:
-                    match = funcRegexp.match(self.expression, searchPos)
+                    match = funcRegexp.match(expression, searchPos)
                     if match:
                         self._pushFunc(match.string[match.start():match.end()])
                     else:
                         raise ValueError("Undefined tokens "+funcRegexp.split(expression[searchPos:])[0])
     
 
-    def calculate():
+    def calculate(self):
+        calcStack = Stack()
+        
         
         

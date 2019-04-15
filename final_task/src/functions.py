@@ -1,16 +1,26 @@
 import math
 
-
-def log(a):
-    return math.log(a)
-
-
-def exp(a):
-    return math.exp(a)
-
-
 functions = {attr: getattr(math, attr) for attr in dir(math) if callable(
-    getattr(math, attr)) or type(getattr(math, attr)) == float}
+    getattr(math, attr))}
+standartFunctions = {
+    "==": lambda a,b: a==b,
+    "!=": lambda a,b: a!=b,
+    ">": lambda a,b: a>b,
+    ">=": lambda a,b: a>=b,
+    "<": lambda a,b: a<b,
+    "<=": lambda a,b: a<=b,
+    "+": lambda a,b: a+b,
+    "-": lambda a,b: a-b,
+    "*": lambda a,b: a*b,
+    "/": lambda a,b: a/b,
+    "%": lambda a,b: a%b,
+    "//": lambda a,b: a//b,
+    "unary-": lambda a: -a,
+    "unary+": lambda a: +a,
+    "^": lambda a,b: a**b,
+    "abs":  abs,
+    "round": round
+}
 priorities = {
     "==": 0,
     "!=": 0,
