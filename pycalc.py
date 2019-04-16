@@ -1,4 +1,5 @@
 #16.04.2019 12:00
+# to master
 import argparse
 from math import pi,e,cos,sin,acos,asin,tan,atan,log,log10,sqrt,exp,factorial
 
