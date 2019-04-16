@@ -34,8 +34,8 @@ args = parser.parse_args()
 try:
     
         if args.a!="--help":
-        a=cheker.doAllCh(args.a)
-        a=calculator.expressionSearch(args.a)
+                a=cheker.doAllCh(args.a)
+                a=calculator.expressionSearch(args.a)
         
         else: print (helper)
 
