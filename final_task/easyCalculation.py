@@ -6,24 +6,23 @@ class Calculator():
 
 
     def __calculation(self,expr):    
+        expr=self.__degree(expr)
        
-        for i in operators.operators:   
-            place=expr.rfind(i)
-     #поиск в обратную сторону только для ^^
+        place=re.search(r'/|\*|%|&',expr)
 
-            while place!=-1:
-
-                findBefore=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place::-1])
-                findAfter=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place:])
+        while place!=None:
+            #регульрное выражение с конца строки есть вроде
+                findBefore=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place.start()::-1])
+                findAfter=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place.start():])
            
 
                 if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
                     raise Exception("the expression should be written in the following form 'number operator number'")
                
-                rezult=str( operators.operators[i](float(findBefore[0][::-1]),float(findAfter[0])))
-                begin=expr[:place-len(findBefore[0])]
-                expr=begin+rezult+expr[findAfter.end()+place:]
-                place=expr.rfind(i)
+                rezult=str( operators.operators[place[0]](float(findBefore[0][::-1]),float(findAfter[0])))
+                begin=expr[:place.start()-len(findBefore[0])]
+                expr=begin+rezult+expr[findAfter.end()+place.start():]
+                place=re.search(r'/|\*|%|&',expr)
 
         return self.__sum(expr)                 
 
@@ -68,3 +67,22 @@ class Calculator():
         rezult=self.__calculation(expr)
 
         return rezult
+
+    def __degree (self,expr):
+        place=expr.rfind("^")
+        #совместить часть вычислений с остальными выражениями
+
+        while place!=-1:
+
+            findBefore=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place::-1])
+            findAfter=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place:])           
+
+            if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
+                raise Exception("the expression should be written in the following form 'number operator number'")
+           
+            rezult=str( operators.operators["^"](float(findBefore[0][::-1]),float(findAfter[0])))
+            begin=expr[:place-len(findBefore[0])]
+            expr=begin+rezult+expr[findAfter.end()+place:]
+            place=expr.rfind("^")
+
+        return expr

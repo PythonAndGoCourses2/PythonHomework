@@ -1,9 +1,18 @@
 import re
 import easyCalculation 
-import functions
+import math
+
 class ComplexCalc():
    
     calc=easyCalculation.Calculator()
+
+    math_functions = {attr:getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
+
+
+    const={
+    "pi":math.pi,
+    "e":math.e
+    }
 
 
     def expressionSearch(self,expr):
@@ -17,9 +26,9 @@ class ComplexCalc():
         
             afterExpr=func.end()
             k=func.start()
-            if func[0] in functions.const:
+            if func[0] in ComplexCalc.const:
 
-                s=functions.const[func[0]]
+                s=ComplexCalc.const[func[0]]
                 expr=expr[:k]+str(s)+expr[afterExpr:]
                 continue
             
@@ -49,19 +58,15 @@ class ComplexCalc():
     def __findreplacement(self,func,expr):
 
 #сделать общий алгоритм для всех вариантов
-        if func in functions.d:
-        
-            expr= str(self.expressionSearch(expr))
-            a=functions.d[func](float(expr))
-        
-        elif  func in functions.twoarg:
+        if  func in ComplexCalc.math_functions:
             l=expr.split(",")
-            if(len(2)!=2):
-                raise Exception("проверьте аргументы функции ")
-            l1=float(self.expressionSearch(l[0]))
-            l2=float(self.expressionSearch(l[1]))
-            a=functions.twoarg[func](l1,l2)
-       
+            
+            k=[]
+            for each in l:
+                
+                k.append(float(self.expressionSearch(each)))
+
+            a=ComplexCalc.math_functions[func](*k)      
 
         else: 
     
@@ -69,10 +74,3 @@ class ComplexCalc():
         return str(a)
 
 
-"""d=ComplexCalc()
-while True:
-    a=input()
-    try:
-        print(d.expressionSearch(a))
-    except Exception:
-        print(Exception)"""
