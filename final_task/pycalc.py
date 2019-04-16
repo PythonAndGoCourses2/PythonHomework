@@ -27,7 +27,7 @@ ______8888$$88888$$8888$$$88
 ____________************* """
 calculator=difcalc.ComplexCalc()
 cheker=CheckAndChange.CandC()
-"""parser = argparse.ArgumentParser(description='Calculation')
+parser = argparse.ArgumentParser(description='Calculation')
 parser.add_argument('a', type=str, help='input your expression')
 args = parser.parse_args()
 
@@ -58,6 +58,6 @@ while True:
                 print("Error:  " + str(e))
         else: print(a)
 
-
+"""
     
     
