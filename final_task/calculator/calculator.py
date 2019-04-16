@@ -14,7 +14,7 @@ class Calculator(object):
         self.evaluator = evaluator.Evaluator()
 
     def calculate(self, iExpr):
-        "function for final calculate"
+        """function for final calculate"""
 
         correctedExpr = self.corrector.correct(iExpr)
 
