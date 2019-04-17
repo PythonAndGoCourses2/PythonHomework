@@ -8,12 +8,10 @@ def create_arg_parser():
     parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
     parser.add_argument('-m', '--module', type=str, nargs='+', help='additional modules to use')
     args = parser.parse_args()
-    #return args
 
 
 create_arg_parser()
 line = args.EXPRESSION
-print(line)
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
@@ -126,13 +124,11 @@ def sign_replacement(text):
     line = text
 
 
-
 sign_replacement(line)
 
 #if set(line).isdisjoint(mat):
 #    print(line)
 #    quit()
-
 
 line = split_operators(line)
 
