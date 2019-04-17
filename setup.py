@@ -8,6 +8,7 @@ setup(
     author='Konstantin Novash',  		# Optional
     author_email='novash.ki@gmail.com',  	# Optional
     py_modules=["pycalc"]			# Required
+    entry-points={'pycalc': ['pycalc=pycalc:main']}
     #packages=['pycalc_project']		# Required
     #python_requires='>3.0, <3.7'
     )

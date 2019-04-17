@@ -1,5 +1,7 @@
 #16.04.2019 12:00
 # to master
+#main
+
 import argparse
 from math import pi,e,cos,sin,acos,asin,tan,atan,log,log10,sqrt,exp,factorial
 
@@ -327,7 +329,7 @@ def brktindx(spisok):
 
 
 # основная функция
-def calc(xpr):
+def main(xpr):
     #проверка скобок в строке
     if xpr.count('(') != xpr.count(')'):
         print('ERROR: brackets are not balanced')
@@ -357,6 +359,6 @@ def calc(xpr):
     #print(result)
     return (result)
 
-print (calc(xpr))
+print (main(xpr))
 
 
