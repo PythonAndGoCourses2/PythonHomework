@@ -1,11 +1,11 @@
 import argparse
-from expression import Expression
+from calculate import calculate
 
 
 parser = argparse.ArgumentParser()
-#parser.add_argument("expression", help="Enter expression to evaluate", type=str)
+parser.add_argument("expression", help="Enter expression to evaluate", type=str)
 args = parser.parse_args()
-#expression = args.expression
-
-expression = Expression('12-20*2^2/5*abs(10)')
-print(expression.calculate())
+try:
+    print(calculate(args.expression))
+except ValueError as err:
+    print("ERROR: "+err)
