@@ -3,18 +3,17 @@ import argparse
 
 
 def create_arg_parser():
-    global parser
-    parser = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.',
-                                     conflict_handler='resolve', add_help=True,
-                                     formatter_class=argparse.RawTextHelpFormatter)
+    global args
+    parser = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
     parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
-    parser.add_argument('-m', '--modules', type=str, help='MODULE [MODULE...] additional modules to use')
-    return parser
+    parser.add_argument('-m', '--module', type=str, nargs='+', help='additional modules to use')
+    args = parser.parse_args()
+    #return args
 
 
 create_arg_parser()
-line = parser.parse_args().EXPRESSION
-
+line = args.EXPRESSION
+print(line)
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (3, lambda x, y: x % y)}
@@ -54,9 +53,7 @@ def matched(lines):
                 count += 1
             elif i == ")":
                 count -= 1
-        if int(count) == 0:
-            return count == 0
-        else:
+        if not int(count) == 0:
             print('ERROR: the number of open and closed brackets is not equal')
             quit()
     except Exception:
@@ -109,25 +106,32 @@ check_line(line)
 line = "".join(str(item) for item in line)
 
 
-try:
-    for bracket in line:
-        if bracket == '(':
-            x = line.index('(')
-            y = line[x + 1]
-            if y in mat:
-                print('ERROR: after the sign ( must be a number')
-                quit()
-            elif line.find(')') == -1:
-                print('ERROR: a character was entered \'(\' but the character was not entered \')\'')
-                quit()
-            else:
-                continue
-except Exception:
-    print('fail bracket_in_line')
+def sign_replacement(text):
+    global line
+    unit_bag = {',': '.', '--': '+', '++': '+', '+-': '-', '-+': '-',
+                '<+': '<', '>+': '>', '=<': '<=', '=>': '>=', '==+': '+'}
+    for unit in unit_bag:
+        if text.find(unit):
+            text = text.replace(unit, unit_bag[unit])
+        else:
+            return text
+    if text[0] == '+':
+        del text[0]
+#    keys = unit_bag.keys()
+#    for sign in text:
+#        if sign in keys:
+#            sign_replacement(text)
+#        else:
+#            continue
+    line = text
 
-if set(line).isdisjoint(mat):
-    print(line)
-    quit()
+
+
+sign_replacement(line)
+
+#if set(line).isdisjoint(mat):
+#    print(line)
+#    quit()
 
 
 line = split_operators(line)
