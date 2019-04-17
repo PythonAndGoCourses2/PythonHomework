@@ -1,9 +1,8 @@
-#16.04.2019 12:00
-# to master
-#main
+#18.04.2019 00:20
 
 import argparse
-from math import pi,e,cos,sin,acos,asin,tan,atan,log,log10,sqrt,exp,factorial
+import math
+from math import *
 
 ap = argparse.ArgumentParser(description = 'Pure-python command-line calculator.')
 ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
@@ -23,70 +22,6 @@ show = args.PRINT
 ##xpr = print (modstr,'=',mod.myfunc(3))
 
 
-##  Unary operators
-##xpr = "-13"
-##xpr = "6-(-13)"
-##xpr = "1---1"
-##xpr = "-+---+-1"
-##  Operation priority
-##xpr = "1+2*2"
-##xpr = "1+(2+3*2)*3"
-##xpr = "10*(2+1)"
-##xpr = "10^(2+1)"
-##xpr = "100/3^2"
-##xpr = "100/3%2^2"
-##  Functions and constants
-##xpr = "pi+e"
-##xpr = "log(e)"
-##xpr = "sin(pi/2)"
-##xpr = "log10(100)"
-##xpr = "sin(pi/2)*111*6"
-##xpr = "2*sin(pi/2)"
-##xpr = "abs(-5)"
-##xpr = "round(123.456789)"
-##xpr = Associative
-##xpr = "102%12%7"
-##xpr = "100/4/3"
-##xpr = "2^3^4"
-##  Comparison operators
-##xpr = "1+2*3==1+2*3"
-##xpr = "e^5>=e^5+1"
-##xpr = "1+2*4/3+1!=1+2*4/3+2"
-##  Common tests
-##xpr = "(100)"
-##xpr = "666"
-##xpr = "-.1"
-##xpr = "1/3"
-##xpr = "1.0/3.0"
-##xpr = ".1 * 2.0^56.0"
-##xpr = "e^34"
-##xpr = "(2.0^(pi/pi+e/e+2.0^0.0))"
-##xpr = "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)"
-##xpr = "sin(pi/2^1) + log(1*4+2^2+1, 3^2)"
-##xpr = "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"
-##xpr = "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"
-##xpr = "2.0^(2.0^2.0*2.0^2.0)"
-## ошибка ? "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
-##xpr = "sin(e^log(e^e^sin(23.0)*45.0) + cos(3.0+log10(e^-e)))"
-##xpr = Error cases
-##xpr = ""
-##xpr = "+"
-##xpr = "1-"
-##xpr = "1 2"
-##xpr = "ee"
-##xpr = "==7"
-##xpr = "1 + 2(3 * 4))"
-##xpr = "((1+2)"
-##xpr = "1 + 1 2 3 4 5 6 "
-##xpr = "log100(100)"
-##xpr = "------"
-##xpr = "5 > = 6"
-##xpr = "5 / / 6"
-##xpr = "6 < = 6"
-##xpr = "6 * * 6"
-##xpr = "((((("
-##xpr = “pow(2, 3, 4)”
-
 ## EVAL TEST
 ##test=xpr
 ##test=test.replace('^','**')
@@ -96,91 +31,102 @@ show = args.PRINT
 ##print(xpr)
 
 oper = ('!','^','//','/','*','%','-','+','(',')','==','<=','>=','<','>','!=','=')
-digit = ('1','2','3','4','5','6','7','8','9','0','.')
-func = ('sin','cos','tan','log10','log','exp','abs','round','sqrt')
-stroka = ''
-slovo = ''
+
+#func = ('sin','cos','tan','log10','log','exp','abs','round','sqrt')
+func = dir(math)
+print(func)
+xprstr = ''
+#word = ''
 operator = ''
-spisok = []
+xprlst = []
 a = 0.
 b = 0.
 result = 0.
 
 
 #разбор строки на элементы списка
-def parse(stroka):
-    slovo=''
+def parse(xprstr):
+    word=''
     #исправление неверно введенных знаков
-    stroka = stroka.replace(' ','')
-    stroka = stroka.replace(',','.')
-    stroka = stroka.replace('--','+')
-    stroka = stroka.replace('++','+')
-    stroka = stroka.replace('+-','-')
-    stroka = stroka.replace('-+','-')
-    stroka = stroka.replace('<+','<')
-    stroka = stroka.replace('>+','>')
-    stroka = stroka.replace('=<','<=')
-    stroka = stroka.replace('=>','>=')
-    stroka = stroka.replace('==+','+')
-    if stroka[0] == '+': stroka=stroka[1:]
-    #print('parse:',stroka)
+    xprstr = xprstr.replace(' ','')
+    xprstr = xprstr.replace(',','.')
+    xprstr = xprstr.replace('--','+')
+    xprstr = xprstr.replace('++','+')
+    xprstr = xprstr.replace('+-','-')
+    xprstr = xprstr.replace('-+','-')
+    xprstr = xprstr.replace('<+','<')
+    xprstr = xprstr.replace('>+','>')
+    xprstr = xprstr.replace('=<','<=')
+    xprstr = xprstr.replace('=>','>=')
+    xprstr = xprstr.replace('==+','+')
+    if xprstr[0] == '+': xprstr=xprstr[1:]
+    #print('parse:',xprstr)
 
     #разбор строки
-    for i,sym in enumerate(stroka + ' '):     #добавлен дополнительный пробел
-        if sym in oper or i == len(stroka):
-            #print(i,slovo,sym)
-            if slovo == 'pi':
-                spisok.append(pi)
-            elif slovo == 'e':
-                spisok.append(e)
-            elif slovo in func:
-                spisok.append(slovo)
-            elif slovo.replace('.','').isdigit() and slovo.count('.')<2:
-                spisok.append(float(slovo))
-            elif slovo != '':
-                print('ERROR: wrong symbol "',slovo,sym,'"')
+    for i,sym in enumerate(xprstr + ' '):     #добавлен дополнительный пробел
+        if sym in oper or i == len(xprstr):
+            #print(i,word,sym)
+            if word == 'pi':
+                xprlst.append(pi)
+            elif word == 'e':
+                xprlst.append(e)
+            elif word in func:
+                xprlst.append(word)
+            elif word.replace('.','').isdigit() and word.count('.')<2:
+                xprlst.append(float(word))
+            elif word != '':
+                print('ERROR: wrong symbol "',word,sym,'"')
                 exit(0)
-            spisok.append(sym)
-            slovo = ''
+            xprlst.append(sym)
+            word = ''
             #print(sym)
             
         else:
-            slovo = slovo + sym
-        #print(i,sym,spisok)
-    spisok.pop()    #удаляется добавленный пробел      
+            word = word + sym
+        #print(i,sym,xprlst)
+    xprlst.pop()    #удаляется добавленный пробел      
     
-    for i,data in enumerate(spisok):
-        if spisok[i] == '/' and spisok[i + 1] == '/':
-            spisok[i] = '//'
-            spisok.pop(i + 1)
-        if spisok[i] == '>' and spisok[i + 1] == '=':
-            spisok[i] = '>='
-            spisok.pop(i + 1)
-        if spisok[i] == '<' and spisok[i + 1] == '=':
-            spisok[i] = '<='
-            spisok.pop(i + 1)
-        if spisok[i] == '=' and spisok[i + 1] == '=' or spisok[i] =='=':
-            spisok[i] = '=='
-            spisok.pop(i + 1)
-        if spisok[i] == '!' and spisok[i + 1] == '=':
-            spisok[i] = '!='
-            spisok.pop(i + 1)
-        if spisok[i] == '-' and spisok[i - 1] in ('^','//','/','*','%','-','+','==','<=','>=','<','>','!=','=') and type(spisok[i + 1]) == float:
-            spisok[i + 1] = spisok[i + 1]* - 1
-            spisok.pop(i)
-        if (spisok[i] == '-' and i == 0) or(spisok[i] == '-' and spisok[i - 1] in('*','^','+','-','(','<','>','=') ):
-            spisok[i] = -1
-            spisok.insert(i + 1,'*')
-        if spisok[i] == '-' and spisok[i - 1] == '/':
-            spisok[i - 1] = '*'
-            spisok[i] = -1
-            spisok.insert(i + 1,'/')
-    #print(spisok)        
-    return(spisok)
+    for i,data in enumerate(xprlst):
+        if xprlst[i] == '/' and xprlst[i + 1] == '/':
+            xprlst[i] = '//'
+            xprlst.pop(i + 1)
+        if xprlst[i] == '>' and xprlst[i + 1] == '=':
+            xprlst[i] = '>='
+            xprlst.pop(i + 1)
+        if xprlst[i] == '<' and xprlst[i + 1] == '=':
+            xprlst[i] = '<='
+            xprlst.pop(i + 1)
+        if xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] =='=':
+            xprlst[i] = '=='
+            xprlst.pop(i + 1)
+        if xprlst[i] == '!' and xprlst[i + 1] == '=':
+            xprlst[i] = '!='
+            xprlst.pop(i + 1)
+        if xprlst[i] == '-' and xprlst[i - 1] in ('^','//','/','*','%','-','+','==','<=','>=','<','>','!=','=') and type(xprlst[i + 1]) == float:
+            xprlst[i + 1] = xprlst[i + 1]* - 1
+            xprlst.pop(i)
+        if (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1] in('*','^','+','-','(','<','>','=') ):
+            xprlst[i] = -1
+            xprlst.insert(i + 1,'*')
+        if xprlst[i] == '-' and xprlst[i - 1] == '/':
+            xprlst[i - 1] = '*'
+            xprlst[i] = -1
+            xprlst.insert(i + 1,'/')
+    #print(xprlst)        
+    return(xprlst)
+
+
+def operate2(operator,a,b):
+    if operator in dir(math):
+        result=math.__dict__[operator](a)
+    return result		
+
 
 
 def operate(operator,a,b):
-    if operator == "+":
+    if operator in dir(math):
+        result=math.__dict__[operator](a)
+    elif operator == "+":
        result = a + b
     elif operator == "-":
        result = a - b
@@ -215,28 +161,6 @@ def operate(operator,a,b):
         result = a == b
     elif operator == "!=":
         result = a != b
-    elif operator == "abs":
-        result = abs(a)
-    elif operator == "round":
-        result = round(a)
-    elif operator == "cos":
-        result = cos(a)
-    elif operator == "sin":
-        result = sin(a)
-    elif operator == "tan":
-        result = tan(a)
-    elif operator == "log":
-        result = log(a)
-    elif operator == "log10":
-        result = log10(a)
-    elif operator == "sqrt":
-        result = sqrt(a)
-    elif operator == "cos":
-        result = cos(a)
-    elif operator == "exp":
-        result = exp(a)
-    elif operator == "!":
-        result = factorial(a)
     else:
         print('ERROR: unknown math operator',operator)
         result = 0
@@ -248,83 +172,83 @@ def operate(operator,a,b):
     return result
 
 #вычисление выражения без скобок
-def calculate(spisok):
-    if show == 'y': print('Calculate:',spisok)
+def calculate(xprlst):
+    if show == 'y': print('Calculate:',xprlst)
     # перебор списка функций 
     for f in func:
-        for i in range(spisok.count(f)):
-           #print(f,spisok.count(f))
-            s = spisok.index(f)
-            spisok[s] = (operate(f,spisok[s + 1],0))
-            spisok[s + 1] = ''
-            wipe(spisok)
-            #print(*spisok,sep='')
+        for i in range(xprlst.count(f)):
+           #print(f,xprlst.count(f))
+            s = xprlst.index(f)
+            xprlst[s] = (operate(f,xprlst[s + 1],0))
+            xprlst[s + 1] = ''
+            wipe(xprlst)
+            #print(*xprlst,sep='')
             
     #вычисление возведение в степень с реверсом списка
-    #print('^ count:',spisok.count('^'))
-    if '^' in spisok:
-        spisok.reverse()
-        #print('reverse: ',spisok)
-        while '^' in spisok:
-            i = spisok.index('^')
+    #print('^ count:',xprlst.count('^'))
+    if '^' in xprlst:
+        xprlst.reverse()
+        #print('reverse: ',xprlst)
+        while '^' in xprlst:
+            i = xprlst.index('^')
             #print('i = ',i)
-            spisok[i] = spisok[i + 1]**spisok[i - 1]
-            #print(spisok[i + 1],'^',spisok[i - 1],'=',spisok[i])
-            spisok[i - 1] = ''
-            spisok[i + 1] = ''
-            #print(spisok)
-            wipe(spisok)
-            #print(spisok)
-        spisok.reverse()
+            xprlst[i] = xprlst[i + 1]**xprlst[i - 1]
+            #print(xprlst[i + 1],'^',xprlst[i - 1],'=',xprlst[i])
+            xprlst[i - 1] = ''
+            xprlst[i + 1] = ''
+            #print(xprlst)
+            wipe(xprlst)
+            #print(xprlst)
+        xprlst.reverse()
         
     #перебор списка математических операций
     for j in oper:
         #print('operation = ',j)
-        #print(spisok)
+        #print(xprlst)
         i = 1
-        while i < len(spisok):
-            if spisok[i] == j:
-                #print('calculate: ',*spisok,sep='')
-                spisok[i] = operate(spisok[i],spisok[i - 1],spisok[i + 1])
-                spisok[i - 1] = ''
-                spisok[i + 1] = ''
-                #print(spisok)
-                wipe(spisok)
+        while i < len(xprlst):
+            if xprlst[i] == j:
+                #print('calculate: ',*xprlst,sep='')
+                xprlst[i] = operate(xprlst[i],xprlst[i - 1],xprlst[i + 1])
+                xprlst[i - 1] = ''
+                xprlst[i + 1] = ''
+                #print(xprlst)
+                wipe(xprlst)
                 i = i - 1
             i = i + 1
-    #print('Stop calculate:',float(spisok[0]))
-    wipe(spisok)
-    #print(spisok)
-    result = spisok[0]
-    if len(spisok) > 1:
+    #print('Stop calculate:',float(xprlst[0]))
+    wipe(xprlst)
+    #print(xprlst)
+    result = xprlst[0]
+    if len(xprlst) > 1:
         print('ERROR: missed operator')
         #exit(0)
     return(result)
 
 #очистка списка от пустых значений ''
-def wipe(spisok):
-    #print('WIPE:\n',spisok)
-    while '' in spisok:
-        i = spisok.index('')
-        spisok.pop(i)
-    #print('WIPED:\n',spisok)
-    return(spisok)
+def wipe(xprlst):
+    #print('WIPE:\n',xprlst)
+    while '' in xprlst:
+        i = xprlst.index('')
+        xprlst.pop(i)
+    #print('WIPED:\n',xprlst)
+    return(xprlst)
 
 #поиск начала и конца выражения в скобках()
-def brktindx(spisok):
-    bl = spisok.index('(')
-    br = spisok.index(')')
-    s = spisok[bl + 1:br]
+def brktindx(xprlst):
+    bl = xprlst.index('(')
+    br = xprlst.index(')')
+    s = xprlst[bl + 1:br]
     #print('BL BR ',bl + 1,' ',br,' ',*s,sep='')
     while '(' in s:
         if s.count('(') == s.count(')'):
-            bl = spisok.index('(',bl + 1)
-            br = spisok.index(')',bl + 1)
-            s = spisok[bl + 1:br]
+            bl = xprlst.index('(',bl + 1)
+            br = xprlst.index(')',bl + 1)
+            s = xprlst[bl + 1:br]
             #print('BL BR ',bl + 1,' ',br,' ', *s,sep='')
         else:
-            br = spisok.index(')',br + 1)
-            s = spisok[bl:br + 1]
+            br = xprlst.index(')',br + 1)
+            s = xprlst[bl:br + 1]
     return(bl + 1,br)
 
 
@@ -336,26 +260,26 @@ def main(xpr):
         exit(0)
 
     #разбор строики в список
-    spisok = parse(xpr)
-    #print(*spisok,sep=',')
+    xprlst = parse(xpr)
+    #print(*xprlst,sep=',')
 
 
 
 
 
     #поиск скобок и вычисление в скобках
-    while '(' in spisok:
-        a,b = brktindx(spisok)
-        #print('in brackets: ',*spisok[a:b],sep='')
-        spisok[a - 1] = calculate(spisok[a:b])
+    while '(' in xprlst:
+        a,b = brktindx(xprlst)
+        #print('in brackets: ',*xprlst[a:b],sep='')
+        xprlst[a - 1] = calculate(xprlst[a:b])
         while a < b + 1:
-            spisok[a] = ''
+            xprlst[a] = ''
             a = a + 1
-        wipe(spisok)
-        #print(*spisok,sep='')
+        wipe(xprlst)
+        #print(*xprlst,sep='')
 
     #вычисление без скобок
-    result = calculate(spisok)
+    result = calculate(xprlst)
     #print(result)
     return (result)
 
