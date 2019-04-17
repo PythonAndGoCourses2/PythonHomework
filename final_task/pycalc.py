@@ -34,7 +34,7 @@ oper = ('!','^','//','/','*','%','-','+','(',')','==','<=','>=','<','>','!=','='
 
 #func = ('sin','cos','tan','log10','log','exp','abs','round','sqrt')
 func = dir(math)
-print(func)
+#print(func)
 xprstr = ''
 #word = ''
 operator = ''
