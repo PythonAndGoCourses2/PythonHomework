@@ -1,5 +1,5 @@
 from functions import priorities,regexSpecialSymbols
-from inspect import signature
+import inspect
 import re
 
 class Functions:
@@ -23,11 +23,11 @@ class Functions:
             raise ValueError("Function is undefined")
         return result
     
-    def getNumOperands(self, func):
+    def getOperands(self, func):
         if type(func) == str:
             function = self.getFunc(func)
-            return len(signature(function).parameters)
+            return inspect.getargspec(function).args
         elif callable(func):
-            return len(signature(func).parameters)
+            return inspect.getargspec(func).args
         else:
             raise TypeError("Trying to get number of operands for "+func)

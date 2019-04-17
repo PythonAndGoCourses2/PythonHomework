@@ -61,10 +61,28 @@ class Expression:
                         self._pushFunc(match.string[match.start():match.end()])
                     else:
                         raise ValueError("Undefined tokens "+funcRegexp.split(expression[searchPos:])[0])
+                searchPos = match.end()
+        while not self._operatorsStack.isEmpty():
+            self.ppnExpression.append(self._operatorsStack.pop())
     
 
     def calculate(self):
         calcStack = Stack()
-        
+        for item in self.ppnExpression:
+            if item in {"(", ")"}:
+                raise ValueError("Brackets are not balanced")
+            elif callable(item):
+                funcOperands = self.definedFuncs.getOperands(item)
+                operands = []
+                for operand in funcOperands:
+                    operands.append(calcStack.pop())
+                operands.reverse()
+                calcStack.push(item(*operands))
+            else:
+                calcStack.push(item)
+        return calcStack.pop()
+
+
+
         
         

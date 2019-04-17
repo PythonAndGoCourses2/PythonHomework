@@ -1,7 +1,7 @@
 import math
 
-functions = {attr: getattr(math, attr) for attr in dir(math) if callable(
-    getattr(math, attr))}
+functions = [getattr(math, attr) for attr in dir(math) if callable(
+    getattr(math, attr))]
 standartFunctions = {
     "==": lambda a,b: a==b,
     "!=": lambda a,b: a!=b,
@@ -21,6 +21,7 @@ standartFunctions = {
     "abs":  abs,
     "round": round
 }
+functions = {**functions, **standartFunctions}
 priorities = {
     "==": 0,
     "!=": 0,
