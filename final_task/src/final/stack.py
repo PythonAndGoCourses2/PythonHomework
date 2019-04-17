@@ -9,3 +9,5 @@ class Stack:
         return self.items.pop()
     def size(self):
         return len(self.items)
+    def lastItem(self):
+        return self.items[len(self.items)-1]

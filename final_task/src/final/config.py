@@ -1,5 +1,5 @@
 import math
-
+from collections import namedtuple
 functions = [getattr(math, attr) for attr in dir(math) if callable(
     getattr(math, attr))]
 standartFunctions = {
@@ -18,10 +18,8 @@ standartFunctions = {
     "unary-": lambda a: -a,
     "unary+": lambda a: +a,
     "^": lambda a,b: a**b,
-    "abs":  abs,
-    "round": round
 }
-functions = {**functions, **standartFunctions}
+#functions = {**functions, **standartFunctions}
 priorities = {
     "==": 0,
     "!=": 0,
