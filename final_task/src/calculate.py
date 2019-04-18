@@ -120,12 +120,12 @@ def parseExpression(expression, functions=None):
                     else:
                         operators.push(standartFuncDict['unary+'])
                         prevPushed = standartFuncDict['unary+']
-                elif operators.isEmpty() or (standartFuncDict[matchStr].priority > operators.lastItem().priority):
+                elif operators.isEmpty() or (standartFuncDict[matchStr].priority >= operators.lastItem().priority):
 
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
                 else:
-                    while not operators.isEmpty() and standartFuncDict[matchStr].priority <= operators.lastItem().priority:
+                    while not operators.isEmpty() and standartFuncDict[matchStr].priority < operators.lastItem().priority:
                         ppnExp.append(operators.pop().func)
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
@@ -176,4 +176,4 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
-#calculate('100/3%2^2')
+#calculate('2^3^4')
