@@ -1,5 +1,6 @@
 # coding=utf-8
 # 18.04.2019 00:20
+# pycharm
 
 import argparse
 import math
@@ -67,7 +68,7 @@ def parse(xprstr):
     xprstr = xprstr.replace('==+', '+')
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
-    print('parse:', xprstr)
+    # print('parse:', xprstr)
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -236,7 +237,7 @@ def wipe(xprlst):
         i = xprlst.index('')
         xprlst.pop(i)
     # print('WIPED:\n', xprlst)
-    return(xprlst)
+    return xprlst
 
 
 # поиск начала и конца выражения в скобках()
