@@ -93,7 +93,7 @@ def parseExpression(expression, functions=None):
     ppnExp = []
     searchPos = 0
     while searchPos < len(expression):
-        while searchPos<len(expression)-1 and expression[searchPos]==' ':
+        while expression[searchPos]==' ':
             searchPos+=1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
@@ -170,6 +170,7 @@ def parseExpression(expression, functions=None):
 
 
 def calculate(expression, functions=None):
+    expression.strip()
     ppnExpression = parseExpression(expression, functions)
     calcStack = Stack()
     for item in ppnExpression:
