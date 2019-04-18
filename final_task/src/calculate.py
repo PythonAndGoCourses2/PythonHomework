@@ -75,7 +75,6 @@ def getConstDict(functions=None):
     return {**mathConsts, **externalConsts}
 
 
-help(getConstDict)
 @executeOnce
 def getNumRegex():
     """Creates regexp object for matching any valid numbers
