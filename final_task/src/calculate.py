@@ -55,7 +55,7 @@ def getStandartFuncDict():
     return {funcKey: funcWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(standartFunctions.items(), priorities.items())}
 
 
-# @executeOnce
+@executeOnce
 def getConstDict(functions=None):
     """Creates dictionary of constants.
 
@@ -222,13 +222,12 @@ def parseExpression(expression, functions=None):
                 if match:
                     matchStr = match.string[match.start(): match.end()]
                     if matchStr in funcDict.keys():
-                        # TODO parse ,
                         mathFuncEnd = match.end() + \
                             findClosingBracket(expression[match.end():])
                         innerExpression = expression[match.end(
                         )+1:mathFuncEnd]
                         paramStrs = [innerExpression]
-                        if re.match('[^(]+[,][^)]+', innerExpression):
+                        if re.match('[^(]*(\(([^()])*\))*,(\(([^()])*\))*[^)]*', innerExpression):
                             paramStrs = innerExpression.split(',')
                         parameters = []
                         for exprs in paramStrs:
