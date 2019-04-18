@@ -3,6 +3,7 @@ from src import calculate
 
 
 def calc():
+    """run pycalc util"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "expression", help="Enter expression to evaluate", type=str)

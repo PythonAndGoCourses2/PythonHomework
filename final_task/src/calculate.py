@@ -11,6 +11,7 @@ funcWithPriority = namedtuple('Func', ['func', 'priority'])
 
 
 def executeOnce(func):
+    """Decorator to execute function only once"""
     result = []
 
     def wrapper(*args, **kwargs):
