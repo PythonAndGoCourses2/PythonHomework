@@ -47,7 +47,7 @@ def getConstDict(functions=None):
 
 @executeOnce
 def getNumRegex():
-    return re.compile('[0-9]+[.]?[0-9]*|[.][0-9]+')
+    return re.compile('\d+[.]?\d*|[.]\d+')
 
 #TODO wrong interpreting of >=, because of > matched first
 @executeOnce
@@ -93,6 +93,8 @@ def parseExpression(expression, functions=None):
     ppnExp = []
     searchPos = 0
     while searchPos < len(expression):
+        while expression[searchPos]==' ':
+            searchPos+=1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
             operators.push(funcWithPriority('(', -1))
@@ -168,7 +170,6 @@ def parseExpression(expression, functions=None):
 
 
 def calculate(expression, functions=None):
-    expression = expression.replace(" ", "")
     ppnExpression = parseExpression(expression, functions)
     calcStack = Stack()
     for item in ppnExpression:
@@ -181,7 +182,3 @@ def calculate(expression, functions=None):
         else:
             calcStack.push(item)
     return calcStack.pop()
-#try:
- #   calculate(r'sin(e^log(e^e*sin(90),45.0) + cos(3.0+log10(e^-e)))')
-#except Exception as err:
- #   print("ERROR: {0}".format(err))
