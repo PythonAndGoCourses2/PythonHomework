@@ -35,7 +35,7 @@ def getMathFuncDict(functions=None):
     -------
     dict
         dictionary with keys of name of functions and values of functions.
-    
+
     """
     mathFunctions = {attr: getattr(math, attr) for attr in dir(math) if callable(
         getattr(math, attr))}
@@ -54,7 +54,8 @@ def getStandartFuncDict():
         dictionary with keys of operators names and values of FuncWithPriority
 
     """
-    return {funcKey: FuncWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(STANDART_FUNCTIONS.items(), PRIORITIES.items())}
+    return {funcKey: FuncWithPriority(func, priority) for (funcKey, func),
+            (priorityKey, priority) in zip(STANDART_FUNCTIONS.items(), PRIORITIES.items())}
 
 
 @executeOnce
@@ -70,7 +71,7 @@ def getConstDict(functions=None):
     -------
     dict
         Dictionary with keys of constant names and values of their values
-    
+
     """
     mathConsts = {attr: getattr(math, attr) for attr in dir(
         math) if type(getattr(math, attr)) in (int, float, complex)}
@@ -106,7 +107,7 @@ def getStandartFuncRegex():
     keys.sort(reverse=True)
     standartFuncStr = str('|').join(keys)
     for symbol in REGEX_SPEC_SYMBOLS:
-        standartFuncStr = standartFuncStr.replace(symbol, "\\"+symbol)
+        standartFuncStr = standartFuncStr.replace(symbol, "\\" + symbol)
     return re.compile(standartFuncStr)
 
 
@@ -169,8 +170,9 @@ def parseExpression(expression, functions=None):
     Returns
     -------
     list
-        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of numbers and functions, that represents mathematical operators
-    
+        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of 
+        numbers and functions, that represents mathematical operators
+
     """
     numRegex = getNumRegex()
     standartFuncRegex = getStandartFuncRegex()
@@ -206,7 +208,8 @@ def parseExpression(expression, functions=None):
             match = standartFuncRegex.match(expression, searchPos)
             if match:
                 matchStr = match.string[match.start(): match.end()]
-                if matchStr in ('-', '+') and (isinstance(prevPushed, Iterable) or prevPushed == '(' or prevPushed is None):
+                if matchStr in ('-', '+') and (isinstance(prevPushed, Iterable)
+                                               or prevPushed == '(' or prevPushed is None):
                     if matchStr == '-':
                         operators.push(standartFuncDict['unary-'])
                         prevPushed = standartFuncDict['unary-']
@@ -220,7 +223,8 @@ def parseExpression(expression, functions=None):
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
                 else:
-                    while not operators.isEmpty() and standartFuncDict[matchStr].priority <= operators.lastItem().priority:
+                    while not operators.isEmpty(
+                    ) and standartFuncDict[matchStr].priority <= operators.lastItem().priority:
                         ppnExp.append(operators.pop().func)
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
@@ -233,7 +237,7 @@ def parseExpression(expression, functions=None):
                         mathFuncEnd = match.end() + \
                             findClosingBracket(expression[match.end():])
                         innerExpression = expression[match.end(
-                        )+1:mathFuncEnd]
+                        ) + 1:mathFuncEnd]
                         paramStrs = [innerExpression]
                         if re.match(r"[^(]*(\(([^()])*\))*,(\(([^()])*\))*[^)]*", innerExpression):
                             paramStrs = innerExpression.split(',')
@@ -242,14 +246,14 @@ def parseExpression(expression, functions=None):
                             parameters.append(calculate(exprs))
                         prevPushed = funcDict[matchStr](*parameters)
                         ppnExp.append(prevPushed)
-                        searchPos = mathFuncEnd+1
+                        searchPos = mathFuncEnd + 1
                     elif matchStr in constsDict.keys():
                         prevPushed = constsDict[matchStr]
                         ppnExp.append(prevPushed)
                         searchPos = match.end()
                     else:
                         raise Exception(
-                            "Unknown expression at "+str(match.start()))
+                            "Unknown expression at " + str(match.start()))
                 else:
                     raise Exception("Unknown symbol at " + str(searchPos))
 
