@@ -6,5 +6,5 @@ def calc():
     args = parser.parse_args()
     try:
         print(calculate.calculate(args.expression))
-    except ValueError as err:
-        print("ERROR: "+ err.str())
+    except Exception as err:
+        print("ERROR: {0}".format(err))
