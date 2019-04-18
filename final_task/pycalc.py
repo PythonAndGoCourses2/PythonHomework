@@ -39,7 +39,7 @@ funcdict = math.__dict__          # dict of math functions
 funcdict['abs'] = abs
 
 
-#print(func)
+# print(func)
 xprstr = ''
 # word = ''
 operator = ''
@@ -79,8 +79,8 @@ def parse(xprstr):
                 xprlst.append(word)
             elif word.replace('.', '').isdigit() and word.count('.')<2:
                 xprlst.append(float(word))
-            #elif word != '':
-            #else:
+            # elif word != '':
+            # else:
             #    print('ERROR: wrong symbol "',word,sym, '"')
             #    exit(0)
             xprlst.append(sym)
@@ -90,7 +90,7 @@ def parse(xprstr):
 
     xprlst.pop()    # удаляется добавленный пробел      
 
-    print(xprlst)
+    # print(xprlst)
 
     
     for i,data in enumerate(xprlst):
@@ -121,14 +121,6 @@ def parse(xprstr):
             xprlst.insert(i + 1, '/')
     # print(xprlst)        
     return(xprlst)
-
-
-def operate2(operator,a,b):
-    if operator in dir(math):
-        result = math.__dict__[operator](a)
-    return result		
-
-
 
 def operate(operator,a,b):
     if operator in dir(math):
