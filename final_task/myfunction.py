@@ -154,3 +154,4 @@ def find_func(stroka,idx,val):
         except KeyError:
             raise KeyError('unknown function',st1)
         return stroka
+    
