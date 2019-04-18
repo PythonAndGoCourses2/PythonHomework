@@ -8,7 +8,7 @@ class Stack:
         args : list
             if provided stack will be initialized with args values
         """
-        self.items = [] if len(args) == 0 else [args]
+        self.items = args if args else []
 
     def isEmpty(self):
         """
@@ -21,7 +21,7 @@ class Stack:
 
     def push(self, item):
         """Pushes item in stack head
-        
+       
         Parameters
         ----------
         item : any

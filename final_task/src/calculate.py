@@ -3,15 +3,15 @@ import math
 import inspect
 from collections import namedtuple
 from collections.abc import Iterable
-from src.config import standartFunctions, priorities, regexSpecialSymbols
+from src.config import STANDART_FUNCTIONS, PRIORITIES, REGEX_SPEC_SYMBOLS
 from src.stack import Stack
 
 
-funcWithPriority = namedtuple('Func', ['func', 'priority'])
+FuncWithPriority = namedtuple('Func', ['func', 'priority'])
 
 
 def executeOnce(func):
-    """Decorator to execute function only once"""
+    """Decorate to execute function only once."""
     result = []
 
     def wrapper(*args, **kwargs):
@@ -24,7 +24,7 @@ def executeOnce(func):
 
 @executeOnce
 def getMathFuncDict(functions=None):
-    """Creates mathematical functions dictionary.
+    """Create mathematical functions dictionary.
 
     Parameters
     ----------
@@ -35,6 +35,7 @@ def getMathFuncDict(functions=None):
     -------
     dict
         dictionary with keys of name of functions and values of functions.
+    
     """
     mathFunctions = {attr: getattr(math, attr) for attr in dir(math) if callable(
         getattr(math, attr))}
@@ -45,19 +46,20 @@ def getMathFuncDict(functions=None):
 
 @executeOnce
 def getStandartFuncDict():
-    """Creates dictionary of standart mathematical operators
+    """Create dictionary of standart mathematical operators.
 
     Returns
     -------
     dict
-        dictionary with keys of operators names and values of funcWithPriority
+        dictionary with keys of operators names and values of FuncWithPriority
+
     """
-    return {funcKey: funcWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(standartFunctions.items(), priorities.items())}
+    return {funcKey: FuncWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(STANDART_FUNCTIONS.items(), PRIORITIES.items())}
 
 
 @executeOnce
 def getConstDict(functions=None):
-    """Creates dictionary of constants.
+    """Create dictionary of constants.
 
     Parameters
     ----------
@@ -68,6 +70,7 @@ def getConstDict(functions=None):
     -------
     dict
         Dictionary with keys of constant names and values of their values
+    
     """
     mathConsts = {attr: getattr(math, attr) for attr in dir(
         math) if type(getattr(math, attr)) in (int, float, complex)}
@@ -78,36 +81,38 @@ def getConstDict(functions=None):
 
 @executeOnce
 def getNumRegex():
-    """Creates regexp object for matching any valid numbers
+    """Create regexp object for matching any valid numbers.
 
     Returns
     -------
     regular expression object
         regexp object that mathes any valid number
+
     """
-    return re.compile('\d+[.]?\d*|[.]\d+')
+    return re.compile(r"\d+[.]?\d*|[.]\d+")
 
 
 @executeOnce
 def getStandartFuncRegex():
-    """Creates regexp object that matches standart mathematical operators
+    """Create regexp object that matches standart mathematical operators.
 
     Returns
     -------
     regular expression object
         regexp object that mathes any valid mathematical operator
+
     """
     keys = list(getStandartFuncDict().keys())
     keys.sort(reverse=True)
     standartFuncStr = str('|').join(keys)
-    for symbol in regexSpecialSymbols:
+    for symbol in REGEX_SPEC_SYMBOLS:
         standartFuncStr = standartFuncStr.replace(symbol, "\\"+symbol)
     return re.compile(standartFuncStr)
 
 
 @executeOnce
 def getConstsRegex(functions=None):
-    """Creates regexp object that matches any constants from math module and user-defined module
+    """Create regexp object that matches any constants from math module and user-defined module.
 
     Parameters
     ----------
@@ -118,12 +123,13 @@ def getConstsRegex(functions=None):
     -------
     regular expression object
         regexp object that mathes any valid mathematical operator
+
     """
     return re.compile(str('|').join(getConstDict(functions).keys()))
 
 
 def findClosingBracket(expression):
-    """Checks expression for valid brackets and finds the position of closing one
+    """Check expression for valid brackets and finds the position of closing one.
 
     Parameters
     ----------
@@ -134,6 +140,7 @@ def findClosingBracket(expression):
     -------
     int
         position of last balanced closing bracket in expression
+
     """
     brackets = Stack()
     for pos, symbol in enumerate(expression):
@@ -150,7 +157,7 @@ def findClosingBracket(expression):
 
 
 def parseExpression(expression, functions=None):
-    """Parses string expression to postfix polish notation
+    """Parse string expression to postfix polish notation.
 
     Parameters
     ----------
@@ -163,6 +170,7 @@ def parseExpression(expression, functions=None):
     -------
     list
         Postfix polish notation expression, where mathematical functions have been already calculated. List contains of numbers and functions, that represents mathematical operators
+    
     """
     numRegex = getNumRegex()
     standartFuncRegex = getStandartFuncRegex()
@@ -179,7 +187,7 @@ def parseExpression(expression, functions=None):
             searchPos += 1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
-            operators.push(funcWithPriority('(', -1))
+            operators.push(FuncWithPriority('(', -1))
             prevPushed = '('
             searchPos += 1
         elif expression[searchPos] == ')':
@@ -227,7 +235,7 @@ def parseExpression(expression, functions=None):
                         innerExpression = expression[match.end(
                         )+1:mathFuncEnd]
                         paramStrs = [innerExpression]
-                        if re.match('[^(]*(\(([^()])*\))*,(\(([^()])*\))*[^)]*', innerExpression):
+                        if re.match(r"[^(]*(\(([^()])*\))*,(\(([^()])*\))*[^)]*", innerExpression):
                             paramStrs = innerExpression.split(',')
                         parameters = []
                         for exprs in paramStrs:
@@ -251,7 +259,7 @@ def parseExpression(expression, functions=None):
 
 
 def calculate(expression, functions=None):
-    """Calculates mathematical expression from string
+    """Calculate mathematical expression from string.
 
     Parameters
     ----------
@@ -264,6 +272,7 @@ def calculate(expression, functions=None):
     -------
     float, bool
         value of calculated expression
+
     """
     expression = expression.strip(' ')
     ppnExpression = parseExpression(expression, functions)
@@ -271,7 +280,7 @@ def calculate(expression, functions=None):
     for item in ppnExpression:
         if callable(item):
             args = []
-            for arg in inspect.getargspec(item).args:
+            for arg in inspect.getfullargspec(item).args:
                 args.append(calcStack.pop())
             args.reverse()
             calcStack.push(item(*args))

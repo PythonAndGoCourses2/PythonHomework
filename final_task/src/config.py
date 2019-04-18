@@ -1,4 +1,4 @@
-standartFunctions = {
+STANDART_FUNCTIONS = {
     "==": lambda a, b: a == b,
     "!=": lambda a, b: a != b,
     ">": lambda a, b: a > b,
@@ -15,7 +15,7 @@ standartFunctions = {
     "unary+": lambda a: +a,
     "^": lambda a, b: a**b,
 }
-priorities = {
+PRIORITIES = {
     "==": 0,
     "!=": 0,
     ">": 1,
@@ -33,4 +33,4 @@ priorities = {
     "^": 5
 }
 
-regexSpecialSymbols = ["*", "+", "^"]
+REGEX_SPEC_SYMBOLS = ["*", "+", "^"]
