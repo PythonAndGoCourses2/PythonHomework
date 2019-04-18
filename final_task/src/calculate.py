@@ -106,7 +106,7 @@ def getStandartFuncRegex():
 
 @executeOnce
 def getConstsRegex(functions=None):
-    """Creates regexp object that matches any constants from math module and user-defined module 
+    """Creates regexp object that matches any constants from math module and user-defined module
 
     Parameters
     ----------
@@ -161,7 +161,7 @@ def parseExpression(expression, functions=None):
     Returns
     -------
     list
-        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of numbers and functions, that represents mathematical operators 
+        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of numbers and functions, that represents mathematical operators
     """
     numRegex = getNumRegex()
     standartFuncRegex = getStandartFuncRegex()
@@ -197,7 +197,7 @@ def parseExpression(expression, functions=None):
             match = standartFuncRegex.match(expression, searchPos)
             if match:
                 matchStr = match.string[match.start(): match.end()]
-                if matchStr in ('-', '+') and (isinstance(prevPushed, Iterable) or prevPushed == '(' or prevPushed == None):
+                if matchStr in ('-', '+') and (isinstance(prevPushed, Iterable) or prevPushed == '(' or prevPushed is None):
                     if matchStr == '-':
                         operators.push(standartFuncDict['unary-'])
                         prevPushed = standartFuncDict['unary-']
