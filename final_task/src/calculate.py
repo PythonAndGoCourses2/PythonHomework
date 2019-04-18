@@ -188,7 +188,3 @@ def calculate(expression, functions=None):
     if not calcStack.isEmpty():
         raise Exception("No operators between expressions!")
     return answer
-try:
-   print(calculate(r'((((( '))
-except Exception as err:
-   print("ERROR: {0}".format(err))
