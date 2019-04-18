@@ -176,4 +176,4 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
-calculate(r'2^3^4')
+#calculate(r'100/4/3')
