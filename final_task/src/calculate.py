@@ -7,6 +7,7 @@ import functools
 from src.config import standartFunctions, priorities, regexSpecialSymbols
 from src.stack import Stack
 
+
 funcWithPriority = namedtuple('Func', ['func', 'priority'])
 
 
@@ -69,12 +70,13 @@ def findClosingBracket(expression):
             brackets.push('(')
         elif symbol == ')':
             if brackets.isEmpty():
-                raise ValueError("Brackets are not balanced!")
+                raise Exception("Brackets are not balanced!")
             brackets.pop()
         if brackets.isEmpty():
             return pos
     if not brackets.isEmpty():
-        raise ValueError("Brackets are not balanced!")
+        raise Exception("Brackets are not balanced!")
+
 # TODO implement parsing))
 
 
@@ -101,7 +103,7 @@ def parseExpression(expression, functions=None):
                 ppnExp.append(lastItem.func)
                 lastItem = operators.pop()
             if lastItem.func != '(':
-                raise ValueError("Brackets are not balanced!")
+                raise Exception("Brackets are not balanced!")
             searchPos+=1
         elif match:
             prevPushed = float(match.string[match.start():match.end()])
@@ -138,8 +140,11 @@ def parseExpression(expression, functions=None):
                         #paramsstr = expression[match.end():match.end()+findClosingBracket(expression[match.end():])-1]
                         mathFuncEnd = match.end() + \
                             findClosingBracket(expression[match.end():])
-                        paramStrs = expression[match.end(
-                        )+1:mathFuncEnd].split(',')
+                        innerExpression = expression[match.end(
+                        )+1:mathFuncEnd]
+                        paramStrs = [innerExpression]
+                        if re.match('[^(]+[,][^)]+', innerExpression):
+                            paramStrs = innerExpression.split(',')
                         parameters = []
                         for exprs in paramStrs:
                             parameters.append(calculate(exprs))
@@ -151,10 +156,10 @@ def parseExpression(expression, functions=None):
                         ppnExp.append(prevPushed)
                         searchPos = match.end()
                     else:
-                        raise ValueError(
+                        raise Exception(
                             "Unknown expression at "+str(match.start()))
                 else:
-                    raise ValueError("Unknown symbol at " + str(searchPos))
+                    raise Exception("Unknown symbol at " + str(searchPos))
 
     while not operators.isEmpty():
         ppnExp.append(operators.pop().func)
@@ -175,5 +180,7 @@ def calculate(expression, functions=None):
         else:
             calcStack.push(item)
     return calcStack.pop()
-
-#calculate(r'100/4/3')
+#try:
+#    calculate(r'sin(e^log(e^e*sin(90),45.0) + cos(3.0+log10(e^-e)))')
+#except Exception as err:
+#    print("ERROR: {0}".format(err))
