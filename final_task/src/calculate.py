@@ -1,9 +1,8 @@
 import re
 import math
+import inspect
 from collections import namedtuple
 from collections.abc import Iterable
-import inspect
-import functools
 from src.config import standartFunctions, priorities, regexSpecialSymbols
 from src.stack import Stack
 
@@ -24,6 +23,18 @@ def executeOnce(func):
 
 @executeOnce
 def getMathFuncDict(functions=None):
+    """Creates mathematical functions dictionary.
+
+    Parameters
+    ----------
+    functions : module
+         User-specified module containing functions (default is None)
+
+    Returns
+    -------
+    dict
+        dictionary with keys of name of functions and values of functions.
+    """
     mathFunctions = {attr: getattr(math, attr) for attr in dir(math) if callable(
         getattr(math, attr))}
     externalFunctions = {attr: getattr(functions, attr) for attr in dir(functions) if callable(
@@ -33,11 +44,30 @@ def getMathFuncDict(functions=None):
 
 @executeOnce
 def getStandartFuncDict():
+    """Creates dictionary of standart mathematical operators
+
+    Returns
+    -------
+    dict
+        dictionary with keys of operators names and values of funcWithPriority
+    """
     return {funcKey: funcWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(standartFunctions.items(), priorities.items())}
 
 
-@executeOnce
+# @executeOnce
 def getConstDict(functions=None):
+    """Creates dictionary of constants.
+
+    Parameters
+    ----------
+    functions : module
+        User-specified module containing constants (default is None)
+
+    Returns
+    -------
+    dict
+        Dictionary with keys of constant names and values of their values
+    """
     mathConsts = {attr: getattr(math, attr) for attr in dir(
         math) if type(getattr(math, attr)) in (int, float, complex)}
     externalConsts = {attr: getattr(functions, attr) for attr in dir(
@@ -45,15 +75,30 @@ def getConstDict(functions=None):
     return {**mathConsts, **externalConsts}
 
 
+help(getConstDict)
 @executeOnce
 def getNumRegex():
+    """Creates regexp object for matching any valid numbers
+
+    Returns
+    -------
+    regular expression object
+        regexp object that mathes any valid number
+    """
     return re.compile('\d+[.]?\d*|[.]\d+')
 
-#TODO wrong interpreting of >=, because of > matched first
+
 @executeOnce
 def getStandartFuncRegex():
+    """Creates regexp object that matches standart mathematical operators
+
+    Returns
+    -------
+    regular expression object
+        regexp object that mathes any valid mathematical operator
+    """
     keys = list(getStandartFuncDict().keys())
-    keys.sort(reverse = True)
+    keys.sort(reverse=True)
     standartFuncStr = str('|').join(keys)
     for symbol in regexSpecialSymbols:
         standartFuncStr = standartFuncStr.replace(symbol, "\\"+symbol)
@@ -62,10 +107,34 @@ def getStandartFuncRegex():
 
 @executeOnce
 def getConstsRegex(functions=None):
+    """Creates regexp object that matches any constants from math module and user-defined module 
+
+    Parameters
+    ----------
+    functions : module
+        User-specified module containing functions (default is None)
+
+    Returns
+    -------
+    regular expression object
+        regexp object that mathes any valid mathematical operator
+    """
     return re.compile(str('|').join(getConstDict(functions).keys()))
 
 
 def findClosingBracket(expression):
+    """Checks expression for valid brackets and finds the position of closing one
+
+    Parameters
+    ----------
+    expression : str
+        String where to find closing bracket
+
+    Returns
+    -------
+    int
+        position of last balanced closing bracket in expression
+    """
     brackets = Stack()
     for pos, symbol in enumerate(expression):
         if symbol == '(':
@@ -80,8 +149,21 @@ def findClosingBracket(expression):
         raise Exception("Brackets are not balanced!")
 
 
-
 def parseExpression(expression, functions=None):
+    """Parses string expression to postfix polish notation
+
+    Parameters
+    ----------
+    expression : str
+        expression string to parse into polish notation
+    functions : module
+        user-defined module with functions and constants. Will overwrite standart functions if needed (default is None)
+
+    Returns
+    -------
+    list
+        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of numbers and functions, that represents mathematical operators 
+    """
     numRegex = getNumRegex()
     standartFuncRegex = getStandartFuncRegex()
     funcDict = getMathFuncDict(functions)
@@ -93,8 +175,8 @@ def parseExpression(expression, functions=None):
     ppnExp = []
     searchPos = 0
     while searchPos < len(expression):
-        while expression[searchPos]==' ':
-            searchPos+=1
+        while expression[searchPos] == ' ':
+            searchPos += 1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
             operators.push(funcWithPriority('(', -1))
@@ -107,7 +189,7 @@ def parseExpression(expression, functions=None):
                 lastItem = operators.pop()
             if lastItem.func != '(':
                 raise Exception("Brackets are not balanced!")
-            searchPos+=1
+            searchPos += 1
         elif match:
             prevPushed = float(match.string[match.start():match.end()])
             ppnExp.append(prevPushed)
@@ -140,7 +222,7 @@ def parseExpression(expression, functions=None):
                 if match:
                     matchStr = match.string[match.start(): match.end()]
                     if matchStr in funcDict.keys():
-                        #TODO parse ,
+                        # TODO parse ,
                         mathFuncEnd = match.end() + \
                             findClosingBracket(expression[match.end():])
                         innerExpression = expression[match.end(
@@ -170,6 +252,20 @@ def parseExpression(expression, functions=None):
 
 
 def calculate(expression, functions=None):
+    """Calculates mathematical expression from string
+
+    Parameters
+    ----------
+    expression : str
+        expression string to parse into polish notation
+    functions : module
+        user-defined module with functions and constants. Will overwrite standart functions if needed (default is None)
+
+    Returns
+    -------
+    float, bool
+        value of calculated expression
+    """
     expression = expression.strip(' ')
     ppnExpression = parseExpression(expression, functions)
     calcStack = Stack()

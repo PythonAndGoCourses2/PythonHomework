@@ -1,5 +1,3 @@
-import math
-
 standartFunctions = {
     "==": lambda a, b: a == b,
     "!=": lambda a, b: a != b,
@@ -17,7 +15,6 @@ standartFunctions = {
     "unary+": lambda a: +a,
     "^": lambda a, b: a**b,
 }
-#functions = {**functions, **standartFunctions}
 priorities = {
     "==": 0,
     "!=": 0,
