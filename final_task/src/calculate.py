@@ -6,8 +6,8 @@ from collections import namedtuple
 from collections.abc import Iterable
 import inspect
 import functools
-from config import standartFunctions, priorities, regexSpecialSymbols
-from stack import Stack
+from src.config import standartFunctions, priorities, regexSpecialSymbols
+from src.stack import Stack
 
 funcWithPriority = namedtuple('Func', ['func', 'priority'])
 
@@ -175,5 +175,3 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
-
-print(calculate('2*3+log10(100)^3 == 14'))
