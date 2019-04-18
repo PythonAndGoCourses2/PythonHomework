@@ -1,5 +1,25 @@
 class Stack:
-    """Standart stack implementation"""
+    """Standart stack implementation
+
+    Attributes
+    ----------
+    items : list
+        items stored in stack
+
+    Methods
+    -------
+    isEmpty()
+        returns true if the stack is empty
+    push(item)
+        inserts item on stack head
+    pop()
+        deletes stack head and returns it value
+    size()
+        returns number of items stored in stack
+    lastItem()
+        returns value of stack head
+
+    """
     def __init__(self, *args):
         """initializes stack object
 
