@@ -8,29 +8,15 @@ from math import *
 
 ap = argparse.ArgumentParser(description='Pure-python command-line calculator.')
 ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
-ap.add_argument('-p', '--PRINT', default='n', choices=['y', 'n'], type=str, help='print evaluation process')
 ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
 args = ap.parse_args()
-# print(args.EXPRESSION)
-# print(args.PRINT)
-# print(args.MODULE)
 xpr = args.EXPRESSION
-show = args.PRINT
-# show = 'y'
 
 # xpr = modstr = args.MODULE
 # xpr=
 # xpr=mod=__import__(modstr)
 # xpr=print (modstr, '=', mod.myfunc(3))
 
-
-# EVAL TEST
-# test = xpr
-# test = test.replace('^', '**')
-# test = test.replace(' ', '')
-# test = test.replace(', ', '.')
-# print ('EVAL:', test, '=', eval(test))
-# print(xpr)
 
 oper = ('!', '^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=')
 
@@ -78,7 +64,7 @@ def parse(xprstr):
             elif word == 'e':
                 xprlst.append(e)
             elif word in funclist:
-                print(word, ' in math')
+                # print(word, ' in math')
                 xprlst.append(word)
             elif word.replace('.', '').isdigit() and word.count('.') < 2:
                 xprlst.append(float(word))
@@ -166,18 +152,16 @@ def operate(operator, a, b):
     else:
         print('ERROR: unknown math operator', operator)
         result = 0
-    if show == 'y':
-        if operator in oper:
-            print('Operate:', a, operator, b, '=', result)
-        elif operator in funclist:
-            print('Operate:', operator, a, '=', result)
+    # if operator in oper:
+    #    print('Operate:', a, operator, b, '=', result)
+    # elif operator in funclist:
+    #    print('Operate:', operator, a, '=', result)
     return result
 
 
 # вычисление выражения без скобок
 def calculate(xprlst):
-    if show == 'y':
-        print('Calculate:', xprlst)
+    # print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
         for i in range(xprlst.count(f)):
