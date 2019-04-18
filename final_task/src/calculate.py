@@ -34,7 +34,7 @@ def getMathFuncDict(functions=None):
 
 @executeOnce
 def getStandartFuncDict():
-    return {funcKey: funcWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(standartFunctions.items(), priorities.items()) if funcKey == priorityKey}
+    return {funcKey: funcWithPriority(func, priority) for (funcKey, func), (priorityKey, priority) in zip(standartFunctions.items(), priorities.items())}
 
 
 @executeOnce
@@ -176,4 +176,4 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
-#calculate('1+(2+3*2)*3')
+#calculate('100/3%2^2')
