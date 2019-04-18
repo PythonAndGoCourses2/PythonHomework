@@ -262,10 +262,6 @@ def main(xpr):
     xprlst = parse(xpr)
     # print(*xprlst,sep=', ')
 
-
-
-
-
     # поиск скобок и вычисление в скобках
     while '(' in xprlst:
         a,b = brktindx(xprlst)
