@@ -21,7 +21,7 @@ class Stack:
 
     def push(self, item):
         """Pushes item in stack head
-             
+
         Parameters
         ----------
         item : any

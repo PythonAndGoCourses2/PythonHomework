@@ -170,7 +170,7 @@ def parseExpression(expression, functions=None):
     Returns
     -------
     list
-        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of 
+        Postfix polish notation expression, where mathematical functions have been already calculated. List contains of
         numbers and functions, that represents mathematical operators
 
     """
