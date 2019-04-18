@@ -2,13 +2,12 @@
 import argparse
 from mymodule import first_foo, find_brackets, find_comparsion, calc, Compare
 
-
-#ap=argparse.ArgumentParser(description='Pure-python command line calculator.')
-#ap.add_argument('EXPRESSION',type=str, help='expression string to evalute')
-#ap.add_argument('-p','--PRINT', default='n', choices=['y','n'], type=str, help='print evaluation proces')
-#args = ap.parse_args()
-    
-a = input(str())#args.EXPRESSION
+def byild_parser():
+    parser=argparse.ArgumentParser(description='Pure-python command line calculator.')
+    parser.add_argument('expression', help='expression string to evalute', type=str)
+    args = parser.parse_args()
+    return args
+a = byild_parser().expression
 try:
     a = first_foo(a)
     result1 = find_brackets(a)
