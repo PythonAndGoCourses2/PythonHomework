@@ -93,7 +93,7 @@ def parseExpression(expression, functions=None):
     ppnExp = []
     searchPos = 0
     while searchPos < len(expression):
-        while expression[searchPos]==' ':
+        while searchPos<len(expression)-1 and expression[searchPos]==' ':
             searchPos+=1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
@@ -179,6 +179,15 @@ def calculate(expression, functions=None):
                 args.append(calcStack.pop())
             args.reverse()
             calcStack.push(item(*args))
-        else:
+        elif type(item) in (int, float, complex):
             calcStack.push(item)
-    return calcStack.pop()
+        else:
+            raise Exception("Brackets are not balanced")
+    answer = calcStack.pop()
+    if not calcStack.isEmpty():
+        raise Exception("No operators between expressions!")
+    return answer
+try:
+   print(calculate(r'((((( '))
+except Exception as err:
+   print("ERROR: {0}".format(err))
