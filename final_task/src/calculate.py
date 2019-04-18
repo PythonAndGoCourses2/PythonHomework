@@ -52,7 +52,9 @@ def getNumRegex():
 #TODO wrong interpreting of >=, because of > matched first
 @executeOnce
 def getStandartFuncRegex():
-    standartFuncStr = str('|').join(getStandartFuncDict().keys())
+    keys = list(getStandartFuncDict().keys())
+    keys.sort(reverse = True)
+    standartFuncStr = str('|').join(keys)
     for symbol in regexSpecialSymbols:
         standartFuncStr = standartFuncStr.replace(symbol, "\\"+symbol)
     return re.compile(standartFuncStr)
@@ -77,7 +79,6 @@ def findClosingBracket(expression):
     if not brackets.isEmpty():
         raise Exception("Brackets are not balanced!")
 
-# TODO implement parsing))
 
 
 def parseExpression(expression, functions=None):
@@ -137,7 +138,7 @@ def parseExpression(expression, functions=None):
                 if match:
                     matchStr = match.string[match.start(): match.end()]
                     if matchStr in funcDict.keys():
-                        #paramsstr = expression[match.end():match.end()+findClosingBracket(expression[match.end():])-1]
+                        #TODO parse ,
                         mathFuncEnd = match.end() + \
                             findClosingBracket(expression[match.end():])
                         innerExpression = expression[match.end(
@@ -181,6 +182,6 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 #try:
-#    calculate(r'sin(e^log(e^e*sin(90),45.0) + cos(3.0+log10(e^-e)))')
+ #   calculate(r'sin(e^log(e^e*sin(90),45.0) + cos(3.0+log10(e^-e)))')
 #except Exception as err:
-#    print("ERROR: {0}".format(err))
+ #   print("ERROR: {0}".format(err))
