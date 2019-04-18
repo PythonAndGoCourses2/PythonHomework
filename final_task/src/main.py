@@ -7,4 +7,4 @@ def calc():
     try:
         print(calculate.calculate(args.expression))
     except ValueError as err:
-        print("ERROR: "+err)
+        print("ERROR: "+ err.str())

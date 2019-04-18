@@ -99,11 +99,12 @@ def parseExpression(expression, functions=None):
             searchPos += 1
         elif expression[searchPos] == ')':
             lastItem = operators.pop()
-            while lastItem != ')' and not operators.isEmpty():
-                ppnExp.append(lastItem)
+            while lastItem != '(' and not operators.isEmpty():
+                ppnExp.append(lastItem.func)
                 lastItem = operators.pop()
-            if lastItem != ')':
+            if lastItem != '(':
                 raise ValueError("Brackets are not balanced!")
+            searchPos+=1
         elif match:
             prevPushed = float(match.string[match.start():match.end()])
             ppnExp.append(prevPushed)
@@ -175,3 +176,4 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
+#calculate('6-(-13)')
