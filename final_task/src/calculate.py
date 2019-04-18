@@ -152,9 +152,9 @@ def parseExpression(expression, functions=None):
                         searchPos = match.end()
                     else:
                         raise ValueError(
-                            "Unknown expression at "+match.start())
+                            "Unknown expression at "+str(match.start()))
                 else:
-                    raise ValueError("Unknown symbol at " + searchPos)
+                    raise ValueError("Unknown symbol at " + str(searchPos))
 
     while not operators.isEmpty():
         ppnExp.append(operators.pop().func)
