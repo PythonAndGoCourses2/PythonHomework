@@ -1,17 +1,17 @@
 import math, operator
 
-A={'*':operator.mul,'%':operator.mod,'//':operator.floordiv,'^':operator.pow,'/':operator.truediv,'+':operator.add,'-':operator.sub,}
-C = {'acos':math.acos,'acosh':math.acosh,'asin':math.asin,'asinh':math.asinh,'atan':math.atan,
-    'atan2':math.atan2,'atanh':math.atanh, 'ceil':math.ceil,'copysign':math.copysign,'cos':math.cos,
-    'cosh':math.cosh,'degrees':math.degrees,'erf':math.erf,'erfc':math.erfc,'exp':math.exp,
-    'expm1':math.expm1,'fabs':math.fabs,'factorial':math.factorial,'floor':math.floor,'fmod':math.fmod,
-    'frexp':math.frexp,'fsum':math.fsum,'gamma':math.gamma,'gcd':math.gcd,'hypot':math.hypot,
-    'isclose':math.isclose,'isfinite':math.isfinite,'isinf':math.isinf,'isnan':math.isnan,'ldexp':math.ldexp,
-    'lgamma':math.lgamma,'log':math.log,'log10':math.log10,'log1p':math.log1p,'log2':math.log2,'modf':math.modf,
-    'pow':math.pow,'radians':math.radians,'sin':math.sin,'sinh':math.sinh,'sqrt':math.sqrt,
-    'tan':math.tan,'tanh':math.tanh,'trunc':math.trunc,'round':round,'abs':abs}
-Compare={'>':operator.gt,'<':operator.lt,'!=':operator.ne,'==':operator.eq,'>=':operator.ge,'<=':operator.le}
-Const={'e':math.e,'pi':math.pi,'tau':math.tau,'-e':-math.e,'-pi':-math.pi,'-tau':-math.tau,'+e':math.e,'+pi':math.pi,'+tau':math.tau}
+A={'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow, '/': operator.truediv, '+': operator.add, '-': operator.sub,}
+C = {'acos': math.acos, 'acosh': math.acosh,'asin': math.asin,'asinh': math.asinh,'atan': math.atan,
+    'atan2': math.atan2, 'atanh': math.atanh, 'ceil': math.ceil,'copysign': math.copysign,'cos': math.cos,
+    'cosh': math.cosh,'degrees': math.degrees,'erf': math.erf,'erfc': math.erfc,'exp':math.exp,
+    'expm1': math.expm1,'fabs': math.fabs,'factorial':math.factorial,'floor': math.floor,'fmod': math.fmod,
+    'frexp': math.frexp,'fsum': math.fsum,'gamma': math.gamma,'gcd':math.gcd,'hypot': math.hypot,
+    'isclose': math.isclose,'isfinite':math.isfinite,'isinf': math.isinf,'isnan': math.isnan,'ldexp': math.ldexp,
+    'lgamma': math.lgamma,'log': math.log,'log10': math.log10,'log1p': math.log1p,'log2': math.log2,'modf': math.modf,
+    'pow': math.pow,'radians': math.radians,'sin': math.sin,'sinh': math.sinh,'sqrt': math.sqrt,
+    'tan': math.tan,'tanh': math.tanh,'trunc': math.trunc,'round': round,'abs': abs}
+Compare={'>': operator.gt, '<':operator.lt, '!=': operator.ne, '==': operator.eq, '>=': operator.ge,' <=': operator.le}
+Const={'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e':-math.e, '-pi': -math.pi, '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 
 
 def first_foo(stroka):

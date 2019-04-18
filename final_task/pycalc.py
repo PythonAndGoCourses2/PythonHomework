@@ -1,6 +1,6 @@
 #%%
 import argparse
-from mymodule import first_foo, find_brackets, find_comparsion, calc, Compare
+from myfunction import first_foo, find_brackets, find_comparsion, calc, Compare
 
 def byild_parser():
     parser=argparse.ArgumentParser(description='Pure-python command line calculator.')
@@ -28,7 +28,7 @@ except ZeroDivisionError:
 except TypeError as e:
     print('error:',str(e),sep=' ')
 except KeyError as e:
-    x,y = e.args
+    x, y = e.args
     print(x,y)
 except ValueError as e:
         print('error: invalid syntax',str(e),sep=' ')
