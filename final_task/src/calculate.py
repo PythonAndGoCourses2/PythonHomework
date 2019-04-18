@@ -1,5 +1,3 @@
-# TODO How to import modules????
-
 import re
 import math
 from collections import namedtuple
@@ -48,9 +46,9 @@ def getConstDict(functions=None):
 
 @executeOnce
 def getNumRegex():
-    return re.compile('[0-9]+[.]?[0-9]*')
+    return re.compile('[0-9]+[.]?[0-9]*|[.][0-9]+')
 
-
+#TODO wrong interpreting of >=, because of > matched first
 @executeOnce
 def getStandartFuncRegex():
     standartFuncStr = str('|').join(getStandartFuncDict().keys())
@@ -86,7 +84,7 @@ def parseExpression(expression, functions=None):
     funcDict = getMathFuncDict(functions)
     constsDict = getConstDict(functions)
     standartFuncDict = getStandartFuncDict()
-    strRegex = re.compile('[A-z]+[0-9]*')
+    strRegex = re.compile('[A-Z]|[a-z]+[0-9]*')
     operators = Stack()
     prevPushed = None
     ppnExp = []
@@ -120,12 +118,14 @@ def parseExpression(expression, functions=None):
                     else:
                         operators.push(standartFuncDict['unary+'])
                         prevPushed = standartFuncDict['unary+']
-                elif operators.isEmpty() or (standartFuncDict[matchStr].priority >= operators.lastItem().priority):
-
+                elif operators.isEmpty() or (standartFuncDict[matchStr].priority > operators.lastItem().priority):
+                    prevPushed = standartFuncDict[matchStr]
+                    operators.push(prevPushed)
+                elif matchStr == '^' and operators.lastItem() == standartFuncDict[matchStr]:
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
                 else:
-                    while not operators.isEmpty() and standartFuncDict[matchStr].priority < operators.lastItem().priority:
+                    while not operators.isEmpty() and standartFuncDict[matchStr].priority <= operators.lastItem().priority:
                         ppnExp.append(operators.pop().func)
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
@@ -176,4 +176,4 @@ def calculate(expression, functions=None):
             calcStack.push(item)
     return calcStack.pop()
 
-#calculate('2^3^4')
+calculate(r'2^3^4')
