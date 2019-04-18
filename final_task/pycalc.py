@@ -1,6 +1,6 @@
 #%%
 import argparse
-from myfunction import first_foo, find_brackets, find_comparsion, calc, Compare
+from mymodule import first_foo, find_brackets, find_comparsion, calc, Compare
 
 def byild_parser():
     parser=argparse.ArgumentParser(description='Pure-python command line calculator.')
