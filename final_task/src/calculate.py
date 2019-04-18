@@ -170,7 +170,7 @@ def parseExpression(expression, functions=None):
 
 
 def calculate(expression, functions=None):
-    expression.strip()
+    expression = expression.strip(' ')
     ppnExpression = parseExpression(expression, functions)
     calcStack = Stack()
     for item in ppnExpression:
