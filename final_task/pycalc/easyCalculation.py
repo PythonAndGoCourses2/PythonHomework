@@ -41,7 +41,7 @@ class Calculator():
             else: splitted.append(float(find[0]))
             expr=expr[find.end():]
 
-        return if '{:.8f}'.format((sum(splitted)))
+        return '{:.8f}'.format((sum(splitted)))
     
 
     def calculate(self,expr):
