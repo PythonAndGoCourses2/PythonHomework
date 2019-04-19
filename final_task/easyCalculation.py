@@ -23,7 +23,7 @@ class Calculator():
                 begin=expr[:place.start()-len(findBefore[0])]
                 expr=begin+rezult+expr[findAfter.end()+place.start():]
                 place=re.search(r'/|\*|%|&',expr)
-
+                #добавить сравнение после суммы
         return self.__sum(expr)                 
 
     def __sum(self,expr):
@@ -86,3 +86,15 @@ class Calculator():
             place=expr.rfind("^")
 
         return expr
+
+
+        compare={
+
+    ">":lambda a, b: a>b,
+    ">=":lambda a, b:a>=b,
+    "<=":lambda a, b:a<=b,
+    "==": lambda a, b: a==b
+    "<":lambda a,b: a<b
+
+
+    }

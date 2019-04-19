@@ -57,20 +57,18 @@ class ComplexCalc():
 
     def __findreplacement(self,func,expr):
 
-#сделать общий алгоритм для всех вариантов
         if  func in ComplexCalc.math_functions:
             l=expr.split(",")
             
             k=[]
-            for each in l:
-                
+            for each in l:               
                 k.append(float(self.expressionSearch(each)))
 
-            a=ComplexCalc.math_functions[func](*k)      
+            a=round(ComplexCalc.math_functions[func](*k),8)      
 
         else: 
     
             raise Exception("Indefined function")
         return str(a)
 
-
+ 
