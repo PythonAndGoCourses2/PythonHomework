@@ -103,7 +103,7 @@ def parse(xprstr):
 
 
 def operate(operator, *args):
-    #print('def operate', operator, args)
+    print('def operate', operator, args)
     if operator in dir(math):
         result = funcdict[operator](*args)
     elif operator == "+":
@@ -156,11 +156,11 @@ def operate(operator, *args):
 
 # вычисление выражения без скобок
 def calculate(xprlst):
-    #print('Calculate:', xprlst)
+    print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
         for i in range(xprlst.count(f)):
-            #print(f,'in funclist')
+            print(f,'in funclist')
             # print(f, xprlst.count(f))
             s = xprlst.index(f)
             if ',' in xprlst:
@@ -265,8 +265,7 @@ def main(xpr):
     # поиск скобок и вычисление в скобках
     while '(' in xprlst:
         a, b = brktindx(xprlst)
-        inbrackets = xprlst[a:b]
-        #print('in brackets to oper: ', inbrackets)
+        print('in brackets:',xprlst[a:b])
         tmp = calculate(xprlst[a:b])
         #print (tmp)
         xprlst = xprlst[0:a-1] + tmp + xprlst[b+1:]
