@@ -34,7 +34,11 @@ result = 0.
 def parse(xprstr):
     word = ''
     # исправление неверно введенных знаков
-    xprstr = xprstr.replace(' ', '')
+    if xprstr.count(' ') > 0:
+        print ('ERROR: unexpected spase')
+        exit(0)
+
+    #xprstr = xprstr.replace(' ', '')
     xprstr = xprstr.replace('--', '+')
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
