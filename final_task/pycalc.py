@@ -125,8 +125,8 @@ def parse(xprstr):
 def operate(operator, *args):
     # print('def operate', operator, args)
     for i in args:
-        if type(i) != float:
-            print('ERROR: operate non float arguments')
+        if not( type(i) == float or type(i) == int):
+            print('ERROR: operate non float arguments', i, args)
             exit(0)
 
     if operator in dir(math):
