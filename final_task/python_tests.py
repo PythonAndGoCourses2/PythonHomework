@@ -1,4 +1,6 @@
-import unittest, mymodule, math
+import unittest
+from mycalc import mymodule
+import math
 
 
 class Testmyfunction(unittest.TestCase):
@@ -9,13 +11,13 @@ class Testmyfunction(unittest.TestCase):
 
     def test_replace_many_plus_minus(self):
         self.assertEqual(mymodule.replace_many_plus_minus('+-1*3+++2'), '-1*3+2')
-  
+
     def test_plus_reject(self):
         self.assertEqual(mymodule.plus_reject('3'), ['3'])
         self.assertEqual(mymodule.plus_reject('3+2'), ['3', '2'])
         self.assertEqual(mymodule.plus_reject('3-1'), ['3', '-1'])
         self.assertEqual(mymodule.plus_reject('3+'), ['3', ''])
-  
+
     def test_result(self):
         self.assertEqual(mymodule.result('1*3'), 3.0)
         self.assertEqual(mymodule.result('1*3/3'), 1.0)

@@ -4,8 +4,8 @@ import operator
 A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
      '/': operator.truediv, '+': operator.add, '-': operator.sub}
 Compare = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
-          '>=': operator.ge, ' <=': operator.le}
-Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi, 
+           '>=': operator.ge, ' <=': operator.le}
+Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
         '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 F['abs'], F['round'] = abs, round
@@ -15,7 +15,7 @@ def first_foo(stroka):
     stroka = stroka.strip()
     if stroka in '':
         raise ValueError('empty string')
-    return stroka    
+    return stroka
 
 
 def find_comparsion(stroka):
@@ -67,7 +67,7 @@ def replace_many_plus_minus(stroka):
         stroka = stroka.replace('+-', '-')
     elif stroka.find('-+') != -1:
         stroka = stroka.replace('-+', '-')
-    else: 
+    else:
         return stroka
     return replace_many_plus_minus(stroka)
 
@@ -81,7 +81,7 @@ def plus_reject(stroka):
             lst.append(stroka[i1:idx])
             i1 = idx+A[elem]
     lst.append(stroka[i1:])
-    return lst 
+    return lst
 
 
 def result(stroka):
@@ -102,7 +102,7 @@ def result(stroka):
         else:
             try:
                 s[idx] = float(s[idx])
-            except ValueError: 
+            except ValueError:
                 raise ValueError(s[idx])
     replae_power(o, s)
     o = o.replace('^', '')
@@ -133,10 +133,10 @@ def find_brackets(stroka):
             stroka2 = find_func(stroka, indx, valbr)
             return find_brackets(stroka2)
         else:
-            raise ValueError('brackets are not balanced') 
+            raise ValueError('brackets are not balanced')
     elif stroka.find('(') != -1:
         raise ValueError('brackets are not balanced')
-    else:    
+    else:
         return stroka
 
 

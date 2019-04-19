@@ -7,7 +7,7 @@ setup(
    description='Pure-python command-line calculator.',
    author='Dubovik Pavel',
    author_email='geometryk@gmail.com',
-   py_modules=['pycalc'],			
-   entry_points={'console_scripts': ['pycalc=pycalc', ], },
-   platforms='any', 
+   py_modules=['pycalc'],		
+   entry_points={'console_scripts': ['pycalc = mycalc.pycalc', ], },
+   platforms='any',
 )
