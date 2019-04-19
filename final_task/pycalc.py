@@ -42,6 +42,11 @@ def parse(xprstr):
     word = ''
     # исправление неверно введенных знаков
 
+    xprstr = xprstr.replace(' -', '-')
+    if xprstr.count(' ') > 0:
+        print ('ERROR: useless spaces')
+        exit(0)
+
     xprstr = xprstr.replace(' ', '')
     xprstr = xprstr.replace('--', '+')
     xprstr = xprstr.replace('++', '+')
@@ -181,6 +186,9 @@ def calculate(xprlst):
     # print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
+        if len(xprlst) <1:
+            print('ERROR: no arguments')
+            exit(0)
         for i in range(xprlst.count(f)):
             # print(f,'in funclist')
             # print(f, xprlst.count(f))
@@ -292,6 +300,7 @@ def main(xpr):
 
     # вычисление без скобок
     result = calculate(xprlst)
+
     # print(result)
     return result[0]
 
