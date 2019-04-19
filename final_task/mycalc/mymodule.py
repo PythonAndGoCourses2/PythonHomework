@@ -1,5 +1,6 @@
 import math
 import operator
+import argparse
 
 A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
      '/': operator.truediv, '+': operator.add, '-': operator.sub}
@@ -9,6 +10,13 @@ Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -mat
         '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 F['abs'], F['round'] = abs, round
+
+
+def byild_parser():
+    parser = argparse.ArgumentParser(description='Pure-python command line calculator.')
+    parser.add_argument('expression', help='expression string to evalute', type=str)
+    args = parser.parse_args()
+    return args
 
 
 def first_foo(stroka):
@@ -41,14 +49,19 @@ def find_comparsion(stroka):
     return [op, lst]
 
 
-def replae_power(stroka, lst):
+def replace_power(stroka, lst):
     i = stroka.rfind('^')
     if i == -1:
         return stroka, lst
     else:
-        power = lst[i] ** lst[i+1]
-        lst[i:i+2] = [power]
-        return replae_power(stroka[:i], lst)
+        if lst[i] < 0:
+            power = (-lst[i]) ** lst[i+1]
+            lst[i:i+2] = [-power]
+            return replace_power(stroka[:i], lst)
+        else: 
+            power = lst[i] ** lst[i+1]
+            lst[i:i+2] = [power]
+            return replace_power(stroka[:i], lst)
 
 
 def del_space(stroka):
@@ -104,7 +117,7 @@ def result(stroka):
                 s[idx] = float(s[idx])
             except ValueError:
                 raise ValueError(s[idx])
-    replae_power(o, s)
+    replace_power(o, s)
     o = o.replace('^', '')
     res = s[0]
     for idx, elem in enumerate(o):
@@ -156,5 +169,6 @@ def find_func(stroka, idx, val):
         try:
             stroka = stroka.replace(st+str(val)[1:-1], str(F[st1](*val)), 1)
         except KeyError:
-            raise KeyError('unknown function', st1)
+            raise KeyError('ERROR: unknown function', st1)
         return stroka
+
