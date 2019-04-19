@@ -27,24 +27,22 @@ class Calculator():
         return self.__sum(expr)                 
 
     def __sum(self,expr):
+
         if expr[-1]=="+" or expr[-1]=="-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
     
         splitted=list()
-        
+
         while expr!="":
             find=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr)
             l=expr[:find.end()]
             if l.count("-")%2==1:
-                splitted.append("-"+find[0])
-            else: splitted.append(find[0])
+                splitted.append(float("-"+find[0]))
+            else: splitted.append(float(find[0]))
             expr=expr[find.end():]
 
-        sum =0
-        for each in splitted:
-            sum+=float(each)
-
-        return sum
+        return sum(splitted)
+    
 
     def calculate(self,expr):
 

@@ -6,7 +6,10 @@ class ComplexCalc():
    
     calc=easyCalculation.Calculator()
 
-    math_functions = {attr:getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
+    math_functions = {**{attr:getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
+    **{"abs":lambda a:abs(a),
+        "round":lambda a:round(a),
+        "pow":lambda a,b:pow(a,b)}}
 
 
     const={
@@ -78,13 +81,14 @@ class ComplexCalc():
     ">=":lambda a, b:a>=b,
     "<=":lambda a, b:a<=b,
     "=": lambda a, b: a==b,
-    "<":lambda a,b: a<b
+    "<":lambda a,b: a<b,
+    "!=":lambda a,b:a!=b
 
 
     }
     def calculate(self,expr):
 
-         place=re.search(r'(>=)|(>)|(<=)|(<)|=',expr)
+         place=re.search(r'(>=)|(>)|(<=)|(<)|(!=)|=',expr)
          if place:
              a=self.expression_search(expr[:place.start()])
              b=self.expression_search(expr[place.end():])
