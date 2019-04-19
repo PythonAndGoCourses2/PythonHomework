@@ -2,6 +2,7 @@
 
 import argparse
 import math
+import string
 from math import *
 
 ap = argparse.ArgumentParser(description='Pure-python command-line calculator.')
@@ -10,7 +11,7 @@ ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...]
 args = ap.parse_args()
 xpr = args.EXPRESSION
 
-split = ('^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=', ',')
+split = ('^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=', ',','!')
 oper = ('!', '^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=')
 
 funclist = dir(math)+['abs', 'round']      # list of math functions names
@@ -67,10 +68,11 @@ def parse(xprstr):
             word = ''
         else:
             word = word + sym
+         #   print(word)
 
     xprlst.pop()    # удаляется добавленный пробел
 
-    # print(xprlst)
+  #  print(xprlst)
 
     for i, data in enumerate(xprlst):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
@@ -98,11 +100,25 @@ def parse(xprstr):
             xprlst[i - 1] = '*'
             xprlst[i] = -1
             xprlst.insert(i + 1, '/')
-    # print(xprlst)
+#    print(xprlst)
+
+
+
+#    ss=set(xprstr)
+#    digitsset = set(string.digits)
+#    funcset = set(funclist)
+#    digitsset.union(funcset)
+
+#    print(digitsset.union(funcset))
+ #   print(ss)
+  #  print('!!!!!!!!!!!!!!!!!!', ss.isdisjoint(digitsset))
+
+
     return xprlst
 
 
 def operate(operator, *args):
+
     #print('def operate', operator, args)
     if operator in dir(math):
         result = funcdict[operator](*args)
@@ -156,7 +172,7 @@ def operate(operator, *args):
 
 # вычисление выражения без скобок
 def calculate(xprlst):
-    #print('Calculate:', xprlst)
+ #   print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
         for i in range(xprlst.count(f)):
@@ -196,7 +212,7 @@ def calculate(xprlst):
 
     # перебор списка математических операций
     for j in oper:
-        # print('operation=', j)
+      #   print('operation=', j)
         # print(xprlst)
         i = 1
         while i < len(xprlst):
@@ -205,7 +221,7 @@ def calculate(xprlst):
                 xprlst[i] = operate(xprlst[i], xprlst[i - 1], xprlst[i + 1])
                 xprlst[i - 1] = ''
                 xprlst[i + 1] = ''
-                # print(xprlst)
+               # print(xprlst)
                 wipe(xprlst)
                 i = i - 1
             i = i + 1
