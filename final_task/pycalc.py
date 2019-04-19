@@ -11,13 +11,28 @@ ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...]
 args = ap.parse_args()
 xpr = args.EXPRESSION
 
-split = ('^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=', ',','!')
-oper = ('!', '^', '//', '/', '*', '%', '-', '+', '(', ')', '==', '<=', '>=', '<', '>', '!=', '=')
+funcset = {}
+operset = {}
+splitset = {}
+xprset = {}
+
+
+
+split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!', ',', '(', ')')
+oper  = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=')
+
+# проверка недопустимых символов
+exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
+xprset = set(xpr)
+if not exset.isdisjoint(xprset):
+    print('ERROR: unknown symbol')
+    exit(0)
 
 funclist = dir(math)+['abs', 'round']      # list of math functions names
 funcdict = math.__dict__          # dict of math functions
 funcdict['abs'] = abs
 funcdict['round'] = round
+
 
 
 # print(func)
@@ -30,6 +45,9 @@ b = 0.
 result = 0.
 
 
+
+
+
 # разбор строки на элементы списка
 def parse(xprstr):
     word = ''
@@ -40,11 +58,11 @@ def parse(xprstr):
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
     xprstr = xprstr.replace('-+', '-')
-    xprstr = xprstr.replace('<+', '<')
-    xprstr = xprstr.replace('>+', '>')
-    xprstr = xprstr.replace('=<', '<=')
-    xprstr = xprstr.replace('=>', '>=')
-    xprstr = xprstr.replace('==+', '+')
+   # xprstr = xprstr.replace('<+', '<')
+   # xprstr = xprstr.replace('>+', '>')
+   # xprstr = xprstr.replace('=<', '<=')
+   # xprstr = xprstr.replace('=>', '>=')
+   # xprstr = xprstr.replace('==+', '+')
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
     # print('parse:', xprstr)
