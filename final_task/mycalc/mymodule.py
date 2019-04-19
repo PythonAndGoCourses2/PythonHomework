@@ -31,7 +31,7 @@ def find_comparsion(stroka):
     lst = []
     op = []
     tup = ('>', '<', '!', '=')
-    if  stroka[0] in tup or stroka[-1] in tup:
+    if stroka[0] in tup or stroka[-1] in tup:
         raise ValueError
     for elem in stroka:
         if '><=!'.find(elem) != -1:
@@ -58,7 +58,7 @@ def replace_power(stroka, lst):
             power = (-lst[i]) ** lst[i+1]
             lst[i:i+2] = [-power]
             return replace_power(stroka[:i], lst)
-        else: 
+        else:
             power = lst[i] ** lst[i+1]
             lst[i:i+2] = [power]
             return replace_power(stroka[:i], lst)
@@ -171,4 +171,3 @@ def find_func(stroka, idx, val):
         except KeyError:
             raise KeyError('ERROR: unknown function', st1)
         return stroka
-
