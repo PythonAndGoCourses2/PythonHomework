@@ -7,7 +7,7 @@ A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operato
 Compare = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
            '>=': operator.ge, ' <=': operator.le}
 Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
-        '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
+         '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 F['abs'], F['round'] = abs, round
 
@@ -19,7 +19,7 @@ def byild_parser():
     return args
 
 
-def first_foo(stroka):
+def first_function(stroka):
     stroka = stroka.strip()
     if stroka in '':
         raise ValueError('empty string')

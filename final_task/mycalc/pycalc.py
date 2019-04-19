@@ -1,9 +1,10 @@
 from mycalc import mymodule
 
+
 def main():
     a = mymodule.byild_parser().expression
     try:
-        a = mymodule.first_foo(a)
+        a = mymodule.first_function(a)
         result1 = mymodule.find_brackets(a)
         [compare, result2] = mymodule.find_comparsion(result1)
         if compare:
