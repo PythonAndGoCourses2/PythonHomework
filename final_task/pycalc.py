@@ -35,6 +35,7 @@ xprlst = []
 a = 0.
 b = 0.
 result = 0.
+funcset=set(funclist)
 
 
 # разбор строки на элементы списка
@@ -42,10 +43,10 @@ def parse(xprstr):
     word = ''
     # исправление неверно введенных знаков
 
-    xprstr = xprstr.replace(' -', '-')
-    if xprstr.count(' ') > 0:
-        print ('ERROR: useless spaces')
-        exit(0)
+  #  xprstr = xprstr.replace(' -', '-')
+  #  if xprstr.count(' ') > 0:
+  #      print ('ERROR: useless spaces')
+  #      exit(0)
 
     xprstr = xprstr.replace(' ', '')
     xprstr = xprstr.replace('--', '+')
@@ -88,7 +89,9 @@ def parse(xprstr):
 
     punctset = set(string.punctuation)
     xprset = set(xprstr)
-    if xprset.issubset(punctset):
+
+  #  print (funcset)
+    if xprset.issubset(punctset) or xprset.issubset(funcset):
         print('ERROR: no digits or functions')
         exit(0)
     for i, data in enumerate(xprlst):
@@ -119,16 +122,17 @@ def parse(xprstr):
             xprlst.insert(i + 1, '/')
         elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
             pass
+
             #  print('ok', i)
         else:
             print('ERROR: unknown', xprlst[i], i)
-    # print(xprlst)
+  #  print(xprlst)
 
     return xprlst
 
 
 def operate(operator, *args):
-    # print('def operate', operator, args)
+  #  print('def operate', operator, args)
     for i in args:
         if not( type(i) == float or type(i) == int):
             print('ERROR: operate non float arguments', i, args)
@@ -183,7 +187,7 @@ def operate(operator, *args):
 
 # вычисление выражения без скобок
 def calculate(xprlst):
-    # print('Calculate:', xprlst)
+  #  print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
         if len(xprlst) <1:
