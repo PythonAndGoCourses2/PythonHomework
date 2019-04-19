@@ -1,17 +1,19 @@
 import math, operator
 
-A={'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow, '/': operator.truediv, '+': operator.add, '-': operator.sub,}
-C = {'acos': math.acos, 'acosh': math.acosh,'asin': math.asin,'asinh': math.asinh,'atan': math.atan,
-    'atan2': math.atan2, 'atanh': math.atanh, 'ceil': math.ceil,'copysign': math.copysign,'cos': math.cos,
-    'cosh': math.cosh,'degrees': math.degrees,'erf': math.erf,'erfc': math.erfc,'exp':math.exp,
-    'expm1': math.expm1,'fabs': math.fabs,'factorial':math.factorial,'floor': math.floor,'fmod': math.fmod,
-    'frexp': math.frexp,'fsum': math.fsum,'gamma': math.gamma,'gcd':math.gcd,'hypot': math.hypot,
-    'isclose': math.isclose,'isfinite':math.isfinite,'isinf': math.isinf,'isnan': math.isnan,'ldexp': math.ldexp,
-    'lgamma': math.lgamma,'log': math.log,'log10': math.log10,'log1p': math.log1p,'log2': math.log2,'modf': math.modf,
-    'pow': math.pow,'radians': math.radians,'sin': math.sin,'sinh': math.sinh,'sqrt': math.sqrt,
-    'tan': math.tan,'tanh': math.tanh,'trunc': math.trunc,'round': round,'abs': abs}
-Compare={'>': operator.gt, '<':operator.lt, '!=': operator.ne, '==': operator.eq, '>=': operator.ge,' <=': operator.le}
-Const={'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e':-math.e, '-pi': -math.pi, '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
+A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow, '/': operator.truediv, '+': operator.add, '-': operator.sub}
+#C = {'acos': math.acos, 'acosh': math.acosh,'asin': math.asin,'asinh': math.asinh,'atan': math.atan,
+#    'atan2': math.atan2, 'atanh': math.atanh, 'ceil': math.ceil,'copysign': math.copysign,'cos': math.cos,
+#    'cosh': math.cosh,'degrees': math.degrees,'erf': math.erf,'erfc': math.erfc,'exp':math.exp,
+#    'expm1': math.expm1,'fabs': math.fabs,'factorial':math.factorial,'floor': math.floor,'fmod': math.fmod,
+#    'frexp': math.frexp,'fsum': math.fsum,'gamma': math.gamma,'gcd':math.gcd,'hypot': math.hypot,
+#    'isclose': math.isclose,'isfinite':math.isfinite,'isinf': math.isinf,'isnan': math.isnan,'ldexp': math.ldexp,
+#    'lgamma': math.lgamma,'log': math.log,'log10': math.log10,'log1p': math.log1p,'log2': math.log2,'modf': math.modf,
+#    'pow': math.pow,'radians': math.radians,'sin': math.sin,'sinh': math.sinh,'sqrt': math.sqrt,
+#    'tan': math.tan,'tanh': math.tanh,'trunc': math.trunc,'round': round,'abs': abs}
+Compare = {'>': operator.gt, '<':operator.lt, '!=': operator.ne, '==': operator.eq, '>=': operator.ge,' <=': operator.le}
+Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e':-math.e, '-pi': -math.pi, '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
+F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
+F['abs'], F['round'] = abs, round
 
 
 def first_foo(stroka):
@@ -25,7 +27,7 @@ def find_comparsion(stroka):
     i1 = 0
     lst = []
     op = []
-    tup=('>','<','!','=')
+    tup=('>', '<', '!', '=')
     if  stroka[0] in tup or stroka[-1] in tup:
         raise ValueError
     for elem in stroka:
@@ -43,40 +45,40 @@ def find_comparsion(stroka):
         col -= 1
     return [op, lst]
 
-def replae_power(stroka,mas):
+def replae_power(stroka, lst):
     i = stroka.rfind('^')
     if i == -1:
-        return stroka, mas
+        return stroka, lst
     else:
-        power = mas[i] ** mas[i+1]
-        mas[i:i+2] = [power]
-        return replae_power(stroka[:i],mas)
+        power = lst[i] ** lst[i+1]
+        lst[i:i+2] = [power]
+        return replae_power(stroka[:i], lst)
 
 def del_space(stroka):
     for elem in '+-':
-        lst=list(map(lambda x: x.strip(),stroka.split(elem)))
+        lst=list(map(lambda x: x.strip(), stroka.split(elem)))
         stroka=elem.join(lst)
     return stroka
 
 def replace_many_plus_minus(stroka):
     if stroka.find('++') != -1:
-        stroka=stroka.replace('++','+')
+        stroka=stroka.replace('++', '+')
     elif stroka.find('--') != -1:
-        stroka=stroka.replace('--','+')
+        stroka=stroka.replace('--', '+')
     elif stroka.find('+-') != -1:
-        stroka=stroka.replace('+-','-')
+        stroka=stroka.replace('+-', '-')
     elif stroka.find('-+') != -1:
-        stroka=stroka.replace('-+','-')
+        stroka=stroka.replace('-+', '-')
     else: 
         return stroka
     return replace_many_plus_minus(stroka)
 
 def plus_reject(stroka):
-    A={'+':1,'-':0}
+    A={'+': 1, '-': 0}
     i1 = 0
     lst = []
     for idx, elem in enumerate(stroka):
-        if '+-'.find(elem) != -1 and stroka[idx-1] not in ('/','%','^','*'):
+        if '+-'.find(elem) != -1 and stroka[idx-1] not in ('/', '%', '^', '*'):
             lst.append(stroka[i1:idx])
             i1 = idx+A[elem]
     lst.append(stroka[i1:])
@@ -104,14 +106,14 @@ def result(stroka):
             except ValueError: 
                 raise ValueError(s[idx])
     replae_power(o,s)
-    o = o.replace('^','')
+    o = o.replace('^', '')
     res = s[0]
     for idx, elem in enumerate(o):
         res = A[elem](res,s[idx+1])
     return res
 
 def calc(stroka):
-    stroka='0+'+stroka
+    stroka='0+' + stroka
     stroka=del_space(stroka)
     stroka=replace_many_plus_minus(stroka)
     lst = plus_reject(stroka)
@@ -136,11 +138,11 @@ def find_brackets(stroka):
     else:    
         return stroka
 
-def find_func(stroka,idx,val):
+def find_func(stroka, idx, val):
     st = stroka[idx-1::-1]
     i = idx
     for elem in st:
-        if (elem not in A) and (elem not in ('>','<','=','(')):
+        if (elem not in A) and (elem not in ('>', '<', '=', '(')):
             i -= 1
         else:
             break
@@ -150,8 +152,7 @@ def find_func(stroka,idx,val):
         return stroka
     else:
         try:
-            stroka = stroka.replace(st+str(val)[1:-1],str(C[st1](*val)),1)
+            stroka = stroka.replace(st+str(val)[1:-1], str(F[st1](*val)), 1)
         except KeyError:
-            raise KeyError('unknown function',st1)
+            raise KeyError('unknown function', st1)
         return stroka
-    
