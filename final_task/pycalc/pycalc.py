@@ -28,16 +28,15 @@ while True:
         a=input()
         try:
                 if a!="--help":
-                        a=cheker.doAllCh(a)
+                        a=cheker.do_all_changes(a)
                         a=calculator.calculate(a)
         
-                else: print (helper)
+                else: print ("your problem")
 
         except Exception as e:
                 print("Error:  " + str(e))
         else: print(a)
-
-
-    
-    
 """
+
+    
+    

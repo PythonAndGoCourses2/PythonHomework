@@ -60,8 +60,8 @@ class Calculator():
             if begin!=0 and expr[begin-1] not in operators.operators and expr[begin-1]!='-' and expr[begin-1]!='+' :
                 raise Exception("no operators before brackets")
 
-            rezult=self.__calculation(expr[begin+1,end])
-            expr==expr[:begin]+str(rezult)+expr[end+1:]  
+            rezult=self.__calculation(expr[begin+1:end])
+            expr=expr[:begin]+str(rezult)+expr[end+1:]  
 
         
         rezult=self.__calculation(expr)
