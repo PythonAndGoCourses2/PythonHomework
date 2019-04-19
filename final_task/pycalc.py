@@ -277,7 +277,7 @@ def main(xpr):
     # вычисление без скобок
     result = calculate(xprlst)
     # print(result)
-    return (result)
+    return (result[0])
 
 
 print(main(xpr))
