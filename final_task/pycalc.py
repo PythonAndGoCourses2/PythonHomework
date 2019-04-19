@@ -34,11 +34,8 @@ result = 0.
 def parse(xprstr):
     word = ''
     # исправление неверно введенных знаков
-    if xprstr.count(' ') > 0:
-        print ('ERROR: unexpected spase')
-        exit(0)
 
-    #xprstr = xprstr.replace(' ', '')
+    xprstr = xprstr.replace(' ', '')
     xprstr = xprstr.replace('--', '+')
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
@@ -77,6 +74,14 @@ def parse(xprstr):
     xprlst.pop()    # удаляется добавленный пробел
 
   #  print(xprlst)
+    punctset = set(string.punctuation)
+    xprset = set(xprstr)
+    if xprset.issubset(punctset):
+        print('ERROR: no digits or functions')
+        exit(0)
+
+
+
 
     for i, data in enumerate(xprlst):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
