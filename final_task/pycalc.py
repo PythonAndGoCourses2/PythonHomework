@@ -14,15 +14,12 @@ xpr = args.EXPRESSION
 funcset = {}
 operset = {}
 splitset = {}
-xprset = {}
-
-
 
 split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!',  '(', ')', ',')
-oper  = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '(', ')')
+oper = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '(', ')')
 
 # проверка недопустимых символов
-exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
+exset = {'"', '# ', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
 xprset = set(xpr)
 if not exset.isdisjoint(xprset):
     print('ERROR: unknown symbol')
@@ -32,20 +29,12 @@ funclist = dir(math)+['abs', 'round']      # list of math functions names
 funcdict = math.__dict__          # dict of math functions
 funcdict['abs'] = abs
 funcdict['round'] = round
-
-
-
-# print(func)
 xprstr = ''
-# word = ''
 operator = ''
 xprlst = []
 a = 0.
 b = 0.
 result = 0.
-
-
-
 
 
 # разбор строки на элементы списка
@@ -58,19 +47,13 @@ def parse(xprstr):
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
     xprstr = xprstr.replace('-+', '-')
-   # xprstr = xprstr.replace('<+', '<')
-   # xprstr = xprstr.replace('>+', '>')
-   # xprstr = xprstr.replace('=<', '<=')
-   # xprstr = xprstr.replace('=>', '>=')
-   # xprstr = xprstr.replace('==+', '+')
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
-    # print('parse:', xprstr)
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
-          #  print(word)
+            #  print(word)
             if word == 'pi':
                 xprlst.append(pi)
             elif word == 'e':
@@ -88,25 +71,21 @@ def parse(xprstr):
                 print('ERROR: wrong symbol "', word, sym, '"')
                 exit(0)
             xprlst.append(sym)
-          #  print(xprlst)
+            #  print(xprlst)
             word = ''
         else:
             word = word + sym
-          #  print(word)
+            #  print(word)
 
     xprlst.pop()    # удаляется добавленный пробел
 
-    #print('XPRLST:',xprlst)
+    # print('XPRLST:',xprlst)
 
     punctset = set(string.punctuation)
     xprset = set(xprstr)
     if xprset.issubset(punctset):
         print('ERROR: no digits or functions')
         exit(0)
-
-
-
-
     for i, data in enumerate(xprlst):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
             xprlst[i] = '//'
@@ -135,97 +114,80 @@ def parse(xprstr):
             xprlst.insert(i + 1, '/')
         elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
             pass
-          #  print('ok',i)
+            #  print('ok',i)
         else:
-            print('ERROR: unknown',xprlst[i],i)
-    print(xprlst)
-
-
-
-#    ss=set(xprstr)
-#    digitsset = set(string.digits)
-#    funcset = set(funclist)
-#    digitsset.union(funcset)
-
-#    print(digitsset.union(funcset))
- #   print(ss)
-  #  print('!!!!!!!!!!!!!!!!!!', ss.isdisjoint(digitsset))
-
+            print('ERROR: unknown', xprlst[i], i)
+    # print(xprlst)
 
     return xprlst
 
 
 def operate(operator, *args):
-
-    #print('def operate', operator, args)
+    # print('def operate', operator, args)
     if operator in dir(math):
         result = funcdict[operator](*args)
     elif operator == "+":
-        result =  args[0] +  args[1]
+        result = args[0] + args[1]
     elif operator == "-":
-        result =  args[0] -  args[1]
+        result = args[0] - args[1]
     elif operator == "*":
-        result =  args[0] *  args[1]
+        result = args[0] * args[1]
     elif operator == "//":
         if args[1] != 0:
-            result =  args[0] //  args[1]
+            result = args[0] // args[1]
         else:
             print('ERROR: division by zero')
             exit(0)
     elif operator == "/":
         if args[1] != 0:
-            result =  args[0] /  args[1]
+            result = args[0] / args[1]
         else:
             print('ERROR: division by zero')
             exit(0)
     elif operator == "%":
-        result =  args[0] %  args[1]
+        result = args[0] % args[1]
     elif operator == "^":
         result = a**b
     elif operator == "<=":
-        result =  args[0] <=  args[1]
+        result = args[0] <= args[1]
     elif operator == ">=":
-        result =  args[0] >=  args[1]
+        result = args[0] >= args[1]
     elif operator == "<":
-        result =  args[0] <  args[1]
+        result = args[0] < args[1]
     elif operator == ">":
-        result =  args[0] >  args[1]
+        result = args[0] > args[1]
     elif operator == "==":
-        result =  args[0] ==  args[1]
+        result = args[0] == args[1]
     elif operator == "!=":
-        result =  args[0] !=  args[1]
+        result = args[0] != args[1]
     else:
         print('ERROR: unknown math operator', operator)
         result = 0
-
-
 #    if operator in oper:
 #        print('Operate:', a, operator, b, '=', result)
 #    elif operator in funclist:
 #        print('Operate:', operator, a, '=', result)
-
-
     return result
 
 
 # вычисление выражения без скобок
 def calculate(xprlst):
- #   print('Calculate:', xprlst)
+    # print('Calculate:', xprlst)
     # перебор списка функций
     for f in funclist:
         for i in range(xprlst.count(f)):
-            #print(f,'in funclist')
+            # print(f,'in funclist')
             # print(f, xprlst.count(f))
             s = xprlst.index(f)
             if ',' in xprlst:
-                #print (f,xprlst[s + 1], xprlst[s + 3])
+                # print (f,xprlst[s + 1], xprlst[s + 3])
                 xprlst[s] = (operate(f, xprlst[s + 1], xprlst[s + 3]))
                 xprlst[s + 1] = ''
                 xprlst[s + 2] = ''
                 xprlst[s + 3] = ''
             else:
-                #print('norm')
-                #print (f,xprlst[s + 1])
+                # print('norm')
+                # print (f,xprlst[s + 1])
                 xprlst[s] = (operate(f, xprlst[s + 1]))
                 xprlst[s + 1] = ''
             wipe(xprlst)
@@ -250,26 +212,25 @@ def calculate(xprlst):
 
     # перебор списка математических операций
     for j in oper:
-      #   print('operation=', j)
+        # print('operation=', j)
         # print(xprlst)
         i = 1
         while i < len(xprlst):
             if xprlst[i] == j:
-                #print(xprlst[i-1], j, xprlst[i+1])
+                # print(xprlst[i-1], j, xprlst[i+1])
                 xprlst[i] = operate(xprlst[i], xprlst[i - 1], xprlst[i + 1])
                 xprlst[i - 1] = ''
                 xprlst[i + 1] = ''
-               # print(xprlst)
+                # print(xprlst)
                 wipe(xprlst)
                 i = i - 1
             i = i + 1
     # print('Stop calculate:', float(xprlst[0]))
     wipe(xprlst)
-    #print(xprlst)
-
- #   if len(xprlst) > 1:
-  #      print('ERROR: missed operator')
-   #     #exit(0)
+    # print(xprlst)
+    # if len(xprlst) > 1:
+    # print('ERROR: missed operator')
+    # exit(0)
     return xprlst
 
 
@@ -301,10 +262,6 @@ def brktindx(xprlst):
     return(bl + 1, br)
 
 
-
-
-
-
 # основная функция
 def main(xpr):
     # проверка скобок в строке
@@ -320,18 +277,17 @@ def main(xpr):
     while '(' in xprlst:
         a, b = brktindx(xprlst)
         inbrackets = xprlst[a:b]
-        #print('in brackets to oper: ', inbrackets)
+        # print('in brackets to oper: ', inbrackets)
         tmp = calculate(xprlst[a:b])
-        #print (tmp)
+        # print (tmp)
         xprlst = xprlst[0:a-1] + tmp + xprlst[b+1:]
 
-        #print(xprlst)
-
+        # print(xprlst)
 
     # вычисление без скобок
     result = calculate(xprlst)
     # print(result)
-    return (result[0])
+    return result[0]
 
 
 print(main(xpr))
