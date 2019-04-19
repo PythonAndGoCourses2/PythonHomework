@@ -2,12 +2,11 @@
 import argparse
 import mymodule
 
-def byild_parser():
-    parser=argparse.ArgumentParser(description='Pure-python command line calculator.')
-    parser.add_argument('expression', help='expression string to evalute', type=str)
-    args = parser.parse_args()
-    return args
-a = byild_parser().expression
+
+parser=argparse.ArgumentParser(description='Pure-python command line calculator.')
+parser.add_argument('expression', help='expression string to evalute', type=str)
+args = parser.parse_args()
+a = args.expression
 try:
     a = mymodule.first_foo(a)
     result1 = mymodule.find_brackets(a)
@@ -16,7 +15,7 @@ try:
         logic = True
         for idx, elem in enumerate(compare):
             try:
-                logic *= mymodule.Compare[elem](calc(result2[idx]),calc(result2[idx+1]))
+                logic *= mymodule.Compare[elem](mymodule.calc(result2[idx]),mymodule.calc(result2[idx+1]))
             except KeyError:
                 raise KeyError('comparsion error', elem)
         print(bool(logic))
