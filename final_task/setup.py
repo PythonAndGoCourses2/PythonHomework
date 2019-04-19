@@ -8,6 +8,6 @@ setup(
    author='Dubovik Pavel',
    author_email='geometryk@gmail.com',
    py_modules=['pycalc'],
-   entry_points={'console_scripts': ['pycalc = mycalc.pycalc', ], },
+   entry_points={'console_scripts': ['pycalc = mycalc.pycalc:main', ], },
    platforms='any',
 )
