@@ -31,18 +31,18 @@ cheker=CheckAndChange.CandC()
 parser = argparse.ArgumentParser(description='Calculation')
 parser.add_argument('a', type=str, help='input your expression')
 args = parser.parse_args()
-
-try:
+def start():
+        try:
     
-        if args.a!="--help":
-                a=cheker.doAllCh(args.a)
-                a=calculator.expressionSearch(args.a)
+                if args.a!="--help":
+                        a=cheker.doAllCh(args.a)
+                        a=calculator.expressionSearch(args.a)
         
-        else: print (helper)
+                else: print (helper)
 
-except Exception as e:
-        print("Error:  " + e)
-else: print(a)
+        except Exception as e:
+                print("Error:  " + e)
+        else: print(a)
 """
 
 while True:

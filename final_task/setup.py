@@ -1,11 +1,10 @@
 from setuptools import setup
-setup(name='pycalc',
+setup(name='Final_TASK',
 version='0.1',
-description='The funniest joke in the world',
-url='https://github.com/Honnery/PythonHomework/tree/master/final_task',
+description='calculator',
+url='https://github.com/Honnery/PythonHomework/final_task',
 author='Honery',
 author_email='flyingcircus@example.com',
-license='MIT',
 packages=['pycalc'],
 zip_safe=False,
 

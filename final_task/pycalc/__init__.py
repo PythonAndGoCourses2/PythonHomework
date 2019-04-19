@@ -1,0 +1,4 @@
+import pycalc
+
+
+pycalc.start()
