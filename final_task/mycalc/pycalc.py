@@ -1,4 +1,4 @@
-from mycalc import mymodule
+import mymodule
 
 
 a = mymodule.byild_parser().expression
@@ -30,7 +30,3 @@ except IndexError:
     print('ERROR: invalid syntax')
 except OverflowError:
     print('ERROR: overflow')
-
-
-
-
