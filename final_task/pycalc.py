@@ -79,7 +79,7 @@ def parse(xprstr):
 
     xprlst.pop()    # удаляется добавленный пробел
 
-    # print('XPRLST:',xprlst)
+    # print('XPRLST:', xprlst)
 
     punctset = set(string.punctuation)
     xprset = set(xprstr)
@@ -114,7 +114,7 @@ def parse(xprstr):
             xprlst.insert(i + 1, '/')
         elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
             pass
-            #  print('ok',i)
+            #  print('ok', i)
         else:
             print('ERROR: unknown', xprlst[i], i)
     # print(xprlst)
@@ -124,6 +124,11 @@ def parse(xprstr):
 
 def operate(operator, *args):
     # print('def operate', operator, args)
+    for i in args:
+        if type(i) != float:
+            print('ERROR: operate non float arguments')
+            exit(0)
+
     if operator in dir(math):
         result = funcdict[operator](*args)
     elif operator == "+":
@@ -170,6 +175,7 @@ def operate(operator, *args):
     return result
 
 
+
 # вычисление выражения без скобок
 def calculate(xprlst):
     # print('Calculate:', xprlst)
@@ -187,7 +193,7 @@ def calculate(xprlst):
                 xprlst[s + 3] = ''
             else:
                 # print('norm')
-                # print (f,xprlst[s + 1])
+                # print (f, xprlst[s + 1])
                 xprlst[s] = (operate(f, xprlst[s + 1]))
                 xprlst[s + 1] = ''
             wipe(xprlst)
@@ -236,11 +242,11 @@ def calculate(xprlst):
 
 # очистка списка от пустых значений ''
 def wipe(xprlst):
-    # print('WIPE:\n', xprlst)
+    # print('WIPE', xprlst)
     while '' in xprlst:
         i = xprlst.index('')
         xprlst.pop(i)
-    # print('WIPED:\n', xprlst)
+    # print('WIPED', xprlst)
     return xprlst
 
 
