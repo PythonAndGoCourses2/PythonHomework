@@ -3,22 +3,18 @@ import unittest, mymodule, math
 
 class Testmyfunction(unittest.TestCase):
 
-
     def test_del_space(self):
         self.assertEqual(mymodule.del_space(' + 1'), '+1')
         self.assertEqual(mymodule.del_space('1 + + -1 +'), '1++-1+')
 
-
     def test_replace_many_plus_minus(self):
         self.assertEqual(mymodule.replace_many_plus_minus('+-1*3+++2'), '-1*3+2')
   
-
     def test_plus_reject(self):
         self.assertEqual(mymodule.plus_reject('3'), ['3'])
-        self.assertEqual(mymodule.plus_reject('3+2'), ['3','2'])
-        self.assertEqual(mymodule.plus_reject('3-1'), ['3','-1'])
-        self.assertEqual(mymodule.plus_reject('3+'), ['3',''])
-  
+        self.assertEqual(mymodule.plus_reject('3+2'), ['3', '2'])
+        self.assertEqual(mymodule.plus_reject('3-1'), ['3', '-1'])
+        self.assertEqual(mymodule.plus_reject('3+'), ['3', ''])
   
     def test_result(self):
         self.assertEqual(mymodule.result('1*3'), 3.0)
@@ -38,7 +34,6 @@ class Testmyfunction(unittest.TestCase):
             mymodule.result('/2')
             mymodule.result('')
 
-
     def test_calc(self):
         self.assertEqual(mymodule.calc('- - 1* 3'), 3.0)
         self.assertEqual(mymodule.calc('  2 - -1^ - 3'), 3)
@@ -50,14 +45,12 @@ class Testmyfunction(unittest.TestCase):
             mymodule.calc(' * -e')
             mymodule.calc('1-')
 
-
     def test_find_brakets(self):
         self.assertEqual(mymodule.find_brackets('(- - 1* 3  )'), '3.0')
         with self.assertRaises(ValueError):
             mymodule.find_brackets('1+2)')
             mymodule.find_brackets('( 1+2')
             mymodule.find_brackets('( (')
-
 
     def test_find_func(self):
         self.assertEqual(mymodule.find_func('sin3', 3, [3]), str(math.sin(3)))

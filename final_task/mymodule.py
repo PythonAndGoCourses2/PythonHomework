@@ -1,9 +1,12 @@
 import math
 import operator
 
-A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow, '/': operator.truediv, '+': operator.add, '-': operator.sub}
-Compare = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq, '>=': operator.ge, ' <=': operator.le}
-Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi, '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
+A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
+     '/': operator.truediv, '+': operator.add, '-': operator.sub}
+Compare = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
+          '>=': operator.ge, ' <=': operator.le}
+Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi, 
+        '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 F['abs'], F['round'] = abs, round
 
@@ -13,6 +16,7 @@ def first_foo(stroka):
     if stroka in '':
         raise ValueError('empty string')
     return stroka    
+
 
 def find_comparsion(stroka):
     i1 = 0
@@ -67,6 +71,7 @@ def replace_many_plus_minus(stroka):
         return stroka
     return replace_many_plus_minus(stroka)
 
+
 def plus_reject(stroka):
     A = {'+': 1, '-': 0}
     i1 = 0
@@ -85,7 +90,7 @@ def result(stroka):
     i1 = 0
     for elem in stroka:
         if '*/%^'.find(elem) != -1:
-            i2 = stroka.find(elem,i1)
+            i2 = stroka.find(elem, i1)
             o += elem
             s.append(stroka[i1:i2])
             i1 = i2 + 1
@@ -99,12 +104,13 @@ def result(stroka):
                 s[idx] = float(s[idx])
             except ValueError: 
                 raise ValueError(s[idx])
-    replae_power(o,s)
+    replae_power(o, s)
     o = o.replace('^', '')
     res = s[0]
     for idx, elem in enumerate(o):
-        res = A[elem](res,s[idx+1])
+        res = A[elem](res, s[idx+1])
     return res
+
 
 def calc(stroka):
     stroka = '0+' + stroka
@@ -112,6 +118,7 @@ def calc(stroka):
     stroka = replace_many_plus_minus(stroka)
     lst = plus_reject(stroka)
     return sum(list(map(result, lst)))
+
 
 def find_brackets(stroka):
     global indx, valbr
@@ -131,6 +138,7 @@ def find_brackets(stroka):
         raise ValueError('brackets are not balanced')
     else:    
         return stroka
+
 
 def find_func(stroka, idx, val):
     st = stroka[idx-1::-1]
