@@ -19,7 +19,7 @@ xprset = {}
 
 
 split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!', ',', '(', ')')
-oper  = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=')
+oper  = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '(', ')')
 
 # проверка недопустимых символов
 exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
@@ -70,6 +70,7 @@ def parse(xprstr):
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
+          #  print(word)
             if word == 'pi':
                 xprlst.append(pi)
             elif word == 'e':
@@ -80,18 +81,23 @@ def parse(xprstr):
             elif word.replace('.', '').isdigit() and word.count('.') < 2:
                 xprlst.append(float(word))
             # elif word != '':
-            # else:
-            #    print('ERROR: wrong symbol "', word, sym, '"')
-            #    exit(0)
+            elif word in split or word == '':
+                pass
+                #  print('ok', word)
+            else:
+                print('ERROR: wrong symbol "', word, sym, '"')
+                exit(0)
             xprlst.append(sym)
+          #  print(xprlst)
             word = ''
         else:
             word = word + sym
-         #   print(word)
+          #  print(word)
 
     xprlst.pop()    # удаляется добавленный пробел
 
-  #  print(xprlst)
+    #print('XPRLST:',xprlst)
+
     punctset = set(string.punctuation)
     xprset = set(xprstr)
     if xprset.issubset(punctset):
@@ -105,29 +111,34 @@ def parse(xprstr):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
             xprlst[i] = '//'
             xprlst.pop(i + 1)
-        if xprlst[i] == '>' and xprlst[i + 1] == '=':
+        elif xprlst[i] == '>' and xprlst[i + 1] == '=':
             xprlst[i] = '>='
             xprlst.pop(i + 1)
-        if xprlst[i] == '<' and xprlst[i + 1] == '=':
+        elif xprlst[i] == '<' and xprlst[i + 1] == '=':
             xprlst[i] = '<='
             xprlst.pop(i + 1)
-        if xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] == '=':
+        elif xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] == '=':
             xprlst[i] = '=='
             xprlst.pop(i + 1)
-        if xprlst[i] == '!' and xprlst[i + 1] == '=':
+        elif xprlst[i] == '!' and xprlst[i + 1] == '=':
             xprlst[i] = '!='
             xprlst.pop(i + 1)
-        if xprlst[i] == '-' and xprlst[i - 1] in ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=') and type(xprlst[i + 1]) == float:
+        elif xprlst[i] == '-' and xprlst[i - 1] in ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=') and type(xprlst[i + 1]) == float:
             xprlst[i + 1] = xprlst[i + 1] * - 1
             xprlst.pop(i)
-        if (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1] in('*', '^', '+', '-', '(', '<', '>', '=')):
+        elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1] in('*', '^', '+', '-', '(', '<', '>', '=')):
             xprlst[i] = -1
             xprlst.insert(i + 1, '*')
-        if xprlst[i] == '-' and xprlst[i - 1] == '/':
+        elif xprlst[i] == '-' and xprlst[i - 1] == '/':
             xprlst[i - 1] = '*'
             xprlst[i] = -1
             xprlst.insert(i + 1, '/')
-#    print(xprlst)
+        elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper:
+            pass
+          #  print('ok',i)
+        else:
+            print('ERROR: unknown',xprlst[i],i)
+   # print(xprlst)
 
 
 
