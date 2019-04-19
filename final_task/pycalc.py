@@ -18,7 +18,7 @@ xprset = {}
 
 
 
-split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!', ',', '(', ')')
+split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!',  '(', ')', ',')
 oper  = ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '(', ')')
 
 # проверка недопустимых символов
@@ -133,12 +133,12 @@ def parse(xprstr):
             xprlst[i - 1] = '*'
             xprlst[i] = -1
             xprlst.insert(i + 1, '/')
-        elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper:
+        elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
             pass
           #  print('ok',i)
         else:
             print('ERROR: unknown',xprlst[i],i)
-   # print(xprlst)
+    print(xprlst)
 
 
 
