@@ -1,4 +1,4 @@
-import mymodule
+from mycalc import mymodule
 
 
 a = mymodule.byild_parser().expression
