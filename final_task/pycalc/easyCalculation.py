@@ -1,5 +1,5 @@
 import re
-import operators
+import pycalc.operators as operators
 
 
 class Calculator():
@@ -30,18 +30,18 @@ class Calculator():
         if expr[-1]=="+" or expr[-1]=="-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
     
-        all=list()
+        splitted=list()
         
         while expr!="":
             find=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr)
             l=expr[:find.end()]
             if l.count("-")%2==1:
-                all.append("-"+find[0])
-            else: all.append(find[0])
+                splitted.append("-"+find[0])
+            else: splitted.append(find[0])
             expr=expr[find.end():]
 
         sum =0
-        for each in all:
+        for each in splitted:
             sum+=float(each)
 
         return sum

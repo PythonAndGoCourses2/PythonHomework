@@ -1,11 +1,13 @@
 from setuptools import setup, find_packages
-setup(name='FINAL_TASK',
-version='0.1',
-description='calculator',
-url='https://github.com/Honnery/PythonHomework/final_task',
-author='Honery',
-author_email='flyingcircus@example.com',
-packages=find_packages(),
-zip_safe=False,
 
+setup(
+   name='pycalc',
+   version='1.0',
+   packages=find_packages(),
+   description='calculator.',
+   author='Honery',
+   author_email='^_----',
+   py_modules=['pycalc'],
+   entry_points={'console_scripts': ['pycalc = pycalc.pycalc:start', ], },
+   platforms='any',
 )

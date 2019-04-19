@@ -1,24 +1,21 @@
 import re
 
-class CandC():
+class CheckAndChange():
         
-    def doAllCh(self,expr):
+    def do_all_changes(self,expr):
         expr=expr.replace("//","&")
-        self.correctBrackets(expr)
+        self.correct_brackets(expr)
         return expr
 
 
-    def correctBrackets(self,expr):
+    def correct_brackets(self,expr):
      
-        if re.search(r'[0-9]+',expr)==None and re.search(r'[A-ZAa-z]+',expr)==None:
+        if re.search(r'[0-9]+',expr)==None and re.search(r'[A-ZAa-z]+',expr)==None:        
+            raise Exception("No Numbers in expression")
         
-            raise Exception("Numbers???")
-        
-        i=0
-  
+        i=0  
         for one in expr:
 
-       
             if one=="(":
                 i+=1
             elif one==")":
@@ -29,4 +26,4 @@ class CandC():
             if i!=0 :
                 raise Exception("check brackets! ")  
 
-#доделать всякие исключения, есть ли исключение на пустые скобки?
+#доделать всякие исключения, есть ли исключение на пустые скобки

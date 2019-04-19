@@ -1,5 +1,5 @@
 import re
-import easyCalculation 
+import pycalc.easyCalculation as easyCalculation 
 import math
 
 class ComplexCalc():
@@ -15,7 +15,7 @@ class ComplexCalc():
     }
 
 
-    def expressionSearch(self,expr):
+    def expression_search(self,expr):
 
         while True:
 
@@ -51,18 +51,18 @@ class ComplexCalc():
 
             else: 
            
-                a=self.__findreplacement(func[0],expr[afterExpr+1:end])
+                a=self.__find_replacement(func[0],expr[afterExpr+1:end])
                 expr=expr[:k]+a+expr[end+1:]
 
 
-    def __findreplacement(self,func,expr):
+    def __find_replacement(self,func,expr):
 
         if  func in ComplexCalc.math_functions:
             l=expr.split(",")
             
             k=[]
             for each in l:               
-                k.append(float(self.expressionSearch(each)))
+                k.append(float(self.expression_search(each)))
 
             a=round(ComplexCalc.math_functions[func](*k),8)      
 
@@ -86,8 +86,8 @@ class ComplexCalc():
 
          place=re.search(r'(>=)|(>)|(<=)|(<)|=',expr)
          if place:
-             a=self.expressionSearch(expr[:place.start()])
-             b=self.expressionSearch(expr[place.end():])
+             a=self.expression_search(expr[:place.start()])
+             b=self.expression_search(expr[place.end():])
              return ComplexCalc.compare[place[0]](a,b)
          else:
-             return self.expressionSearch(expr)
+             return self.expression_search(expr)
