@@ -41,7 +41,7 @@ class Calculator():
             else: splitted.append(float(find[0]))
             expr=expr[find.end():]
 
-        return sum(splitted)
+        return '{:.0f}'.format((sum(splitted)))
     
 
     def calculate(self,expr):
@@ -78,12 +78,14 @@ class Calculator():
             if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
                 raise Exception("the expression should be written in the following form 'number operator number'")
            
-            rezult=str( operators.operators["^"](float(findBefore[0][::-1]),float(findAfter[0])))
+            rezult= '{:.0f}'.format( operators.operators["^"](float(findBefore[0][::-1]),float(findAfter[0])))
             begin=expr[:place-len(findBefore[0])]
             expr=begin+rezult+expr[findAfter.end()+place:]
             place=expr.rfind("^")
 
         return expr
 
+
+    
 
     
