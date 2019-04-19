@@ -72,3 +72,22 @@ class ComplexCalc():
         return str(a)
 
  
+    compare={
+
+    ">":lambda a, b: a>b,
+    ">=":lambda a, b:a>=b,
+    "<=":lambda a, b:a<=b,
+    "=": lambda a, b: a==b,
+    "<":lambda a,b: a<b
+
+
+    }
+    def calculate(self,expr):
+
+         place=re.search(r'(>=)|(>)|(<=)|(<)|=',expr)
+         if place:
+             a=self.expressionSearch(expr[:place.start()])
+             b=self.expressionSearch(expr[place.end():])
+             return ComplexCalc.compare[place[0]](a,b)
+         else:
+             return self.expressionSearch(expr)

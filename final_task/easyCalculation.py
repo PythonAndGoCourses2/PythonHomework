@@ -88,13 +88,4 @@ class Calculator():
         return expr
 
 
-        compare={
-
-    ">":lambda a, b: a>b,
-    ">=":lambda a, b:a>=b,
-    "<=":lambda a, b:a<=b,
-    "==": lambda a, b: a==b
-    "<":lambda a,b: a<b
-
-
-    }
+    
