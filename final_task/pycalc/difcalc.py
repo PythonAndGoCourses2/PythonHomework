@@ -111,6 +111,11 @@ class ComplexCalc():
          if place:
              a=self.expression_search(expr[:place.start()])
              b=self.expression_search(expr[place.end():])
-             return ComplexCalc.compare[place[0]](a,b)
+
+             if a and b:
+                  return ComplexCalc.compare[place[0]](a,b)
+             else:
+                 raise Exception("uncorrect expression must be 'expr' operator 'expr'" )
+
          else:
              return self.expression_search(expr)

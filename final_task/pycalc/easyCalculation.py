@@ -46,7 +46,7 @@ class Calculator():
 
     def calculate(self,expr):
         expr=expr.replace(" ","")
-       
+       #посмотреть где выскакивает лишний " "
         while "(" in expr:
         
             end=expr.find(")")
