@@ -61,7 +61,7 @@ class ComplexCalc():
     def __find_replacement(self,func,expr):
 
         if  func in ComplexCalc.math_functions:
-            l=expr.split(",")
+            l=self.__commasplit(expr)
             
             k=[]
             for each in l:               
@@ -75,6 +75,25 @@ class ComplexCalc():
         return str(a)
 
  
+    def __commasplit(self,expr):
+        breketscounter=0
+        preve=0
+        count=1
+        split=[]
+        for each in expr:
+            if breketscounter==0 and each==",":
+                split.append(expr[preve:count-1])
+                preve=count
+            
+            elif each=="(":
+                    breketscounter+=1
+            elif each ==")":
+                    breketscounter -=1
+            count+=1  
+
+        split.append(expr[preve:count])
+
+        return split
     compare={
 
     ">":lambda a, b: a>b,
