@@ -12,13 +12,10 @@ except Exception:
     print("ERROR: argument fail")
 
 
-#if not create_arg_parser():
-#    print("ERROR: argument fail")
-
-#line = args.EXPRESSION
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
-             '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a**b) }
+             '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a**b)
+             }
 
 z = 0
 numbers = "0123456789."
@@ -136,10 +133,6 @@ def sign_replacement(text):
 
 
 sign_replacement(line)
-
-#if set(line).isdisjoint(mat):
-#    print(line)
-#    quit()
 
 line = split_operators(line)
 
