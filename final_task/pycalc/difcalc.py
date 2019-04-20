@@ -67,7 +67,7 @@ class ComplexCalc():
             for each in l:               
                 k.append(float(self.expression_search(each)))
 
-            a=round(ComplexCalc.math_functions[func](*k),8)      
+            a='{:.10f}'.format(ComplexCalc.math_functions[func](*k))      
 
         else: 
     
