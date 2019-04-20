@@ -12,8 +12,8 @@ class Calculator():
 
         while place!=None:
             #регульрное выражение с конца строки есть вроде
-                findBefore=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place.start()::-1])
-                findAfter=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place.start():])
+                findBefore=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place.start()::-1])
+                findAfter=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place.start():])
            
 
                 if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
@@ -34,7 +34,7 @@ class Calculator():
         splitted=list()
 
         while expr!="":
-            find=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr)
+            find=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr)
             l=expr[:find.end()]
             if l.count("-")%2==1:
                 splitted.append(float("-"+find[0]))
@@ -72,8 +72,8 @@ class Calculator():
 
         while place!=-1:
 
-            findBefore=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place::-1])
-            findAfter=re.search(r'(?:\d+(?:\.\d+)?|\.\d+)',expr[place:])           
+            findBefore=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place::-1])
+            findAfter=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place:])           
 
             if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
                 raise Exception("the expression should be written in the following form 'number operator number'")
