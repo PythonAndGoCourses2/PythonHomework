@@ -12,7 +12,7 @@ class Calculator():
 
         while place!=None:
             #регульрное выражение с конца строки есть вроде
-                findBefore=re.search(r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)',expr[place.start()::-1])
+                findBefore=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place.start()::-1])
                 findAfter=re.search(r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)',expr[place.start():])
            
 
@@ -72,7 +72,7 @@ class Calculator():
 
         while place!=-1:
 
-            findBefore=re.search(r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)',expr[place::-1])
+            findBefore=re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+',expr[place::-1])
             findAfter=re.search(r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)',expr[place:])           
 
             if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
