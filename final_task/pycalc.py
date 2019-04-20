@@ -2,15 +2,20 @@
 import argparse
 import re
 
-pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
-pars.add_argument("EXPRESSION", metavar='EXPRESSION', type=str, help="expression string to evaluate")
-pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+', help='additional user modules')
-args = pars.parse_args()
-try:
-    line = args.EXPRESSION
-except Exception:
-    print("ERROR: argument fail")
 
+def create_arg_parser():
+    global line
+    pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
+    pars.add_argument("EXPRESSION", metavar='EXPRESSION', type=str, help="expression string to evaluate")
+    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+', help='additional user modules')
+    args = pars.parse_args()
+    try:
+        line = args.EXPRESSION
+    except Exception:
+        print("ERROR: argument fail")
+
+
+create_arg_parser()
 
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
