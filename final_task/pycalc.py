@@ -1,6 +1,7 @@
 #!python
 import argparse
 import re
+import string
 
 
 def create_arg_parser():
@@ -17,15 +18,17 @@ def create_arg_parser():
 
 create_arg_parser()
 
-OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
+OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
+             '>=': (0, lambda x, y: x >= y), "<=": (0, lambda a, b: a <= b),
+             '+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
-             '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a**b)
+             '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a ** b)
              }
 
 z = 0
-numbers = "0123456789."
+numbers = string.digits
 mat = ('+', '-', '/', '*', '//', '**', '^', '%', '=')
-letters = "abcdefghjklmnopqrstuvwxyz &$#@абвгдежзиклмнопрстухцчюшщуыывюяё"
+letters = string.ascii_letters
 result = 0
 
 
@@ -83,12 +86,12 @@ only_letters(line)
 
 
 def check_line(oneline):
-    if oneline[0] == '-':
-        line.insert(0, '0')
-        return oneline
-    elif oneline is None:
+    if oneline is None:
         print('ERROR: The first value cannot be early ' + oneline[0])
         quit()
+    elif oneline[0] == '-':
+        line.insert(0, '0')
+        return oneline
     elif oneline[0] in mat:
         print('ERROR: The first value cannot be early ' + oneline[0])
         quit()
@@ -218,7 +221,7 @@ def eval_(formula):
         try:
             number = ''
             for s in formula_string:
-                if s in '1234567890.':
+                if s in numbers:
                     number += s
                 elif number:
                     yield float(number)
@@ -273,7 +276,12 @@ def eval_(formula):
             print('fail func eval_calc')
 
     final_result = calc(shunting_yard(parse(formula)))
-    print(final_result)
+    if formula.find("!=") == -1:
+        print(final_result)
+    else:
+        x_result = calc(shunting_yard(parse(formula.split("!=")[0])))
+        y_result = calc(shunting_yard(parse(formula.split("!=")[-1])))
+        print(x_result != y_result)
 
 
 def start_calc(inp_line):
