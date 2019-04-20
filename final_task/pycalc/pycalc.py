@@ -20,7 +20,7 @@ def start():
                 else: print ("help yourself")
 
         except Exception as e:
-                print("Error:  " + e)
+                print("Error:  " + str(e))
         else: print(a)
 """
 
