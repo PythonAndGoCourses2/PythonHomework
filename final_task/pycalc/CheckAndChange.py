@@ -1,6 +1,6 @@
 import re
 import pycalc.operators as operators
-
+import pycalc.difcalc as difcalc
 class CheckAndChange():
         
     def do_all_changes(self,expr):
@@ -20,6 +20,8 @@ class CheckAndChange():
                     raise Exception("must not be 'digit' 'space' 'digit'")
                 if  expression[searcher-1] in operators.operators and expression[searcher+1] in operators.operators:
                     raise Exception("must not be 'operator' 'space' 'operator'")
+                if  expression[searcher-1] in difcalc.ComplexCalc.compare and expression[searcher+1] in difcalc.ComplexCalc.compare:
+                    raise Exception("Check your spaces1")
                 expression=expression[searcher+1:]
                 searcher=expression.find(" ")
             else: 
