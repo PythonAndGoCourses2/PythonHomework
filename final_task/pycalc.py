@@ -1,20 +1,24 @@
 #!python
 import argparse
+import re
+
+pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
+pars.add_argument("EXPRESSION", metavar='EXPRESSION', type=str, help="expression string to evaluate")
+pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+', help='additional user modules')
+args = pars.parse_args()
+try:
+    line = args.EXPRESSION
+except Exception:
+    print("ERROR: argument fail")
 
 
-def create_arg_parser():
-    global args
-    parser = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
-    parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
-    parser.add_argument('-m', '--module', type=str, nargs='+', help='additional modules to use')
-    args = parser.parse_args()
+#if not create_arg_parser():
+#    print("ERROR: argument fail")
 
-
-create_arg_parser()
-line = args.EXPRESSION
+#line = args.EXPRESSION
 OPERATORS = {'+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
-             '%': (3, lambda x, y: x % y)}
+             '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a**b) }
 
 z = 0
 numbers = "0123456789."
@@ -106,21 +110,28 @@ line = "".join(str(item) for item in line)
 
 def sign_replacement(text):
     global line
-    unit_bag = {',': '.', '--': '+', '++': '+', '+-': '-', '-+': '-',
-                '<+': '<', '>+': '>', '=<': '<=', '=>': '>=', '==+': '+'}
-    for unit in unit_bag:
-        if text.find(unit):
-            text = text.replace(unit, unit_bag[unit])
-        else:
-            return text
-    if text[0] == '+':
-        del text[0]
-#    keys = unit_bag.keys()
-#    for sign in text:
-#        if sign in keys:
-#            sign_replacement(text)
-#        else:
-#            continue
+
+    patterns_and_replacements = [
+        (r" ", r""),
+        (r"--", r"+"),
+        (r"\++\+", r"+"),
+        (r"\+-", r"-"),
+        (r"-\+", r"-"),
+        (r"\)\(", r")*("),
+        (r"\(\+", r"("),
+        (r"\(\-", r"(0-")
+    ]
+
+    check = True
+    while check:
+        check = False
+        for item in patterns_and_replacements:
+            text = re.sub(item[0], item[1], text)
+        for item in patterns_and_replacements:
+            if re.search(item[0], text):
+                check = True
+                break
+
     line = text
 
 
@@ -139,7 +150,6 @@ for idx, stack in enumerate(line):
         elif line[idx - 1] in mat:
             continue
         elif line[idx - 1] in numbers or line[idx - 1] == stack:
-            inpt_star = idx - 1
             line.insert(idx, '*')
             continue
         else:
@@ -151,8 +161,8 @@ for idx, stack in enumerate(line):
         elif line[idx + 1] in mat:
             continue
         elif line[idx + 1] in numbers or line[idx + 1] == '(':
-            inpt_star = idx + 1
-            line.insert(inpt_star, '*')
+            place_star = idx + 1
+            line.insert(place_star, '*')
             continue
         elif line[idx + 1] == stack:
             continue
