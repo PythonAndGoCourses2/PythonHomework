@@ -5,6 +5,7 @@ class CheckAndChange():
     def do_all_changes(self,expr):
         expr=expr.replace("//","&")
         self.correct_brackets(expr)
+        expr=expr.replace(" ","")
         return expr
 
 
