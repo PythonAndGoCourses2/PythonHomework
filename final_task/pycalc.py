@@ -7,16 +7,17 @@ import string
 def create_arg_parser():
     global line
     pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
-    pars.add_argument("EXPRESSION", metavar='EXPRESSION', type=str, help="expression string to evaluate")
+    pars.add_argument("EXPRESSION", type=str, help="expression string to evaluate")
     pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+', help='additional user modules')
     args = pars.parse_args()
-    try:
-        line = args.EXPRESSION
-    except Exception:
-        print("ERROR: argument fail")
+    line = args.EXPRESSION
 
+try:
+    create_arg_parser()
+except SystemExit:
+    print('ERROR parse string')
+    quit()
 
-create_arg_parser()
 
 OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
              '>=': (0, lambda x, y: x >= y), "<=": (0, lambda a, b: a <= b),
