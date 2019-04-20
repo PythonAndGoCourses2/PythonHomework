@@ -19,7 +19,7 @@ class Calculator():
                 if findAfter==None or findAfter.start()!=1 or  findBefore==None or findBefore.start()!=1:
                     raise Exception("the expression should be written in the following form 'number operator number'")
                
-                rezult=str( operators.operators[place[0]](float(findBefore[0][::-1]),float(findAfter[0])))
+                rezult= '{:.10f}'.format( operators.operators[place[0]](float(findBefore[0][::-1]),float(findAfter[0])))
                 begin=expr[:place.start()-len(findBefore[0])]
                 expr=begin+rezult+expr[findAfter.end()+place.start():]
                 place=re.search(r'/|\*|%|&',expr)

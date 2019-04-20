@@ -1,12 +1,35 @@
 import re
+import pycalc.operators as operators
 
 class CheckAndChange():
         
     def do_all_changes(self,expr):
         expr=expr.replace("//","&")
         self.correct_brackets(expr)
+        self.correct_spaces(expr)
         expr=expr.replace(" ","")
         return expr
+
+    def correct_spaces(self,expr):
+        searcher=expr.find(" ")
+        expression=expr
+
+        while searcher!=-1 and expression!="":
+            if searcher!= len( expression)-1 and searcher !=0:
+                if expression[searcher-1].isdigit() and expression[searcher+1].isdigit():
+                    raise Exception("must not be 'digit' 'space' 'digit'")
+                if  expression[searcher-1] in operators.operators and expression[searcher+1] in operators.operators:
+                    raise Exception("must not be 'operator' 'space' 'operator'")
+                expression=expression[searcher+1:]
+                searcher=expression.find(" ")
+            else: 
+                if searcher==len( expression)-1:
+                    break
+                if searcher==0:
+                    expression=expression[1:]
+        
+
+
 
 
     def correct_brackets(self,expr):
