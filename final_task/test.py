@@ -104,10 +104,10 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main("100/4/3"), eval("100/4/3"))
         self.assertEqual(pycalc.main("2^3^4"), eval("2**3**4"))
 
-    # def test_comparison_operators(self):
-    #     self.assertEqual(pycalc.main("1+2*3==1+2*3"), eval("1+2*3==1+2*3"))
-    #     self.assertEqual(pycalc.main("e^5>=e^5+1"), eval("e**5>=e**5+1"))
-    #     self.assertEqual(pycalc.main("1+2*4/3+1!=1+2*4/3+2"), eval("1+2*4/3+1!=1+2*4/3+2"))
+    def test_comparison_operators(self):
+        self.assertEqual(pycalc.main("1+2*3==1+2*3"), eval("1+2*3==1+2*3"))
+        self.assertEqual(pycalc.main("e^5>=e^5+1"), eval("math.e**5>=math.e**5+1"))
+        self.assertEqual(pycalc.main("1+2*4/3+1!=1+2*4/3+2"), eval("1+2*4/3+1!=1+2*4/3+2"))
 
     def test_common_tests(self):
         self.assertEqual(pycalc.main("(100)"), eval("(100)"))

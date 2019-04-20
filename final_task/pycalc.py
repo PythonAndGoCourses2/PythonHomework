@@ -1,6 +1,7 @@
 import re
 import tool
 import config
+import math
 
 
 def validation(string):
@@ -29,6 +30,28 @@ def object_type(obj):
             return float(obj)
         return int(obj)
     return obj
+
+
+def comparison_calculation(string):
+    for token in config.comparison_check:
+        if token in string:
+            array = ['']
+            for idx, token in enumerate(string):
+                if token in config.comparison_check:
+                    if string[idx-1] in config.comparison_check:
+                        array[-1] += token
+                        array.append('')
+                    else:
+                        array.append(token)
+                else:
+                    array[-1] += token
+            flag = True
+            for idx in range(1, len(array), 2):
+                result = tool.comparison_calculation(main(array[idx-1]), main(array[idx+1]), array[idx])
+                if result == False:
+                    flag = False
+                    break
+            return flag
 
 
 def split_all_characters_and_numbers(string):
@@ -111,7 +134,12 @@ def constants_switch(array):
             idx = array.index(token)
             result = tool.constants_calculation(token)
             array.pop(idx)
-            array.insert(idx, result)
+            if len(array) == 0:
+                array.insert(idx, result)
+            elif array[idx-1] == '-' and (array[idx-2] in config.characters or array[idx-2] == '(' or array[idx-2] == ','):
+                array[idx-1] += str(result)
+            else:
+                array.insert(idx, result)
     return array
 
 
@@ -158,12 +186,26 @@ def brackets_calculation(array):
                 for i in range(length):
                     array.pop()
                 if len(array) != 0:
-                    if array[first_index-2] == '-' and \
-                            (array[first_index-3] == '(' or array[first_index-3] in config.characters or array[first_index-3] == ','):
-                        if array[first_index-2] == '-':
-                            array[first_index - 2] = str(result)
+                    if len(array) == 1:
+                        if array[0] == '-':
+                            array[0] = str(math.fabs(result)) if result < 0 else str(-result)
+                        elif array[0] == '+':
+                            array[0] = str(math.fabs(result)) if result > 0 else str(result)
+                    elif array[first_index-2] == '-':
+                        if array[first_index-3] == '(' or array[first_index-3] in config.characters or array[first_index-3] == ',':
+                            array[first_index-2] = str(math.fabs(result)) if result < 0 else str(-result)
+                        elif array[first_index-3][-1].isdigit() or array[first_index-3] == ')':
+                            array[first_index-2] = '-' if result > 0 else '+'
+                            array.insert(first_index - 1, str(math.fabs(result)))
                         else:
-                            array[first_index-2] += str(result)
+                            array.insert(first_index - 1, str(result))
+                            array[0] = str(result)
+                    elif array[first_index-2] == '+':
+                        if array[first_index-3] == '(' or array[first_index-3] in config.characters or array[first_index-3] == ',':
+                            array[first_index-2] = str(result)
+                        else:
+                            array[first_index - 2] = '+' if result > 0 else '-'
+                            array.insert(first_index - 1, str(math.fabs(result)))
                     else:
                         array.insert(first_index-1, str(result))
                 else:
@@ -184,6 +226,8 @@ def brackets_calculation(array):
 def calculation(array):
     if type(array) == tuple or type(array[0]) == list:
         return array
+    if array[0] in config.characters:
+        array.insert(0, '0')
     if len(array) != 1:
         for token in config.characters:
             while token in array:
@@ -201,7 +245,10 @@ def calculation(array):
                         i += 1
                 else:
                     idx = array.index(token)
-                    result = tool.arithmetic(object_type(array[idx-1]), object_type(array[idx+1]), token)
+                    if array[idx-2] == '-':
+                        result = tool.arithmetic(-object_type(array[idx - 1]), object_type(array[idx + 1]), token)
+                    else:
+                        result = tool.arithmetic(object_type(array[idx-1]), object_type(array[idx+1]), token)
                     if len(array) == 3:
                         return result
                     index = idx
@@ -210,13 +257,19 @@ def calculation(array):
                         index += 1
                     for i in range(3):
                         array.pop()
-                    array.insert(idx - 1, result)
+                    if array[idx-2] == '-':
+                        array.insert(idx - 1, -result) if result > 0 else array.insert(idx - 1, math.fabs(result))
+                    else:
+                        array.insert(idx - 1, result)
     else:
         return array[0]
 
 
 def main(string):
     res = remove_space_between_operators(string)
+    bool_result = comparison_calculation(res)
+    if bool_result == True or bool_result == False:
+        return bool_result
     res = split_all_characters_and_numbers(res)
     res = constants_switch(res)
     res = brackets_calculation(res)

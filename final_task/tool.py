@@ -1,20 +1,20 @@
 import math
 
 
-def arithmetic(a, b, chr):
-    if chr == '^':
+def arithmetic(a, b, char):
+    if char == '^':
         return a**b
-    if chr == '*':
+    if char == '*':
         return a*b
-    if chr == '/':
+    if char == '/':
         return a/b
-    if chr == '//':
+    if char == '//':
         return a//b
-    if chr == '%':
+    if char == '%':
         return a%b
-    if chr == '+':
+    if char == '+':
         return a+b
-    if chr == '-':
+    if char == '-':
         return a-b
 
 
@@ -110,8 +110,23 @@ def functions(a, func, b=None):
         return round(a, b)
 
 
-def constants_calculation(chr):
-    if chr == 'pi':
+def constants_calculation(char):
+    if char == 'pi':
         return math.pi
-    if chr == 'e':
+    if char == 'e':
         return math.e
+
+
+def comparison_calculation(a, b, char):
+    if char == '<':
+        return a < b
+    if char == '>':
+        return a > b
+    if char == '<=':
+        return a <= b
+    if char == '>=':
+        return a >= b
+    if char == '==':
+        return a == b
+    if char == '!=':
+        return a != b

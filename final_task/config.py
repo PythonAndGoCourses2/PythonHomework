@@ -8,3 +8,4 @@ all_functions = 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'ta
 function_with_double_argument = 'hypot', 'copysign', 'fmod', 'pow', 'log', 'round'
 constants = 'e', 'pi'
 comparison = '<', '<=', '==', '!=', '>=', '>'
+comparison_check = '<', '>', '!', '='
