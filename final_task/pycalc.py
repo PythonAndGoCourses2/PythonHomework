@@ -17,13 +17,6 @@ splitset = {}
 
 split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!',  '(', ')', ',')
 
-# проверка недопустимых символов
-exset = {'"', '# ', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
-xprset = set(xpr)
-if not exset.isdisjoint(xprset):
-    print('ERROR: unknown symbol')
-    exit(0)
-
 funclist = dir(math)+['abs', 'round']      # list of math functions names
 funcdict = math.__dict__          # dict of math functions
 funcdict['abs'] = abs
@@ -46,17 +39,38 @@ operlowest = ['(', ')', '==', '<=', '>=', '<', '>', '!=']           # 0
 # разбор строки на элементы списка
 def parse(xprstr):
     word = ''
+
+    # проверка недопустимых символов
+    exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
+    xprset = set(xprstr)
+    if not exset.isdisjoint(xprset):
+        print('ERROR: unknown symbol')
+        exit(0)
     # проверка скобок в строке
     if xpr.count('(') != xpr.count(')'):
         print('ERROR: brackets are not balanced')
         exit(0)
-    xprstr = xprstr.replace(' ', '')
+
+    # проверка если состоит только из знаков пунктуации
+    punctset = set(string.punctuation)
+    xprset = set(xprstr)
+    if xprset.issubset(punctset) or xprset.issubset(funcset):
+        print('ERROR: no digits or functions')
+        exit(0)
+
+    xprstr = xprstr.replace(' -', '-')
     xprstr = xprstr.replace('--', '+')
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
     xprstr = xprstr.replace('-+', '-')
+
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
+
+    # проверка пробелов
+    if xpr.count(' ') > 0:
+        print('ERROR: useles spaces')
+        exit(0)
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -76,7 +90,7 @@ def parse(xprstr):
                 pass
                 #  # print('ok', word)
             else:
-                print('ERROR: wrong symbol "', word, sym, '"')
+                print('ERROR: wrong symbol "', word, '"')
                 exit(0)
             xprlst.append(sym)
             #  # print(xprlst)
@@ -84,18 +98,10 @@ def parse(xprstr):
         else:
             word = word + sym
             #  # print(word)
-
     xprlst.pop()    # удаляется добавленный пробел
 
-    # # print('XPRLST:', xprlst)
 
-    punctset = set(string.punctuation)
-    xprset = set(xprstr)
 
-  #  # print (funcset)
-    if xprset.issubset(punctset) or xprset.issubset(funcset):
-        print('ERROR: no digits or functions')
-        exit(0)
     for i, data in enumerate(xprlst):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
             xprlst[i] = '//'
@@ -128,6 +134,16 @@ def parse(xprstr):
             #  # print('ok', i)
         else:
             print('ERROR: unknown', xprlst[i], i)
+
+
+        xprset = set(xprlst)
+        if xprset.issubset(funcset) or xprset.issubset(operset):
+            print('ERROR: только функция')
+            exit(0)
+
+
+
+
   #  # print(xprlst)
 
     return xprlst
@@ -142,6 +158,12 @@ def logargs(*args):
 
 
 def operate(operator, *args):
+
+    for i in args:
+        if not (type(i) == float or type(i) == int):
+            print('ERROR: operate non digits')
+            exit(0)
+
     if operator in dir(math) and not operator in ['pow', 'log']:
         result = funcdict[operator](args[-1])
     elif operator == "pow":
@@ -287,6 +309,11 @@ def main(xpr):
         # print('i in pol = ',i)
 
         if i in oper+['pow','log']:
+
+            if len(stack) < 2:
+                print('ERROR: no argument')
+                exit(0)
+
             tmp = operate(i, *stack)
             if ',' in stack:
                 stack.pop()
