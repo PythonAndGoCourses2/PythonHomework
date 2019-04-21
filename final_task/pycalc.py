@@ -170,10 +170,13 @@ def parse(xprstr):
         elif xprlst[i] == '!' and xprlst[i + 1] == '=':
             xprlst[i] = '!='
             xprlst.pop(i + 1)
-        elif xprlst[i] == '-' and xprlst[i - 1] in ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=') and type(xprlst[i + 1]) == float:
+        elif xprlst[i] == '-' and xprlst[i - 1] in \
+                ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=')\
+                and type(xprlst[i + 1]) == float:
             xprlst[i + 1] = xprlst[i + 1] * - 1
             xprlst.pop(i)
-        elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1] in('*', '^', '+', '-', '(', '<', '>', '=')):
+        elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1]
+                                              in('*', '^', '+', '-', '(', '<', '>', '=')):
             xprlst[i] = -1
             xprlst.insert(i + 1, '*')
         elif xprlst[i] == '-' and xprlst[i - 1] == '/':
@@ -313,7 +316,8 @@ def main(xpr):
 
         if i == ',':
             if stack != []:
-                while stack[-1] in oper+funclist and prior(i, stack[-1]): # пока наверху стека оператор с большим или равным приоритетом
+                while stack[-1] in oper+funclist and prior(i, stack[-1]):
+                    # пока наверху стека оператор с большим или равным приоритетом
                     # # print('пока на верху стэка оператор')
                     # # print ( 'PRIOR',i, '<=', stack[-1], prior(i, stack[-1]))
                     output.append(stack.pop()) # переложить оператор из стека на выход
@@ -340,7 +344,8 @@ def main(xpr):
                 # # print('stack=',*stack,sep=' ')
             else:
                 # # print('оператор:',i, '<=stack', stack[-1], prior(i, stack[-1]))
-                while stack[-1] in oper+funclist and prior(i, stack[-1]): # пока наверху стека оператор с большим или равным приоритетом
+                while stack[-1] in oper+funclist and prior(i, stack[-1]):
+                # пока наверху стека оператор с большим или равным приоритетом
                         # # print('пока на верху стэка оператор')
                         # # print ( 'PRIOR',i, '<=', stack[-1], prior(i, stack[-1]))
                         output.append(stack.pop()) # переложить оператор из стека на выход
