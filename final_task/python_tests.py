@@ -71,7 +71,7 @@ class Testmyfunction(unittest.TestCase):
         with self.assertRaises(ValueError):
             mymodule.find_comparsion('> 1')
             mymodule.find_comparsion('1 >=')
-    
+
 
 if __name__ == '__main__':
     unittest.main()
