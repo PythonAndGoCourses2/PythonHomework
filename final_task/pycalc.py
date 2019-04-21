@@ -8,8 +8,8 @@ def create_arg_parser():
     global line
     pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
     pars.add_argument("EXPRESSION", type=str, help="expression string to evaluate")
-#    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+',
-#                      help='additional user modules')
+    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+',
+                          help='additional user modules')
     try:
         args = pars.parse_args()
         line = args.EXPRESSION
