@@ -8,15 +8,20 @@ def create_arg_parser():
     global line
     pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
     pars.add_argument("EXPRESSION", type=str, help="expression string to evaluate")
-    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+', help='additional user modules')
-    args = pars.parse_args()
-    line = args.EXPRESSION
+#    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+',
+#                      help='additional user modules')
+    try:
+        args = pars.parse_args()
+        line = args.EXPRESSION
+    except SystemExit:
+        print('ERROR parse string')
+        quit()
+    except KeyError:
+        print('ERROR parse key')
+        quit()
 
-try:
-    create_arg_parser()
-except SystemExit:
-    print('ERROR parse string')
-    quit()
+
+create_arg_parser()
 
 
 OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
@@ -27,7 +32,7 @@ OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
              }
 
 z = 0
-numbers = string.digits
+numbers = string.digits + '.'
 mat = ('+', '-', '/', '*', '//', '**', '^', '%', '=')
 letters = string.ascii_letters
 result = 0
