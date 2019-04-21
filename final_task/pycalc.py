@@ -57,6 +57,7 @@ def parse(xprstr):
     if xprset.issubset(punctset) or xprset.issubset(funcset):
         print('ERROR: no digits or functions')
         exit(0)
+
     xprstr = xprstr.replace('  ', ' ')
     xprstr = xprstr.replace(', ', ',')
     xprstr = xprstr.replace(' *', '*')
@@ -70,11 +71,13 @@ def parse(xprstr):
     xprstr = xprstr.replace('+-', '-')
     xprstr = xprstr.replace('-+', '-')
 
+    # print(xprstr)
+
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
     # проверка пробелов
-    if xpr.count(' ') > 0:
+    if xprstr.count(' ') > 0:
         print('ERROR: useles spaces')
         exit(0)
 
@@ -166,7 +169,7 @@ def logargs(*args):
 def operate(operator, *args):
 
     for i in args:
-        if not (type(i) == float or type(i) == int):
+        if not (type(i) == float or type(i) == int or i == ','):
             print('ERROR: operate non digits')
             exit(0)
 
@@ -226,9 +229,6 @@ def prior(op1, op2):
             prior2 = i
     # # print(prior1 <= prior2)
     return prior1 <= prior2
-
-
-
 
 
 # основная функция
