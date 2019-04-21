@@ -4,21 +4,35 @@ import re
 import string
 
 
+def input_check(func):
+    def wrapper():
+        try:
+            func()
+            return func
+        except SystemExit:
+            print("ERROR string not recognized")
+            quit()
+        except RuntimeError as err:
+            print("ERROR: in execute_rpn " + str(err.args[0]))
+            quit()
+        except ValueError:
+            print("ERROR: in execute_rpn Unknown operand!")
+            quit()
+        except Exception:
+            print("ERROR: in execute_rpn Unknown error!")
+            quit()
+    return wrapper()
+
+
+@input_check
 def create_arg_parser():
     global line
-    pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.', add_help=True)
+    pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.')
     pars.add_argument("EXPRESSION", type=str, help="expression string to evaluate")
     pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+',
                           help='additional user modules')
-    try:
-        args = pars.parse_args()
-        line = args.EXPRESSION
-    except SystemExit:
-        print('ERROR parse string')
-        quit()
-    except KeyError:
-        print('ERROR parse key')
-        quit()
+    args = pars.parse_args()
+    line = args.EXPRESSION
 
 
 create_arg_parser()
@@ -26,6 +40,7 @@ create_arg_parser()
 
 OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
              '>=': (0, lambda x, y: x >= y), "<=": (0, lambda a, b: a <= b),
+             "==": (0, lambda a, b: a == b),
              '+': (1, lambda x, y: x + y), '-': (1, lambda x, y: x - y),
              '*': (2, lambda x, y: x * y), '/': (2, lambda x, y: x / y),
              '%': (2, lambda x, y: x % y), "^": (3, lambda a, b: a ** b)
@@ -78,12 +93,21 @@ matched(line)
 
 def only_letters(tested_string):
     try:
+        check_in_mat = 0
+        check_in_numbers = 0
         for sign in tested_string:
             if sign not in letters:
                 continue
             else:
                 print("ERROR: In the entered expression are not only numbers and math.")
                 quit()
+        if tested_string in mat:
+            check_in_mat = 1
+        if tested_string in numbers:
+            check_in_numbers = 1
+        if not check_in_mat == check_in_numbers:
+            print("ERROR: wrong data")
+            quit()
     except Exception:
         print('fail func only_letters')
 
@@ -92,14 +116,8 @@ only_letters(line)
 
 
 def check_line(oneline):
-    if oneline is None:
-        print('ERROR: The first value cannot be early ' + oneline[0])
-        quit()
-    elif oneline[0] == '-':
-        line.insert(0, '0')
-        return oneline
-    elif oneline[0] in mat:
-        print('ERROR: The first value cannot be early ' + oneline[0])
+    if oneline == ():
+        print('ERROR: string None ')
         quit()
     elif oneline[-1] in mat:
         print('ERROR: The last value cannot be early ' + oneline[-1])
@@ -110,6 +128,8 @@ def check_line(oneline):
     elif oneline[-1] == '(':
         print('ERROR: The last value cannot be early ' + oneline[-1])
         quit()
+    elif oneline[0] == '-':
+        line.insert(0, '0')
 
 
 line = split_operators(line)
@@ -178,28 +198,38 @@ for idx, stack in enumerate(line):
 
 line = "".join(str(item) for item in line)
 
-for idx, stack in enumerate(line):
-    if stack == '*':
-        if line[idx + 1] == stack:
-            x = line[idx - 1]
-            x_ind = idx - 1
-            y = line[idx + 2]
-            y_ind = idx + 2
-            if y == stack:
-                print('ERROR: not known mathematical action ***')
-                quit()
-            elif y in mat:
-                print('ERROR: not known mathematical action **' + y)
-                quit()
-            else:
-                z = int(x) ** int(y)
-                line = split_operators(line)
-                line[x_ind:y_ind + 1] = [z]
-                break
-        elif line[idx + 1] != stack:
-            continue
 
-line = "".join(str(item) for item in line)
+def check_star(check_line):
+    check = True
+    global line
+    while check:
+        for idx, stack in enumerate(check_line):
+            if stack == '*':
+                if check_line[idx + 1] == stack:
+                    x = check_line[idx - 1]
+                    x_ind = idx - 1
+                    y = check_line[idx + 2]
+                    y_ind = idx + 2
+                    if y == stack:
+                        print('ERROR: not known mathematical action ***')
+                        quit()
+                    else:
+                        z = int(x) ** int(y)
+                        check_line = split_operators(check_line)
+                        check_line[x_ind:y_ind + 1] = [z]
+                        check_line = "".join(str(item) for item in check_line)
+                        check = False
+                        if re.search(r"\*\*", check_line):
+                            check = True
+                            check_star(check_line)
+                            break
+                elif check_line[idx + 1] != stack:
+                    continue
+        check = False
+    line = "".join(str(item) for item in check_line)
+
+
+check_star(line)
 
 for idx, stack in enumerate(line):
     if stack == '/':
@@ -283,6 +313,17 @@ def eval_(formula):
 
     final_result = calc(shunting_yard(parse(formula)))
     if formula.find("!=") == -1:
+        if formula.find("==") == -1:
+            pass
+        else:
+            equality_index = formula.split('==')[0]
+            if equality_index == '':
+                final_result = calc(shunting_yard(parse(formula.split("==")[-1])))
+            else:
+                x_result = calc(shunting_yard(parse(formula.split("==")[0])))
+                y_result = calc(shunting_yard(parse(formula.split("==")[-1])))
+                print(x_result == y_result)
+                exit(0)
         print(final_result)
     else:
         x_result = calc(shunting_yard(parse(formula.split("!=")[0])))
