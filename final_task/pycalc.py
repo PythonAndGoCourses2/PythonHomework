@@ -361,11 +361,12 @@ def main(xpr):
 
             # print(i,'=',tmp)
 
-            if stack[-2]==',':
-                stack.pop()
-                stack.pop()
-                stack.pop()
-                stack.append(tmp)
+            if ',' in stack:
+                if stack[-2]==',':
+                    stack.pop()
+                    stack.pop()
+                    stack.pop()
+                    stack.append(tmp)
             elif i in oper:
                 stack.pop()
                 stack.pop()
