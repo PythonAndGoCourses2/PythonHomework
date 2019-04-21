@@ -177,10 +177,21 @@ def operate(operator, *args):
 
     if operator in dir(math) and not operator in ['pow', 'log']:
         result = funcdict[operator](args[-1])
+
+
+
     elif operator == "pow":
         result = pow(args[-3], args[-1])
+
+
+
     elif operator == "log":
         result = logargs(*args)
+
+
+    elif len(args) < 2:
+        print('ERROR: no arguments')
+        exit(0)
     elif operator == "+":
         result = args[-2] + args[-1]
     elif operator == "-":
@@ -327,6 +338,8 @@ def main(xpr):
 
     stack.reverse()
     pol = output + stack # poland
+
+    # print(xpr)
     # print('POLAND:',*pol,sep=' ')
 
 
@@ -348,7 +361,7 @@ def main(xpr):
 
             # print(i,'=',tmp)
 
-            if ',' in stack:
+            if stack[-2]==',':
                 stack.pop()
                 stack.pop()
                 stack.pop()
