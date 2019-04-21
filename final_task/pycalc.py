@@ -1,5 +1,3 @@
-# coding=utf-8
-
 import argparse
 import math
 import string
@@ -197,10 +195,6 @@ def parse(xprstr):
             exit(0)
 
 
-   # # # print(*xprlst,sep=' ')
-
-
-   
 
     return xprlst
 
@@ -224,21 +218,14 @@ def operate(operator, *args):
 
     if operator in dir(math) and not operator in ['pow', 'log']:
         result = funcdict[operator](args[-1])
-
-
-
     elif operator == "pow":
         if len(args) == 3:
             result = pow(args[-3], args[-1])
         else:
             print('ERROR: wrong arguments')
             exit(0)
-
-
     elif operator == "log":
         result = logargs(*args)
-
-
     elif len(args) < 2:
         print('ERROR: no arguments')
         exit(0)
@@ -363,9 +350,6 @@ def main(xpr):
                 # # print('output=',*output,sep=' ')
                 # # print('stack=',*stack,sep=' ')
 
-
-
-
         elif i == '(':
             stack.append(i)
             # # print('output=',*output,sep=' ')
@@ -375,7 +359,8 @@ def main(xpr):
             # # print(i)
             while stack[-1] != '(': # пока верх стека не равен (
                 # # print ('push stack', stack[-1])
-                output.append(stack.pop())  # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
+                output.append(stack.pop())
+                # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop() # удаление из стека (
             # # print('output=',*output,sep=' ')
             # # print('stack=',*stack,sep=' ')
