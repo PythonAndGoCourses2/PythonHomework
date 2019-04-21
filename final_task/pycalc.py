@@ -57,8 +57,14 @@ def parse(xprstr):
     if xprset.issubset(punctset) or xprset.issubset(funcset):
         print('ERROR: no digits or functions')
         exit(0)
-
+    xprstr = xprstr.replace('  ', ' ')
+    xprstr = xprstr.replace(', ', ',')
+    xprstr = xprstr.replace(' *', '*')
+    xprstr = xprstr.replace('* ', '*')
+    xprstr = xprstr.replace(' +', '+')
+    xprstr = xprstr.replace('+ ', '+')
     xprstr = xprstr.replace(' -', '-')
+    xprstr = xprstr.replace('- ', '-')
     xprstr = xprstr.replace('--', '+')
     xprstr = xprstr.replace('++', '+')
     xprstr = xprstr.replace('+-', '-')
