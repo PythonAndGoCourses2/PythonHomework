@@ -26,8 +26,8 @@ class LogicTests(unittest.TestCase):
         self.assertEqual(logic._get_item_by_type('True', logic.get_imports_attrs(constants.imports)), True)
 
     def test_str_parse(self):
-        self.assertEqual(logic.str_parse('2+2'), ['2', '+', '2'])
-        self.assertEqual(logic.str_parse('5+abs(-5)'), ['5', '+', 'abs', '(', '0', '-', '5', ')'])
+        self.assertEqual(logic.str_parse('2+2', pycalc._methods), ['2', '+', '2'])
+        self.assertEqual(logic.str_parse('5+abs(-5)', pycalc._methods), ['5', '+', 'abs', '(', '(', '0', '-', '5', ')', ')'])
 
     def test_priority(self):
         self.assertEqual(logic._priority('+'), 2)

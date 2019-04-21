@@ -12,6 +12,57 @@ from typing import Any
 
 pycodestyle.maximum_line_length = 120
 
+def parse_funcs_params(ex_list: list, methods: dict)-> list:
+    if not ex_list:
+        return None
+    scobes_count = 0
+    found_func = False
+    output_list = []
+    params_list = []
+    params_buff_list = []
+    one_param_list = []
+    for ex in ex_list:
+        if constants.RE_FUNCTIONS.findall(ex) and callable(methods[ex]):
+            if not found_func:
+                found_func = True
+                output_list.append(ex)
+            else:
+                one_param_list.append(ex)
+            continue
+        if ex == '(':
+            if not scobes_count:
+                output_list.append(ex)
+            else:
+                one_param_list.append(ex)
+            scobes_count += 1
+            continue
+        if ex == ')':
+            scobes_count -= 1
+            if not scobes_count:
+                found_func = False
+                params_list.append(one_param_list)
+                one_param_list = []
+                for list in params_list:
+                    params_buff_list.append(parse_funcs_params(list, methods))
+                params_list = params_buff_list
+                output_list.append(params_list)
+                params_list = []
+                params_buff_list = []
+                output_list.append(ex)
+            else:
+                one_param_list.append(ex)
+            continue
+        if ex == ',' and scobes_count == 1:
+            params_list.append(one_param_list)
+            one_param_list = []
+            continue
+        if scobes_count:
+            one_param_list.append(ex)
+            continue
+        output_list.append(ex)
+
+    return output_list
+
 
 def import_usr_imports(usr_imports: list):
     """import user files
@@ -74,53 +125,49 @@ def _get_unit_attrs(unit: str) -> dict:
     return output_dict
 
 
-def str_parse(ex_str: str) -> list:
+def str_parse(ex_str: str, methods: dict) -> list:
     """parse mathematical expression string using regular expressions
 
     :param ex_str: expression string
     :return: list made of parsed expression string
     """
+    if not ex_str:
+        raise Exception('brackets are not balanced')
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    expression = re.compile(r'[+\-*%^()]|[0-9]+[.][0-9]+|[0-9a-zA-Z]+|[a-zA-Z]+|[/<=!>]+|[0-9]+')
-    negative = re.compile(r'[^0-9)a-zA-Z][\-][0-9]+|[^0-9)a-zA-Z][\-][a-zA-Z]+')
-    positive = re.compile(r'[^0-9)a-zA-Z][+][0-9]+|[^0-9)a-zA-Z][+][a-zA-Z]+')
-    float_val = re.compile(r'[^0-9][.][0-9]+')
-    start_string_float_val = re.compile(r'^[.][0-9]+')
-    extra_operators = re.compile(r'[+\-]{2,}')
-    start_of_string_operator = re.compile(r'^[+\-][0-9]+[.][0-9]+|^[+\-][0-9]+|^[+\-][a-zA-Z]+')
+    while re.compile(r'[+][-]|[-][+]').findall(ex_str):
+        for operators in re.compile(r'[+][-]|[-][+]').findall(ex_str):
+            ex_str = ex_str.replace(operators, '-')
+            if not ex_str.count(operators):
+                break
 
-    ex_str = ex_str.replace('--', '+')
+    while re.compile(r'[\-]{2,}').findall(ex_str) or re.compile(r'[+]{2,}').findall(ex_str):
+        for minuses in re.compile(r'[\-]{2,}').findall(ex_str):
+            if minuses.count('-') % 2 == 0:
+                ex_str = ex_str.replace(minuses, '+')
+            elif minuses.count('-') % 2 != 0:
+                ex_str = ex_str.replace(minuses, '-')
+        for pluses in re.compile(r'[+]{2,}').findall(ex_str):
+            ex_str = ex_str.replace(pluses, '+')
 
-    if start_string_float_val.findall(ex_str):
-            ex_str = ex_str.replace(ex_str, '0' + ex_str)
+    for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
+        if re.compile(r'[a-zA-Z]+').findall(negative_value) and callable(methods[re.compile(r'[a-zA-Z]+').findall(negative_value)[0]]):
+            continue
+        ex_str = ex_str.replace(negative_value, negative_value[0]+'(0'+negative_value[1:]+')')
 
-    while float_val.findall(ex_str):
-        for element in float_val.findall(ex_str):
-            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+    while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
+        for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
+            ex_str = ex_str.replace(negative_func, negative_func[0]+'(0'+negative_func[1:]+')')
 
-    while negative.findall(ex_str):
-        for element in negative.findall(ex_str):
-            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+    if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
+        ex_str = '0'+ex_str
 
-    while positive.findall(ex_str):
-        for element in positive.findall(ex_str):
-            ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+    parse_list = constants.RE_MAIN_PARSE_ARG.findall(ex_str)
 
-    while extra_operators.findall(ex_str):
-        while negative.findall(ex_str):
-            for element in negative.findall(ex_str):
-                ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
+    test = parse_funcs_params(parse_list, methods)
 
-        while positive.findall(ex_str):
-            for element in positive.findall(ex_str):
-                ex_str = ex_str.replace(element, element[0:1] + '0' + element[1:])
-
-    if start_of_string_operator.findall(ex_str):
-        ex_str = ex_str.replace(ex_str, '0' + ex_str)
-
-    return expression.findall(ex_str)
+    return constants.RE_MAIN_PARSE_ARG.findall(ex_str)
 
 
 def _priority(expression: str) -> int:
