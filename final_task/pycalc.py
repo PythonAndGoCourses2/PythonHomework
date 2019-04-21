@@ -16,6 +16,7 @@ operset = {}
 splitset = {}
 
 split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!',  '(', ')', ',')
+splitset = set(split)
 
 funclist = dir(math)+['abs', 'round']      # list of math functions names
 funcdict = math.__dict__          # dict of math functions
@@ -30,6 +31,7 @@ result = 0.
 funcset=set(funclist)
 
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
+operset = set(oper)
 operhi = ['^'] + funclist                   # 3
 opermid = ['*', '/', '%']                        # 2
 operlow = ['+', '-']                        # 1
@@ -80,6 +82,44 @@ def parse(xprstr):
     if xprstr.count(' ') > 0:
         print('ERROR: useles spaces')
         exit(0)
+        
+        
+    # добавление скобок для возведения в степень 2^3^4
+    l=0
+    r=len(xprstr)
+    for x in range(xprstr.count('^')):
+        r = xprstr.rindex('^',0,r)
+        # print('r=', r,'   ',xprstr[:r])
+        l = xprstr.rindex('^',0,r)+1
+        # print('l=',l,'r=',r,'     ',xprstr[l:r])
+        tmp = xprstr[l:r]
+        # print('tmp=',tmp)
+        tmpset = set(tmp)
+        # print('tmpset', tmpset)
+        # print('operset', operset)
+        if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
+            # print('нада скобки для степени')
+            xprstr=xprstr[:l]+'('+xprstr[l:]
+            # print(xprstr)
+
+            l=r+2
+            # print(xprstr[l:])
+
+            r=len(xprstr)
+            for i,data in enumerate(xprstr[l:]):
+                if data in split and data != '(':
+                    r = l+i
+                    break
+            # print('l=',l,'r=',r,'   ', xprstr[l:r])
+            tmp = xprstr[l:r]
+            # print(tmp)
+            xprstr=xprstr[:r]+')'+xprstr[r:]
+            # print(xprstr)
+        else:
+            # print('НЕ надо скобки',l,r)
+            r = l
+
+
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -151,9 +191,10 @@ def parse(xprstr):
             exit(0)
 
 
+   # # print(*xprlst,sep=' ')
 
 
-  #  # print(xprlst)
+   
 
     return xprlst
 
@@ -161,7 +202,7 @@ def parse(xprstr):
 def logargs(*args):
     # print('START logoargs', args)
     if ',' in args:
-        res = log(args[-3],args[-1])
+        res = log(args[-3], args[-1])
     else:
         res = log(args[-1])
     # print('RETURN logoargs', res)
