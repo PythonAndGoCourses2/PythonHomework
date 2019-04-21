@@ -181,8 +181,11 @@ def operate(operator, *args):
 
 
     elif operator == "pow":
-        result = pow(args[-3], args[-1])
-
+        if len(args) == 3:
+            result = pow(args[-3], args[-1])
+        else:
+            print('ERROR: wrong arguments')
+            exit(0)
 
 
     elif operator == "log":
@@ -361,7 +364,7 @@ def main(xpr):
 
             # print(i,'=',tmp)
 
-            if ',' in stack:
+            if ',' in stack and i in ['pow', 'log']:
                 if stack[-2]==',':
                     stack.pop()
                     stack.pop()
