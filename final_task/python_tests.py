@@ -59,7 +59,7 @@ class Testmyfunction(unittest.TestCase):
         self.assertAlmostEqual(mymodule.find_func('  sin  3', 7, [3]), str(math.sin(3)))
         with self.assertRaises(KeyError):
             mymodule.find_func('si(3)', 2, [3])
-    
+
     def test_calc_logical(self):
         self.assertEqual(mymodule.calc_logical([['>'], ['3', '1']]), True)
         with self.assertRaises(KeyError):
@@ -71,8 +71,7 @@ class Testmyfunction(unittest.TestCase):
         with self.assertRaises(ValueError):
             mymodule.find_comparsion('> 1')
             mymodule.find_comparsion('1 >=')
-            
-
+    
 
 if __name__ == '__main__':
     unittest.main()

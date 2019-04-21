@@ -3,7 +3,7 @@ import operator
 import argparse
 
 ARITHMETIC_OPERATORS = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
-              '/': operator.truediv, '+': operator.add, '-': operator.sub}
+                        '/': operator.truediv, '+': operator.add, '-': operator.sub}
 COMPARE = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
            '>=': operator.ge, ' <=': operator.le}
 CONSTANT = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
@@ -46,6 +46,7 @@ def find_comparsion(stroka):
         comparsion[indx-1:indx+1] = [comparsion[indx-1]+comparsion[indx]]
         quantity -= 1
     return [comparsion, lst_expression]
+
 
 def calc_logical(lst):
     [compare_list, number_list] = lst
@@ -103,7 +104,8 @@ def plus_reject(stroka):
             lst_expression.append(stroka[begin:indx])
             begin = indx+A[elem]
     lst_expression.append(stroka[begin:])
-    if lst_expression[0] == '': lst_expression.remove('')
+    if lst_expression[0] == '':
+        lst_expression.remove('')
     return lst_expression
 
 
@@ -119,7 +121,8 @@ def calculation(stroka):
     lst_numbers.append(stroka[begin:])
     for indx, elem in enumerate(lst_numbers):
         elem = elem.strip()
-        if elem in '': raise ValueError('empty string between operator')
+        if elem in '':
+            raise ValueError('empty string between operator')
         if elem in CONSTANT:
             lst_numbers[indx] = CONSTANT[elem]
         else:
@@ -153,7 +156,7 @@ def find_brackets(stroka):
             indx = begin
             rad = stroka[begin+1:end].split(',')
             val_1 = list(map(find_comparsion, rad))
-            val_2 = list(map(calc_logical,val_1))
+            val_2 = list(map(calc_logical, val_1))
             stroka = stroka.replace(stroka[begin:end+1], str(val_2)[1:-1], 1)
             stroka = find_func(stroka, indx, val_2)
             return find_brackets(stroka)
