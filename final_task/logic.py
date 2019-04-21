@@ -170,7 +170,7 @@ def str_parse(ex_str: str, methods: dict) -> list:
 
     packed_expression = parse_funcs_params(parse_list, methods)
 
-    return packed_expression 
+    return packed_expression
 
 
 def _priority(expression: str) -> int:
@@ -260,7 +260,7 @@ def polish_notation(expression_list: list, methods: dict) -> list:
     return output_expression
 
 
-def ex_calc(polish_list: list, methods: dict) -> float:
+def ex_calc(polish_list: list, methods: dict) -> Any:
     """calculate mathematical expression writed as polish notation
 
     :param polish_list: list which contains mathematical expression writed as polish notation
@@ -269,38 +269,33 @@ def ex_calc(polish_list: list, methods: dict) -> float:
     """
     output_list = []
     for ex in polish_list:
+        if isinstance(ex, list):
+            output_list.append(ex_calc(ex, methods))
+            continue
         if constants.RE_FLOATS.findall(ex) or constants.RE_INTS.findall(ex) and not constants.RE_FUNCTIONS.findall(ex):
             output_list.append(ex)
             continue
 
         if constants.RE_FUNCTIONS.findall(ex):
-            values = []
-
             if not callable(methods[ex]):  # if word is constant value just write it into output list
                 output_list.append(methods[ex])
                 continue
-
-            signature = inspect.signature(methods[ex])
-            parameters_count = len(signature.parameters)
-            parameters = signature.parameters
-            for parameter in parameters:  # get count of parameters of function
-                if not parameters[parameter].default:
-                    parameters_count -= 1
-            while parameters_count > 0:
-                if output_list:
-                    float_val = float(output_list.pop())
-                    values.append(float_val)
-                parameters_count -= 1
-
-            # perform mathematical function and write result into output List
-            output_list.append(methods[ex](*values[::-1]))
+            else:
+                if isinstance(output_list[0], list):
+                    output_list.append(methods[ex](*output_list.pop()))
+                else:
+                    output_list.append(methods[ex](output_list.pop()))
+                continue
 
         if constants.RE_OPERATIONS.findall(ex):  # if found operation perform it
             second_val = _get_item_by_type(output_list.pop(), methods)
             first_val = _get_item_by_type(output_list.pop(), methods)
             output_list.append(constants.operator[ex](first_val, second_val))
-
-    return _get_item_by_type(output_list[0], methods)
+            continue
+    if len(output_list) > 1:
+        return output_list
+    else:
+        return _get_item_by_type(output_list[0], methods)
 
 # goals for weekend
 
