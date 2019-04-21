@@ -2,14 +2,14 @@ import math
 import operator
 import argparse
 
-A = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
-     '/': operator.truediv, '+': operator.add, '-': operator.sub}
-Compare = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
+ARITHMETIC_OPERATORS = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
+              '/': operator.truediv, '+': operator.add, '-': operator.sub}
+COMPARE = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
            '>=': operator.ge, ' <=': operator.le}
-Const = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
-         '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
-F = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
-F['abs'], F['round'] = abs, round
+CONSTANT = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
+            '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau, 'False': False, 'True': True}
+FUNCTIONS = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
+FUNCTIONS['abs'], FUNCTIONS['round'] = abs, round
 
 
 def byild_parser():
@@ -27,41 +27,55 @@ def first_function(stroka):
 
 
 def find_comparsion(stroka):
-    i1 = 0
-    lst = []
-    op = []
+    begin = 0
+    lst_expression = []
+    comparsion = []
     tup = ('>', '<', '!', '=')
     if stroka[0] in tup or stroka[-1] in tup:
         raise ValueError
-    for elem in stroka:
-        if '><=!'.find(elem) != -1:
-            i2 = stroka.find(elem, i1)
-            lst.append(stroka[i1:i2])
-            op.append(elem)
-            i1 = i2 + 1
-    lst.append(stroka[i1:])
-    col = lst.count('')
-    while col != 0:
-        i = lst.index('')
-        del lst[i]
-        op[i-1:i+1] = [op[i-1]+op[i]]
-        col -= 1
-    return [op, lst]
+    for indx, elem in enumerate(stroka):
+        if elem in '><=!':
+            lst_expression.append(stroka[begin:indx])
+            comparsion.append(elem)
+            begin = indx + 1
+    lst_expression.append(stroka[begin:])
+    quantity = lst_expression.count('')
+    while quantity != 0:
+        indx = lst_expression.index('')
+        del lst_expression[indx]
+        comparsion[indx-1:indx+1] = [comparsion[indx-1]+comparsion[indx]]
+        quantity -= 1
+    return [comparsion, lst_expression]
+
+def calc_logical(lst):
+    [compare_list, number_list] = lst
+    if compare_list:
+        logic = True
+        for indx, elem in enumerate(compare_list):
+            try:
+                x = calculation_without_brackets(number_list[indx])
+                y = calculation_without_brackets(number_list[indx+1])
+                logic *= COMPARE[elem](x, y)
+            except KeyError:
+                raise KeyError('ERROR: unknown compare operator', elem)
+        return bool(logic)
+    else:
+        return calculation_without_brackets(number_list[0])
 
 
-def replace_power(stroka, lst):
+def replace_power(stroka, lst_numbers):
     i = stroka.rfind('^')
     if i == -1:
-        return stroka, lst
+        return stroka, lst_numbers
     else:
-        if lst[i] < 0:
-            power = (-lst[i]) ** lst[i+1]
-            lst[i:i+2] = [-power]
-            return replace_power(stroka[:i], lst)
+        if lst_numbers[i] < 0:
+            power = (-lst_numbers[i]) ** lst_numbers[i+1]
+            lst_numbers[i:i+2] = [-power]
+            return replace_power(stroka[:i], lst_numbers)
         else:
-            power = lst[i] ** lst[i+1]
-            lst[i:i+2] = [power]
-            return replace_power(stroka[:i], lst)
+            power = lst_numbers[i] ** lst_numbers[i+1]
+            lst_numbers[i:i+2] = [power]
+            return replace_power(stroka[:i], lst_numbers)
 
 
 def del_space(stroka):
@@ -72,79 +86,77 @@ def del_space(stroka):
 
 
 def replace_many_plus_minus(stroka):
-    if stroka.find('++') != -1:
-        stroka = stroka.replace('++', '+')
-    elif stroka.find('--') != -1:
-        stroka = stroka.replace('--', '+')
-    elif stroka.find('+-') != -1:
-        stroka = stroka.replace('+-', '-')
-    elif stroka.find('-+') != -1:
-        stroka = stroka.replace('-+', '-')
-    else:
-        return stroka
-    return replace_many_plus_minus(stroka)
+    A = {'++': '+', '--': '+', '-+': '-', '+-': '-'}
+    for key, value in A.items():
+        if key in stroka:
+            stroka = stroka.replace(key, value)
+            return replace_many_plus_minus(stroka)
+    return stroka
 
 
 def plus_reject(stroka):
     A = {'+': 1, '-': 0}
-    i1 = 0
-    lst = []
-    for idx, elem in enumerate(stroka):
-        if '+-'.find(elem) != -1 and stroka[idx-1] not in ('/', '%', '^', '*'):
-            lst.append(stroka[i1:idx])
-            i1 = idx+A[elem]
-    lst.append(stroka[i1:])
-    return lst
+    begin = 0
+    lst_expression = []
+    for indx, elem in enumerate(stroka):
+        if elem in '+-' and stroka[indx-1] not in ('/', '%', '^', '*'):
+            lst_expression.append(stroka[begin:indx])
+            begin = indx+A[elem]
+    lst_expression.append(stroka[begin:])
+    if lst_expression[0] == '': lst_expression.remove('')
+    return lst_expression
 
 
-def result(stroka):
-    s = []
-    o = ''
-    i1 = 0
-    for elem in stroka:
-        if '*/%^'.find(elem) != -1:
-            i2 = stroka.find(elem, i1)
-            o += elem
-            s.append(stroka[i1:i2])
-            i1 = i2 + 1
-    s.append(stroka[i1:])
-    for idx, elem in enumerate(s):
+def calculation(stroka):
+    lst_numbers = []
+    operations = ''
+    begin = 0
+    for indx, elem in enumerate(stroka):
+        if elem in '*/%^':
+            operations += elem
+            lst_numbers.append(stroka[begin:indx])
+            begin = indx + 1
+    lst_numbers.append(stroka[begin:])
+    for indx, elem in enumerate(lst_numbers):
         elem = elem.strip()
-        if elem in Const:
-            s[idx] = Const[elem]
+        if elem in '': raise ValueError('empty string between operator')
+        if elem in CONSTANT:
+            lst_numbers[indx] = CONSTANT[elem]
         else:
             try:
-                s[idx] = float(s[idx])
+                lst_numbers[indx] = float(lst_numbers[indx])
             except ValueError:
-                raise ValueError(s[idx])
-    replace_power(o, s)
-    o = o.replace('^', '')
-    res = s[0]
-    for idx, elem in enumerate(o):
-        res = A[elem](res, s[idx+1])
-    return res
+                raise ValueError(lst_numbers[indx])
+    replace_power(operations, lst_numbers)
+    operations = operations.replace('^', '')
+    total = lst_numbers[0]
+    for indx, elem in enumerate(operations):
+        total = ARITHMETIC_OPERATORS[elem](total, lst_numbers[indx+1])
+    return total
 
 
-def calc(stroka):
-    stroka = '0+' + stroka
+def calculation_without_brackets(stroka):
     stroka = del_space(stroka)
     stroka = replace_many_plus_minus(stroka)
-    lst = plus_reject(stroka)
-    return sum(list(map(result, lst)))
+    lst_expression = plus_reject(stroka)
+    if len(lst_expression) == 1:
+        return calculation(lst_expression[0])
+    else:
+        return sum(list(map(calculation, lst_expression)))
 
 
 def find_brackets(stroka):
-    global indx, valbr
-    i = stroka.find(')')
-    if i != -1:
-        i2 = stroka[:i].rfind('(')
-        if i2 != -1:
-            indx = i2
-            rad = stroka[i2+1:i].split(',')
-            valbr = list(map(calc, rad))
-            stroka = stroka.replace(stroka[i2:i+1], str(valbr)[1:-1], 1)
-            stroka2 = find_func(stroka, indx, valbr)
-            return find_brackets(stroka2)
+    end = stroka.find(')')
+    if end != -1:
+        begin = stroka[:end].rfind('(')
+        if begin != -1:
+            indx = begin
+            rad = stroka[begin+1:end].split(',')
+            val_1 = list(map(find_comparsion, rad))
+            val_2 = list(map(calc_logical,val_1))
+            stroka = stroka.replace(stroka[begin:end+1], str(val_2)[1:-1], 1)
+            stroka = find_func(stroka, indx, val_2)
+            return find_brackets(stroka)
         else:
             raise ValueError('brackets are not balanced')
     elif stroka.find('(') != -1:
@@ -153,21 +165,21 @@ def find_brackets(stroka):
         return stroka
 
 
-def find_func(stroka, idx, val):
-    st = stroka[idx-1::-1]
-    i = idx
+def find_func(stroka, indx, val):
+    st = stroka[indx-1::-1]
+    i = indx
     for elem in st:
-        if (elem not in A) and (elem not in ('>', '<', '=', '(')):
+        if (elem not in ARITHMETIC_OPERATORS) and (elem not in ('>', '<', '=', '(')):
             i -= 1
         else:
             break
-    st = stroka[i:idx]
+    st = stroka[i:indx]
     st1 = st.strip()
     if st1 in '':
         return stroka
     else:
         try:
-            stroka = stroka.replace(st+str(val)[1:-1], str(F[st1](*val)), 1)
+            stroka = stroka.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](*val)), 1)
         except KeyError:
             raise KeyError('ERROR: unknown function', st1)
         return stroka

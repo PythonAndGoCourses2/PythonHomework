@@ -6,18 +6,9 @@ def main():
     try:
         a = mymodule.first_function(a)
         result1 = mymodule.find_brackets(a)
-        [compare, result2] = mymodule.find_comparsion(result1)
-        if compare:
-            logic = True
-            for idx, elem in enumerate(compare):
-                try:
-                    logic *= mymodule.Compare[elem](mymodule.calc(result2[idx]), mymodule.calc(result2[idx+1]))
-                except KeyError:
-                    raise KeyError('ERROR: unknown compare operator', elem)
-            print(bool(logic))
-        else:
-            s = mymodule.calc(result2[0])
-            print(s)
+        compare = mymodule.find_comparsion(result1)
+        total = mymodule.calc_logical(compare)
+        print(total)
     except ZeroDivisionError:
         print('ERROR: division by zero')
     except TypeError as e:
