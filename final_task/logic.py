@@ -12,6 +12,7 @@ from typing import Any
 
 pycodestyle.maximum_line_length = 120
 
+
 def parse_funcs_params(ex_list: list, methods: dict)-> list:
     if not ex_list:
         return None
@@ -122,6 +123,8 @@ def _get_unit_attrs(unit: str) -> dict:
     for attribute in attrs:
         if not attribute.count('_'):
             output_dict[attribute] = getattr(globals()[unit], attribute)
+    output_dict['abs'] = abs
+    output_dict['round'] = round
     return output_dict
 
 
@@ -165,9 +168,9 @@ def str_parse(ex_str: str, methods: dict) -> list:
 
     parse_list = constants.RE_MAIN_PARSE_ARG.findall(ex_str)
 
-    test = parse_funcs_params(parse_list, methods)
+    packed_expression = parse_funcs_params(parse_list, methods)
 
-    return constants.RE_MAIN_PARSE_ARG.findall(ex_str)
+    return packed_expression 
 
 
 def _priority(expression: str) -> int:
@@ -201,6 +204,9 @@ def polish_notation(expression_list: list, methods: dict) -> list:
     operation_list = []
 
     for expression in expression_list:
+        if isinstance(expression, list):
+            output_expression.append(polish_notation(expression, methods))
+            continue
         if constants.RE_FUNCTIONS.findall(expression) and expression not in methods.keys():
             raise Exception('unknown function {}'.format(expression))
         if constants.RE_FUNCTIONS.findall(expression) and not callable(methods[expression]):

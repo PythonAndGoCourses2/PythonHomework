@@ -51,4 +51,4 @@ RE_OPERATIONS = re.compile(r'[(<=!>+\-*/%^]+')
 #
 RE_NEGATIVE_FUNCS = re.compile(r'[^\w)]-\w+[(].+[)]')
 
-imports = ['builtins', 'math']
+imports = ['math']
