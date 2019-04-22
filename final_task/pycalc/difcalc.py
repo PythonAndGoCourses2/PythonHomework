@@ -31,12 +31,12 @@ class ComplexCalc():
             if func[0] in ComplexCalc.const:
 
                 s = ComplexCalc.const[func[0]]
-                expr = expr[:k]+str(s)+expr[afterExpr:]
+                expr = expr[:k] + str(s) + expr[afterExpr:]
                 continue
 
             searcher = 0
             count = 1
-            for one in expr[afterExpr+1:]:
+            for one in expr[afterExpr + 1:]:
 
                 searcher += 1
                 if one == ")":
@@ -45,7 +45,7 @@ class ComplexCalc():
                     count += 1
                 if count == 0:
                     break
-            end = searcher+afterExpr
+            end = searcher + afterExpr
         # выкинуть если конец строки
             if expr[afterExpr] != '(':
 
@@ -54,8 +54,8 @@ class ComplexCalc():
 
             else:
 
-                a = self.__find_replacement(func[0], expr[afterExpr+1:end])
-                expr = expr[:k]+a+expr[end+1:]
+                a = self.__find_replacement(func[0], expr[afterExpr + 1:end])
+                expr = expr[:k] + a + expr[end + 1:]
 
     def __find_replacement(self, func, expr):
 
@@ -80,7 +80,7 @@ class ComplexCalc():
         split = []
         for each in expr:
             if breketscounter == 0 and each == ",":
-                split.append(expr[preve:count-1])
+                split.append(expr[preve:count - 1])
                 preve = count
 
             elif each == "(":
@@ -103,7 +103,7 @@ class ComplexCalc():
 
 
     }
-    
+
     def calculate(self, expr):
 
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|=', expr)
