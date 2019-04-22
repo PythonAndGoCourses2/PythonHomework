@@ -80,43 +80,43 @@ def parse(xprstr):
     if xprstr.count(' ') > 0:
         print('ERROR: useles spaces')
         exit(0)
-    # добавление скобок для возведения в степень 2^3^4
-    l = 0
-    r = len(xprstr)
 
+    # добавление скобок для возведения в степень 2^3^4
+    left = 0
+    r = len(xprstr)
     for x in range(xprstr.count('^')):
         r = xprstr.rindex('^', 0, r)
         # print('r=', r, '   ', xprstr[:r])
         if xprstr[:r].count('^') == 0:
             break
-        l = xprstr.rindex('^', 0, r)+1
-        # # print('l=', l, 'r=', r, '     ', xprstr[l:r])
-        tmp = xprstr[l:r]
+        left = xprstr.rindex('^', 0, r)+1
+        # # print('left=', left, 'r=', r, '     ', xprstr[left:r])
+        tmp = xprstr[left:r]
         # # print('tmp=', tmp)
         tmpset = set(tmp)
         # # print('tmpset', tmpset)
         # # print('operset', operset)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
             # # print('нада скобки для степени')
-            xprstr = xprstr[:l]+'('+xprstr[l:]
+            xprstr = xprstr[:left]+'('+xprstr[left:]
             # # print(xprstr)
 
-            l = r+2
+            left = r+2
             # # print(xprstr[l:])
 
             r = len(xprstr)
-            for i, data in enumerate(xprstr[l:]):
+            for i, data in enumerate(xprstr[left:]):
                 if data in split and data != '(':
-                    r = l+i
+                    r = left+i
                     break
-            # # print('l=', l, 'r=', r, '   ', xprstr[l:r])
-            tmp = xprstr[l:r]
+            # # print('left=', left, 'r=', r, '   ', xprstr[left:r])
+            tmp = xprstr[left:r]
             # # print(tmp)
             xprstr = xprstr[:r]+')'+xprstr[r:]
             # # print(xprstr)
         else:
-            # # print('НЕ надо скобки', l, r)
-            r = l
+            # # print('НЕ надо скобки', left, r)
+            r = left
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -205,7 +205,7 @@ def operate(operator, *args):
             print('ERROR: operate non digits')
             exit(0)
 
-    if operator in dir(math) and not operator in ['pow', 'log']:
+    if operator in dir(math) and operator not in ['pow', 'log']:
         result = funcdict[operator](args[-1])
     elif operator == "pow":
         if len(args) == 3:
@@ -388,7 +388,7 @@ def main(xpr):
                 stack.pop()
                 stack.append(tmp)
             # # print('stack=', stack)
-        elif i in funclist and not i in ['pow', 'log']:
+        elif i in funclist and i not in ['pow', 'log']:
             tmp = operate(i, *stack)
             stack[-1] = tmp
             # # print('stack=', stack)
