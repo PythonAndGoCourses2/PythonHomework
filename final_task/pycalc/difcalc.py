@@ -23,7 +23,7 @@ class ComplexCalc():
 
             func = re.search(r'[A-ZAa-z]+1?0?', expr)
 
-            if func == None:
+            if func is None:
                 return self.calc.calculate(expr)
 
             afterExpr = func.end()

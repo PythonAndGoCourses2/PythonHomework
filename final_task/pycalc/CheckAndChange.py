@@ -20,10 +20,12 @@ class CheckAndChange():
             if searcher != len(expression)-1 and searcher != 0:
                 if expression[searcher-1].isdigit() and expression[searcher+1].isdigit():
                     raise Exception("must not be 'digit' 'space' 'digit'")
-                if expression[searcher-1] in operators.operators and expression[searcher+1] in operators.operators:
+                if expression[searcher-1] in operators.operators \
+                     and expression[searcher+1] in operators.operators:
                     raise Exception(
                         "must not be 'operator' 'space' 'operator'")
-                if expression[searcher-1] in difcalc.ComplexCalc.compare and expression[searcher+1] in difcalc.ComplexCalc.compare:
+                if expression[searcher-1] in difcalc.ComplexCalc.compare \
+                    and expression[searcher+1] in difcalc.ComplexCalc.compare:
                     raise Exception("Check your spaces1")
                 expression = expression[searcher+1:]
                 searcher = expression.find(" ")
@@ -35,7 +37,7 @@ class CheckAndChange():
 
     def correct_brackets(self, expr):
 
-        if re.search(r'[0-9]+', expr) == None and re.search(r'[A-ZAa-z]+', expr) == None:
+        if re.search(r'[0-9]+', expr) is None and re.search(r'[A-ZAa-z]+', expr) is None:
             raise Exception("No Numbers in expression")
 
         i = 0
@@ -52,3 +54,5 @@ class CheckAndChange():
                 raise Exception("check brackets! ")
 
 # доделать всякие исключения, есть ли исключение на пустые скобки
+
+
