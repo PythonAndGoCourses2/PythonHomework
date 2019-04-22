@@ -10,7 +10,7 @@ class Calculator():
         place = re.search(r'/|\*|%|&', expr)
 
         while place is not None:
-            # регульрное выражение с конца строки есть вроде
+
             findBefore = re.search(
                 r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr[place.start()::-1])
             findAfter = re.search(
@@ -34,18 +34,18 @@ class Calculator():
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
 
-        splitted = list()
-
+        summing=0
+        number=0
         while expr != "":
             find = re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr)
             number = expr[:find.end()]
             if number.count("-") % 2 == 1:
-                splitted.append(float("-" + find[0]))
+               a=float("-" + find[0])
             else:
-                splitted.append(float(find[0]))
+                a=float(find[0])
             expr = expr[find.end():]
-
-        return '{:.15f}'.format((sum(splitted)))
+            summing +=a
+        return '{:.15f}'.format(summing)
 
     def calculate(self, expr):
         expr = expr.replace(" ", "")
