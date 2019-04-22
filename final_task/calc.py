@@ -2,7 +2,14 @@
 
 import operator
 import math
+from argparse import ArgumentParser
 from math import *
+
+
+parser = ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
+parser.add_argument('-m', '--use-modules', help='additional modules to use', metavar='MODULE [MODULE ...]')
+parser.add_argument('EXPRESSION', help='expression string to calculate')
+expression_line = parser.parse_args().EXPRESSION
 
 
 function_dict = {
@@ -33,48 +40,48 @@ operator_dict = {
 }
 
 
-example = [
-    "-13",
-    "8//3",
-    "6-(-13)",
-    "1---1",
-    "-+---+-1",
-    "1+2*2",
-    "1+(2+3*2)*3",
-    "10*(2+1)",
-    "10^(2+1)",
-    "100/3^2",
-    "100/3%2^2",
-    "pi+e",
-    "log(e)",
-    "sin(pi/2)",
-    "log10(100)",
-    "sin(pi/2)*111*6",
-    "2*sin(pi/2)",
-    "abs(-5)",
-    "round(123.45689)",
-    "102%12%7",
-    "100/4/3",
-    "2^3^4",
-    "1+2*3==1+2*3",
-    "e^5>=e^5+1",
-    "1+2*4/3+1!=1+2*4/3+2",
-    "(100)",
-    "666",
-    "-.1",
-    "1/3",
-    "1.0/3.0",
-    ".1 * 2.0^56.0",
-    "e^34",
-    "(2.0^(pi/pi+e/e+2.0^0.0))",
-    "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)",
-    "sin(pi/2^1) + log(1*4+2^2+1, 3^2)",
-    "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5",
-    "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)",
-    "2.0^(2.0^2.0*2.0^2.0)",
-    "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
-
-]
+# example = [
+#     "-13",
+#     "8//3",
+#     "6-(-13)",
+#     "1---1",
+#     "-+---+-1",
+#     "1+2*2",
+#     "1+(2+3*2)*3",
+#     "10*(2+1)",
+#     "10^(2+1)",
+#     "100/3^2",
+#     "100/3%2^2",
+#     "pi+e",
+#     "log(e)",
+#     "sin(pi/2)",
+#     "log10(100)",
+#     "sin(pi/2)*111*6",
+#     "2*sin(pi/2)",
+#     "abs(-5)",
+#     "round(123.45689)",
+#     "102%12%7",
+#     "100/4/3",
+#     "2^3^4",
+#     "1+2*3==1+2*3",
+#     "e^5>=e^5+1",
+#     "1+2*4/3+1!=1+2*4/3+2",
+#     "(100)",
+#     "666",
+#     "-.1",
+#     "1/3",
+#     "1.0/3.0",
+#     ".1 * 2.0^56.0",
+#     "e^34",
+#     "(2.0^(pi/pi+e/e+2.0^0.0))",
+#     "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)",
+#     "sin(pi/2^1) + log(1*4+2^2+1, 3^2)",
+#     "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5",
+#     "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)",
+#     "2.0^(2.0^2.0*2.0^2.0)",
+#     "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
+#
+# ]
 
 
 def number_parser(number):
@@ -90,12 +97,12 @@ def function_parser(function_name):
     return function_name
 
 
-def split_operators(s):
+def split_operators(expression_line):
     parsing_list = []
     last_number = ""
     last_letter = ""
     last_symbol = ""
-    for i in s:
+    for i in expression_line:
         if i == " ":
             continue
         if i.isnumeric() or i is '.':
@@ -296,34 +303,38 @@ def calculate(converted_list):
     return current_result
 
 
-operands = OperandStack()
-function = OperandStack()
+def main():
+    operands = OperandStack()
+    function = OperandStack()
 
-if type(example) is str:
-    print('example: {}'.format(example))
-    parser = split_operators(example)
-    print(parser)
-    converted_list = converter(parser)
-    print(converted_list)
-    result = calculate(converted_list)
-    print(result)
-else:
-    for expression in example:
-        string = ''
-        for i in expression:
-            if i == '^':
-                string += '**'
-            else:
-                string +=i
-        try:
-            calculate(converter(split_operators(expression)))
-        except:
-            print('fault on {} \n'.format(expression))
-        if current_result == eval(string):
-            print(expression)
-            print(current_result, current_result == eval(string))
-            print('\n')
+    if type(expression_line) is str:
+        print('example: {}'.format(expression_line))
+        parser = split_operators(expression_line)
+        print(parser)
+        converted_list = converter(parser)
+        print(converted_list)
+        result = calculate(converted_list)
+        print(result)
+    else:
+        for expression in expression_line:
+            string = ''
+            for i in expression:
+                if i == '^':
+                    string += '**'
+                else:
+                    string +=i
+            try:
+                calculate(converter(split_operators(expression)))
+            except:
+                print('fault on {} \n'.format(expression))
+            if current_result == eval(string):
+                print(expression)
+                print(current_result, current_result == eval(string))
+                print('\n')
 
+
+if __name__ == '__main__':
+    main()
 
 
 
