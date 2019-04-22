@@ -14,30 +14,27 @@ math_const = {'e': math.e,
 math_function = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])  # Need to redo
 
 
-# print(math_function)
-
-
-def calculating(expr):
-    def parse(expr):
-        number = ''
-        func = ''
-        op = ''
-        for symbol in expr:
+def calculating(expression):
+    def parse(expression):
+        number, func, op = '', '', ''
+        for symbol in expression:
             if symbol.isdigit() or symbol == '.':
                 number += symbol
             elif number:
                 yield float(number)
                 number = ''
-            if symbol in "epi":
+            if symbol.isalpha():
                 func += symbol
             elif func and func in math_const:
                 yield math_const[func]
                 func = ''
-            if symbol in OPERATORS or symbol in "()":
+            if symbol in OPERATORS:
                 op += symbol
             elif op:
                 yield op
                 op = ''
+            if symbol in "()":
+                yield symbol
         if number:
             yield float(number)
         elif func and func in math_const:
@@ -74,7 +71,7 @@ def calculating(expr):
                 stack.append(token)
         return stack[0]
 
-    return calc(infix_to_postfix(parse(expr)))
+    return calc(infix_to_postfix(parse(expression)))
 
 
 print(calculating(parser.create_parser().EXPRESSION))
