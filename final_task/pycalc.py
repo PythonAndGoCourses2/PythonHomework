@@ -375,7 +375,7 @@ def main(xpr):
             tmp = operate(i, *stack)
             # # print(i, '=', tmp)
             if ',' in stack and i in ['pow', 'log']:
-                if stack[-2] == ', ':
+                if stack[-2] == ',':
                     stack.pop()
                     stack.pop()
                     stack.pop()
