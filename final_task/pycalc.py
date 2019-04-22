@@ -26,7 +26,7 @@ xprlst = []
 a = 0.
 b = 0.
 result = 0.
-funcset=set(funclist)
+funcset = set(funclist)
 
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
 operset = set(oper)
@@ -59,7 +59,7 @@ def parse(xprstr):
         exit(0)
 
     xprstr = xprstr.replace('  ', ' ')
-    xprstr = xprstr.replace(', ', ',')
+    xprstr = xprstr.replace(', ', ', ')
     xprstr = xprstr.replace(' *', '*')
     xprstr = xprstr.replace('* ', '*')
     xprstr = xprstr.replace(' +', '+')
@@ -80,47 +80,43 @@ def parse(xprstr):
     if xprstr.count(' ') > 0:
         print('ERROR: useles spaces')
         exit(0)
-        
-        
     # добавление скобок для возведения в степень 2^3^4
-    l=0
-    r=len(xprstr)
+    l = 0
+    r = len(xprstr)
 
     for x in range(xprstr.count('^')):
-        r = xprstr.rindex('^',0,r)
-        # print('r=', r,'   ',xprstr[:r])
-        if xprstr[:r].count('^') ==0:
+        r = xprstr.rindex('^', 0, r)
+        # print('r=', r, '   ', xprstr[:r])
+        if xprstr[:r].count('^') == 0:
             break
-        l = xprstr.rindex('^',0,r)+1
-        # # print('l=',l,'r=',r,'     ',xprstr[l:r])
+        l = xprstr.rindex('^', 0, r)+1
+        # # print('l=', l, 'r=', r, '     ', xprstr[l:r])
         tmp = xprstr[l:r]
-        # # print('tmp=',tmp)
+        # # print('tmp=', tmp)
         tmpset = set(tmp)
         # # print('tmpset', tmpset)
         # # print('operset', operset)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
             # # print('нада скобки для степени')
-            xprstr=xprstr[:l]+'('+xprstr[l:]
+            xprstr = xprstr[:l]+'('+xprstr[l:]
             # # print(xprstr)
 
-            l=r+2
+            l = r+2
             # # print(xprstr[l:])
 
-            r=len(xprstr)
-            for i,data in enumerate(xprstr[l:]):
+            r = len(xprstr)
+            for i, data in enumerate(xprstr[l:]):
                 if data in split and data != '(':
                     r = l+i
                     break
-            # # print('l=',l,'r=',r,'   ', xprstr[l:r])
+            # # print('l=', l, 'r=', r, '   ', xprstr[l:r])
             tmp = xprstr[l:r]
             # # print(tmp)
-            xprstr=xprstr[:r]+')'+xprstr[r:]
+            xprstr = xprstr[:r]+')'+xprstr[r:]
             # # print(xprstr)
         else:
-            # # print('НЕ надо скобки',l,r)
+            # # print('НЕ надо скобки', l, r)
             r = l
-
-
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -149,8 +145,6 @@ def parse(xprstr):
             word = word + sym
             #  # # print(word)
     xprlst.pop()    # удаляется добавленный пробел
-
-
 
     for i, data in enumerate(xprlst):
         if xprlst[i] == '/' and xprlst[i + 1] == '/':
@@ -187,15 +181,10 @@ def parse(xprstr):
             #  # # print('ok', i)
         else:
             print('ERROR: unknown', xprlst[i], i)
-
-
         xprset = set(xprlst)
         if xprset.issubset(funcset) or xprset.issubset(operset):
             print('ERROR: только функция')
             exit(0)
-
-
-
     return xprlst
 
 
@@ -272,7 +261,7 @@ def operate(operator, *args):
 def prior(op1, op2):
     priorset = [operlowest, operlow, opermid, operhi]
     for i, data in enumerate(priorset):
-        # # # print(op1, i,data,)
+        # # # print(op1, i, data, )
         if op1 in data:
             prior1 = i
         if op2 in data:
@@ -283,103 +272,96 @@ def prior(op1, op2):
 
 # основная функция
 def main(xpr):
-
-
     # разбор строики в список
     xprlst = parse(xpr)
     # # print(*xprlst, sep=' ')
 
-    output=[]
-    stack=[]
+    output = []
+    stack = []
     for i in xprlst:
         # # print('-----------------------------------')
-        # # print('i=',i)
-
-
+        # # print('i=', i)
         if type(i) == float or type(i) == int:
             output.append(i)
-            # # print('output=',*output,sep=' ')
-            # # print('stack=',*stack,sep=' ')
-
+            # # print('output=', *output, sep=' ')
+            # # print('stack=', *stack, sep=' ')
         if i == ',':
             if stack != []:
                 while stack[-1] in oper+funclist and prior(i, stack[-1]):
                     # пока наверху стека оператор с большим или равным приоритетом
                     # # print('пока на верху стэка оператор')
-                    # # print ( 'PRIOR',i, '<=', stack[-1], prior(i, stack[-1]))
-                    output.append(stack.pop()) # переложить оператор из стека на выход
-                    # # print('output=',*output,sep=' ')
-                    # # print('stack=',*stack,sep=' ')
-                    if stack == []: break
+                    # # print ( 'PRIOR', i, '<=', stack[-1], prior(i, stack[-1]))
+                    output.append(stack.pop())  # переложить оператор из стека на выход
+                    # # print('output=', *output, sep=' ')
+                    # # print('stack=', *stack, sep=' ')
+                    if stack == []:
+                        break
             output.append(i)
-            # # print('output=',*output,sep=' ')
-            # # print('stack=',*stack,sep=' ')
+            # # print('output=', *output, sep=' ')
+            # # print('stack=', *stack, sep=' ')
 
-        elif i in oper and i != ',': # '^', '*', '/', '+', '-'
+        elif i in oper and i != ',':  # '^', '*', '/', '+', '-'
 
-            # # print('in oper',i)
+            # # print('in oper', i)
             # # print(oper)
-            if stack == []: # если стек пуст
+            if stack == []:  # если стек пуст
                 # # print('стек пуст. добваить оператор в стек')
                 stack.append(i)
-                # # print('output=',*output,sep=' ')
-                # # print('stack=',*stack,sep=' ')
-            elif stack[-1] == '(': # если стек содержит (
+                # # print('output=', *output, sep=' ')
+                # # print('stack=', *stack, sep=' ')
+            elif stack[-1] == '(':  # если стек содержит (
                 # # print('( положить в стек')
                 stack.append(i)
-                # # print('output=',*output,sep=' ')
-                # # print('stack=',*stack,sep=' ')
+                # # print('output=', *output, sep=' ')
+                # # print('stack=', *stack, sep=' ')
             else:
-                # # print('оператор:',i, '<=stack', stack[-1], prior(i, stack[-1]))
+                # # print('оператор:', i, '<=stack', stack[-1], prior(i, stack[-1]))
                 while stack[-1] in oper+funclist and prior(i, stack[-1]):
-                # пока наверху стека оператор с большим или равным приоритетом
+                        # пока наверху стека оператор с большим или равным приоритетом
                         # # print('пока на верху стэка оператор')
-                        # # print ( 'PRIOR',i, '<=', stack[-1], prior(i, stack[-1]))
-                        output.append(stack.pop()) # переложить оператор из стека на выход
-                        # # print('output=',*output,sep=' ')
-                        # # print('stack=',*stack,sep=' ')
-                        if stack == []: break
-                stack.append(i) # иначе положить оператор в стек
+                        # # print ( 'PRIOR', i, '<=', stack[-1], prior(i, stack[-1]))
+                        output.append(stack.pop())  # переложить оператор из стека на выход
+                        # # print('output=', *output, sep=' ')
+                        # # print('stack=', *stack, sep=' ')
+                        if stack == []:
+                            break
+                stack.append(i)  # иначе положить оператор в стек
 
-                # if i ==',':
+                # if i ==', ':
                 #     output.append(i) # если это , то на выход
                 # else:
                 #     stack.append(i) # иначе положить оператор в стек
-
-
-                # # print('output=',*output,sep=' ')
-                # # print('stack=',*stack,sep=' ')
+                # # print('output=', *output, sep=' ')
+                # # print('stack=', *stack, sep=' ')
 
         elif i == '(':
             stack.append(i)
-            # # print('output=',*output,sep=' ')
-            # # print('stack=',*stack,sep=' ')
+            # # print('output=', *output, sep=' ')
+            # # print('stack=', *stack, sep=' ')
 
         elif i == ')':
             # # print(i)
-            while stack[-1] != '(': # пока верх стека не равен (
+            while stack[-1] != '(':  # пока верх стека не равен (
                 # # print ('push stack', stack[-1])
                 output.append(stack.pop())
                 # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
-            stack.pop() # удаление из стека (
-            # # print('output=',*output,sep=' ')
-            # # print('stack=',*stack,sep=' ')
+            stack.pop()  # удаление из стека (
+            # # print('output=', *output, sep=' ')
+            # # print('stack=', *stack, sep=' ')
         elif i in funclist:
-            # # print(i,'IN FUNCLIST помещаем в стек')
+            # # print(i, 'IN FUNCLIST помещаем в стек')
             stack.append(i)
-            # # print('output=',*output,sep=' ')
-            # # print('stack=',*stack,sep=' ')
+            # # print('output=', *output, sep=' ')
+            # # print('stack=', *stack, sep=' ')
     # # print('*******')
-    # # print('output=',*output,sep=' ')
-    # # print('stack=',*stack,sep=' ')
+    # # print('output=', *output, sep=' ')
+    # # print('stack=', *stack, sep=' ')
 
     stack.reverse()
-    pol = output + stack # poland
+    pol = output + stack  # poland
 
     # # print(xpr)
-    # # print('POLAND:',*pol,sep=' ')
-
-
+    # # print('POLAND:', *pol, sep=' ')
     # # print('START CALCULATE *****************')
 
     output = []
@@ -387,19 +369,13 @@ def main(xpr):
 
     for i in pol:
         # # print('---------------')
-        # # print('i in pol = ',i)
-
-        if i in oper+['pow','log'] and i != ',':
-
-
-            # # print(stack,'+++++++++ to pow or log')
-
+        # # print('i in pol = ', i)
+        if i in oper+['pow', 'log'] and i != ',':
+            # # print(stack, '+++++++++ to pow or log')
             tmp = operate(i, *stack)
-
-            # # print(i,'=',tmp)
-
+            # # print(i, '=', tmp)
             if ',' in stack and i in ['pow', 'log']:
-                if stack[-2]==',':
+                if stack[-2] == ', ':
                     stack.pop()
                     stack.pop()
                     stack.pop()
@@ -411,34 +387,29 @@ def main(xpr):
             else:
                 stack.pop()
                 stack.append(tmp)
-            # # print('stack=',stack)
-        elif i in funclist and not i in ['pow','log']:
+            # # print('stack=', stack)
+        elif i in funclist and not i in ['pow', 'log']:
             tmp = operate(i, *stack)
             stack[-1] = tmp
-            # # print('stack=',stack)
-        # elif i in ['pow','log']:
+            # # print('stack=', stack)
+        # elif i in ['pow', 'log']:
         #     # # print('DOBL')
         #     tmp = operate(i, *stack)
         #     stack.pop()
         #     stack.pop()
         #     stack[-1] = tmp
-        #     # # print('stack=',stack)
-
-
+        #     # # print('stack=', stack)
         else:
             stack.append(i)
-            # # print('stack=',stack)
+            # # print('stack=', stack)
 
     return stack[0]
 
-#EVAL TEST
+
+# EVAL TEST
 test = xpr
 test = test.replace('^', '**')
 test = test.replace(' ', '')
 test = test.replace(', ', '.')
 
-# test
-
 print(main(xpr))
-
-# # print ('EVAL:',test, '=',eval(test))
