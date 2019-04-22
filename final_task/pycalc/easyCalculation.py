@@ -34,17 +34,17 @@ class Calculator():
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
 
-        summing=0
-        number=0
+        summing = 0
+        number = 0
         while expr != "":
             find = re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr)
             number = expr[:find.end()]
             if number.count("-") % 2 == 1:
-               a=float("-" + find[0])
+                a = float("-" + find[0])
             else:
-                a=float(find[0])
+                a = float(find[0])
             expr = expr[find.end():]
-            summing +=a
+            summing += a
         return '{:.15f}'.format(summing)
 
     def calculate(self, expr):
