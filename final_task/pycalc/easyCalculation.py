@@ -79,7 +79,7 @@ class Calculator():
             findAfter = re.search(
                 r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[place:])
 
-            if findAfter == None or findAfter.start() != 1 or findBefore == None or findBefore.start() != 1:
+            if findAfter is None or findAfter.start() != 1 or findBefore == None or findBefore.start() != 1:
                 raise Exception(
                     "the expression should be written in the following form 'number operator number'")
 

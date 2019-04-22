@@ -103,6 +103,7 @@ class ComplexCalc():
 
 
     }
+    
     def calculate(self, expr):
 
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|=', expr)
