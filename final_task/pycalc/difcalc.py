@@ -60,10 +60,10 @@ class ComplexCalc():
     def __find_replacement(self, func, expr):
 
         if func in ComplexCalc.math_functions:
-            l = self.__commasplit(expr)
+            allargs = self.__commasplit(expr)
 
             k = []
-            for each in l:
+            for each in allargs:
                 k.append(float(self.expression_search(each)))
 
             a = '{:.15f}'.format(ComplexCalc.math_functions[func](*k))

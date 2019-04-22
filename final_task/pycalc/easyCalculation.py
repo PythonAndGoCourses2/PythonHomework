@@ -56,7 +56,9 @@ class Calculator():
                 Exception("no operator after brackets")
 
             begin = expr[:end].rfind("(")
-            if begin != 0 and expr[begin-1] not in operators.operators and expr[begin-1] != '-' and expr[begin-1] != '+':
+
+            if begin != 0 and expr[begin-1] not in operators.operators \
+             and expr[begin-1] != '-' and expr[begin-1] != '+':
                 raise Exception("no operators before brackets")
 
             rezult = self.__calculation(expr[begin+1:end])
