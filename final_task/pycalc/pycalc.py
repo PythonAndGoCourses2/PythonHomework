@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser(description='Calculation')
 parser.add_argument('a', type=str, help='input your expression')
 args = parser.parse_args()
 
+
 def start():
 
     try:
@@ -26,4 +27,3 @@ def start():
         print("ERROR:  " + str(e))
     else:
         print(a)
-

@@ -3,7 +3,7 @@ def degree(a, b):
 
 
 def multiply(a, b):
-    return a*b
+    return a * b
 
 
 def remainder(a, b):
@@ -11,11 +11,11 @@ def remainder(a, b):
 
 
 def division(a, b):
-    return a/b
+    return a / b
 
 
 def noremainer(a, b):
-    return a//b
+    return a // b
 
 
 operators = {
