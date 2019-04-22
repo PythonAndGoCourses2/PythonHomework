@@ -38,8 +38,8 @@ class Calculator():
 
         while expr != "":
             find = re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr)
-            l = expr[:find.end()]
-            if l.count("-") % 2 == 1:
+            number = expr[:find.end()]
+            if number.count("-") % 2 == 1:
                 splitted.append(float("-" + find[0]))
             else:
                 splitted.append(float(find[0]))
@@ -49,7 +49,7 @@ class Calculator():
 
     def calculate(self, expr):
         expr = expr.replace(" ", "")
-       # посмотреть где выскакивает лишний " "
+        # посмотреть где выскакивает лишний " "
         while "(" in expr:
 
             end = expr.find(")")
