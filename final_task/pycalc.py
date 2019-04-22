@@ -59,7 +59,7 @@ def parse(xprstr):
         exit(0)
 
     xprstr = xprstr.replace('  ', ' ')
-    xprstr = xprstr.replace(', ', ', ')
+    xprstr = xprstr.replace(', ', ',')
     xprstr = xprstr.replace(' *', '*')
     xprstr = xprstr.replace('* ', '*')
     xprstr = xprstr.replace(' +', '+')
