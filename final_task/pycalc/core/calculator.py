@@ -1,4 +1,4 @@
-'''This module calculate the exception'''
+'''This module calculate the expression'''
 import math
 
 
@@ -76,11 +76,3 @@ def solve(expression):
                 upper_element = stack.pop()
                 stack.append(upper_element / lower_element)
     return stack[0]
-
-
-def main():
-    expression = str(input())
-    print(solve(expression))
-
-if __name__ == "__main__":
-    main()
