@@ -1,16 +1,8 @@
 import re
-import operator
+import pycalc.operators as operators
 
 
 class Calculator():
-
-    operators = {
-    "^": operator.pow,
-    "*": operator.mul,
-    "/": operator.truediv,
-    "%": operator.mod,
-    "&": operator.floordiv,
-}
 
     def __calculation(self, expr):
         place = expr.rfind("^")
@@ -54,12 +46,12 @@ class Calculator():
 
             end = expr.find(")")
             if end != len(expr) - \
-                    1 and expr[end + 1] not in Calculator.operators:
+                    1 and expr[end + 1] not in operators.operators:
                 Exception("no operator after brackets")
 
             begin = expr[:end].rfind("(")
 
-            if begin != 0 and expr[begin - 1] not in Calculator.operators \
+            if begin != 0 and expr[begin - 1] not in operators.operators \
                     and expr[begin - 1] != '-' and expr[begin - 1] != '+':
                 raise Exception("no operators before brackets")
 
@@ -81,7 +73,7 @@ class Calculator():
             raise Exception(
                 "the expression should be written in the following form 'number operator number'")
 
-        rezult = '{:.15f}'.format(Calculator.operators[expr[place]](
+        rezult = '{:.15f}'.format(operators.operators[expr[place]](
             float(findBefore[0][::-1]), float(findAfter[0])))
         begin = expr[:place - len(findBefore[0])]
         expr = begin + rezult + expr[findAfter.end() + place:]
