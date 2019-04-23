@@ -16,9 +16,9 @@ class Calculator():
 
         while place is not None:
 
-            expr = self.__binary_operation(place, expr)
+            expr = self.__binary_operation(place.start(), expr)
             place = re.search(r'/|\*|%|&', expr)
-            # добавить сравнение после суммы
+            
         return self.__sum(expr)
 
     def __sum(self, expr):
