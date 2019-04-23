@@ -18,7 +18,7 @@ class Calculator():
 
             expr = self.__binary_operation(place.start(), expr)
             place = re.search(r'/|\*|%|&', expr)
-            
+
         return self.__sum(expr)
 
     def __sum(self, expr):
