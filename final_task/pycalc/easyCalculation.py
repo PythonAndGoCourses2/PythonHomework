@@ -5,29 +5,36 @@ import pycalc.operators as operators
 class Calculator():
 
     def __calculation(self, expr):
-        expr = self.__degree(expr)
+        place = expr.rfind("^")
+
+        while place is not None:
+            expr = self.__binary(place, expr)
+            place = expr.rfind("^")
 
         place = re.search(r'/|\*|%|&', expr)
 
         while place is not None:
-
-            findBefore = re.search(
-                r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr[place.start()::-1])
-            findAfter = re.search(
-                r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[place.start():])
-
-            if findAfter is None or findAfter.start(
-            ) != 1 or findBefore is None or findBefore.start() != 1:
-                raise Exception(
-                    "the expression should be written in the following form 'number operator number'")
-
-            rezult = '{:.15f}'.format(operators.operators[place[0]](
-                float(findBefore[0][::-1]), float(findAfter[0])))
-            begin = expr[:place.start() - len(findBefore[0])]
-            expr = begin + rezult + expr[findAfter.end() + place.start():]
+            expr = self.__binary(place, expr)
             place = re.search(r'/|\*|%|&', expr)
-            # добавить сравнение после суммы
+
         return self.__sum(expr)
+
+    def __binary(self, place, expr):
+        findBefore = re.search(
+            r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr[place::-1])
+        findAfter = re.search(
+            r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[place:])
+
+        if findAfter is None or findAfter.start(
+        ) != 1 or findBefore is None or findBefore.start() != 1:
+            raise Exception(
+                "the expression should be written in the following form 'number operator number'")
+
+        rezult = '{:.15f}'.format(operators.operators[expr[place]](
+            float(findBefore[0][::-1]), float(findAfter[0])))
+        begin = expr[:place - len(findBefore[0])]
+        expr = begin + rezult + expr[findAfter.end() + place:]
+        return expr
 
     def __sum(self, expr):
 
@@ -69,27 +76,3 @@ class Calculator():
         rezult = self.__calculation(expr)
 
         return rezult
-
-    def __degree(self, expr):
-        place = expr.rfind("^")
-        # совместить часть вычислений с остальными выражениями
-
-        while place != -1:
-
-            findBefore = re.search(
-                r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr[place::-1])
-            findAfter = re.search(
-                r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[place:])
-
-            if findAfter is None or findAfter.start(
-            ) != 1 or findBefore is None or findBefore.start() != 1:
-                raise Exception(
-                    "the expression should be written in the following form 'number operator number'")
-
-            rezult = '{:.15f}'.format(operators.operators["^"](
-                float(findBefore[0][::-1]), float(findAfter[0])))
-            begin = expr[:place - len(findBefore[0])]
-            expr = begin + rezult + expr[findAfter.end() + place:]
-            place = expr.rfind("^")
-
-        return expr
