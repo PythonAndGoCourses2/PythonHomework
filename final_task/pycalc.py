@@ -144,14 +144,17 @@ def constants_switch(array):
 
 
 def function_calculation(array):
-    if ',' in array:
-        index = array.index(',')
-        result_first = calculation(array[2:index])
-        result_second = calculation(array[index+1:-1])
-        return tool.functions(object_type(result_first), array[0], object_type(result_second))
-    else:
-        result = calculation(array[2:-1])
-        return tool.functions(object_type(result), array[0])
+    index = 0
+    arguments = []
+    for idx, token in enumerate(array):
+        if token in config.brackets or token == ',':
+            if index == 0:
+                index = idx
+            else:
+                result = calculation(array[index+1:idx])
+                arguments.append(object_type(result))
+                index = idx
+    return tool.functions(array[0], *arguments)
 
 
 def brackets_calculation(array):
