@@ -7,13 +7,19 @@ from src.config import STANDART_FUNCTIONS, PRIORITIES, REGEX_SPEC_SYMBOLS
 from src.stack import Stack
 
 
-FuncWithPriority = namedtuple('Func', ['func', 'priority'])
+func_with_priority = namedtuple('Func', ['func', 'priority'])
+standart_functions_dict = {
+    funcKey: func_with_priority(
+        func, priority) for (
+            funcKey, func), (priorityKey, priority) in zip(
+                STANDART_FUNCTIONS.items(), PRIORITIES.items())}
+num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 
 
 def execute_once(func):
     """Decorate to execute function only once."""
     result = []
-
+    
     def wrapper(*args, **kwargs):
         nonlocal result
         if not result:
@@ -39,18 +45,13 @@ def get_mathematical_functions_dict(functions=None):
     """
     mathFunctions = {attr: getattr(math, attr) for attr in dir(math) if callable(
         getattr(math, attr))}
+    mathFunctions["abs"] = abs
+    mathFunctions["round"] = round
     externalFunctions = {attr: getattr(functions, attr) for attr in dir(functions) if callable(
         getattr(functions, attr))}
     for key, val in externalFunctions.items():
         mathFunctions[key] = val
     return mathFunctions
-
-
-standart_functions_dict = {
-    funcKey: FuncWithPriority(
-        func, priority) for (
-            funcKey, func), (priorityKey, priority) in zip(
-                STANDART_FUNCTIONS.items(), PRIORITIES.items())}
 
 
 @execute_once
@@ -75,9 +76,6 @@ def get_constants_dict(functions=None):
     for key, val in externalConsts.items():
         mathConsts[key] = val
     return mathConsts
-
-
-num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 
 
 @execute_once
@@ -176,7 +174,7 @@ def parse_expression(expression, functions=None):
             searchPos += 1
         match = numRegex.match(expression, searchPos)
         if expression[searchPos] == '(':
-            operators.push(FuncWithPriority('(', -1))
+            operators.push(func_with_priority('(', -1))
             prevPushed = '('
             searchPos += 1
         elif expression[searchPos] == ')':

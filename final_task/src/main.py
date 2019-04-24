@@ -18,6 +18,8 @@ def calc():
     try:
         if args.module:
             spec = util.spec_from_file_location("external_module", args.module)
+            if not spec:
+                raise Exception("Can't find your module")
             module = util.module_from_spec(spec)
             spec.loader.exec_module(module)
             print(calculate.calculate(args.expression, module))
