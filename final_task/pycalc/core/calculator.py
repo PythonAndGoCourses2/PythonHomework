@@ -2,6 +2,7 @@
 import math
 import operator as op
 
+
 def get_priority(operand):
     '''Determines the priority of the operation'''
     low_priority = ('+', '-')
@@ -41,6 +42,7 @@ def handling_closing_bracket(polish_notation, num, stack):
         polish_notation += tmp + ' '
 
     return polish_notation, ''
+
 
 def convert_into_rpn(expression):
     '''Rewrites the expression into the reverse polish notation'''
