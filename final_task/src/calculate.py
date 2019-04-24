@@ -41,7 +41,9 @@ def get_mathematical_functions_dict(functions=None):
         getattr(math, attr))}
     externalFunctions = {attr: getattr(functions, attr) for attr in dir(functions) if callable(
         getattr(functions, attr))}
-    return {**mathFunctions, **externalFunctions, 'abs': abs, 'round': round}
+    for key, val in externalFunctions.items():
+        mathFunctions[key] = val
+    return mathFunctions
 
 
 standart_functions_dict = {
@@ -70,7 +72,9 @@ def get_constants_dict(functions=None):
         math) if type(getattr(math, attr)) in (int, float, complex)}
     externalConsts = {attr: getattr(functions, attr) for attr in dir(
         functions) if type(getattr(functions, attr)) in (int, float, complex)}
-    return {**mathConsts, **externalConsts}
+    for key, val in externalConsts.items():
+        mathConsts[key] = val
+    return mathConsts
 
 
 num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")

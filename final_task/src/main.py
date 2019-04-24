@@ -17,9 +17,9 @@ def calc():
     args = parser.parse_args()
     try:
         if args.module:
-            spec = util.spec_from_file_location("external", args.module)
+            spec = util.spec_from_file_location("external_module", args.module)
             module = util.module_from_spec(spec)
-            
+            spec.loader.exec_module(module)
             print(calculate.calculate(args.expression, module))
         else:
             print(calculate.calculate(args.expression))
