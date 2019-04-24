@@ -1,6 +1,6 @@
 '''This module calculate the expression'''
 import math
-
+import operator as op
 
 def get_priority(operand):
     '''Determines the priority of the operation'''
@@ -69,28 +69,26 @@ def convert_into_rpn(expression):
 
 def solve(expression):
     '''Solves an expression using reverse polish notation.'''
+    operators = {
+        '+': op.add,
+        '-': op.sub,
+        '*': op.mul,
+        '/': op.floordiv
+    }
     polish_notation = convert_into_rpn(expression)
     num = ''
     stack = []
     for symbol in polish_notation:
         if symbol.isdigit() or symbol == '.':
             num += symbol
-        else:
+        elif symbol in operators.keys():
             if num:
                 stack.append(float(num))
                 num = ''
-            if symbol == '+':
-                tmp = stack.pop() + stack.pop()
-                stack.append(tmp)
-            elif symbol == '-':
-                lower_element = stack.pop()
-                upper_element = stack.pop()
-                stack.append(upper_element - lower_element)
-            elif symbol == '*':
-                tmp = stack.pop() * stack.pop()
-                stack.append(tmp)
-            elif symbol == '/':
-                lower_element = stack.pop()
-                upper_element = stack.pop()
-                stack.append(upper_element / lower_element)
+            lower_num, upper_num = stack.pop(), stack.pop()
+            stack.append(operators[symbol](upper_num, lower_num))
+        elif not symbol.isdigit():
+            if num:
+                stack.append(float(num))
+                num = ''
     return stack[0]
