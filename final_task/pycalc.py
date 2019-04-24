@@ -159,10 +159,10 @@ class ExpressionParser:
         "==": __operator_func_priority(operator.eq, 0),
         "!=": __operator_func_priority(operator.ne, 0),
 
-        "<=": __operator_func_priority(operator.le, 1),
-        "<": __operator_func_priority(operator.lt, 1),
-        ">": __operator_func_priority(operator.gt, 1),
-        ">=": __operator_func_priority(operator.ge, 1),
+        "<=": __operator_func_priority(operator.le, 0),
+        "<": __operator_func_priority(operator.lt, 0),
+        ">": __operator_func_priority(operator.gt, 0),
+        ">=": __operator_func_priority(operator.ge, 0),
 
         "+": __operator_func_priority(operator.add, 1),
         "-": __operator_func_priority(operator.sub, 1),
