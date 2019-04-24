@@ -10,7 +10,7 @@ from src.stack import Stack
 FuncWithPriority = namedtuple('Func', ['func', 'priority'])
 
 
-def executeOnce(func):
+def execute_once(func):
     """Decorate to execute function only once."""
     result = []
 
@@ -22,8 +22,8 @@ def executeOnce(func):
     return wrapper
 
 
-@executeOnce
-def getMathFuncDict(functions=None):
+@execute_once
+def get_mathematical_functions_dict(functions=None):
     """Create mathematical functions dictionary.
 
     Parameters
@@ -44,22 +44,15 @@ def getMathFuncDict(functions=None):
     return {**mathFunctions, **externalFunctions, 'abs': abs, 'round': round}
 
 
-@executeOnce
-def getStandartFuncDict():
-    """Create dictionary of standart mathematical operators.
-
-    Returns
-    -------
-    dict
-        dictionary with keys of operators names and values of FuncWithPriority
-
-    """
-    return {funcKey: FuncWithPriority(func, priority) for (funcKey, func),
-            (priorityKey, priority) in zip(STANDART_FUNCTIONS.items(), PRIORITIES.items())}
+standart_functions_dict = {
+    funcKey: FuncWithPriority(
+        func, priority) for (
+            funcKey, func), (priorityKey, priority) in zip(
+                STANDART_FUNCTIONS.items(), PRIORITIES.items())}
 
 
-@executeOnce
-def getConstDict(functions=None):
+@execute_once
+def get_constants_dict(functions=None):
     """Create dictionary of constants.
 
     Parameters
@@ -80,21 +73,11 @@ def getConstDict(functions=None):
     return {**mathConsts, **externalConsts}
 
 
-@executeOnce
-def getNumRegex():
-    """Create regexp object for matching any valid numbers.
-
-    Returns
-    -------
-    regular expression object
-        regexp object that mathes any valid number
-
-    """
-    return re.compile(r"\d+[.]?\d*|[.]\d+")
+num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 
 
-@executeOnce
-def getStandartFuncRegex():
+@execute_once
+def get_standart_functions_regex():
     """Create regexp object that matches standart mathematical operators.
 
     Returns
@@ -103,7 +86,7 @@ def getStandartFuncRegex():
         regexp object that mathes any valid mathematical operator
 
     """
-    keys = list(getStandartFuncDict().keys())
+    keys = list(standart_functions_dict.keys())
     keys.sort(reverse=True)
     standartFuncStr = str('|').join(keys)
     for symbol in REGEX_SPEC_SYMBOLS:
@@ -111,8 +94,8 @@ def getStandartFuncRegex():
     return re.compile(standartFuncStr)
 
 
-@executeOnce
-def getConstsRegex(functions=None):
+@execute_once
+def get_constants_regex(functions=None):
     """Create regexp object that matches any constants from math module and user-defined module.
 
     Parameters
@@ -126,10 +109,10 @@ def getConstsRegex(functions=None):
         regexp object that mathes any valid mathematical operator
 
     """
-    return re.compile(str('|').join(getConstDict(functions).keys()))
+    return re.compile(str('|').join(get_constants_dict(functions).keys()))
 
 
-def findClosingBracket(expression):
+def find_closing_bracket(expression):
     """Check expression for valid brackets and finds the position of closing one.
 
     Parameters
@@ -148,16 +131,16 @@ def findClosingBracket(expression):
         if symbol == '(':
             brackets.push('(')
         elif symbol == ')':
-            if brackets.isEmpty():
+            if brackets.is_empty():
                 raise Exception("Brackets are not balanced!")
             brackets.pop()
-        if brackets.isEmpty():
+        if brackets.is_empty():
             return pos
-    if not brackets.isEmpty():
+    if not brackets.is_empty():
         raise Exception("Brackets are not balanced!")
 
 
-def parseExpression(expression, functions=None):
+def parse_expression(expression, functions=None):
     """Parse string expression to postfix polish notation.
 
     Parameters
@@ -174,11 +157,11 @@ def parseExpression(expression, functions=None):
         numbers and functions, that represents mathematical operators
 
     """
-    numRegex = getNumRegex()
-    standartFuncRegex = getStandartFuncRegex()
-    funcDict = getMathFuncDict(functions)
-    constsDict = getConstDict(functions)
-    standartFuncDict = getStandartFuncDict()
+    numRegex = num_regex
+    standartFuncRegex = get_standart_functions_regex()
+    funcDict = get_mathematical_functions_dict(functions)
+    constsDict = get_constants_dict(functions)
+    standartFuncDict = standart_functions_dict
     strRegex = re.compile('[A-Z]|[a-z]+[0-9]*')
     operators = Stack()
     prevPushed = None
@@ -193,11 +176,11 @@ def parseExpression(expression, functions=None):
             prevPushed = '('
             searchPos += 1
         elif expression[searchPos] == ')':
-            lastItem = operators.pop()
-            while lastItem.func != '(' and not operators.isEmpty():
-                ppnExp.append(lastItem.func)
-                lastItem = operators.pop()
-            if lastItem.func != '(':
+            last_item = operators.pop()
+            while last_item.func != '(' and not operators.is_empty():
+                ppnExp.append(last_item.func)
+                last_item = operators.pop()
+            if last_item.func != '(':
                 raise Exception("Brackets are not balanced!")
             searchPos += 1
         elif match:
@@ -216,15 +199,15 @@ def parseExpression(expression, functions=None):
                     else:
                         operators.push(standartFuncDict['unary+'])
                         prevPushed = standartFuncDict['unary+']
-                elif operators.isEmpty() or (standartFuncDict[matchStr].priority > operators.lastItem().priority):
+                elif operators.is_empty() or (standartFuncDict[matchStr].priority > operators.last_item().priority):
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
-                elif matchStr == '^' and operators.lastItem() == standartFuncDict[matchStr]:
+                elif matchStr == '^' and operators.last_item() == standartFuncDict[matchStr]:
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
                 else:
-                    while not operators.isEmpty(
-                    ) and standartFuncDict[matchStr].priority <= operators.lastItem().priority:
+                    while not operators.is_empty(
+                    ) and standartFuncDict[matchStr].priority <= operators.last_item().priority:
                         ppnExp.append(operators.pop().func)
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
@@ -235,7 +218,7 @@ def parseExpression(expression, functions=None):
                     matchStr = match.string[match.start(): match.end()]
                     if matchStr in funcDict.keys():
                         mathFuncEnd = match.end() + \
-                            findClosingBracket(expression[match.end():])
+                            find_closing_bracket(expression[match.end():])
                         innerExpression = expression[match.end(
                         ) + 1:mathFuncEnd]
                         paramStrs = [innerExpression]
@@ -257,7 +240,7 @@ def parseExpression(expression, functions=None):
                 else:
                     raise Exception("Unknown symbol at " + str(searchPos))
 
-    while not operators.isEmpty():
+    while not operators.is_empty():
         ppnExp.append(operators.pop().func)
     return ppnExp
 
@@ -279,7 +262,7 @@ def calculate(expression, functions=None):
 
     """
     expression = expression.strip(' ')
-    ppnExpression = parseExpression(expression, functions)
+    ppnExpression = parse_expression(expression, functions)
     calcStack = Stack()
     for item in ppnExpression:
         if callable(item):
@@ -293,6 +276,6 @@ def calculate(expression, functions=None):
         else:
             raise Exception("Brackets are not balanced")
     answer = calcStack.pop()
-    if not calcStack.isEmpty():
+    if not calcStack.is_empty():
         raise Exception("No operators between expressions!")
     return answer

@@ -30,7 +30,7 @@ class Stack:
         """
         self.items = args if args else []
 
-    def isEmpty(self):
+    def is_empty(self):
         """
         Returns
         -------
@@ -67,7 +67,7 @@ class Stack:
         """
         return len(self.items)
 
-    def lastItem(self):
+    def last_item(self):
         """Returns value of last item from stack
         Returns
         -------
