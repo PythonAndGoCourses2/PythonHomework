@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-import pycalc
+from . import pycalc
 
 
 def parse_command_line():
