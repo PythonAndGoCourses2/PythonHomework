@@ -83,7 +83,7 @@ class Testmyfunction(unittest.TestCase):
 
     def test_solv_linear_equation(self):
         self.assertEqual(solve_polynom.solv_linear_equation([6, 3]), [-2.0])
-    
+
     def test_solv_quartic_equation(self):
         self.assertEqual(solve_polynom.solv_quartic_equation([-6, 5, 1]), [1.0, -6.0])
 
