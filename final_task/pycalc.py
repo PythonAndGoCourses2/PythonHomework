@@ -19,7 +19,7 @@ splitset = set(split)
 
 funclist = dir(math)+['abs', 'round']      # list of math functions names
 funcdict = math.__dict__          # dict of math functions
-funcdict['abs'] = abs
+funcdict['abws'] = abs
 funcdict['round'] = round
 xprstr = ''
 operator = ''
