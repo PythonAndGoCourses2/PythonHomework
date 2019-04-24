@@ -1,14 +1,18 @@
 from mycalc import mymodule
+from mycalc import equations
 
 
 def main():
-    a = mymodule.byild_parser().expression
+    a = mymodule.byild_parser().EXPRESSION
     try:
-        a = mymodule.first_function(a)
-        result1 = mymodule.find_brackets(a)
-        compare = mymodule.find_comparsion(result1)
-        total = mymodule.calc_logical(compare)
-        print(total)
+        if mymodule.byild_parser().use_module:
+            total = equations.total_solve_func(a)
+            print('polynomial roots:')
+            for idx, elem in enumerate(total):
+                print('x_' + str(idx + 1) + ' =', elem)
+        else:
+            total = mymodule.total_calculation(a)
+            print('Answer is:', total)
     except ZeroDivisionError:
         print('ERROR: division by zero')
     except TypeError as e:

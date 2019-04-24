@@ -2,6 +2,7 @@ import math
 import operator
 import argparse
 
+
 ARITHMETIC_OPERATORS = {'*': operator.mul, '%': operator.mod, '//': operator.floordiv, '^': operator.pow,
                         '/': operator.truediv, '+': operator.add, '-': operator.sub}
 COMPARE = {'>': operator.gt, '<': operator.lt, '!=': operator.ne, '==': operator.eq,
@@ -14,31 +15,37 @@ FUNCTIONS['abs'], FUNCTIONS['round'] = abs, round
 
 def byild_parser():
     parser = argparse.ArgumentParser(description='Pure-python command line calculator.')
-    parser.add_argument('expression', help='expression string to evalute', type=str)
+    parser.add_argument('EXPRESSION', help='expression string to evalute. for example: \
+                        "(e + pi)^pi + 3" get the answer: 261.45937196674714', type=str)
+    parser.add_argument('-m', '--use-module', action='store_true', help='Use the module \
+                        to find all the roots of polynomial equations with real coefficients \
+                        of degree no more than 4. For example: \
+                        "sin(pi/2)*x^3 - exp(e^2)*x = 666*x^2 + 1" -m get the answer: \
+                        x_1 = 668.42, x_2 = -2.42, x_3 = 0')
     args = parser.parse_args()
     return args
 
 
-def first_function(stroka):
-    stroka = stroka.strip()
-    if stroka in '':
+def first_function(expression):
+    expression = expression.strip()
+    if expression in '':
         raise ValueError('empty string')
-    return stroka
+    return expression
 
 
-def find_comparsion(stroka):
+def find_comparsion(expression):
     begin = 0
     lst_expression = []
     comparsion = []
     tup = ('>', '<', '!', '=')
-    if stroka[0] in tup or stroka[-1] in tup:
+    if expression[0] in tup or expression[-1] in tup:
         raise ValueError
-    for indx, elem in enumerate(stroka):
+    for indx, elem in enumerate(expression):
         if elem in '><=!':
-            lst_expression.append(stroka[begin:indx])
+            lst_expression.append(expression[begin:indx])
             comparsion.append(elem)
             begin = indx + 1
-    lst_expression.append(stroka[begin:])
+    lst_expression.append(expression[begin:])
     quantity = lst_expression.count('')
     while quantity != 0:
         indx = lst_expression.index('')
@@ -64,61 +71,70 @@ def calc_logical(lst):
         return calculation_without_brackets(number_list[0])
 
 
-def replace_power(stroka, lst_numbers):
-    i = stroka.rfind('^')
+def replace_power(expression, lst_numbers):
+    i = expression.rfind('^')
     if i == -1:
-        return stroka, lst_numbers
+        return expression, lst_numbers
     else:
         if lst_numbers[i] < 0:
             power = (-lst_numbers[i]) ** lst_numbers[i+1]
             lst_numbers[i:i+2] = [-power]
-            return replace_power(stroka[:i], lst_numbers)
+            return replace_power(expression[:i], lst_numbers)
         else:
             power = lst_numbers[i] ** lst_numbers[i+1]
             lst_numbers[i:i+2] = [power]
-            return replace_power(stroka[:i], lst_numbers)
+            return replace_power(expression[:i], lst_numbers)
 
 
-def del_space(stroka):
-    for elem in '+-':
-        lst = list(map(lambda x: x.strip(), stroka.split(elem)))
-        stroka = elem.join(lst)
-    return stroka
+def del_space(expression, val):
+    for elem in val:
+        lst = list(map(lambda x: x.strip(), expression.split(elem)))
+        expression = elem.join(lst)
+    return expression
 
 
-def replace_many_plus_minus(stroka):
+def replace_many_plus_minus(expression):
     A = {'++': '+', '--': '+', '-+': '-', '+-': '-'}
     for key, value in A.items():
-        if key in stroka:
-            stroka = stroka.replace(key, value)
-            return replace_many_plus_minus(stroka)
-    return stroka
+        if key in expression:
+            expression = expression.replace(key, value)
+            return replace_many_plus_minus(expression)
+    return expression
 
 
-def plus_reject(stroka):
+def plus_reject(expression):
     A = {'+': 1, '-': 0}
     begin = 0
     lst_expression = []
-    for indx, elem in enumerate(stroka):
-        if elem in '+-' and stroka[indx-1] not in ('/', '%', '^', '*'):
-            lst_expression.append(stroka[begin:indx])
+    for indx, elem in enumerate(expression):
+        if elem in '+-' and expression[indx-1] not in ('/', '%', '^', '*'):
+            lst_expression.append(expression[begin:indx])
             begin = indx+A[elem]
-    lst_expression.append(stroka[begin:])
+    lst_expression.append(expression[begin:])
     if lst_expression[0] == '':
         lst_expression.remove('')
     return lst_expression
 
 
-def calculation(stroka):
+def calculation(expression):
+    lst_expression = expression.split('//')
+    lst_numbers = list(map(calculation_without_quotient, lst_expression))
+    total = lst_numbers[0]
+    for indx in range(1, len(lst_numbers)):
+        total = total // lst_numbers[indx]
+    return total
+
+
+def calculation_without_quotient(expression):
     lst_numbers = []
     operations = ''
     begin = 0
-    for indx, elem in enumerate(stroka):
+    for indx, elem in enumerate(expression):
         if elem in '*/%^':
             operations += elem
-            lst_numbers.append(stroka[begin:indx])
+            lst_numbers.append(expression[begin:indx])
             begin = indx + 1
-    lst_numbers.append(stroka[begin:])
+    lst_numbers.append(expression[begin:])
     for indx, elem in enumerate(lst_numbers):
         elem = elem.strip()
         if elem in '':
@@ -138,51 +154,61 @@ def calculation(stroka):
     return total
 
 
-def calculation_without_brackets(stroka):
-    stroka = del_space(stroka)
-    stroka = replace_many_plus_minus(stroka)
-    lst_expression = plus_reject(stroka)
+def calculation_without_brackets(expression):
+    expression = del_space(expression, '+-')
+    expression = replace_many_plus_minus(expression)
+    lst_expression = plus_reject(expression)
     if len(lst_expression) == 1:
         return calculation(lst_expression[0])
     else:
         return sum(list(map(calculation, lst_expression)))
 
 
-def find_brackets(stroka):
-    end = stroka.find(')')
+def find_brackets(expression):
+    end = expression.find(')')
     if end != -1:
-        begin = stroka[:end].rfind('(')
+        begin = expression[:end].rfind('(')
         if begin != -1:
             indx = begin
-            rad = stroka[begin+1:end].split(',')
+            rad = expression[begin+1:end].split(',')
             val_1 = list(map(find_comparsion, rad))
             val_2 = list(map(calc_logical, val_1))
-            stroka = stroka.replace(stroka[begin:end+1], str(val_2)[1:-1], 1)
-            stroka = find_func(stroka, indx, val_2)
-            return find_brackets(stroka)
+            expression = expression.replace(expression[begin:end+1], str(val_2)[1:-1], 1)
+            expression = find_func(expression, indx, val_2)
+            return find_brackets(expression)
         else:
             raise ValueError('brackets are not balanced')
-    elif stroka.find('(') != -1:
+    elif expression.find('(') != -1:
         raise ValueError('brackets are not balanced')
     else:
-        return stroka
+        return expression
 
 
-def find_func(stroka, indx, val):
-    st = stroka[indx-1::-1]
+def find_func(expression, indx, val):
+    st = expression[indx-1::-1]
     i = indx
     for elem in st:
         if (elem not in ARITHMETIC_OPERATORS) and (elem not in ('>', '<', '=', '(')):
             i -= 1
         else:
             break
-    st = stroka[i:indx]
+    st = expression[i:indx]
     st1 = st.strip()
     if st1 in '':
-        return stroka
+        return expression
     else:
         try:
-            stroka = stroka.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](*val)), 1)
+            expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](val)), 1)
         except KeyError:
             raise KeyError('ERROR: unknown function', st1)
-        return stroka
+        except TypeError:
+            expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](*val)), 1)
+        return expression
+
+
+def total_calculation(expression):
+    a = first_function(expression)
+    result1 = find_brackets(a)
+    compare = find_comparsion(result1)
+    total = calc_logical(compare)
+    return total
