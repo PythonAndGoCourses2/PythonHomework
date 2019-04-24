@@ -12,7 +12,7 @@ class TestMyCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main('2/2'), 2/2)
         self.assertEqual(pycalc.main('2^2'), 2**2)
         self.assertEqual(pycalc.main('2//2'), 2//2)
-        self.assertEqual(pycalc.main('2%2'), 2%2)
+        self.assertEqual(pycalc.main('2%2'), 2 % 2)
 
     def test_more_than_one_number(self):
         self.assertEqual(pycalc.main('22+22'), 22+22)
@@ -46,7 +46,7 @@ class TestMyCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main('floor(3.4)'), math.floor(3.4))
         self.assertEqual(pycalc.main('fmod(5,4)'), math.fmod(5, 4))
         self.assertEqual(pycalc.main('frexp(300000)'), math.frexp(300000))
-        self.assertEqual(pycalc.main('ldexp(3,10)'), math.ldexp(3,10))
+        self.assertEqual(pycalc.main('ldexp(3,10)'), math.ldexp(3, 10))
         self.assertEqual(pycalc.main('fsum([3,4,5])'), math.fsum([3, 4, 5]))
         self.assertEqual(pycalc.main('isfinite(3)'), math.isfinite(3))
         self.assertEqual(pycalc.main('isinf(3)'), math.isinf(3))
@@ -91,7 +91,7 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main("10*(2+1)"), 10*(2+1))
         self.assertEqual(pycalc.main("10^(2+1)"), 10**(2+1))
         self.assertEqual(pycalc.main("100/3^2"), 100/3**2)
-        self.assertEqual(pycalc.main("100/3%2^2"), 100/3%2**2)
+        self.assertEqual(pycalc.main("100/3%2^2"), 100/3 % 2**2)
 
     def test_functions_and_constants(self):
         self.assertEqual(pycalc.main("pi+e"), math.pi+math.e)
@@ -102,14 +102,14 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main("2*sin(pi/2)"), 2*math.sin(math.pi/2))
 
     def test_associative(self):
-        self.assertEqual(pycalc.main("102%12%7"), 102%12%7)
+        self.assertEqual(pycalc.main("102%12%7"), 102 % 12 % 7)
         self.assertEqual(pycalc.main("100/4/3"), 100/4/3)
         self.assertEqual(pycalc.main("2^3^4"), 2**3**4)
 
     def test_comparison_operators(self):
-        self.assertEqual(pycalc.main("1+2*3==1+2*3"), 1+2*3==1+2*3)
-        self.assertAlmostEqual(pycalc.main("e^5>=e^5+1"), math.e**5>=math.e**5+1)
-        self.assertAlmostEqual(pycalc.main("1+2*4/3+1!=1+2*4/3+2"), 1+2*4/3+1!=1+2*4/3+2)
+        self.assertEqual(pycalc.main("1+2*3==1+2*3"), 1+2*3 == 1+2*3)
+        self.assertAlmostEqual(pycalc.main("e^5>=e^5+1"), math.e**5 >= math.e**5+1)
+        self.assertAlmostEqual(pycalc.main("1+2*4/3+1!=1+2*4/3+2"), 1+2*4/3+1 != 1+2*4/3+2)
 
     def test_common_tests(self):
         self.assertEqual(pycalc.main("(100)"), (100))

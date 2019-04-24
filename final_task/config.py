@@ -1,7 +1,7 @@
 import math
 import operator
 
-
+minus_plus_characters = {'++': '+', '+-': '-', '-+': '-', '--': '+'}
 brackets = '(', ')'
 sqr_brackets = '[', ']'
 comparison_check = '<', '>', '!', '='
