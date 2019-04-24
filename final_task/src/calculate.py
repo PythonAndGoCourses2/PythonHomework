@@ -19,7 +19,7 @@ num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 def execute_once(func):
     """Decorate to execute function only once."""
     result = []
-    
+
     def wrapper(*args, **kwargs):
         nonlocal result
         if not result:
@@ -196,11 +196,11 @@ def parse_expression(expression, functions=None):
                 if matchStr in ('-', '+') and (isinstance(prevPushed, Iterable)
                                                or prevPushed == '(' or prevPushed is None):
                     if matchStr == '-':
-                        operators.push(standartFuncDict['unary-'])
-                        prevPushed = standartFuncDict['unary-']
+                        operators.push(standartFuncDict['-unary'])
+                        prevPushed = standartFuncDict['-unary']
                     else:
-                        operators.push(standartFuncDict['unary+'])
-                        prevPushed = standartFuncDict['unary+']
+                        operators.push(standartFuncDict['+unary'])
+                        prevPushed = standartFuncDict['+unary']
                 elif operators.is_empty() or (standartFuncDict[matchStr].priority > operators.last_item().priority):
                     prevPushed = standartFuncDict[matchStr]
                     operators.push(prevPushed)
