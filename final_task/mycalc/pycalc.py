@@ -12,7 +12,7 @@ def main():
                 print('x_' + str(idx + 1) + ' =', elem)
         else:
             total = mymodule.total_calculation(a)
-            print('Answer is:', total)
+            print(total)
     except ZeroDivisionError:
         print('ERROR: division by zero')
     except TypeError as e:

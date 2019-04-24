@@ -25,8 +25,8 @@ def solv_linear_equation(list_number):
 def solv_quartic_equation(list_number):
     total = [0] * 2
     det = list_number[1] ** 2 - 4 * list_number[0]
-    total[0] = ( -list_number[1] + det ** 0.5) / 2
-    total[1] = ( -list_number[1] -  det ** 0.5) / 2
+    total[0] = (-list_number[1] + det ** 0.5) / 2
+    total[1] = (-list_number[1] - det ** 0.5) / 2
     return total
 
 
@@ -52,7 +52,7 @@ def get_canonical_cubic_form(list_number):
 def solv_cubic_equation(list_number):
     lst = get_canonical_cubic_form(list_number)
     det = round((lst[1] / 3) ** 3 + (lst[0]/2) ** 2, 3)
-    t =  - lst[0] / 2 + det ** 0.5
+    t = - lst[0] / 2 + det ** 0.5
     alpha = complex_power(t)
     beta = [-lst[1] / 3 / elem if elem != 0 else 0 for elem in alpha]
     total = [(alpha[idx] + beta[idx]) - list_number[2] / 3 for idx in range(3)]
@@ -69,7 +69,7 @@ def solv_four_degree(list_number):
     q_list = [0] * 3
     q_list[0] = root ** 2 / 4 - lst[0]
     q_list[1] = lst[3] / 2 * root - lst[1]
-    q_list[2] = lst[3] ** 2 / 4 -lst[2] + root
+    q_list[2] = lst[3] ** 2 / 4 - lst[2] + root
     t = q_list[2] ** 0.5
     q_list = get_canonical_polynom(q_list)
     q_root = solv_quartic_equation(q_list)[0]
