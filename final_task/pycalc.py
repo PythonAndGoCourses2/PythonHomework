@@ -11,16 +11,16 @@ import operator
 
 class ArgParser:
     """
-    The class contains method for args parsing.
+    The class contains methods for args parsing.
     Use ArgParser.parse().
     """
     class __ArgumentParserError(argparse.ArgumentParser):
         """
         Overrides original exception-type to exception-type with human-readable error explanation.
-        Write "ERROR: <message>" in stderr. Then return exit code 2.
+        Write "ERROR: <message>" in stdout. Then return exit code 2.
         """
         def error(self, message):
-            sys.stderr.write(f"ERROR: {message}\n")
+            sys.stdout.write(f"ERROR: {message}\n")
             self.exit(2)
 
     @classmethod
@@ -61,10 +61,10 @@ class ImportMathModules:
     class __ImportMathModulesError(ImportError):
         """
         Exception-type with human-readable error explanation.
-        Write "ERROR: <message>" in stderr. Then return exit code 2.
+        Write "ERROR: <message>" in stdout. Then return exit code 2.
         """
         def __init__(self, msg):
-            sys.stderr.write(f"ERROR: {msg}\n")
+            sys.stdout.write(f"ERROR: {msg}\n")
             sys.exit(2)
 
     __importing_modules = ["math", ]
@@ -118,12 +118,7 @@ class ImportMathModules:
         cls.__importing_modules.extend(list_of_modules_names)
 
         for module in cls.__importing_modules:
-            try:
-                module_spec = cls.__check_module(module)
-            except ImportError as err:
-                sys.stderr.write(f"ERROR: {err}\n")
-                sys.exit(2)
-
+            module_spec = cls.__check_module(module)
             module = cls.__import_module_from_spec(module_spec)
             module_attrs = cls.__parse_module(module)
             cls.__math_attrs.update(module_attrs)
@@ -142,10 +137,10 @@ class ExpressionParser:
     class __ExpressionParserError(Exception):
         """
         Make exception-type with human-readable error explanation.
-        Write "ERROR: <message>" in stderr. Then return exit code 2.
+        Write "ERROR: <message>" in stdout. Then return exit code 2.
         """
         def __init__(self, msg):
-            sys.stderr.write(f"ERROR: {msg}\n")
+            sys.stdout.write(f"ERROR: {msg}\n")
             sys.exit(2)
 
     __C_REGEXP_BRACKET_UNARY_PLUSMINUS = re.compile(r"\([+\-]")
@@ -204,14 +199,17 @@ class ExpressionParser:
             "1+.1 1-1" -> False.
             "1+.11-1" -> True.
         """
+        operator_symbols = set("".join(cls.__OPERATORS.keys()))
+        operator_symbols_without_plusminus = operator_symbols.copy()
+        operator_symbols_without_plusminus.difference_update({"+", "-"})
+
         last_token = ""
         tokens = cls.__C_REGEXP_TOKENS.finditer(expression)
-        operator_symbols_without_plusminus = cls.__OPERATORS.keys()-{"-", "+"}
 
         for token in tokens:
             token = token.group()
 
-            if token in operator_symbols_without_plusminus and last_token in cls.__OPERATORS:
+            if token in operator_symbols_without_plusminus and last_token in operator_symbols:
                 return False
 
             elif token in cls.math_consts or token in cls.math_funcs or cls.__is_number(token):
@@ -497,7 +495,8 @@ class ExpressionParser:
             raise cls.__ExpressionParserError("expression includes denied whitespaces or invalid combined operators")
         expression = cls.__remove_whitespaces(expression)
         if not cls.__is_not_missed_operator_near_brackets(expression):
-            raise cls.__ExpressionParserError("an operator near brackets is missed")
+            raise cls.__ExpressionParserError(
+                "an operator near brackets is missed or expression contains unknown function")
         expression = cls.__squash_doubled_plusminus(expression)
         expression = cls.__bracket_unary_plusminus_wrapper(expression)
         expression = cls.__substitute_bracket_unary_plusminus(expression)
