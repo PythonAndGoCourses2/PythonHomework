@@ -8,8 +8,8 @@ import math
 class Testmyfunction(unittest.TestCase):
 
     def test_del_space(self):
-        self.assertEqual(mymodule.del_space(' + 1'), '+1')
-        self.assertEqual(mymodule.del_space('1 + + -1 +'), '1++-1+')
+        self.assertEqual(mymodule.del_space(' + 1', '+-'), '+1')
+        self.assertEqual(mymodule.del_space('1 + + -1 +', '+-'), '1++-1+')
 
     def test_replace_many_plus_minus(self):
         self.assertEqual(mymodule.replace_many_plus_minus('+-1*3+++2'), '-1*3+2')
@@ -73,20 +73,20 @@ class Testmyfunction(unittest.TestCase):
         with self.assertRaises(ValueError):
             mymodule.find_comparsion('> 1')
             mymodule.find_comparsion('1 >=')
-    
+
     def test_calculation(self):
         self.assertAlmostEqual(mymodule.calculation('7 * 1 //2'), 3.0)
         self.assertAlmostEqual(mymodule.calculation('4*3^2/-1'), eval('4*3**2/-1'))
         with self.assertRaises(ValueError):
             mymodule.calculation('//1')
             mymodule.calculation('1/ /2')
-    
+
     def test_solv_linear_equation(self):
         self.assertEqual(solve_polynom.solv_linear_equation([6, 3]), [-2.0])
     
     def test_solv_quartic_equation(self):
         self.assertEqual(solve_polynom.solv_quartic_equation([-6, 5, 1]), [1.0, -6.0])
-    
+
     def test_total_solve_func(self):
         self.assertAlmostEqual(equations.total_solve_func('1*x^2+5*x-6=0'), [1.0, -6.0])
         self.assertAlmostEqual(equations.total_solve_func('2*x + -6 = 4'), [5.0])
@@ -101,7 +101,7 @@ class Testmyfunction(unittest.TestCase):
     def test_get_canonical_polynom(self):
         self.assertAlmostEqual(equations.get_canonical_polynom([2, 4, 6, 8, 2]), [1, 2, 3, 4, 1])
         self.assertAlmostEqual(equations.filter_coefficient([]), [])
-    
+
     def test_get_coefficient(self):
         self.assertAlmostEqual(equations.get_coefficient('2*x^3-11*x^2+12*x+9-0'), [9.0, 12.0, -11.0, 2.0])
 
