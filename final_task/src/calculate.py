@@ -18,13 +18,14 @@ num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 
 def execute_once(func):
     """Decorate to execute function only once."""
-    result = []
-
+    cache = None
+    
     def wrapper(*args, **kwargs):
-        nonlocal result
-        if not result:
-            result.append(func(*args, **kwargs))
-        return result[0]
+        if not wrapper.has_run:
+            wrapper.has_run = True
+            cache = func(*args, **kwargs)
+        return cache
+    wrapper.has_run = False
     return wrapper
 
 
