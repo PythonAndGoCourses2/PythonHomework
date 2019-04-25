@@ -1,6 +1,7 @@
 import re
 import pycalc.easyCalculation as easyCalculation
 import math
+from numbers import Number
 
 
 class ComplexCalc():
@@ -13,9 +14,13 @@ class ComplexCalc():
                          "pow": lambda a, b: pow(a, b)}}
 
     const = {
-        "pi": math.pi,
-        "e": math.e
-    }
+        attr: getattr(
+            math,
+            attr) for attr in dir(math) if isinstance(
+            getattr(
+                math,
+                attr),
+            Number)}
 
     def expression_search(self, expr):
 
