@@ -19,7 +19,7 @@ num_regex = re.compile(r"\d+[.]?\d*|[.]\d+")
 def execute_once(func):
     """Decorate to execute function only once."""
     cache = None
-    
+   
     def wrapper(*args, **kwargs):
         nonlocal cache
         if not wrapper.has_run:
