@@ -19,11 +19,15 @@ def calc():
         if args.module:
             spec = util.spec_from_file_location("external_module", args.module)
             if not spec:
-                raise Exception("Can't find your module")
+                raise ValueError("Can't find your module")
             module = util.module_from_spec(spec)
             spec.loader.exec_module(module)
             print(calculate.calculate(args.expression, module))
         else:
             print(calculate.calculate(args.expression))
+    except ValueError as err:
+        print("ERROR: {0}".format(err))
+    except KeyError as err:
+        print("ERROR: {0}".format(err))
     except Exception as err:
         print("ERROR: {0}".format(err))

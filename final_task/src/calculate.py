@@ -247,7 +247,10 @@ def parse_expression(expression, functions=None):
                     raise KeyError("Unknown symbol at " + str(searchPos))
 
     while not operators.is_empty():
-        ppnExp.append(operators.pop().func)
+        operator = operators.pop().func
+        if operator == '(':
+            raise ValueError("Brackets are not balanced")
+        ppnExp.append(operator)
     return ppnExp
 
 
