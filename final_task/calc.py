@@ -42,6 +42,7 @@ errors = {
     2: lambda arg: 'ERROR: Extra operator {} at the end of an expression!'.format(arg),
     3: 'ERROR: Opening bracket required!',
     4: 'ERROR: Closing bracket required!',
+    5: 'ERROR: Blank symbol between two operands',
     }
 
 
@@ -86,11 +87,25 @@ def split_operators(expression_line):
     last_number = ""
     last_letter = ""
     last_symbol = ""
+    blank_item = False
     if check_expression(expression_line):
         for i in expression_line:
             if i == " ":
-                continue
+                blank_item = True
+                if last_symbol:
+                    parsing_list.append(last_symbol)
+                    last_symbol = ""
+                elif last_number:
+                    parsing_list.append(number_parser(last_number))
+                    last_number = ""
+                elif last_letter:
+                    parsing_list.append(function_parser(last_letter))
+                    last_letter = ""
             if i.isnumeric() or i is '.':
+                if blank_item and type(parsing_list[-1]) is not str:
+                    raise Error(id=5)
+                elif blank_item:
+                    blank_item = False
                 if last_symbol:
                     parsing_list.append(last_symbol)
                     last_symbol = ""

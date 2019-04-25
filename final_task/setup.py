@@ -9,5 +9,6 @@ setup(
     entry_points={'console_scripts': ['pycalc = calc:main']},
     description='Pure-python command-line calculator.',
     platforms='any',
+    py_modules=['pycalc']
 )
 
