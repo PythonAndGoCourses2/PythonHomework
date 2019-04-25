@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from . import pycalc
+from calculator import calc
 
 
 def parse_command_line():
@@ -48,16 +48,16 @@ def is_error_brackets(expression):
 
 
 def is_error_symbol(expression):
-    if (expression[0] in pycalc.OPERATION_PRIORITIES and expression[0] != '(') or\
-            (expression[-1] in pycalc.OPERATION_PRIORITIES and expression[-1] != ')'):
+    if (expression[0] in calc.OPERATION_PRIORITIES and expression[0] != '(') or\
+            (expression[-1] in calc.OPERATION_PRIORITIES and expression[-1] != ')'):
         return True
     i = 0
     while i < len(expression)-1:
-        if (expression[i] in pycalc.OPERATION_PRIORITIES.keys() or expression[i] == '=' or expression[i] == '!') and\
+        if (expression[i] in calc.OPERATION_PRIORITIES.keys() or expression[i] == '=' or expression[i] == '!') and\
                 expression[i] != ')':
-            if (expression[i+1] in pycalc.OPERATION_PRIORITIES.keys() or expression[i + 1] == '=') and\
+            if (expression[i+1] in calc.OPERATION_PRIORITIES.keys() or expression[i + 1] == '=') and\
                     expression[i + 1] != '(':
-                if expression[i]+expression[i+1] in pycalc.OPERATION_PRIORITIES:
+                if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES:
                     i += 2
                     continue
                 else:

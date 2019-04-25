@@ -1,5 +1,5 @@
 import math
-from . import Validation
+from calculator.validation import check_exception
 
 
 OPERATION_PRIORITIES = {
@@ -153,10 +153,10 @@ def translate_reverse_exception(expression):
 
 
 def main():
-    if Validation.check_exception() is None:
+    if check_exception() is None:
         return
     else:
-        expression = Validation.check_exception()
+        expression = check_exception()
         res_expression = translate_reverse_exception(expression)
         result = calculate_res_exception(res_expression)
         print(result)

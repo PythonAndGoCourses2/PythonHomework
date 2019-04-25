@@ -6,13 +6,14 @@ setup(
     author='Oleg Liasota',
     author_email='Liasota1023@gmail.com',
     packages=find_packages(),
-    py_modules=['pycalc'],
+    py_modules=['calc'],
     entry_points={
         'console_scripts': [
-            'pycalc=pycalc.pycalc:main',
+            'pycalc=calculator.calc:main',
         ],
     },
     platforms='any',
 )
+
 
 
