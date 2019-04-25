@@ -21,6 +21,7 @@ def execute_once(func):
     cache = None
     
     def wrapper(*args, **kwargs):
+        nonlocal cache
         if not wrapper.has_run:
             wrapper.has_run = True
             cache = func(*args, **kwargs)
@@ -135,12 +136,12 @@ def find_closing_bracket(expression):
             brackets.push('(')
         elif symbol == ')':
             if brackets.is_empty():
-                raise Exception("Brackets are not balanced!")
+                raise ValueError("Brackets are not balanced!")
             brackets.pop()
         if brackets.is_empty():
             return pos
     if not brackets.is_empty():
-        raise Exception("Brackets are not balanced!")
+        raise ValueError("Brackets are not balanced!")
 
 
 def parse_expression(expression, functions=None):
@@ -179,12 +180,14 @@ def parse_expression(expression, functions=None):
             prevPushed = '('
             searchPos += 1
         elif expression[searchPos] == ')':
+            if operators.is_empty():
+                raise ValueError("Brackets are not balanced!")
             last_item = operators.pop()
             while last_item.func != '(' and not operators.is_empty():
                 ppnExp.append(last_item.func)
                 last_item = operators.pop()
             if last_item.func != '(':
-                raise Exception("Brackets are not balanced!")
+                raise ValueError("Brackets are not balanced!")
             searchPos += 1
         elif match:
             prevPushed = float(match.string[match.start():match.end()])
@@ -238,10 +241,10 @@ def parse_expression(expression, functions=None):
                         ppnExp.append(prevPushed)
                         searchPos = match.end()
                     else:
-                        raise Exception(
+                        raise KeyError(
                             "Unknown expression at " + str(match.start()))
                 else:
-                    raise Exception("Unknown symbol at " + str(searchPos))
+                    raise KeyError("Unknown symbol at " + str(searchPos))
 
     while not operators.is_empty():
         ppnExp.append(operators.pop().func)
@@ -271,14 +274,16 @@ def calculate(expression, functions=None):
         if callable(item):
             args = []
             for arg in inspect.getfullargspec(item).args:
+                if calcStack.is_empty():
+                    raise KeyError("Not enough parameters for operand")
                 args.append(calcStack.pop())
             args.reverse()
             calcStack.push(item(*args))
         elif type(item) in (int, float, complex):
             calcStack.push(item)
         else:
-            raise Exception("Brackets are not balanced")
+            raise Exception("Unknown internal error")
     answer = calcStack.pop()
     if not calcStack.is_empty():
-        raise Exception("No operators between expressions!")
+        raise KeyError("No operators between expressions!")
     return answer

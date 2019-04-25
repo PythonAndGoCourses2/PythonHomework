@@ -28,7 +28,7 @@ class Stack:
         args : list
             if provided stack will be initialized with args values
         """
-        self.items = args if args else []
+        self.items = list(args) if args else []
 
     def is_empty(self):
         """
