@@ -123,6 +123,7 @@ def translate_reverse_exception(expression):
     operations = []
     i = 0
     while i < len(expression):
+
         if expression[i].isdigit() or expression[i] == '.':
             allocate_numbers(expression, res_expression, i)
         elif expression[i] == ',':
@@ -142,6 +143,7 @@ def translate_reverse_exception(expression):
             else:
                 try:
                     res_expression.append(DICT_MATH[func])
+                    i -= 1
                 except KeyError:
                     return ['ERROR: unknown constant']
         else:
