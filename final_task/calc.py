@@ -3,7 +3,6 @@
 import operator
 import math
 from argparse import ArgumentParser
-from math import *
 
 
 parser = ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
@@ -36,52 +35,37 @@ operator_dict = {
     '<': {'operator': operator.lt, 'priority': 4},
     '>=': {'operator': operator.ge, 'priority': 4},
     '<=': {'operator': operator.le, 'priority': 4},
-
 }
 
+errors = {
+    1: 'ERROR: Expression cannot be empty',
+    2: lambda arg: 'ERROR: Extra operator {} at the end of an expression!'.format(arg),
+    3: 'ERROR: Opening bracket required!',
+    4: 'ERROR: Closing bracket required!',
+    }
 
-# example = [
-#     "-13",
-#     "8//3",
-#     "6-(-13)",
-#     "1---1",
-#     "-+---+-1",
-#     "1+2*2",
-#     "1+(2+3*2)*3",
-#     "10*(2+1)",
-#     "10^(2+1)",
-#     "100/3^2",
-#     "100/3%2^2",
-#     "pi+e",
-#     "log(e)",
-#     "sin(pi/2)",
-#     "log10(100)",
-#     "sin(pi/2)*111*6",
-#     "2*sin(pi/2)",
-#     "abs(-5)",
-#     "round(123.45689)",
-#     "102%12%7",
-#     "100/4/3",
-#     "2^3^4",
-#     "1+2*3==1+2*3",
-#     "e^5>=e^5+1",
-#     "1+2*4/3+1!=1+2*4/3+2",
-#     "(100)",
-#     "666",
-#     "-.1",
-#     "1/3",
-#     "1.0/3.0",
-#     ".1 * 2.0^56.0",
-#     "e^34",
-#     "(2.0^(pi/pi+e/e+2.0^0.0))",
-#     "(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)",
-#     "sin(pi/2^1) + log(1*4+2^2+1, 3^2)",
-#     "10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5",
-#     "sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)",
-#     "2.0^(2.0^2.0*2.0^2.0)",
-#     "sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
-#
-# ]
+
+class Error(Exception):
+
+    def __init__(self, id, arg=None):
+        self.arg = arg
+        self.id = id
+        if self.arg is not None:
+            self.text = errors[self.id](self.arg)
+        else:
+            self.text = errors[self.id]
+
+
+def check_expression(expression_line):
+    if not expression_line:
+        raise Error(id=1)
+    if expression_line[-1] in operator_dict.keys():
+        raise Error(id=2, arg=expression_line[-1])
+    if expression_line.count('(') < expression_line.count(')'):
+        raise Error(id=3)
+    elif expression_line.count('(') > expression_line.count(')'):
+        raise Error(id=4)
+    return True
 
 
 def number_parser(number):
@@ -102,50 +86,51 @@ def split_operators(expression_line):
     last_number = ""
     last_letter = ""
     last_symbol = ""
-    for i in expression_line:
-        if i == " ":
-            continue
-        if i.isnumeric() or i is '.':
-            if last_symbol:
-                parsing_list.append(last_symbol)
-                last_symbol = ""
-            if last_letter:
+    if check_expression(expression_line):
+        for i in expression_line:
+            if i == " ":
+                continue
+            if i.isnumeric() or i is '.':
+                if last_symbol:
+                    parsing_list.append(last_symbol)
+                    last_symbol = ""
+                if last_letter:
+                    last_letter += i
+                else:
+                    last_number += i
+            elif i.isalpha():
+                if last_symbol:
+                    parsing_list.append(last_symbol)
+                    last_symbol = ""
                 last_letter += i
+            elif i in "!=<>/":
+                if last_number:
+                    parsing_list.append(number_parser(last_number))
+                    last_number = ""
+                if last_letter:
+                    parsing_list.append(function_parser(last_letter))
+                    last_letter = ""
+                last_symbol += i
             else:
-                last_number += i
-        elif i.isalpha():
-            if last_symbol:
-                parsing_list.append(last_symbol)
-                last_symbol = ""
-            last_letter += i
-        elif i in "!=<>/":
-            if last_number:
-                parsing_list.append(number_parser(last_number))
-                last_number = ""
-            if last_letter:
-                parsing_list.append(function_parser(last_letter))
-                last_letter = ""
-            last_symbol += i
-        else:
-            if last_number:
-                parsing_list.append(number_parser(last_number))
-                last_number = ""
-            if last_letter:
-                parsing_list.append(function_parser(last_letter))
-                last_letter = ""
-            if i:
-                parsing_list.append(i)
-    if last_number:
-        parsing_list.append(number_parser(last_number))
-    elif last_letter:
-        parsing_list.append(function_parser(last_letter))
+                if last_number:
+                    parsing_list.append(number_parser(last_number))
+                    last_number = ""
+                if last_letter:
+                    parsing_list.append(function_parser(last_letter))
+                    last_letter = ""
+                if i:
+                    parsing_list.append(i)
+        if last_number:
+            parsing_list.append(number_parser(last_number))
+        elif last_letter:
+            parsing_list.append(function_parser(last_letter))
     return parsing_list
 
 
 def clean_add_sub_operators(last_item, converted_list):
     if last_item.count('-') % 2 == 0:
         if converted_list[-1] == '(':
-            last_item= ""
+            last_item = ""
         else:
             last_item = '+'
     else:
@@ -165,7 +150,7 @@ def converter(parsing_list):
             if last_item == '+':
                 converted_list.append(operator_dict[last_item])
                 last_item = ''
-	if type(i) is float or type(i) is int:
+        if type(i) is float or type(i) is int:
             if last_item == '-' and converted_list[-1] != '(' and converted_list[-1] not in operator_dict.values():
                 converted_list.append(operator_dict[last_item])
                 converted_list.append(i)
@@ -177,7 +162,7 @@ def converter(parsing_list):
                 converted_list.append(i)
         elif i in operator_dict.keys():
             if i == '-' or i == '+':
-                last_item +=i
+                last_item += i
             else:
                 converted_list.append(operator_dict[i])
         elif i in function_dict.keys():
@@ -202,7 +187,8 @@ def converter(parsing_list):
             converted_list.append(i)
     return converted_list
 
-class OperandStack():
+
+class OperandStack:
 
     def __init__(self):
         self.stack = list()
@@ -308,33 +294,14 @@ def main():
     function = OperandStack()
 
     if type(expression_line) is str:
-        print('example: {}'.format(expression_line))
         parser = split_operators(expression_line)
-        print(parser)
         converted_list = converter(parser)
-        print(converted_list)
         result = calculate(converted_list)
         print(result)
-    else:
-        for expression in expression_line:
-            string = ''
-            for i in expression:
-                if i == '^':
-                    string += '**'
-                else:
-                    string +=i
-            try:
-                calculate(converter(split_operators(expression)))
-            except:
-                print('fault on {} \n'.format(expression))
-            if current_result == eval(string):
-                print(expression)
-                print(current_result, current_result == eval(string))
-                print('\n')
 
 
 if __name__ == '__main__':
-    main()
-
-
-
+    try:
+        main()
+    except Error as err:
+        print(err.text)
