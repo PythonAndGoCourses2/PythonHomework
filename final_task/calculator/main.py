@@ -1,4 +1,4 @@
-from PythonHomework.final_task.pycalc.core.calculator import solve
+from core.calculator import solve
 
 
 def main():
