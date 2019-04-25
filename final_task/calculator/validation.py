@@ -13,11 +13,11 @@ def is_error_spaces(expression):
     for item in expression[1:]:
         if item != ' ' or new_expression[-1] != ' ':
             new_expression += item
-    for i in range(1, len(new_expression)-1):
+    for i in range(1, len(new_expression) - 1):
         if new_expression[i] == ' ':
-            if new_expression[i-1].isalpha():
+            if new_expression[i - 1].isdigit() and new_expression[i + 1].isalnum():
                 return True
-            elif new_expression[i-1].isdigit() and new_expression[i+1].isalnum():
+            elif new_expression[i - 1] + new_expression[i + 1] in calc.OPERATION_PRIORITIES:
                 return True
     return False
 

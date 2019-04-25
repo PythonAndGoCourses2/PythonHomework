@@ -53,6 +53,8 @@ def calculate_res_exception(res_expression):
             return 'ERROR: division by zero'
         except ValueError:
             return 'ERROR: value'
+        except TypeError:
+            return 'ERROR: incorrect number of arguments'
         i += 1
     else:
         return res_expression[0]
@@ -123,7 +125,6 @@ def translate_reverse_exception(expression):
     operations = []
     i = 0
     while i < len(expression):
-
         if expression[i].isdigit() or expression[i] == '.':
             allocate_numbers(expression, res_expression, i)
         elif expression[i] == ',':
