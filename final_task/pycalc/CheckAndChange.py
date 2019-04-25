@@ -1,16 +1,41 @@
 import re
 import pycalc.operators as operators
 import pycalc.difcalc as difcalc
+from numbers import Number
 
 
 class CheckAndChange():
 
-    def do_all_changes(self, expr):
+    def do_all_changes(self, expr, module):
         expr = expr.replace("//", "&")
         self.correct_brackets(expr)
         self.correct_spaces(expr)
         expr = expr.replace(" ", "")
         return expr
+
+    def addargs(self, modul):
+        if modul is not None:
+            if modul[-3:] == ".py":
+                module = __import__(modul)
+                new_functions = {
+                    attr: getattr(
+                        module,
+                        attr) for attr in dir(module) if callable(
+                        getattr(
+                            module,
+                            attr))}
+                difcalc.ComplexCalc.math_functions.update(new_functions)
+                new_const = {
+                    attr: getattr(
+                        module,
+                        attr) for attr in dir(module) if isinstance(
+                        getattr(
+                            module,
+                            attr),
+                        Number)}
+                difcalc.ComplexCalc.const.update(new_const)
+            else:
+                raise Exception("wrong file extension")
 
     def correct_spaces(self, expr):
         searcher = expr.find(" ")
