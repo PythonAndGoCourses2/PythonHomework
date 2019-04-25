@@ -47,16 +47,21 @@ def is_error_brackets(expression):
     return True
 
 
+operators_ignored = ['+', '-']
+
+
 def is_error_symbol(expression):
-    if (expression[0] in calc.OPERATION_PRIORITIES and expression[0] != '(') or\
-            (expression[-1] in calc.OPERATION_PRIORITIES and expression[-1] != ')'):
+    if (expression[0] in calc.OPERATION_PRIORITIES and expression[0] != '(') and\
+        expression[0] not in operators_ignored or\
+        (expression[-1] in calc.OPERATION_PRIORITIES and expression[-1] != ')' and expression[0] not in
+         operators_ignored):
         return True
     i = 0
     while i < len(expression)-1:
         if (expression[i] in calc.OPERATION_PRIORITIES.keys() or expression[i] == '=' or expression[i] == '!') and\
-                expression[i] != ')':
+                expression[i] != ')' and expression[i] not in operators_ignored:
             if (expression[i+1] in calc.OPERATION_PRIORITIES.keys() or expression[i + 1] == '=') and\
-                    expression[i + 1] != '(':
+                    expression[i + 1] != '(' and expression[i] not in operators_ignored:
                 if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES:
                     i += 2
                     continue
