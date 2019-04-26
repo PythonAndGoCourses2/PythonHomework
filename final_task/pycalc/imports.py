@@ -47,32 +47,31 @@ MEMBER_TYPES = {
 }
 
 
-def get_module_members_names(module_name: tuple) -> dict:
+def get_module_members_names(module):
     """"""
 
-    result = defaultdict(list)
-
-    module = import_module(module_name)
-
-    for type_, type_checker in MEMBER_TYPES.items():
-        members = get_module_members_names_by_type(module, type_checker)
-        result[type_].extend(members)
-
-    return module, result
+    return {type_: get_module_members_names_by_type(module, type_checker)
+            for type_, type_checker in MEMBER_TYPES.items()}
 
 
 def get(module_names: tuple = None) -> dict:
     """"""
 
     if not module_names:
-        module_names = []
+        module_names = tuple()
 
     m_names = merge_module_names(module_names)
     m_names = dedupe_to_list(m_names)
 
     result = {}
+
     for module_name in m_names:
-        module, members = get_module_members_names(module_name)
+        try:
+            module = import_module(module_name)
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError
+
+        members = get_module_members_names(module)
         result[module_name] = {}
         result[module_name]['module'] = module
         result[module_name]['members'] = members
@@ -81,8 +80,8 @@ def get(module_names: tuple = None) -> dict:
 
 
 if __name__ == '__main__':
-    names = ('calendar', 'pprint')
+    MODULE_NAMES = ('calendar', 'pprint')
     from pprint import pprint
-    for key, value in get(names).items():
+    for key, value in get(MODULE_NAMES).items():
         print(key)
         pprint(value)
