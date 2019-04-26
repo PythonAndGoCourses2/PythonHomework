@@ -34,11 +34,11 @@ DICT_MATH['abs'] = abs
 
 def calculate_res_exception(res_expression):
     i = 1
-
     while i < len(res_expression):
         try:
             if res_expression[i] in OPERATION_PRIORITIES:
-                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2], res_expression.pop(i - 1))
+                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2],
+                                                                       res_expression.pop(i - 1))
                 i = 1
             if len(res_expression) != 1 and type(res_expression[i]) is str and res_expression[i].isalnum():
                 number = res_expression.pop(i-1)
