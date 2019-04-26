@@ -70,7 +70,12 @@ def allocate_operations(expression, operations, res_expression, item, i):
         if item == ')':
             unloading_operations(res_expression, operations, upload_bracket=True)
         else:
-            if operations[-1].isalnum() or OPERATION_PRIORITIES[item] > OPERATION_PRIORITIES[operations[-1]] or operations[-1] == '(':
+            if operations[-1].isalnum() or operations[-1] == '(':
+                operations.append(item)
+            elif OPERATION_PRIORITIES[item] > OPERATION_PRIORITIES[operations[-1]] or operations[-1] == '(':
+                operations.append(item)
+            elif item in OPERATION_PRIORITIES.keys() and OPERATION_PRIORITIES[item] == OPERATION_PRIORITIES[
+                    operations[-1]] and OPERATION_PRIORITIES[item] == 3:
                 operations.append(item)
             else:
                 prior_operation = OPERATION_PRIORITIES[item]
@@ -109,7 +114,10 @@ def search_func(operations):
             i = -1
         else:
             i -= 1
-    return i
+    if type(operations[i - 1]) is int:
+        return i
+    else:
+        return i - 1
 
 
 def write_func(expression, i):
@@ -162,7 +170,10 @@ def main():
         expression = check_exception()
         res_expression = translate_reverse_exception(expression)
         result = calculate_res_exception(res_expression)
-        print(result)
+        if type(result) is not float and type(result) is not bool:
+            print('ERROR: function')
+        else:
+            print(result)
 
 
 if __name__ == '__main__':
