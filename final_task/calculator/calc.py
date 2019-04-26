@@ -170,7 +170,7 @@ def main():
         expression = check_exception()
         res_expression = translate_reverse_exception(expression)
         result = calculate_res_exception(res_expression)
-        if type(result) is not float and type(result) is not bool:
+        if type(result) is not float and type(result) is not bool and type(result) is not int:
             print('ERROR: function')
         else:
             print(result)

@@ -70,8 +70,6 @@ def is_error_symbol(expression):
                     i += 2
                     continue
                 else:
-                    print(expression[i])
-                    print(expression[i+1])
                     return True
         i += 1
     else:
