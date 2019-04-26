@@ -7,10 +7,12 @@ import sys
 
 
 def validations(string):
+    """Validation in advance using the module validation.py."""
     validation.main(string)
 
 
 def remove_space_between_operators(string):
+    """Removes spaces from the string."""
     array = list(string)
     for idx, token in enumerate(array):
         if token == ' ':
@@ -19,6 +21,7 @@ def remove_space_between_operators(string):
 
 
 def object_type(obj):
+    """Sets various objects to data types for calculations."""
     try:
         if type(obj) == str:
             if obj[0] == '[':
@@ -38,6 +41,11 @@ def object_type(obj):
 
 
 def split_all_comparison_characters(string):
+    """
+    Splits a string by comparative characters.
+
+    :return: array
+    """
     array = ['']
     for idx, token in enumerate(string):
         if token in config.comparison_check and array[-1] in config.comparison_check:
@@ -53,6 +61,14 @@ def split_all_comparison_characters(string):
 
 
 def comparison_calculation(string):
+    """
+     Calculation logical expression.
+
+     Description: the cycle goes through the list comparing logical pairs. If False returns from the pair,
+     the cycle is interrupted.
+
+    :return: bool
+    """
     for token in config.comparison_check:
         if token in string:
             array = split_all_comparison_characters(string)
@@ -67,6 +83,10 @@ def comparison_calculation(string):
 
 
 def replace_minus_plus_characters(string):
+    """
+    Replaces possible variations of minus-plus pairs. Simulate the multiplication of numbers
+    with the specified characters.
+    """
     array = list(string)
     for idx, token in enumerate(array):
         if token == '-' or token == '+':
@@ -80,6 +100,7 @@ def replace_minus_plus_characters(string):
 
 
 def insert_zero_before_point(string):
+    """Insert a zero in front of the point if necessary"""
     array = list(string)
     for idx, token in enumerate(array):
         if idx == 0 and token == '.':
@@ -90,6 +111,11 @@ def insert_zero_before_point(string):
 
 
 def assembly_of_negative_numbers(array):
+    """
+    The function replaces a pair of elements in the array with a minus number by a negative number.
+
+    Example: ['(','-','3','+','2',')'] --> ['(','-3','+','2',')']
+    """
     for idx, token in enumerate(array):
         if (token == '-' or token == '+') and idx == 0 and array[idx+1][0].isdigit():
             array[idx] += array[idx+1]
@@ -103,9 +129,18 @@ def assembly_of_negative_numbers(array):
 
 
 def split_all_characters_and_numbers(string):
+    """
+    The main function. Converting string expressions into a list divided by elements.
+
+    Description: a loop passes a string defining the type of each element. A set of conditions
+    determines how to place this element in the final list.
+
+    :return: array
+    """
     array, square_brackets = [], 0
     for idx, token in enumerate(string):
-        if token in config.sqr_brackets or square_brackets:
+        # array allocation
+        if token in config.sqr_brackets or square_brackets:  # '[1, 2, 3]'
             if token == ']':
                 array[-1] += token
                 square_brackets = 0
@@ -114,30 +149,35 @@ def split_all_characters_and_numbers(string):
             elif token == '[':
                 array.append(token)
                 square_brackets = 1
+        # brackets allocation
         elif token in config.brackets or token == ',':
             array.append(token)
+        # array allocation
         elif token in config.characters:
-            if token == '/' and array[-1] == '/':
+            if token == '/' and array[-1] == '/':  # '4 // 2'
                 array[-1] += token
             else:
                 array.append(token)
+        # point allocation
         elif token == '.':
             if array[-1].isdigit():
-                array[-1] += token
+                array[-1] += token  # 3 --> 3.
             else:
                 array.append(token)
+        # number allocation
         elif token.isdigit():
             if len(array) == 0:
                 array.append(token)
             elif array[-1][-1] == '.' or array[-1][-1].isdigit() or array[-1].isalpha():
-                array[-1] += token
+                array[-1] += token  # 3. --> 3.3
             else:
                 array.append(token)
+        # letter allocation
         elif token.isalpha():
             if len(array) == 0:
                 array.append(token)
             else:
-                if array[-1].isalpha() or re.match(r'^log1', array[-1]):
+                if array[-1].isalpha() or re.match(r'^log1', array[-1]):  # function - log1p
                     array[-1] += token
                 else:
                     array.append(token)
@@ -145,6 +185,7 @@ def split_all_characters_and_numbers(string):
 
 
 def constants_switch(array):
+    """Replaces all constants in the list with their values."""
     for token in config.constants:
         while token in array:
             idx = array.index(token)
@@ -162,6 +203,7 @@ def constants_switch(array):
 
 
 def function_calculation(array):
+    """Receives an array with a function and its arguments and performs calculations."""
     index, arguments = 0, []
     for idx, token in enumerate(array):
         if token in config.brackets or token == ',':
@@ -175,6 +217,7 @@ def function_calculation(array):
 
 
 def search_for_all_atomic_brackets(array):
+    """Searches for atomic brackets. Compiles the final array with the data indexes of the brackets."""
     brackets_inside = []
     last = ''
     index = 0
@@ -195,6 +238,12 @@ def search_for_all_atomic_brackets(array):
 
 
 def pop_calculated_items(array, first_index, second_index, length):
+    """
+    Pulls out items to replace them with calculated ones.
+
+    Description: Due to the complexity of the operation of cyclical pulling elements by indexes(O(n)).
+    Implemented an automatic change of the following array elements to the offset delta.
+    """
     index = first_index
     for token in array[second_index:]:
         array[index] = token
@@ -205,13 +254,21 @@ def pop_calculated_items(array, first_index, second_index, length):
 
 
 def brackets_calculation(array):
+    """
+    Calculation slices with brackets.
+
+    Description: Gets the indices of atomic brackets from the function "search_for_all_atomic_brackets".
+    Checks parentheses for math functions. Calculates by function function_calculation.
+    Inserts a total value into the list.
+    """
     while '(' in array:
         brackets_inside = search_for_all_atomic_brackets(array)
         for second_index in brackets_inside[::-2]:
             first_index = brackets_inside[brackets_inside.index(second_index) - 1]
             if array[first_index - 1] in config.all_functions:
+                # function brackets
                 result = function_calculation(array[first_index - 1:second_index + 1])
-                if array[first_index - 1] == 'frexp':
+                if array[first_index - 1] == 'frexp':  # function frexp - input array
                     return result
                 length = len(array[first_index - 1:second_index + 1])
                 array = pop_calculated_items(array, first_index-1, second_index+1, length)
@@ -235,6 +292,12 @@ def brackets_calculation(array):
 
 
 def replace_minus_and_negative_numbers(array):
+    """
+    Technical function. Replaces all the disadvantages in a simple expression by a plus,
+    and the value makes it negative. In order to equate the priority of minus and plus.
+
+    Example: 2-1+3 = -2 -->  2+(-1)+3 = 4
+    """
     for idx, token in enumerate(array):
         if token == '-' and array[idx+1][-1].isdigit():
             array[idx] = '+'
@@ -243,6 +306,7 @@ def replace_minus_and_negative_numbers(array):
 
 
 def calculation(array):
+    """Calculation of simple expressions"""
     if type(array) == tuple or type(array[0]) == list:
         return array
     if array[0] in config.characters:
@@ -255,6 +319,7 @@ def calculation(array):
     else:
         for token in config.characters:
             while token in array:
+                # exponentiation counts from the end
                 if token == '^':
                     i = 1
                     while i <= len(array):
@@ -284,16 +349,17 @@ def calculation(array):
 
 
 def main(string):
+    """Main function determining the order of calculations."""
     validations(string)
-    res = remove_space_between_operators(string)
-    bool_result = comparison_calculation(res)
+    result = remove_space_between_operators(string)
+    bool_result = comparison_calculation(result)
     if type(bool_result) == bool:
         return bool_result
-    res = insert_zero_before_point(res)
-    res = replace_minus_plus_characters(res)
-    res = split_all_characters_and_numbers(res)
-    res = assembly_of_negative_numbers(res)
-    res = constants_switch(res)
-    res = brackets_calculation(res)
-    res = calculation(res)
-    return object_type(res)
+    result = insert_zero_before_point(result)
+    result = replace_minus_plus_characters(result)
+    result = split_all_characters_and_numbers(result)
+    result = assembly_of_negative_numbers(result)
+    result = constants_switch(result)
+    result = brackets_calculation(result)
+    result = calculation(result)
+    return object_type(result)
