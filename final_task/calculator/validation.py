@@ -51,23 +51,34 @@ operators_ignored = ['+', '-']
 
 
 def is_error_symbol(expression):
-    if (expression[0] in calc.OPERATION_PRIORITIES and expression[0] != '(') and\
-        expression[0] not in operators_ignored or\
-        (expression[-1] in calc.OPERATION_PRIORITIES and expression[-1] != ')' and expression[0] not in
-         operators_ignored):
+    if (expression[0] in calc.OPERATION_PRIORITIES or expression[0] == '!' or expression[0] == '=') and\
+            expression[0] != '(' and expression[0] not in operators_ignored:
         return True
+    elif (expression[-1] in calc.OPERATION_PRIORITIES or expression[-1] == '=') and\
+            expression[-1] != ')' and expression[0] not in operators_ignored:
+        return True
+    is_only_operators = True
     i = 0
     while i < len(expression)-1:
+        if expression[i].isalnum():
+            is_only_operators = False
         if (expression[i] in calc.OPERATION_PRIORITIES.keys() or expression[i] == '=' or expression[i] == '!') and\
                 expression[i] != ')' and expression[i] not in operators_ignored:
             if (expression[i+1] in calc.OPERATION_PRIORITIES.keys() or expression[i + 1] == '=') and\
-                    expression[i + 1] != '(' and expression[i] not in operators_ignored:
+                    expression[i + 1] != '(' and expression[i+1] not in operators_ignored:
                 if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES:
                     i += 2
                     continue
                 else:
+                    print(expression[i])
+                    print(expression[i+1])
                     return True
         i += 1
+    else:
+        if expression[i].isalnum():
+            is_only_operators = False
+        if is_only_operators:
+            return True
     return False
 
 
