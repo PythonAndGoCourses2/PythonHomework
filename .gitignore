@@ -102,3 +102,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+final_task/.vscode/launch.json

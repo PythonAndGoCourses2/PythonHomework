@@ -11,12 +11,13 @@ class CheckAndChange():
         self.correct_brackets(expr)
         self.correct_spaces(expr)
         expr = expr.replace(" ", "")
+        self.addargs(module)
         return expr
 
     def addargs(self, modul):
         if modul is not None:
             if modul[-3:] == ".py":
-                module = __import__(modul)
+                module = __import__(modul[:-3])
                 new_functions = {
                     attr: getattr(
                         module,
