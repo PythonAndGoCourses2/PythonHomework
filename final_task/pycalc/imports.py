@@ -50,13 +50,13 @@ MEMBER_TYPES = {
 def get_module_members_names(module_name: tuple) -> dict:
     """"""
 
-    result = defaultdict(set)
+    result = defaultdict(list)
 
     module = import_module(module_name)
 
     for type_, type_checker in MEMBER_TYPES.items():
         members = get_module_members_names_by_type(module, type_checker)
-        result[type_].update(members)
+        result[type_].extend(members)
 
     return module, result
 
@@ -81,7 +81,7 @@ def get(module_names: tuple = None) -> dict:
 
 
 if __name__ == '__main__':
-    names = ('calendar',)
+    names = ('calendar', 'pprint')
     from pprint import pprint
     for key, value in get(names).items():
         print(key)
