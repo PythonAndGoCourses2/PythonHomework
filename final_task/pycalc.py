@@ -2,10 +2,12 @@ import re
 import tool
 import config
 import math
+import validation
+import sys
 
 
-def validation(string):
-    pass
+def validations(string):
+    validation.main(string)
 
 
 def remove_space_between_operators(string):
@@ -17,19 +19,22 @@ def remove_space_between_operators(string):
 
 
 def object_type(obj):
-    if type(obj) == str:
-        if obj[0] == '[':
-            array = []
-            for token in obj:
-                if token.isdigit():
-                    array.append(object_type(token))
-            return array
-        elif obj == 'True' or obj == 'False':
-            return bool(obj)
-        elif '.' in obj:
-            return float(obj)
-        return int(obj)
-    return obj
+    try:
+        if type(obj) == str:
+            if obj[0] == '[':
+                array = []
+                for token in obj:
+                    if token.isdigit():
+                        array.append(object_type(token))
+                return array
+            elif obj == 'True' or obj == 'False':
+                return bool(obj)
+            elif '.' in obj:
+                return float(obj)
+            return int(obj)
+        return obj
+    except ValueError:
+        sys.exit('ERROR: unknown object - ' + obj)
 
 
 def split_all_comparison_characters(string):
@@ -52,7 +57,10 @@ def comparison_calculation(string):
         if token in string:
             array = split_all_comparison_characters(string)
             for idx in range(1, len(array), 2):
-                result = tool.comparison_calculation(main(array[idx-1]), main(array[idx+1]), array[idx])
+                try:
+                    result = tool.comparison_calculation(main(array[idx-1]), main(array[idx+1]), array[idx])
+                except SystemExit:
+                    sys.exit('ERROR: no value to compare!')
                 if not result:
                     return False
                 return True
@@ -62,9 +70,12 @@ def replace_minus_plus_characters(string):
     array = list(string)
     for idx, token in enumerate(array):
         if token == '-' or token == '+':
-            while array[idx+1] == '-' or array[idx+1] == '+':
-                array[idx] = config.minus_plus_characters[array[idx] + array[idx+1]]
-                array.pop(idx+1)
+            try:
+                while array[idx+1] == '-' or array[idx+1] == '+':
+                    array[idx] = config.minus_plus_characters[array[idx] + array[idx+1]]
+                    array.pop(idx+1)
+            except IndexError:
+                sys.exit('ERROR: no value for expression!')
     return ''.join(array)
 
 
@@ -273,6 +284,7 @@ def calculation(array):
 
 
 def main(string):
+    validations(string)
     res = remove_space_between_operators(string)
     bool_result = comparison_calculation(res)
     if type(bool_result) == bool:

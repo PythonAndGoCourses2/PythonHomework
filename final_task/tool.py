@@ -1,4 +1,5 @@
 import config
+import sys
 
 
 def arithmetic(a, b, token):
@@ -6,7 +7,12 @@ def arithmetic(a, b, token):
 
 
 def functions(token, *args):
-    return config.all_functions[token](*args)
+    try:
+        return config.all_functions[token](*args)
+    except KeyError:
+        sys.exit('ERROR: this function is not supported.!')
+    except TypeError:
+        sys.exit('ERROR: invalid number of arguments!')
 
 
 def constants_calculation(token):
