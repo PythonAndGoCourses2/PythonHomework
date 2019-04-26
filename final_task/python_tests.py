@@ -109,5 +109,6 @@ class Testmyfunction(unittest.TestCase):
     def test_find_approximate_root(self):
         self.assertAlmostEqual(equations.find_approximate_root('cos(x) = x^3', 3.0), [0.8654740331])
 
+
 if __name__ == '__main__':
     unittest.main()

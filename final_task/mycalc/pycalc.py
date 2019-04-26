@@ -19,7 +19,7 @@ def main():
     except TypeError as e:
         print('ERROR:', str(e), sep=' ')
     except KeyError as e:
-        print(e)
+        print(str(e))
     except ValueError as e:
         print('ERROR: invalid syntax', str(e), sep=' ')
     except IndexError:
