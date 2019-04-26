@@ -72,17 +72,19 @@ def get_coefficient(expression):
     return total_list
 
 
-def total_solve_func(expression):
+def verifi_expression(expression):
     expr = mymodule.first_function(expression)
-    quantity = expr.count('=')
-    if quantity == 0 or quantity > 1:
+    lst = expr.strip().split('=')
+    if len(lst) != 2 or '' in lst:
         raise ValueError('expression is not an equation')
-    expr = mymodule.replace_many_plus_minus(mymodule.del_space(expr, '+-'))
+    return expr
+
+
+def total_solve_poly(expression):
+    expr = verifi_expression(expression)
     expr = mymodule.find_brackets(expr)
     expr = mymodule.del_space(expr, 'x')
     [left_expr, right_expr] = expr.split('=')
-    if left_expr.strip() in '' or right_expr.strip() in '':
-        raise ValueError('empty string between =')
     right_expr_list = [''] + mymodule.plus_reject(right_expr)
     left_expr = left_expr + '-'.join(right_expr_list)
     left_coeff = get_coefficient(left_expr)
@@ -91,5 +93,34 @@ def total_solve_func(expression):
     try:
         answer = cut_func(SOLVE_FUNCTION[len(total)](total))
     except KeyError:
-        raise KeyError('Oh, I can not solve equations of degree', len(total)-1)
+        raise KeyError("Oh, I can't solve equations of degree {}, {}".format(len(total)-1,
+                       'but you can specify the initial approximation of the root - INITROOT.'))
     return answer
+
+
+def get_func_value(expression, val):
+    expr = expression.replace('x', str(val))
+    total = mymodule.total_calculation(expr)
+    return total
+
+
+def find_approximate_root(expression, val):
+    expr = verifi_expression(expression)
+    lst = expr.split('=')
+    x, x_prev, i = val, val + 0.1, 0
+    while abs(x - x_prev) >= 1e-7 and i < 1000:
+        f_0 = get_func_value(lst[0], x_prev) - get_func_value(lst[1], x_prev)
+        f_1 = get_func_value(lst[0], x) - get_func_value(lst[1], x)
+        x, x_prev = x - f_1 / (f_1 - f_0) * (x - x_prev), x
+        i += 1
+    if abs(f_0 - f_1) > 1e-1:
+        raise ValueError('Incorrectly chosen initial approximation or equation has no real roots.')
+    return [round(x, 10)]
+
+
+def total_solve(equation, num):
+    if type(num) == float:
+        root = find_approximate_root(equation, num)
+    else:
+        root = total_solve_poly(equation)
+    return root

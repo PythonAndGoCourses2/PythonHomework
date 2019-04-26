@@ -16,9 +16,10 @@ class Testmyfunction(unittest.TestCase):
 
     def test_plus_reject(self):
         self.assertEqual(mymodule.plus_reject('3'), ['3'])
-        self.assertEqual(mymodule.plus_reject('3+2'), ['3', '2'])
-        self.assertEqual(mymodule.plus_reject('3-1'), ['3', '-1'])
+        self.assertEqual(mymodule.plus_reject('3 + +2'), ['3', '2'])
+        self.assertEqual(mymodule.plus_reject('+ - +-3-1'), ['+3', '-1'])
         self.assertEqual(mymodule.plus_reject('3+'), ['3', ''])
+        self.assertEqual(mymodule.plus_reject('3e-12+34/4'), ['3e-12', '34/4'])
 
     def test_calculation_without_quotient(self):
         self.assertAlmostEqual(mymodule.calculation_without_quotient('1*3'), 3.0)
@@ -87,12 +88,12 @@ class Testmyfunction(unittest.TestCase):
     def test_solv_quartic_equation(self):
         self.assertEqual(solve_polynom.solv_quartic_equation([-6, 5, 1]), [1.0, -6.0])
 
-    def test_total_solve_func(self):
-        self.assertAlmostEqual(equations.total_solve_func('1*x^2+5*x-6=0'), [1.0, -6.0])
-        self.assertAlmostEqual(equations.total_solve_func('2*x + -6 = 4'), [5.0])
-        self.assertAlmostEqual(equations.total_solve_func('2*x^3-11*x^2+12*x+9=0'), [3.0, -0.5, 3.0])
+    def test_total_solve_poly(self):
+        self.assertAlmostEqual(equations.total_solve_poly('1*x^2+5*x-6=0'), [1.0, -6.0])
+        self.assertAlmostEqual(equations.total_solve_poly('2*x + -6 = 4'), [5.0])
+        self.assertAlmostEqual(equations.total_solve_poly('2*x^3-11*x^2+12*x+9=0'), [3.0, -0.5, 3.0])
         with self.assertRaises(KeyError):
-            equations.total_solve_func('1*x^5 -1 = 0')
+            equations.total_solve_poly('1*x^5 -1 = 0')
 
     def test_filter_coefficient(self):
         self.assertAlmostEqual(equations.filter_coefficient([1, 1, 0, 0, 0]), [1, 1])
@@ -103,8 +104,10 @@ class Testmyfunction(unittest.TestCase):
         self.assertAlmostEqual(equations.filter_coefficient([]), [])
 
     def test_get_coefficient(self):
-        self.assertAlmostEqual(equations.get_coefficient('2*x^3-11*x^2+12*x+9-0'), [9.0, 12.0, -11.0, 2.0])
+        self.assertAlmostEqual(equations.get_coefficient('2^2*x^3-11*x^2+12/4*x+9-0'), [9.0, 3.0, -11.0, 4.0])
 
+    def test_find_approximate_root(self):
+        self.assertAlmostEqual(equations.find_approximate_root('cos(x) = x^3', 3.0), [0.8654740331])
 
 if __name__ == '__main__':
     unittest.main()

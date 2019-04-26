@@ -17,11 +17,15 @@ def byild_parser():
     parser = argparse.ArgumentParser(description='Pure-python command line calculator.')
     parser.add_argument('EXPRESSION', help='expression string to evalute. for example: \
                         "(e + pi)^pi + 3" get the answer: 261.45937196674714', type=str)
-    parser.add_argument('-m', '--use-module', action='store_true', help='Use the module \
-                        to find all the roots of polynomial equations with real coefficients \
+    parser.add_argument('-m', '--module', action='store', required=False, nargs="?",
+                        dest='initroot', const=True, default=False, type=float, help='Use the module \
+                        to find all the complex roots of polynomial equations with real coefficients \
                         of degree no more than 4. For example: \
                         "sin(pi/2)*x^3 - exp(e^2)*x = 666*x^2 + 1" -m get the answer: \
-                        x_1 = 668.42, x_2 = -2.42, x_3 = 0')
+                        x_1 = 668.42, x_2 = -2.42, x_3 = 0. You can use the optional INITROOT argument \
+                        to find the approximate value of the real root of an equation for one variable "x". \
+                        INITROOT - the initial approximation of the root. For example: " cos(x) = x^3 " -m 3 \
+                        get the answer: x_1 = 0.865474033. Used modified iteration Newton method with accuracy 1e-7.')
     args = parser.parse_args()
     return args
 
@@ -104,15 +108,17 @@ def replace_many_plus_minus(expression):
 
 def plus_reject(expression):
     A = {'+': 1, '-': 0}
-    begin = 0
+    begin = 1
     lst_expression = []
-    for indx, elem in enumerate(expression):
-        if elem in '+-' and expression[indx-1] not in ('/', '%', '^', '*'):
-            lst_expression.append(expression[begin:indx])
-            begin = indx+A[elem]
-    lst_expression.append(expression[begin:])
-    if lst_expression[0] == '':
-        lst_expression.remove('')
+    expr = del_space(expression, '+-')
+    expr = ' ' + replace_many_plus_minus(expr)
+    for indx, elem in enumerate(expr[2:]):
+        if elem in '+-' and expr[indx+1] not in ('/', '%', '^', '*'):
+            if expr[indx+1] == 'e' and expr[indx].isdigit():
+                continue
+            lst_expression.append(expr[begin:indx+2])
+            begin = indx + 2 + A[elem]
+    lst_expression.append(expr[begin:])
     return lst_expression
 
 
@@ -155,8 +161,6 @@ def calculation_without_quotient(expression):
 
 
 def calculation_without_brackets(expression):
-    expression = del_space(expression, '+-')
-    expression = replace_many_plus_minus(expression)
     lst_expression = plus_reject(expression)
     if len(lst_expression) == 1:
         return calculation(lst_expression[0])
@@ -200,7 +204,7 @@ def find_func(expression, indx, val):
         try:
             expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](val)), 1)
         except KeyError:
-            raise KeyError('ERROR: unknown function', st1)
+            raise KeyError('ERROR: unknown function {}'.format(st1))
         except TypeError:
             expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](*val)), 1)
         return expression

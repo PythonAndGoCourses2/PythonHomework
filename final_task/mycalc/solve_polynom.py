@@ -14,7 +14,7 @@ def solve_number(list_number):
 
 
 def solve_inf(list_number):
-    raise ValueError('equation is trivial and the solution is any real number')
+    raise ValueError('equation is trivial and the roots is any real number')
 
 
 def solv_linear_equation(list_number):
@@ -51,7 +51,7 @@ def get_canonical_cubic_form(list_number):
 
 def solv_cubic_equation(list_number):
     lst = get_canonical_cubic_form(list_number)
-    det = round((lst[1] / 3) ** 3 + (lst[0]/2) ** 2, 3)
+    det = round((lst[1] / 3) ** 3 + (lst[0]/2) ** 2, 7)
     t = - lst[0] / 2 + det ** 0.5
     alpha = complex_power(t)
     beta = [-lst[1] / 3 / elem if elem != 0 else 0 for elem in alpha]
