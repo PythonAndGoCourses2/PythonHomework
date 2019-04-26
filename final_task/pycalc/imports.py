@@ -1,11 +1,14 @@
 """"""
 # TODO: exception when import fails
 
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
+from functools import partial
 from importlib import import_module
 from inspect import getmembers
+from types import BuiltinFunctionType, FunctionType, LambdaType
 
 NUMERIC_TYPES = (int, float, complex)
+FUNCTION_TYPES = (BuiltinFunctionType, FunctionType, LambdaType, partial)
 UNDERSCORE = '_'
 DEFAULT_MODULE_NAMES = ('math',)
 
@@ -17,9 +20,15 @@ def dedupe_to_list(iterable) -> list:
 
 
 def is_numeric(obj) -> bool:
-    """Return `True` if a object is of numeric types"""
+    """Return `True` if a object is one of numeric types."""
 
     return isinstance(obj, (NUMERIC_TYPES))
+
+
+def is_function(obj) -> bool:
+    """Return `True` if a object is a function."""
+
+    return isinstance(obj, (FUNCTION_TYPES))
 
 
 def merge_module_names(module_names: tuple) -> list:
@@ -42,7 +51,7 @@ def get_module_members_names_by_type(module, type_checker) -> list:
 
 
 MEMBER_TYPES = {
-    'function': callable,
+    'function': is_function,
     'constants': is_numeric
 }
 
