@@ -7,9 +7,11 @@ from importlib import import_module
 from inspect import getmembers
 from types import BuiltinFunctionType, FunctionType, LambdaType
 
+
 NUMERIC_TYPES = (int, float, complex)
 FUNCTION_TYPES = (BuiltinFunctionType, FunctionType, LambdaType, partial)
 UNDERSCORE = '_'
+
 DEFAULT_MODULE_NAMES = ('math',)
 
 
@@ -51,7 +53,7 @@ def get_module_members_names_by_type(module, type_checker) -> list:
 
 
 MEMBER_TYPES = {
-    'function': is_function,
+    'functions': is_function,
     'constants': is_numeric
 }
 
