@@ -9,11 +9,10 @@ cheker = CheckAndChange. CheckAndChange()
 parser = argparse.ArgumentParser(description='Calculation')
 parser.add_argument('a', type=str, help='input your expression')
 parser.add_argument('-m', type=str, help='your oun module ')
-args = parser.parse_args()
 
 
 def start():
-
+    args = parser.parse_args()
     try:
 
         if args.a != "--help":
