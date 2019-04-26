@@ -14,7 +14,3 @@ setup(
     },
     platforms='any',
 )
-
-
-
-

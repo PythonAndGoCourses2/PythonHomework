@@ -94,9 +94,3 @@ def check_exception():
             print('ERROR: operator')
         else:
             return expression
-
-
-
-
-
-
