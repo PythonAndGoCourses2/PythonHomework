@@ -204,7 +204,7 @@ def find_func(expression, indx, val):
         try:
             expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](val)), 1)
         except KeyError:
-            raise KeyError('ERROR: unknown function {}'.format(st1))
+            raise KeyError('ERROR: unknown function', st1)
         except TypeError:
             expression = expression.replace(st+str(val)[1:-1], str(FUNCTIONS[st1](*val)), 1)
         return expression

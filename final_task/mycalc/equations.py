@@ -93,8 +93,8 @@ def total_solve_poly(expression):
     try:
         answer = cut_func(SOLVE_FUNCTION[len(total)](total))
     except KeyError:
-        raise KeyError("Oh, I can't solve equations of degree {}, {}".format(len(total)-1,
-                       'but you can specify the initial approximation of the root - INITROOT.'))
+        raise KeyError("Oh, I can't solve equations of degree {}".format(len(total)-1),
+                       'but you can specify the initial approximation of the root - INITROOT.')
     return answer
 
 
