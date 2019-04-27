@@ -12,9 +12,11 @@ def functions(token, *args):
     try:
         return config.all_functions[token](*args)
     except KeyError:
-        sys.exit('ERROR: this function is not supported.!')
+        print('ERROR: this function is not supported.!')
+        sys.exit(1)
     except TypeError:
-        sys.exit('ERROR: invalid number of arguments!')
+        print('ERROR: invalid number of arguments!')
+        sys.exit(1)
 
 
 def constants_calculation(token):
@@ -44,7 +46,8 @@ def object_type(obj):
             return int(obj)
         return obj
     except ValueError:
-        sys.exit('ERROR: unknown object - ' + obj)
+        print('ERROR: unknown object - ' + obj)
+        sys.exit(1)
 
 
 def pop_calculated_items(array, first_index, second_index, length):
