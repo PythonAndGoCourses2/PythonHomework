@@ -4,6 +4,7 @@ import config
 import math
 import validation
 import sys
+import argparse
 
 
 def validations(string):
@@ -18,26 +19,6 @@ def remove_space_between_operators(string):
         if token == ' ':
             array.pop(idx)
     return ''.join(array)
-
-
-def object_type(obj):
-    """Sets various objects to data types for calculations."""
-    try:
-        if type(obj) == str:
-            if obj[0] == '[':
-                array = []
-                for token in obj:
-                    if token.isdigit():
-                        array.append(object_type(token))
-                return array
-            elif obj == 'True' or obj == 'False':
-                return bool(obj)
-            elif '.' in obj:
-                return float(obj)
-            return int(obj)
-        return obj
-    except ValueError:
-        sys.exit('ERROR: unknown object - ' + obj)
 
 
 def split_all_comparison_characters(string):
@@ -211,7 +192,7 @@ def function_calculation(array):
                 index = idx
             else:
                 result = calculation(array[index+1:idx])
-                arguments.append(object_type(result))
+                arguments.append(tool.object_type(result))
                 index = idx
     return tool.functions(array[0], *arguments)
 
@@ -237,22 +218,6 @@ def search_for_all_atomic_brackets(array):
     return brackets_inside
 
 
-def pop_calculated_items(array, first_index, second_index, length):
-    """
-    Pulls out items to replace them with calculated ones.
-
-    Description: Due to the complexity of the operation of cyclical pulling elements by indexes(O(n)).
-    Implemented an automatic change of the following array elements to the offset delta.
-    """
-    index = first_index
-    for token in array[second_index:]:
-        array[index] = token
-        index += 1
-    for i in range(length):
-        array.pop()
-    return array
-
-
 def brackets_calculation(array):
     """
     Calculation slices with brackets.
@@ -271,7 +236,7 @@ def brackets_calculation(array):
                 if array[first_index - 1] == 'frexp':  # function frexp - input array
                     return result
                 length = len(array[first_index - 1:second_index + 1])
-                array = pop_calculated_items(array, first_index-1, second_index+1, length)
+                array = tool.pop_calculated_items(array, first_index-1, second_index+1, length)
                 if len(array) != 0:
                     if array[first_index - 2] == '-' or array[first_index - 2] == '+':
                         if result < 0:
@@ -286,22 +251,8 @@ def brackets_calculation(array):
             else:
                 result = calculation(array[first_index + 1:second_index])
                 length = len(array[first_index:second_index + 1])
-                array = pop_calculated_items(array, first_index, second_index + 1, length)
+                array = tool.pop_calculated_items(array, first_index, second_index + 1, length)
                 array.insert(first_index, str(result))
-    return array
-
-
-def replace_minus_and_negative_numbers(array):
-    """
-    Technical function. Replaces all the disadvantages in a simple expression by a plus,
-    and the value makes it negative. In order to equate the priority of minus and plus.
-
-    Example: 2-1+3 = -2 -->  2+(-1)+3 = 4
-    """
-    for idx, token in enumerate(array):
-        if token == '-' and array[idx+1][-1].isdigit():
-            array[idx] = '+'
-            array[idx+1] = str(-object_type(array[idx+1]))
     return array
 
 
@@ -312,7 +263,7 @@ def calculation(array):
     if array[0] in config.characters:
         array.insert(0, '0')
     if len(array) == 3:
-        result = tool.arithmetic(object_type(array[0]), object_type(array[2]), array[1])
+        result = tool.arithmetic(tool.object_type(array[0]), tool.object_type(array[2]), array[1])
         return result
     elif len(array) == 1:
         return array[0]
@@ -324,7 +275,8 @@ def calculation(array):
                     i = 1
                     while i <= len(array):
                         if array[-i] == token:
-                            result = tool.arithmetic(object_type(array[-i-1]), object_type(array[-i+1]), token)
+                            result = tool.arithmetic(tool.object_type(array[-i-1]),
+                                                     tool.object_type(array[-i+1]), token)
                             if len(array) == 3:
                                 return result
                             index = -i
@@ -334,8 +286,9 @@ def calculation(array):
                         i += 1
                 else:
                     idx = array.index(token)
-                    array = replace_minus_and_negative_numbers(array)
-                    result = tool.arithmetic(object_type(array[idx - 1]), object_type(array[idx + 1]), array[idx])
+                    array = tool.replace_minus_and_negative_numbers(array)
+                    result = tool.arithmetic(tool.object_type(array[idx - 1]),
+                                             tool.object_type(array[idx + 1]), array[idx])
                     if len(array) == 3:
                         return result
                     index = idx
@@ -362,4 +315,14 @@ def main(string):
     result = constants_switch(result)
     result = brackets_calculation(result)
     result = calculation(result)
-    return object_type(result)
+    return tool.object_type(result)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        usage='pycalc [-h] EXPRESSION',
+        description='Pure-python command-line calculator.'
+    )
+    parser.add_argument('EXPRESSION', help='expression string to evaluate')
+    args = parser.parse_args()
+    print(main(args.EXPRESSION))
