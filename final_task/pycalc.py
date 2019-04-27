@@ -57,7 +57,8 @@ def comparison_calculation(string):
                 try:
                     result = tool.comparison_calculation(main(array[idx-1]), main(array[idx+1]), array[idx])
                 except SystemExit:
-                    sys.exit('ERROR: no value to compare!')
+                    print('ERROR: no value to compare!')
+                    sys.exit(1)
                 if not result:
                     return False
                 return True
@@ -76,7 +77,8 @@ def replace_minus_plus_characters(string):
                     array[idx] = config.minus_plus_characters[array[idx] + array[idx+1]]
                     array.pop(idx+1)
             except IndexError:
-                sys.exit('ERROR: no value for expression!')
+                print('ERROR: no value for expression!')
+                sys.exit(1)
     return ''.join(array)
 
 
@@ -326,3 +328,5 @@ def start():
     parser.add_argument('EXPRESSION', help='expression string to evaluate')
     args = parser.parse_args()
     print(main(args.EXPRESSION))
+
+print(main("+"))

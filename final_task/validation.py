@@ -6,13 +6,15 @@ import config
 def empty_string(string):
     """Check for empty string."""
     if string == "":
-        sys.exit('ERROR: string is empty!')
+        print('ERROR: string is empty!')
+        sys.exit(1)
 
 
 def only_one_character(string):
     """Single character check."""
     if len(string) == 1 and not string.isdigit() and not string == 'e':
-        sys.exit('ERROR: only one character!')
+        print('ERROR: only one character!')
+        sys.exit(1)
 
 
 def space_between_numbers(string):
@@ -23,7 +25,8 @@ def space_between_numbers(string):
     """
     res = re.search(r'\d+\s+\d+', string)
     if res:
-        sys.exit('ERROR: space between numbers!')
+        print('ERROR: space between numbers!')
+        sys.exit(1)
 
 
 def incorrect_number_of_brackets(string):
@@ -35,7 +38,8 @@ def incorrect_number_of_brackets(string):
     count_left = string.count('(')
     count_right = string.count(')')
     if count_left != count_right:
-        sys.exit('ERROR: brackets are not balanced!')
+        print('ERROR: brackets are not balanced!')
+        sys.exit(1)
 
 
 def space_between_comparison_characters(string):
@@ -50,7 +54,8 @@ def space_between_comparison_characters(string):
             pattern = re.compile(token_1 + r'\s+' + token_2)
             res = pattern.search(string)
             if res is not None:
-                sys.exit('ERROR: space between comparison characters!')
+                print('ERROR: space between comparison characters!')
+                sys.exit(1)
 
 
 def space_between_math_characters(string):
@@ -69,7 +74,8 @@ def space_between_math_characters(string):
             pattern = re.compile('\\' + token_1 + r'\s+' + '\\' + token_2)
             res = pattern.search(string)
             if res is not None:
-                sys.exit('ERROR: space between math characters!')
+                print('ERROR: space between math characters!')
+                sys.exit(1)
 
 
 def main(string):
