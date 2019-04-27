@@ -139,7 +139,6 @@ def translate_reverse_exception(expression):
         elif expression[i].isalpha():
             i, func = write_func(expression, i)
             if i < len(expression) and expression[i] == '(':
-
                 operations.append(1)
                 operations.append(func)
             else:

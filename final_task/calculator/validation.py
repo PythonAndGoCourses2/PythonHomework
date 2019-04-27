@@ -9,6 +9,10 @@ def parse_command_line():
 
 
 def is_error_spaces(expression):
+    """This function first removes duplicate spaces.
+     It then checks for spaces between functions and numbers and double operators.
+    """
+    
     new_expression = expression[0]
     for item in expression[1:]:
         if item != ' ' or new_expression[-1] != ' ':
@@ -55,10 +59,12 @@ def is_operator_check(item, bracket):
 
 
 def is_error_operators(expression):
-    if is_operator_check(expression[0], '('):
-        return True
-    elif (expression[-1] in calc.OPERATION_PRIORITIES or expression[-1] == '!' or expression[-1] == '=') and\
-            expression[-1] != ')':
+    """This function first checks for incorrect operators at the beginning and end.
+    Then he looks for the wrong combination of operators.
+    """
+
+    if is_operator_check(expression[0], '(') or (expression[-1] in calc.OPERATION_PRIORITIES or expression[-1] == '!' or
+                                                 expression[-1] == '=') and expression[-1] != ')':
         return True
     is_only_operators = True
     i = 0
