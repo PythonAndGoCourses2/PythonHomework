@@ -328,5 +328,3 @@ def start():
     parser.add_argument('EXPRESSION', help='expression string to evaluate')
     args = parser.parse_args()
     print(main(args.EXPRESSION))
-
-print(main("+"))
