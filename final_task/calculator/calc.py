@@ -71,7 +71,10 @@ def allocate_operations(expression, operations, res_expression, item, i):
         else:
             if operations[-1].isalnum() or operations[-1] == '(':
                 operations.append(item)
-            elif OPERATION_PRIORITIES[item] >= OPERATION_PRIORITIES[operations[-1]] or operations[-1] == '(':
+            elif OPERATION_PRIORITIES[item] > OPERATION_PRIORITIES[operations[-1]] or operations[-1] == '(':
+                operations.append(item)
+            elif item in OPERATION_PRIORITIES.keys() and OPERATION_PRIORITIES[item] == OPERATION_PRIORITIES[
+                    operations[-1]] and OPERATION_PRIORITIES[item] == 3:
                 operations.append(item)
             else:
                 prior_operation = OPERATION_PRIORITIES[item]
