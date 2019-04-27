@@ -12,7 +12,7 @@ def is_error_spaces(expression):
     """This function first removes duplicate spaces.
      It then checks for spaces between functions and numbers and double operators.
     """
-    
+
     new_expression = expression[0]
     for item in expression[1:]:
         if item != ' ' or new_expression[-1] != ' ':
