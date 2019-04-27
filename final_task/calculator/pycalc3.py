@@ -4,16 +4,13 @@ import calculator.logic as c
 import importlib as imp
 import inspect 
 
-"""
-	В этом модуле происходит парсинг командной строки и вызов функции
-	Которая вычисляет выражение в строке
-"""
 
 def create_parser():
     parser = a.ArgumentParser(description="Pure-python command line calculator")
     parser.add_argument("EXPRESSION", metavar='EXPRESSION', help="expression string to evaluate", type=str, nargs='+')
     parser.add_argument("-m", "--user-modules", help = "additional modules to use", type=str, nargs = '*')
-    return parser;
+    return parser
+	
 
 def main():
     parser = create_parser()
@@ -34,6 +31,7 @@ def main():
         print(c.solve(solve))
     except Exception as err:
         print("ERROR: {}".format(err))
+		
 		
 if __name__ == "__main__":
 		main()
