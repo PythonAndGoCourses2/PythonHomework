@@ -37,8 +37,7 @@ def calculate_res_exception(res_expression):
     while i < len(res_expression):
         try:
             if res_expression[i] in OPERATION_PRIORITIES:
-                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2],
-                                                                       res_expression.pop(i - 1))
+                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2], res_expression.pop(i - 1))
                 i = 1
             if len(res_expression) != 1 and type(res_expression[i]) is str and res_expression[i].isalnum():
                 number = res_expression.pop(i-1)
@@ -109,15 +108,9 @@ def unloading_operations(res_expression, operations, prior_operation=-1, upload_
 
 def search_func(operations):
     i = len(operations)-1
-    if not operations[-1].isalnum():
-        while not operations[i].isalnum() and i != -1:
-            i = -1
-        else:
-            i -= 1
-    if type(operations[i - 1]) is int:
-        return i
-    else:
-        return i - 1
+    while not operations[i].isalnum():
+        i = i-1
+    return i
 
 
 def write_func(expression, i):
