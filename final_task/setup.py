@@ -14,6 +14,6 @@ setup(name='pycalc',
                   'pycalc = pycalc:start',
               ],
       },
-      py_modules=["pycalc"],
+      py_modules=['pycalc', 'tool', 'config', 'validation'],
       zip_safe=False,
       )
