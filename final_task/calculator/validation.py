@@ -47,25 +47,23 @@ def is_error_brackets(expression):
     return True
 
 
-operators_ignored = ['+', '-']
-
-
-def is_error_symbol(expression):
-    if (expression[0] in calc.OPERATION_PRIORITIES or expression[0] == '!' or expression[0] == '=') and\
-            expression[0] != '(' and expression[0] not in operators_ignored:
+def is_operator_check(item, bracket):
+    if (item in calc.OPERATION_PRIORITIES or item == '!' or item == '=') and \
+            item != '+' and item != '-' and item != bracket:
         return True
-    elif (expression[-1] in calc.OPERATION_PRIORITIES or expression[-1] == '=') and\
-            expression[-1] != ')' and expression[0] not in operators_ignored:
+    return False
+
+
+def is_error_operators(expression):
+    if is_operator_check(expression[0], '(') or is_operator_check(expression[-1], ')'):
         return True
     is_only_operators = True
     i = 0
     while i < len(expression)-1:
-        if expression[i].isalnum():
+        if is_only_operators and expression[i].isalnum():
             is_only_operators = False
-        if (expression[i] in calc.OPERATION_PRIORITIES.keys() or expression[i] == '=' or expression[i] == '!') and\
-                expression[i] != ')' and expression[i] not in operators_ignored:
-            if (expression[i+1] in calc.OPERATION_PRIORITIES.keys() or expression[i + 1] == '=') and\
-                    expression[i + 1] != '(' and expression[i+1] not in operators_ignored:
+        if is_operator_check(expression[i], ')'):
+            if is_operator_check(expression[i + 1], '('):
                 if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES:
                     i += 2
                     continue
@@ -73,7 +71,7 @@ def is_error_symbol(expression):
                     return True
         i += 1
     else:
-        if expression[i].isalnum():
+        if is_only_operators and expression[i].isalnum():
             is_only_operators = False
         if is_only_operators:
             return True
@@ -90,7 +88,7 @@ def check_exception():
         expression = del_spaces(expression)
         if is_error_brackets(expression):
             print('ERROR: brackets')
-        elif is_error_symbol(expression):
+        elif is_error_operators(expression):
             print('ERROR: operator')
         else:
             return expression
