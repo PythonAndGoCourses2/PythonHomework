@@ -11,7 +11,7 @@ setup(name='pycalc',
       packages=find_packages(),
       entry_points={
               'console_scripts': [
-                  'pycalc = pycalc:main',
+                  'pycalc = pycalc:start',
               ],
       },
       zip_safe=False,

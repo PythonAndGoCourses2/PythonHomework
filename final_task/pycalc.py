@@ -318,7 +318,7 @@ def main(string):
     return tool.object_type(result)
 
 
-if __name__ == '__main__':
+def start():
     parser = argparse.ArgumentParser(
         usage='pycalc [-h] EXPRESSION',
         description='Pure-python command-line calculator.'
