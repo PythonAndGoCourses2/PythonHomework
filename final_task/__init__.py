@@ -1,1 +1,2 @@
-name = "pycalc"
+def main():
+    return 0
