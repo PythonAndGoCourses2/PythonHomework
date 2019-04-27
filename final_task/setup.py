@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='pycalc',
-      version='0,1',
+      version='1.0',
       description='Pure python calculator',
       url='http://github.com/AndreyFesko/PythonHomework',
       author='Andrey Fesko',
