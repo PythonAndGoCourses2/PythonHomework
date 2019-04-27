@@ -7,7 +7,7 @@ setup(
     packages = [],
     entry_points={ 
         'console_scripts': [
-            'pycalc=pycalc:main',
+            'pycalc=__init__:main',
         ],
     }
 )
