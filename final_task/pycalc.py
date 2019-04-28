@@ -13,7 +13,7 @@ ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
 ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
 args = ap.parse_args()
 xpr = args.EXPRESSION
-mod = args.MODULE
+module = args.MODULE
 
 
 xprstr = ''
@@ -38,23 +38,21 @@ funcdic = math.__dict__  # dict of math functions
 funcset = set(funclist)
 
 opdic = {
-                '+':add, 
-                '-':sub, 
-                '*':mul, 
-                '/':truediv, 
-                '//':floordiv, 
-                '^':pow, 
-                '%':mod, 
-                 '==':eq, 
-                 '<=': le, 
-                 '>=': ge, 
-                 '<':lt, 
-                 '>': gt, 
-                 '!=':ne,
-                 'abs':abs,
-                 'round':round,
-                 'sum':sum
-                 }
+        '+':add,
+        '-':sub,
+        '*':mul,
+        '/':truediv,
+        '//':floordiv, '%':truediv, '^':pow,
+        '==':eq,
+        '<=': le,
+        '>=': ge,
+        '<':lt,
+        '>': gt,
+        '!=':ne,
+        'abs':abs,
+        'round':round,
+        'sum':sum
+        }
 funcdic.update(opdic)
 
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
@@ -63,19 +61,19 @@ operset = set(oper)
 
 
 
-def addfunc(mod):
+def addfunc(module):
     """ добавляет новую функцию из модуля """
-    if mod is not None:  # если введено имя модуля
-        spec = importlib.util.find_spec(mod)
+    if module is not None:  # если введено имя модуля
+        spec = importlib.util.find_spec(module)
         if spec is None:  # проверка возможности импорта модуля
-            print('ERROR: module {} not found'.format(mod))
+            print('ERROR: module {} not found'.format(module))
             exit(0)
         else:
-            newfunc = importlib.import_module(mod)  # импортирование нового модуля
+            newfunc = importlib.import_module(module)  # импортирование нового модуля
             # # print(dir(newfunc))
-            funcdic[mod] = newfunc.main
-            funclist.append(mod)
-            funcset.add(mod)
+            funcdic[module] = newfunc.main
+            funclist.append(module)
+            funcset.add(module)
     return
 
 
@@ -238,13 +236,13 @@ def logargs(*args):
 
 
 def operate(operator, args):
-    # # print('OPERATOR=',operator,'ARGS=',args)
+    # print('OPERATOR=',operator,'ARGS=',args)
 
     if operator in ['sum', 'fsum']:
-        # # print('OPERATOR=',operator,'ARGS=',args)
+        # print('OPERATOR=',operator,'ARGS=',args)
         result = funcdic[operator](args)
-    elif operator in dir(math) + dir(operator) and operator not in ['sum', 'fsum']:
-        # # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
+    elif operator in dir(math) + dir(operator)+['module'] and operator not in ['sum', 'fsum']:
+        # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
         if type(args) == float or type(args) == int or type(args) == bool :
             result = funcdic[operator](args)
         else:
@@ -412,18 +410,19 @@ def evalpostfix(xprpstfx):
 
 def main():
     # попытка добавления внешней функции если указана -m module
-    addfunc(mod)
+    addfunc(module)
     
     # разбор строики вырыжения в список
     xprlst = parse(xpr)
-    ## print(*xprlst, sep=' ')
+    #print(*xprlst, sep=' ')
     
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    ## print(*xprlst, sep=' ')
+    #print(*xprlst, sep=' ')
     
     # вычисление постфиксного списка
-    print(evalpostfix(xprlst))
+    res=evalpostfix(xprlst)
+    print(res)
     return
 
 
