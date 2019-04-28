@@ -357,7 +357,7 @@ def check_for_scientific_notation(number_str: str)-> str:
     :return: normal float number as string
     """
     e_index = number_str.find('e')
-    if e_index >= 0:
+    if e_index >= 0 and number_str.find('+') >= 0:
         remove_number = int(constants.RE_INTS.findall(number_str[e_index:])[0])
         if '+' in number_str:
             number_str = number_str[:e_index]
