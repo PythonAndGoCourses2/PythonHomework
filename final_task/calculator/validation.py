@@ -103,6 +103,7 @@ def is_error_operators(expression):
 
 def check_exception():
     expression = parse_command_line()[0]
+    dicts_modules = parse_added_modules()
     if expression is None or not expression.rstrip():
         print('ERROR: expression argument is required')
     elif is_error_spaces(expression):
@@ -114,4 +115,4 @@ def check_exception():
         elif is_error_operators(expression):
             print('ERROR: operator')
         else:
-            return expression
+            return expression, dicts_modules

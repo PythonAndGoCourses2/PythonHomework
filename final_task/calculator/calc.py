@@ -32,18 +32,27 @@ DICT_MATH['round'] = round
 DICT_MATH['abs'] = abs
 
 
-def calculate_res_exception(res_expression):
+def calculate_res_exception(res_expression, dicts_modules):
     i = 1
     while i < len(res_expression):
         try:
             if res_expression[i] in OPERATION_PRIORITIES:
-                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2], res_expression.pop(i - 1))
+                res_expression[i-2] = CALCULATE[res_expression.pop(i)](res_expression[i - 2],
+                                                                       res_expression.pop(i - 1))
                 i = 1
             if len(res_expression) != 1 and type(res_expression[i]) is str and res_expression[i].isalnum():
                 number = res_expression.pop(i-1)
                 i -= 1
                 args = res_expression[i-number:i]
-                res_expression[i] = DICT_MATH[res_expression[i]](*args)
+                is_in_dicts_modules = False
+                if dicts_modules is not None:
+                    for item in dicts_modules:
+                        if res_expression[i] in item:
+                            res_expression[i] = item[res_expression[i]](*args)
+                            is_in_dicts_modules = True
+                            break
+                if not is_in_dicts_modules:
+                    res_expression[i] = DICT_MATH[res_expression[i]](*args)
                 del res_expression[i-number:i]
                 i = 1
         except KeyError:
@@ -123,7 +132,7 @@ def write_func(expression, i):
     return i, func
 
 
-def translate_reverse_exception(expression):
+def translate_reverse_exception(expression, dicts_modules):
     res_expression = []
     operations = []
     i = 0
@@ -145,7 +154,15 @@ def translate_reverse_exception(expression):
                 operations.append(func)
             else:
                 try:
-                    res_expression.append(DICT_MATH[func])
+                    is_in_dicts_modules = False
+                    if dicts_modules is not None:
+                        for item in dicts_modules:
+                            if func in item:
+                                res_expression.append(item[func])
+                                is_in_dicts_modules = True
+                                break
+                    if not is_in_dicts_modules:
+                        res_expression.append(DICT_MATH[func])
                     i -= 1
                 except KeyError:
                     return ['ERROR: unknown constant']
@@ -161,11 +178,12 @@ def main():
     if check_exception() is None:
         return
     else:
-        expression = check_exception()
-        res_expression = translate_reverse_exception(expression)
-        result = calculate_res_exception(res_expression)
-        if type(result) is not float and type(result) is not bool and type(result) is not int:
-            print('ERROR: function')
+        expression, dicts_modules = check_exception()
+        res_expression = translate_reverse_exception(expression, dicts_modules)
+        result = calculate_res_exception(res_expression, dicts_modules)
+        if type(result) is not float and type(result) is not bool and type(result) is not int and type(result) is\
+                not str:
+            print('ERROR: incomplete expression')
         else:
             print(result)
 
