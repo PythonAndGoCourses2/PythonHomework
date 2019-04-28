@@ -37,7 +37,7 @@ def calculate(expression_str: str, methods=None) -> Any:
         normal_list = logic.str_parse(expression_str, methods)
         polish_list = logic.rebuild_into_polish_notation(normal_list, methods)
         calculation_result = logic.ex_calc(polish_list, methods)
-        if len(calculation_result) > 1:
+        if isinstance(calculation_result, list) and len(calculation_result) > 1:
             raise Exception('check your expression looks like you forgot an operator')
         calc_result = str(calculation_result)
         calc_result = logic.check_for_scientific_notation(calc_result)
