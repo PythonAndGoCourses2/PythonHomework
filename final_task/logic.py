@@ -151,7 +151,7 @@ def str_parse(ex_str: str, methods: dict) -> list:
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    ex_str = ex_str.replace(' ', '')
+    #ex_str = ex_str.replace(' ', '')
 
     for match in constants.RE_INCOMPLETE_FLOAT.findall(ex_str):
         ex_str = ex_str.replace(match, match[0] + '0' + match[1:])

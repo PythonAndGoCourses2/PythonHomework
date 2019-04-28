@@ -6,7 +6,7 @@ def main():
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
     parser.add_argument('EXPRESSION', action='store', type=str, help='expression string to evaluate')
     parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
-    arguments = parser.parse_args()
+    arguments = parser.parse_args(['6 / / 5'])
 
     if arguments.MODULE:
         arguments.MODULE = arguments.MODULE.replace(' ', '')
