@@ -204,6 +204,7 @@ def operate(operator, *args):
         if not (type(i) == float or type(i) == int or i == ','):
             print('ERROR: operate non digits')
             exit(0)
+<<<<<<< HEAD
 
     if operator in dir(math) and operator not in ['pow', 'log']:
         result = funcdict[operator](args[-1])
@@ -255,6 +256,37 @@ def operate(operator, *args):
     else:
         print('ERROR: unknown math operator', operator)
         result = 0
+=======
+    elif operator in dir(math) + dir(operator)+['module'] and operator not in ['sum', 'fsum']:
+        # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
+        if type(args) == float or type(args) == int or type(args) == bool:
+            try:
+                result = funcdic[operator](args)
+            except ArithmeticError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except TypeError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except ValueError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+        else:
+            try:
+                result = funcdic[operator](*args)
+            except ArithmeticError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except TypeError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except ValueError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+    # else:  # уже проверяется в парсинге и попыика импортировать модуль
+        # print('ERROR: unknown math operator', operator)
+        # result = 0
+>>>>>>> test
     return result
 
 
@@ -405,11 +437,36 @@ def main(xpr):
 
     return stack[0]
 
-
 # EVAL TEST
+<<<<<<< HEAD
 test = xpr
 test = test.replace('^', '**')
 test = test.replace(' ', '')
 test = test.replace(', ', '.')
+=======
+# test = xpr
+# test = test.replace('^', '**')
+# test = test.replace(' ', '')
+# test = test.replace(', ', '.')
+
+
+def main(xpr):
+    # попытка добавления внешней функции если указана -m module
+    addfunc(module)
+
+    # разбор строики вырыжения в список
+    xprlst = parse(xpr)
+    # print(*xprlst, sep=' ')
+
+    # преобразование инфиксного списка в постфиксных список
+    xprlst = postfix(xprlst)
+    # print(*xprlst, sep=' ')
+
+    # вычисление постфиксного списка
+    res = evalpostfix(xprlst)
+    # print(res)
+    return res
+
+>>>>>>> test
 
 print(main(xpr))
