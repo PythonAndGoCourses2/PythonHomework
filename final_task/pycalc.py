@@ -15,58 +15,51 @@ args = ap.parse_args()
 xpr = args.EXPRESSION
 module = args.MODULE
 
-
 xprstr = ''
 operator = ''
 xprlst = []
 a = 0.
 b = 0.
 result = 0.
-
-
 funcset = {}
 operset = {}
 splitset = {}
-
-
-
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 splitset = set(split)
-
 funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
 funcdic = math.__dict__  # dict of math functions
 funcset = set(funclist)
-
 opdic = {
-        '+':add,
-        '-':sub,
-        '*':mul,
-        '/':truediv,
-        '//':floordiv,
-        '%':mod,
-        '^':pow,
-        '==':eq,
+        '+': add,
+        '-': sub,
+        '*': mul,
+        '/': truediv,
+        '//': floordiv,
+        '%': mod,
+        '^': pow,
+        '==': eq,
         '<=': le,
         '>=': ge,
-        '<':lt,
+        '<': lt,
         '>': gt,
-        '!=':ne,
-        'abs':abs,
-        'round':round,
-        'sum':sum
+        '!=': ne,
+        'abs': abs,
+        'round': round,
+        'sum': sum
         }
 funcdic.update(opdic)
-
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
 operset = set(oper)
-
-
 
 
 def addfunc(module):
     """ добавляет новую функцию из модуля """
     if module is not None:  # если введено имя модуля
-        spec = importlib.util.find_spec(module)
+        try:
+            spec = importlib.util.find_spec(module)
+        except:
+            print('ERROR: module ', module,'not found, or unknown symbol')
+            exit(0)
         if spec is None:  # проверка возможности импорта модуля
             print('ERROR: module {} not found'.format(module))
             exit(0)
@@ -175,14 +168,14 @@ def parse(xprstr):
             else:
                 addfunc(word)  # импортировать неизвестную функцию
                 xprlst.append(word)
-                #print('ERROR: wrong symbol "', word, '"')
-                #exit(0)
+                # print('ERROR: wrong symbol "', word, '"')
+                # exit(0)
             xprlst.append(sym)
-            #  # # # print(xprlst)
+            # print(xprlst)
             word = ''
         else:
             word = word + sym
-            #  # # # print(word)
+            # print(word)
     xprlst.pop()    # удаляется добавленный пробел
 
     for i, data in enumerate(xprlst):
@@ -242,13 +235,25 @@ def operate(operator, args):
 
     if operator in ['sum', 'fsum']:
         # print('OPERATOR=',operator,'ARGS=',args)
-        result = funcdic[operator](args)
+        try:
+            result = funcdic[operator](args)
+        except:
+            print('ERROR: invalid argument for ', operator)
+            exit(0)
     elif operator in dir(math) + dir(operator)+['module'] and operator not in ['sum', 'fsum']:
         # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
-        if type(args) == float or type(args) == int or type(args) == bool :
-            result = funcdic[operator](args)
+        if type(args) == float or type(args) == int or type(args) == bool:
+            try:
+                result = funcdic[operator](args)
+            except:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
         else:
-            result = funcdic[operator](*args)
+            try:
+                result = funcdic[operator](*args)
+            except:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
     # else:  # уже проверяется в парсинге и попыика импортировать модуль
         # print('ERROR: unknown math operator', operator)
         # result = 0
@@ -373,20 +378,20 @@ def evalpostfix(xprpstfx):
         # # print('EVAL i = ', i, 'STACK=',stack)
         if i in funclist and i != ',':
             if len(stack) < 2:
-                stack[0] = operate(i,stack[0])
+                stack[0] = operate(i, stack[0])
             else:
-                j=len(stack)-2
+                j = len(stack)-2
                 args.append(stack[-1])
                 while stack[j] == ',':
                     args.append(stack[j-1])
                     stack.pop()
                     stack.pop()
-                    j=j-2
+                    j = j - 2
                 stack.pop()
                 args.reverse()
-                tmp = operate(i,args)
+                tmp = operate(i, args)
                 # print('TMP=',tmp)
-                args=[]
+                args = []
                 stack.append(tmp)
                 
             # print('STACK',stack)
@@ -416,16 +421,17 @@ def main():
 
     # разбор строики вырыжения в список
     xprlst = parse(xpr)
-    #print(*xprlst, sep=' ')
+    # print(*xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    #print(*xprlst, sep=' ')
+    # print(*xprlst, sep=' ')
 
     # вычисление постфиксного списка
-    res=evalpostfix(xprlst)
-    #print(res)
+    res = evalpostfix(xprlst)
+    # print(res)
     return res
+
 
 res = main()
 print(res)
