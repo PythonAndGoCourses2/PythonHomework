@@ -244,7 +244,10 @@ def operate(operator, args):
         if type(args) == float or type(args) == int or type(args) == bool:
             try:
                 result = funcdic[operator](args)
-            except ImportError:
+            except ArithmeticError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except TypeError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
             except ValueError:
@@ -254,6 +257,9 @@ def operate(operator, args):
             try:
                 result = funcdic[operator](*args)
             except ArithmeticError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except TypeError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
             except ValueError:
@@ -412,6 +418,7 @@ def evalpostfix(xprpstfx):
 # test = test.replace('^', '**')
 # test = test.replace(' ', '')
 # test = test.replace(', ', '.')
+
 
 def main(xpr):
     # попытка добавления внешней функции если указана -m module
