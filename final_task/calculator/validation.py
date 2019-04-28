@@ -9,6 +9,19 @@ def parse_command_line():
     return parser.parse_args().EXPRESSION, parser.parse_args().use_modules
 
 
+def parse_added_modules():
+    modules = parse_command_line()[1]
+    dicts_modules = []
+    if modules is None:
+        dicts_modules = None
+    try:
+        for item in modules:
+            dicts_modules.append(__import__(item).__dict__)
+    except ModuleNotFoundError:
+        return 'ERROR: Module Not Found'
+    return dicts_modules
+
+
 def is_error_spaces(expression):
     """This function first removes duplicate spaces.
      It then checks for spaces between functions and numbers and double operators.
