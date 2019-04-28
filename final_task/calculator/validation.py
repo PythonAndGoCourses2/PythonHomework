@@ -14,11 +14,12 @@ def parse_added_modules():
     dicts_modules = []
     if modules is None:
         dicts_modules = None
-    try:
-        for item in modules:
-            dicts_modules.append(__import__(item).__dict__)
-    except ModuleNotFoundError:
-        return 'ERROR: Module Not Found'
+    else:
+        try:
+            for item in modules:
+                dicts_modules.append(__import__(item).__dict__)
+        except ModuleNotFoundError:
+            return 'ERROR: Module Not Found'
     return dicts_modules
 
 
