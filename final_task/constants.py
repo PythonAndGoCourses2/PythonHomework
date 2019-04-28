@@ -53,3 +53,10 @@ RE_NEGATIVE_CONSTANTS = re.compile(r'[^\w)][\-][a-zA-Z]+[0-9]+|[^\w)][\-][a-zA-Z
 
 # list which extends by user import modules, and is used for import them
 imports = ['math']
+
+builtin_funcs_dict = {
+    'abs': abs,
+    'round': round,
+    'True': True,
+    'False': False
+}

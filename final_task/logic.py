@@ -116,10 +116,7 @@ def get_imports_attrs(user_imports: list, available_units: dict) -> dict:
     output_dict = dict()
     for element in user_imports:
         output_dict.update(_get_unit_attrs(element, available_units))
-    output_dict['abs'] = abs
-    output_dict['round'] = round
-    output_dict['True'] = True
-    output_dict['False'] = False
+    output_dict.update(constants.builtin_funcs_dict)
     return output_dict
 
 

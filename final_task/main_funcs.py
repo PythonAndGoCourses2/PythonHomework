@@ -31,7 +31,7 @@ def calculate(expression_str: str, methods=None) -> Any:
     """
     :param expression_str: mathematical expression to calculate
     :param methods: methods of user packages and package math
-    :return:
+    :return: result of calculation
     """
     try:
         normal_list = logic.str_parse(expression_str, methods)
