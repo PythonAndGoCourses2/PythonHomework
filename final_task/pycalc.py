@@ -424,7 +424,9 @@ def main():
 
     # вычисление постфиксного списка
     res=evalpostfix(xprlst)
-    print(res)
+    #print(res)
     return res
 
-main()
+res = main()
+print(res)
+
