@@ -151,8 +151,6 @@ def str_parse(ex_str: str, methods: dict) -> list:
     if ex_str.count('(') != ex_str.count(')'):
         raise Exception('brackets are not balanced')
 
-    #ex_str = ex_str.replace(' ', '')
-
     for match in constants.RE_INCOMPLETE_FLOAT.findall(ex_str):
         ex_str = ex_str.replace(match, match[0] + '0' + match[1:])
 
@@ -166,21 +164,6 @@ def str_parse(ex_str: str, methods: dict) -> list:
             if not ex_str.count(operators):
                 break
 
-    while re_multiple_minuses.findall(ex_str) or re_multiple_pluses.findall(ex_str):
-        for minuses in re_multiple_minuses.findall(ex_str):
-            if minuses.count('-') % 2 == 0:
-                ex_str = ex_str.replace(minuses, '+')
-            elif minuses.count('-') % 2 != 0:
-                ex_str = ex_str.replace(minuses, '-')
-        for pluses in re_multiple_pluses.findall(ex_str):
-            ex_str = ex_str.replace(pluses, '+')
-
-    for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
-        if re_function.findall(negative_value) and \
-                callable(methods[re_function.findall(negative_value)[0]]):
-            continue
-        ex_str = ex_str.replace(negative_value, negative_value[0] + '(0' + negative_value[1:] + ')')
-
     while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
         for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
             negative_func_start_index = ex_str.find(negative_func)+1
@@ -190,6 +173,23 @@ def str_parse(ex_str: str, methods: dict) -> list:
 
     if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
         ex_str = '0' + ex_str
+
+    ex_str = ex_str.replace(' ', '')
+
+    for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
+        if re_function.findall(negative_value) and \
+                callable(methods[re_function.findall(negative_value)[0]]):
+            continue
+        ex_str = ex_str.replace(negative_value, negative_value[0] + '(0' + negative_value[1:] + ')')
+
+    while re_multiple_minuses.findall(ex_str) or re_multiple_pluses.findall(ex_str):
+        for minuses in re_multiple_minuses.findall(ex_str):
+            if minuses.count('-') % 2 == 0:
+                ex_str = ex_str.replace(minuses, '+')
+            elif minuses.count('-') % 2 != 0:
+                ex_str = ex_str.replace(minuses, '-')
+        for pluses in re_multiple_pluses.findall(ex_str):
+            ex_str = ex_str.replace(pluses, '+')
 
     parse_list = constants.RE_MAIN_PARSE_ARG.findall(ex_str)
 

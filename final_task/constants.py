@@ -47,7 +47,7 @@ RE_INTS = re.compile(r'\d+')
 RE_FLOATS = re.compile(r'\d+[.]\d+')
 RE_FUNCTIONS = re.compile(r'[a-zA-Z]+[0-9]+|[a-zA-Z]+')
 RE_OPERATIONS = re.compile(r'[(<=!>+\-*/%^]+')
-RE_NEGATIVE_FUNCS = re.compile(r'[^\w)]-\w+')
+RE_NEGATIVE_FUNCS = re.compile(r'[^\w)]-[a-zA-Z]+[0-9]+|[^\w)]-[a-zA-Z]+')
 RE_INCOMPLETE_FLOAT = re.compile(r'[^\d][.]\d')
 RE_NEGATIVE_CONSTANTS = re.compile(r'[^\w)][\-][a-zA-Z]+[0-9]+|[^\w)][\-][a-zA-Z]+')
 
