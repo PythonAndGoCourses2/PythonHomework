@@ -1,12 +1,13 @@
-# test 26 apr
+# test
 import argparse
 import math
-import operator
-from operator import *
 import string
 import importlib
 import importlib.util
 from math import *
+
+#import myfunc1
+# from myfunc import func1
 
 ap = argparse.ArgumentParser(description='Pure-python command-line calculator.')
 ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
@@ -14,7 +15,34 @@ ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...]
 args = ap.parse_args()
 xpr = args.EXPRESSION
 mod = args.MODULE
+print ('111111111111',mod)
 
+
+
+
+
+funcset = {}
+operset = {}
+splitset = {}
+
+split = ('^',       '/', '*', '%', '-', '+', '=',              '<', '>', '!',  '(', ')', ',')
+splitset = set(split)
+
+funclist = dir(math)+['abs', 'round', mod]      # list of math functions names
+funcdict = math.__dict__          # dict of math functions
+funcdict['abs'] = abs
+funcdict['round'] = round
+
+if mod is not None:  # если введено имя модуля
+    spec = importlib.util.find_spec(mod)
+    print('spec=', spec)
+    if spec is None:  # проверка возможности импорта модуля
+        print('ERROR: module {} not found'.format(mod))
+        exit(0)
+    else:
+        newfunc = importlib.import_module(mod)  # импортирование нового модуля
+        print(dir(newfunc))
+        funcdict[mod] = newfunc.main  # добавление в словарь новой функции
 
 xprstr = ''
 operator = ''
@@ -22,71 +50,23 @@ xprlst = []
 a = 0.
 b = 0.
 result = 0.
-
-
-funcset = {}
-operset = {}
-splitset = {}
-
-
-
-split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
-splitset = set(split)
-
-funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
-funcdic = math.__dict__  # dict of math functions
 funcset = set(funclist)
-
-opdic = {
-                '+':add, 
-                '-':sub, 
-                '*':mul, 
-                '/':truediv, 
-                '//':floordiv, 
-                '^':pow, 
-                '%':mod, 
-                 '==':eq, 
-                 '<=': le, 
-                 '>=': ge, 
-                 '<':lt, 
-                 '>': gt, 
-                 '!=':ne,
-                 'abs':abs,
-                 'round':round,
-                 'sum':sum
-                 }
-funcdic.update(opdic)
 
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
 operset = set(oper)
+operhi = ['^'] + funclist                   # 3
+opermid = ['*', '/', '%']                        # 2
+operlow = ['+', '-']                        # 1
+operlowest = ['(', ')', '==', '<=', '>=', '<', '>', '!=', ',']           # 0
 
 
-
-
-def addfunc(mod):
-    """ добавляет новую функцию из модуля """
-    if mod is not None:  # если введено имя модуля
-        spec = importlib.util.find_spec(mod)
-        if spec is None:  # проверка возможности импорта модуля
-            print('ERROR: module {} not found'.format(mod))
-            exit(0)
-        else:
-            newfunc = importlib.import_module(mod)  # импортирование нового модуля
-            # print(dir(newfunc))
-            funcdic[mod] = newfunc.main
-            funclist.append(mod)
-            funcset.add(mod)
-    return
-
-
+# разбор строки на элементы списка
 def parse(xprstr):
-    """ парсинг строки математического выражения.
-    на выходе список в инфиксной нотации"""
     word = ''
+
+    # проверка недопустимых символов
     exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
     xprset = set(xprstr)
-                 
-    # проверка если строка выражения содержит недопустимые символы             
     if not exset.isdisjoint(xprset):
         print('ERROR: unknown symbol')
         exit(0)
@@ -94,8 +74,11 @@ def parse(xprstr):
     if xpr.count('(') != xpr.count(')'):
         print('ERROR: brackets are not balanced')
         exit(0)
-    # проверка если выражение состоит только из знаков пунктуации
-    if xprset.issubset(string.punctuation) or xprset.issubset(funcset):
+
+    # проверка если состоит только из знаков пунктуации
+    punctset = set(string.punctuation)
+    xprset = set(xprstr)
+    if xprset.issubset(punctset) or xprset.issubset(funcset):
         print('ERROR: no digits or functions')
         exit(0)
 
@@ -112,48 +95,52 @@ def parse(xprstr):
     xprstr = xprstr.replace('+-', '-')
     xprstr = xprstr.replace('-+', '-')
 
+    # # print(xprstr)
+
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
-    # проверка лишних пробелов
+    # проверка пробелов
     if xprstr.count(' ') > 0:
         print('ERROR: useles spaces')
         exit(0)
 
     # добавление скобок для возведения в степень 2^3^4
-    lt = 0
-    rt = len(xprstr)
+    left = 0
+    r = len(xprstr)
     for x in range(xprstr.count('^')):
-        rt = xprstr.rindex('^', 0, rt)
-        # print('rt=', rt, '   ', xprstr[:rt])
-        if xprstr[:rt].count('^') == 0:
+        r = xprstr.rindex('^', 0, r)
+        # print('r=', r, '   ', xprstr[:r])
+        if xprstr[:r].count('^') == 0:
             break
-        lt = xprstr.rindex('^', 0, rt)+1
-        # # print('lt=', lt, 'rt=', rt, '     ', xprstr[lt:rt])
-        tmp = xprstr[lt:rt]
+        left = xprstr.rindex('^', 0, r)+1
+        # # print('left=', left, 'r=', r, '     ', xprstr[left:r])
+        tmp = xprstr[left:r]
         # # print('tmp=', tmp)
         tmpset = set(tmp)
         # # print('tmpset', tmpset)
         # # print('operset', operset)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
             # # print('нада скобки для степени')
-            xprstr = xprstr[:lt]+'('+xprstr[lt:]
+            xprstr = xprstr[:left]+'('+xprstr[left:]
             # # print(xprstr)
-            lt = rt+2
+
+            left = r+2
             # # print(xprstr[l:])
-            rt = len(xprstr)
-            for i, data in enumerate(xprstr[lt:]):
+
+            r = len(xprstr)
+            for i, data in enumerate(xprstr[left:]):
                 if data in split and data != '(':
-                    rt = lt+i
+                    r = left+i
                     break
-            # # print('lt=', lt, 'rt=', rt, '   ', xprstr[lt:rt])
-            tmp = xprstr[lt:rt]
+            # # print('left=', left, 'r=', r, '   ', xprstr[left:r])
+            tmp = xprstr[left:r]
             # # print(tmp)
-            xprstr = xprstr[:rt]+')'+xprstr[rt:]
+            xprstr = xprstr[:r]+')'+xprstr[r:]
             # # print(xprstr)
         else:
-            # # print('НЕ надо скобки', lt, rt)
-            rt = lt
+            # # print('НЕ надо скобки', left, r)
+            r = left
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
@@ -173,10 +160,8 @@ def parse(xprstr):
                 pass
                 #  # # print('ok', word)
             else:
-                addfunc(word)  # импортировать неизвестную функцию
-                xprlst.append(word)
-                #print('ERROR: wrong symbol "', word, '"')
-                #exit(0)
+                print('ERROR: wrong symbol "', word, '"')
+                exit(0)
             xprlst.append(sym)
             #  # # print(xprlst)
             word = ''
@@ -237,37 +222,66 @@ def logargs(*args):
     return res
 
 
-def operate(operator, args):
-    # print('OPERATOR=',operator,'ARGS=',args)
+def operate(operator, *args):
+    print('OPERATOR=',operator,'ARGS=',args)
+    for i in args:
+        if not (type(i) == float or type(i) == int):
+            print('ERROR: operate non digits')
+            exit(0)
 
-    if operator in ['sum', 'fsum']:
-        # print('OPERATOR=',operator,'ARGS=',args)
-        result = funcdic[operator](args)
-    elif operator in dir(math) + dir(operator) and operator not in ['sum', 'fsum']:
-        # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
-        if type(args) == float or type(args) == int or type(args) == bool :
-            result = funcdic[operator](args)
+    if operator in dir(math):
+        result = funcdict[operator](*args)
+
+    elif operator == "+":
+        result = args[0] + args[1]
+    elif operator == "-":
+        result = args[0] - args[1]
+    elif operator == "*":
+        result = args[0] * args[1]
+    elif operator == "//":
+        if args[1] != 0:
+            result = args[0] // args[1]
         else:
-            result = funcdic[operator](*args)
-    # else:  # уже проверяется в парсинге и попыика импортировать модуль
-        # print('ERROR: unknown math operator', operator)
-        # result = 0
+            print('ERROR: division by zero')
+            exit(0)
+    elif operator == "/":
+        if args[1] != 0:
+            result = args[0] / args[1]
+        else:
+            print('ERROR: division by zero')
+            exit(0)
+    elif operator == "%":
+        result = args[0] % args[1]
+    elif operator == "^":
+        result = args[0] ** args[1]
+    elif operator == "<=":
+        result = args[0] <= args[1]
+    elif operator == ">=":
+        result = args[0] >= args[1]
+    elif operator == "<":
+        result = args[0] < args[1]
+    elif operator == ">":
+        result = args[0] > args[1]
+    elif operator == "==":
+        result = args[0] == args[1]
+    elif operator == "!=":
+        result = args[0] != args[1]
+    else:
+        print('ERROR: unknown math operator', operator)
+        result = 0
     return result
 
 
 def prior(op1, op2):
-    """ сравнивает приоритеты математических опрераторов и функций op1 <= op2, возвращает bool """
-    operhi = ['^'] + funclist                                           # 3
-    opermid = ['*', '/', '%']                                           # 2
-    operlow = ['+', '-']                                                # 1
-    operlowest = ['(', ')', '==', '<=', '>=', '<', '>', '!=', ',']      # 0
     priorset = [operlowest, operlow, opermid, operhi]
     for i, data in enumerate(priorset):
+        # # # print(op1, i, data, )
         if op1 in data:
-            pr1 = i
+            prior1 = i
         if op2 in data:
-            pr2 = i
-    return pr1 <= pr2
+            prior2 = i
+    # # # print(prior1 <= prior2)
+    return prior1 <= prior2
 
 
 def postfix(xprlst):
@@ -357,7 +371,13 @@ def postfix(xprlst):
     # # print('stack=', *stack, sep=' ')
 
     stack.reverse()
-    return output + stack
+    pol = output + stack  # poland
+
+    # # print(xpr)
+    # # print('POLAND:', *pol, sep=' ')
+    return pol
+
+
 
 
 def evalpostfix(xprpstfx):
@@ -370,61 +390,95 @@ def evalpostfix(xprpstfx):
     args = []
     for i in xprpstfx:
         # # print('---------------')
-        # print('EVAL i = ', i, 'STACK=',stack)
+        print('EVAL i = ', i, 'STACK=',stack)
+
+
+
         if i in funclist and i != ',':
-            if len(stack) < 2:
-                stack[0] = operate(i,stack[0])
-            else:
+
+            if stack[-2] == ',':
                 j=len(stack)-2
-                args.append(stack[-1])
                 while stack[j] == ',':
                     args.append(stack[j-1])
                     stack.pop()
                     stack.pop()
                     j=j-2
-                stack.pop()
                 args.reverse()
-                tmp = operate(i,args)
-                print('TMP=',tmp)
-                args=[]
-                stack.append(tmp)
-                
-            print('STACK',stack)
+                print('j=',j+1,stack[j+1:])
+                print('ARGS=',args)
+                print('STACK',stack)
+            else:
+                args.append(stack[-1])
 
-        elif i in oper and i != ',':
-            tmp = operate(i, stack[-2:])
-            stack.pop()
-            stack.pop()
+
+            tmp = operate(i, *args)
+            print('TMP=',tmp)
+            args=[]
             stack.append(tmp)
             print('STACK',stack)
 
+        elif i in oper and i != ',':
+
+            print('ARGS=',args)
+            print('STACK',stack)
+            tmp = operate(i, stack[-2], stack[-1])
+            print('TMP=',tmp)
+            stack.pop()
+            stack.pop()
+            stack.append(tmp)
+
+            print('STACK',stack)
+
+
+
+
+        #
+        # if i in oper+['pow', 'log'] and i != ',':
+        #     print(stack, '+++++++++ to pow or log')
+        #     tmp = operate(i, *stack)
+        #     # # print(i, '=', tmp)
+        #     if ',' in stack and i in ['pow', 'log']:
+        #         if stack[-2] == ',':
+        #             stack.pop()
+        #             stack.pop()
+        #             stack.pop()
+        #             stack.append(tmp)
+        #     elif i in oper:
+        #         stack.pop()
+        #         stack.pop()
+        #         stack.append(tmp)
+        #     else:
+        #         stack.pop()
+        #         stack.append(tmp)
+        #     # # print('stack=', stack)
+        # elif i in funclist and i not in ['pow', 'log']:
+        #     tmp = operate(i, *stack)
+        #     stack[-1] = tmp
+        #     print('stack=', stack)
+
+
+
         else:
             stack.append(i)
+            # # print('stack=', stack)
 
     return stack[0]
 
 
 # EVAL TEST
-# test = xpr
-# test = test.replace('^', '**')
-# test = test.replace(' ', '')
-# test = test.replace(', ', '.')
+test = xpr
+test = test.replace('^', '**')
+test = test.replace(' ', '')
+test = test.replace(', ', '.')
 
-def main():
-    # попытка добавления внешней функции если указана -m module
-    addfunc(mod)
-    
-    # разбор строики вырыжения в список
-    xprlst = parse(xpr)
-    #print(*xprlst, sep=' ')
-    
-    # преобразование инфиксного списка в постфиксных список
-    xprlst = postfix(xprlst)
-    #print(*xprlst, sep=' ')
-    
-    # вычисление постфиксного списка
-    print(evalpostfix(xprlst))
-    return
+# разбор строики в список
+xprlst = parse(xpr)
+print(*xprlst, sep=' ')
 
+# преобразование инфиксного списка в постфиксных список
+xprlst = postfix(xprlst)
+print(*xprlst, sep=' ')
 
-main()
+# вычисление постфиксного списка
+result = evalpostfix(xprlst)
+print(result)
