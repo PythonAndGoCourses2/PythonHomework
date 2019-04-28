@@ -57,8 +57,8 @@ def addfunc(module):
     if module is not None:  # если введено имя модуля
         try:
             spec = importlib.util.find_spec(module)
-        except:
-            print('ERROR: module ', module,'not found, or unknown symbol')
+        except ImportError:
+            print('ERROR: module ', module, 'not found, or unknown symbol')
             exit(0)
         if spec is None:  # проверка возможности импорта модуля
             print('ERROR: module {} not found'.format(module))
@@ -237,7 +237,7 @@ def operate(operator, args):
         # print('OPERATOR=',operator,'ARGS=',args)
         try:
             result = funcdic[operator](args)
-        except:
+        except ArithmeticError:
             print('ERROR: invalid argument for ', operator)
             exit(0)
     elif operator in dir(math) + dir(operator)+['module'] and operator not in ['sum', 'fsum']:
@@ -245,13 +245,19 @@ def operate(operator, args):
         if type(args) == float or type(args) == int or type(args) == bool:
             try:
                 result = funcdic[operator](args)
-            except:
+            except ImportError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except ValueError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
         else:
             try:
                 result = funcdic[operator](*args)
-            except:
+            except ArithmeticError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
+            except ValueError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
     # else:  # уже проверяется в парсинге и попыика импортировать модуль
