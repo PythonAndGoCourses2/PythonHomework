@@ -407,14 +407,13 @@ def evalpostfix(xprpstfx):
             stack.append(i)
     return stack[0]
 
-
 # EVAL TEST
 # test = xpr
 # test = test.replace('^', '**')
 # test = test.replace(' ', '')
 # test = test.replace(', ', '.')
 
-def main():
+def main(xpr):
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
 
@@ -432,5 +431,4 @@ def main():
     return res
 
 
-res = main()
-print(res)
+print(main(xpr))
