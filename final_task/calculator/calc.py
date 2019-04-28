@@ -132,6 +132,21 @@ def write_func(expression, i):
     return i, func
 
 
+def add_constant_to_res_expression(res_expression, func, dicts_modules):
+    try:
+        is_in_dicts_modules = False
+        if dicts_modules is not None:
+            for item in dicts_modules:
+                if func in item:
+                    res_expression.append(item[func])
+                    is_in_dicts_modules = True
+                    break
+        if not is_in_dicts_modules:
+            res_expression.append(DICT_MATH[func])
+    except KeyError:
+        return ['ERROR: unknown constant']
+
+
 def translate_reverse_exception(expression, dicts_modules):
     res_expression = []
     operations = []
@@ -153,19 +168,11 @@ def translate_reverse_exception(expression, dicts_modules):
                 operations.append(1)
                 operations.append(func)
             else:
-                try:
-                    is_in_dicts_modules = False
-                    if dicts_modules is not None:
-                        for item in dicts_modules:
-                            if func in item:
-                                res_expression.append(item[func])
-                                is_in_dicts_modules = True
-                                break
-                    if not is_in_dicts_modules:
-                        res_expression.append(DICT_MATH[func])
+                if add_constant_to_res_expression(res_expression, func, dicts_modules) is None:
                     i -= 1
-                except KeyError:
-                    return ['ERROR: unknown constant']
+                else:
+                    return add_constant_to_res_expression(res_expression, func, dicts_modules)
+
         else:
             return ['ERROR: unknown character']
         i += 1
