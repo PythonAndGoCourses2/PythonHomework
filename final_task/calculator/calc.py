@@ -32,6 +32,22 @@ DICT_MATH['round'] = round
 DICT_MATH['abs'] = abs
 
 
+def calculate_function(res_expression, dicts_modules, i):
+    number = res_expression.pop(i - 1)
+    i -= 1
+    args = res_expression[i - number:i]
+    is_in_dicts_modules = False
+    if dicts_modules is not None:
+        for item in dicts_modules:
+            if res_expression[i] in item:
+                res_expression[i] = item[res_expression[i]](*args)
+                is_in_dicts_modules = True
+                break
+    if not is_in_dicts_modules:
+        res_expression[i] = DICT_MATH[res_expression[i]](*args)
+    del res_expression[i - number:i]
+
+
 def calculate_res_exception(res_expression, dicts_modules):
     i = 1
     while i < len(res_expression):
@@ -41,19 +57,7 @@ def calculate_res_exception(res_expression, dicts_modules):
                                                                        res_expression.pop(i - 1))
                 i = 1
             if len(res_expression) != 1 and type(res_expression[i]) is str and res_expression[i].isalnum():
-                number = res_expression.pop(i-1)
-                i -= 1
-                args = res_expression[i-number:i]
-                is_in_dicts_modules = False
-                if dicts_modules is not None:
-                    for item in dicts_modules:
-                        if res_expression[i] in item:
-                            res_expression[i] = item[res_expression[i]](*args)
-                            is_in_dicts_modules = True
-                            break
-                if not is_in_dicts_modules:
-                    res_expression[i] = DICT_MATH[res_expression[i]](*args)
-                del res_expression[i-number:i]
+                calculate_function(res_expression, dicts_modules, i)
                 i = 1
         except KeyError:
             return 'ERROR: unknown function'
