@@ -5,7 +5,8 @@ from calculator import calc
 def parse_command_line():
     parser = ArgumentParser(description='Pure-python command-line calculator')
     parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
-    return parser.parse_args().EXPRESSION
+    parser.add_argument('-m', '--use-modules', required=False, nargs='+', help='additional modules to use')
+    return parser.parse_args().EXPRESSION, parser.parse_args().use_modules
 
 
 def is_error_spaces(expression):
@@ -88,7 +89,7 @@ def is_error_operators(expression):
 
 
 def check_exception():
-    expression = parse_command_line()
+    expression = parse_command_line()[0]
     if expression is None or not expression.rstrip():
         print('ERROR: expression argument is required')
     elif is_error_spaces(expression):
