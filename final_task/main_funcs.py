@@ -6,11 +6,17 @@ module which pack main logic functions into functions which more easier to under
 
 import logic
 import constants
-import pycodestyle
 from typing import Any
 
 
 def calc_init(user_imports=None)-> dict:
+    """
+
+    function gets methods of user packages and package math
+
+    :param user_imports: list of strings which contains user import methods
+    :return: methods of user packages and package math
+    """
     try:
         if user_imports:
             constants.imports.extend(user_imports)
@@ -22,9 +28,16 @@ def calc_init(user_imports=None)-> dict:
 
 
 def calculate(expression_str: str, methods=None) -> Any:
+    """
+    :param expression_str: mathematical expression to calculate
+    :param methods: methods of user packages and package math
+    :return:
+    """
     try:
         normal_list = logic.str_parse(expression_str, methods)
         polish_list = logic.rebuild_into_polish_notation(normal_list, methods)
-        return logic.ex_calc(polish_list, methods)
+        calc_result = str(logic.ex_calc(polish_list, methods))
+        calc_result = logic.check_for_scientific_notation(calc_result)
+        return calc_result
     except Exception as ex:
         print('ERROR: {}\n'.format(ex))

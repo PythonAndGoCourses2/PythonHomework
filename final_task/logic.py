@@ -6,7 +6,6 @@ module which contains methods which make up base logic of the calculator
 import re
 import importlib
 import constants
-import pycodestyle
 from typing import Any
 
 
@@ -187,7 +186,10 @@ def str_parse(ex_str: str, methods: dict) -> list:
 
     while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
         for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
-            ex_str = ex_str.replace(negative_func, negative_func[0] + '(0' + negative_func[1:] + ')')
+            negative_func_start_index = ex_str.find(negative_func)+1
+            all_func = _find_negative_func(ex_str, negative_func_start_index)
+            ex_str = ex_str.replace(all_func, '(0'+all_func+')')
+            continue
 
     if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
         ex_str = '0' + ex_str
@@ -205,8 +207,8 @@ def _get_priority(expression: str) -> int:
     :param expression: mathematical operator
     :return: priority of given operator as integer
     """
-    if expression in constants.priority_dict.keys():
-        return constants.priority_dict[expression]
+    if expression in constants.operations_priority_dict.keys():
+        return constants.operations_priority_dict[expression]
     else:
         return -1
 
@@ -323,9 +325,52 @@ def ex_calc(polish_list: list, methods: dict) -> Any:
         if constants.RE_OPERATIONS.findall(ex):  # if found operation perform it
             second_val = _get_item_by_type(output_list.pop(), methods)
             first_val = _get_item_by_type(output_list.pop(), methods)
-            output_list.append(constants.operator[ex](first_val, second_val))
+            output_list.append(constants.operators_methods_dict[ex](first_val, second_val))
             continue
     if len(output_list) > 1:
         return output_list
     else:
         return _get_item_by_type(output_list[0], methods)
+
+
+def _find_negative_func(ex_str: str, func_index: int)-> str:
+    last_bracket_index = func_index
+    first_bracket_found = False
+    brackets_count = 0
+    for char in ex_str[func_index:]:
+        last_bracket_index += 1
+        if char == '(':
+            if not first_bracket_found:
+                first_bracket_found = True
+            brackets_count += 1
+            continue
+        if char == ')':
+            brackets_count -= 1
+            if not brackets_count:
+                break
+    return ex_str[func_index:last_bracket_index]
+
+
+def check_for_scientific_notation(number_str: str)-> str:
+    """
+
+    convert scientific notation of float numbers into normal float
+
+    :param number_str: scientific notation number as string
+    :return: normal float number as string
+    """
+    e_index = number_str.find('e')
+    if e_index >= 0:
+        remove_number = int(constants.RE_INTS.findall(number_str[e_index:])[0])
+        if '+' in number_str:
+            number_str = number_str[:e_index]
+            number_str = number_str.replace('.', '')
+            number_str = number_str[:remove_number]+'.'+number_str[remove_number:]
+            if number_str[-1] == '.':
+                number_str = number_str + '0'
+        elif '-' in number_str:
+            number_str = number_str[:e_index]
+            number_str = number_str.replace('.', '')
+            nulls = ['0' for _ in range(remove_number-1)]
+            number_str = '0.' + ''.join(nulls) + number_str
+    return number_str
