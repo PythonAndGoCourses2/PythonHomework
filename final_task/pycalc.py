@@ -14,7 +14,7 @@ class ArgParser:
     The class contains methods for args parsing.
     Use ArgParser.parse().
     """
-    class __ArgumentParserError(argparse.ArgumentParser):
+    class __ArgumentParser(argparse.ArgumentParser):
         """
         Overrides original exception-type to exception-type with human-readable error explanation.
         Write "ERROR: <message>" in stdout. Then return exit code 2.
@@ -26,8 +26,8 @@ class ArgParser:
     @classmethod
     def parse(cls):
         """Parse args from CLI and return a tuple: (expression: str, (modules: str): tuple)."""
-        parser = cls.__ArgumentParserError(prog="pycalc", description="Pure-python command-line calculator.",
-                                           usage="pycalc [-h] EXPRESSION [-m MODULE [MODULE ...]]")
+        parser = cls.__ArgumentParser(prog="pycalc", description="Pure-python command-line calculator.",
+                                      usage="pycalc [-h] EXPRESSION [-m MODULE [MODULE ...]]")
 
         if len(sys.argv) == 1:
             parser.print_usage()
