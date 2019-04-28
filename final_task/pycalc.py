@@ -398,19 +398,13 @@ def evalpostfix(xprpstfx):
                 # print('TMP=',tmp)
                 args = []
                 stack.append(tmp)
-                
-            # print('STACK',stack)
-
         elif i in oper and i != ',':
             tmp = operate(i, stack[-2:])
             stack.pop()
             stack.pop()
             stack.append(tmp)
-            # print('STACK',stack)
-
         else:
             stack.append(i)
-
     return stack[0]
 
 
