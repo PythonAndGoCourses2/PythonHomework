@@ -23,6 +23,19 @@ Attributes:
     GREAT_OR_EQUAL (str): possible representation of the operation >= in the expression.
     EQUAL (str): possible representation of the operation == in the expression.
     NOT_EQUAL (str): possible representation of the operation != in the expression.
+    REGEXP_DIGIT (rstr): regular expressions for finding numbers.
+    REGEXP_SIMPLE_DIGIT (rstr): regular expressions for checking common digits.
+    REGEXP_SCREENING (rstr): regular expressions for operation screening.
+    REGEX_NAME (rstr): regular expressions for finding names.
+    REGEXP_BACKETS (rstr): regular expressions for finding brackets.
+    REGEXP_FUNCTION (rstr): regular expressions for finding functons.
+    REGEXP_CONSTANT (rstr): regular expressions for finding constant names.
+    REGEXP_UNARY (rstr): regular expressions for finding unary operation.
+    REGEXP_BYNARY (rstr): regular expressions for finding bynary operation.
+    REGEXP_COMPARE (rstr): regular expressions for finding compare operation.
+    REGEXP_INCORECT_EXPRETION (rstr): regular expressions for defining invalid expressions.
+    REGEXP_NON_ZERO_FRACTION_PART (rstr): regular expressions for finding non-zero fraction part.
+    REGEXP_COMPARATOR (rstr): regular expressions for finding comparator.
     HAS_COMPARE (bool): determines whether the expression has a comparison operation.
     LIBRARY (dict): library of available operations.
 """
@@ -32,10 +45,6 @@ import re
 from collections import namedtuple
 from functools import reduce
 from operator import mul, truediv, floordiv, mod, add, sub, lt, le, eq, ne, ge, gt
-from regexps import REGEXP_DIGIT, REGEXP_SIMPLE_DIGIT, REGEXP_SCREENING, REGEX_NAME, REGEXP_BACKETS, \
-                    REGEXP_FUNCTION, REGEXP_CONSTANT, REGEXP_UNARY, REGEXP_BYNARY, REGEXP_COMPARE, \
-                    REGEXP_INCORECT_EXPRETION, REGEXP_NON_ZERO_FRACTION_PART, REGEXP_COMPARATOR
-
 
 LEFT_BRACKET = '('
 RIGHT_BRACKET = ')'
@@ -52,6 +61,30 @@ GREAT = '>'
 GREAT_OR_EQUAL = '>='
 EQUAL = '=='
 NOT_EQUAL = '!='
+
+REGEXP_DIGIT = r'[+-]?\d+\.\d+e\+\d+|[+-]?\d+\.?\d*|[+-]?\d*\.?\d+'
+REGEXP_SIMPLE_DIGIT = rf'^({REGEXP_DIGIT})$'
+REGEXP_SCREENING = rf'\{{operation}}'
+REGEX_NAME = r'\w+'
+REGEXP_BACKETS = r'(?:^|\W)(\([^)(]+\))'
+REGEXP_FUNCTION = rf'(?P<pattern>(?P<name>{REGEX_NAME})\((?P<args>(?:{REGEXP_DIGIT})(?:,(?:{REGEXP_DIGIT})+)*|)\))'
+REGEXP_CONSTANT = rf'(?P<name>{REGEXP_DIGIT}|{REGEX_NAME}\(?)'
+REGEXP_UNARY = rf'([-+]{{2,}})'
+REGEXP_BYNARY = rf'((?:{REGEXP_DIGIT})(?:{{operation}}(?:{REGEXP_DIGIT}))+)'
+REGEXP_COMPARE = rf'^{REGEXP_BYNARY}$'.format(operation='[=!<>]{1,2}')
+REGEXP_NON_ZERO_FRACTION_PART = r'\.0*[1-9]'
+REGEXP_COMPARATOR = r'[=!<>]{1,2}'
+REGEXP_INCORECT_EXPRETION = (
+    r'.?\W\d+\s*\(|'
+    r'^\d+\s*\(|'
+    r'^\W*$|'
+    r'\d+[)(<=!>][<>!]\d+|'
+    r'\W\d+[)(<=!>][<!>]\d+|'
+    r'\w+\s+\w+|'
+    r'[-+*^\/%<=!>]+\s+[\/*^%<=!>]+|'
+    r'^[\/*^%<=!>]|'
+    r'[-+*^\/%<=!>]$'
+)
 
 HAS_COMPARE = False
 LIBRARY = {
