@@ -16,7 +16,7 @@ xpr = args.EXPRESSION
 module = args.MODULE
 
 xprstr = ''
-operator = ''
+
 xprlst = []
 a = 0.
 b = 0.
@@ -78,8 +78,7 @@ def parse(xprstr):
     word = ''
     exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
     xprset = set(xprstr)
-                 
-    # проверка если строка выражения содержит недопустимые символы             
+    # проверка если строка выражения содержит недопустимые символы
     if not exset.isdisjoint(xprset):
         print('ERROR: unknown symbol')
         exit(0)
