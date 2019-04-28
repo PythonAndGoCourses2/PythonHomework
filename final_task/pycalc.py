@@ -42,7 +42,9 @@ opdic = {
         '-':sub,
         '*':mul,
         '/':truediv,
-        '//':floordiv, '%':truediv, '^':pow,
+        '//':floordiv,
+        '%':mod,
+        '^':pow,
         '==':eq,
         '<=': le,
         '>=': ge,
@@ -408,18 +410,21 @@ def evalpostfix(xprpstfx):
 # test = test.replace(' ', '')
 # test = test.replace(', ', '.')
 
+def main():
+    # попытка добавления внешней функции если указана -m module
+    addfunc(module)
 
-# попытка добавления внешней функции если указана -m module
-addfunc(module)
+    # разбор строики вырыжения в список
+    xprlst = parse(xpr)
+    #print(*xprlst, sep=' ')
 
-# разбор строики вырыжения в список
-xprlst = parse(xpr)
-#print(*xprlst, sep=' ')
+    # преобразование инфиксного списка в постфиксных список
+    xprlst = postfix(xprlst)
+    #print(*xprlst, sep=' ')
 
-# преобразование инфиксного списка в постфиксных список
-xprlst = postfix(xprlst)
-#print(*xprlst, sep=' ')
+    # вычисление постфиксного списка
+    res=evalpostfix(xprlst)
+    print(res)
+    return res
 
-# вычисление постфиксного списка
-res=evalpostfix(xprlst)
-print(res)
+main()
