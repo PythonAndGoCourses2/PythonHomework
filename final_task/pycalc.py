@@ -407,7 +407,6 @@ def evalpostfix(xprpstfx):
             stack.append(i)
     return stack[0]
 
-
 # EVAL TEST
 # test = xpr
 # test = test.replace('^', '**')
