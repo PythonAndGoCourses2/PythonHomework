@@ -31,10 +31,9 @@ class LogicTests(unittest.TestCase):
         self.assertEqual(logic._get_priority('^'), 4)
 
     def test_polish_notation(self):
-        self.assertEqual(logic.rebuild_into_polish_notation(['2', '+', '2'],
-                                               methods), ['2', '2', '+'])
-        self.assertEqual(logic.rebuild_into_polish_notation(['(', '2', '*', '3', '-', '4', ')', '/', '(', '5', '+', '2', ')'],
-                                               methods),
+        self.assertEqual(logic.rebuild_into_polish_notation(['2', '+', '2'], methods), ['2', '2', '+'])
+        self.assertEqual(logic.rebuild_into_polish_notation(
+            ['(', '2', '*', '3', '-', '4', ')', '/', '(', '5', '+', '2', ')'], methods),
                          ['2', '3', '*', '4', '-', '5', '2', '+', '/'])
 
     def test_ex_calc(self):

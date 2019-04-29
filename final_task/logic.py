@@ -380,7 +380,7 @@ def check_for_scientific_notation(number_str: str) -> str:
 
 def error_handle(ex_str: str, methods):
     re_calc_operations = re.compile(r'[+\-*/^%]+')
-    re_multiple_plusses = re.compile('[+\-]+')
+    re_multiple_plusses = re.compile('[+-]+')
     re_bool_operations = re.compile(r'[=<>!]+')
     re_nums = re.compile(r'\d+[.]\d+|\d+')
     re_scobes = re.compile(r'[()]')
@@ -398,7 +398,8 @@ def error_handle(ex_str: str, methods):
         if num_calc_operations and not num_bool_operators and not re_multiple_plusses.findall(ex_str) and \
                 (nums_count > num_calc_operations + 1 or nums_count < num_calc_operations + 1):
             raise Exception('looks like you forgot an operation or a number')
-        if num_bool_operators and not num_calc_operations and nums_count > num_bool_operators + 1 or nums_count < num_bool_operators + 1:
+        if num_bool_operators and not num_calc_operations and nums_count > num_bool_operators + 1 or nums_count \
+                < num_bool_operators + 1:
             raise Exception('looks like you forgot an operation or a number')
     if not ex_str:
         raise Exception('nothing to calculate')
