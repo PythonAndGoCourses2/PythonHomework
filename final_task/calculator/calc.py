@@ -106,12 +106,10 @@ class CALCULATOR:
                 elif OPERATION_PRIORITIES[item] > OPERATION_PRIORITIES[self.operations[-1]] or\
                         self.operations[-1] == '(':
                     self.operations.append(item)
-                elif item in OPERATION_PRIORITIES.keys() and OPERATION_PRIORITIES[item] == OPERATION_PRIORITIES[
-                        self.operations[-1]] and OPERATION_PRIORITIES[item] == 3:
+                elif item in OPERATION_PRIORITIES.keys() and item == self.operations[-1] == '^':
                     self.operations.append(item)
                 else:
-                    prior_operation = OPERATION_PRIORITIES[item]
-                    self.unloading_operations(prior_operation)
+                    self.unloading_operations(OPERATION_PRIORITIES[item])
                     self.operations.append(item)
         else:
             self.operations.append(item)
