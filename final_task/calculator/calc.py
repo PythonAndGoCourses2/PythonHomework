@@ -118,6 +118,10 @@ class CALCULATOR:
             self.operations.append(item)
 
     def allocate_numbers(self, i):
+        """Function first writes the expression into a res_expression as a string.
+        Then when the number ends or the expression ends, it leads to the type float
+        """
+
         if i > 0 and self.expression[i - 1].isdigit() or self.expression[i - 1] == '.':
             self.res_expression[-1] = self.res_expression[-1] + self.expression[i]
         else:
@@ -153,6 +157,10 @@ class CALCULATOR:
         return i, func
 
     def add_constant_to_res_expression(self, func, dicts_modules):
+        """The function searches for a constant in the modules added via -m,
+        then in the math module, if it does not find it, it gives an error
+        """
+
         try:
             is_in_dicts_modules = False
             if dicts_modules is not None:
