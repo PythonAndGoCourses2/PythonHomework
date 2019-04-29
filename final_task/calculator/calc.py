@@ -66,8 +66,7 @@ class CALCULATOR:
                     self.res_expression[i - 2] = CALCULATE[self.res_expression.pop(i)](self.res_expression[i - 2],
                                                                                        self.res_expression.pop(i - 1))
                     i = 1
-                if len(self.res_expression) != 1 and type(self.res_expression[i]) is str and\
-                        self.res_expression[i].isalnum():
+                elif type(self.res_expression[i]) is str and self.res_expression[i].isalnum():
                     self.calculate_function(dicts_modules, i)
                     i = 1
             except KeyError:
