@@ -84,8 +84,8 @@ class CALCULATOR:
                 break
             i += 1
         else:
-            if type(self.result) is not float and type(self.result) is not bool and \
-                    type(self.result) is not int:
+            if type(self.res_expression[0]) is not float and type(self.res_expression[0]) is not bool and \
+                    type(self.res_expression[0]) is not int:
                 self.error = 'ERROR: incomplete expression'
             else:
                 return self.res_expression[0]
