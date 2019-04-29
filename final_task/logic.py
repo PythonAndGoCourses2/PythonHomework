@@ -379,6 +379,13 @@ def check_for_scientific_notation(number_str: str) -> str:
 
 
 def error_handle(ex_str: str, methods):
+    """
+
+    function which catching errors
+
+    :param ex_str: string which contains mathematical expressions
+    :param methods: methods of all imports we need as dict
+    """
     re_calc_operations = re.compile(r'[+\-*/^%]+')
     re_multiple_pluses = re.compile('[+-]+')
     re_bool_operations = re.compile(r'[=<>!]+')
