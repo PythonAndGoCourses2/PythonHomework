@@ -1,35 +1,9 @@
 ﻿import math as m
 
-func_dictionary = {'sin': m.sin,
-                   'cos': m.cos,
-                   'tan': m.tan,
-                   'atan': m.atan,
-                   'asin': m.asin,
-                   'acos': m.acos,
-                   'degrees': m.degrees,
-                   'radians': m.radians,
-                   'exp': m.exp,
-                   'sqrt': m.sqrt,
-                   'log': m.log,
-                   'log10': m.log10,
-                   'fabs': m.fabs,
-                   'round': round,
-                   'fsum': m.fsum,
-                   'frexp': m.frexp,
-                   'ceil': m.ceil,
-                   'copysigh': m.copysign,
-                   'floor': m.floor,
-                   'fmod': m.fmod,
-                   'gcd': m.gcd,
-                   'isclose': m.isclose,
-                   'isfinite': m.isfinite,
-                   'isinf': m.isinf,
-                   'isnan': m.isnan,
-                   'ldexp': m.ldexp,
-                   'trunc': m.trunc,
-                   'pow': m.pow,
-                   'abs': abs
-                   }
+
+func_dictionary = dict([(attr, getattr(m, attr)) for attr in dir(m) if callable(getattr(m, attr))])
+func_dictionary['abs'] = abs
+func_dictionary['round'] = round
 
 
 def skip_space(eval_string, index):
