@@ -42,7 +42,6 @@ def skip_space(eval_string, index):
 
 def call_func_with_args(Func, Args):
     return Func(*Args)
-    
 
 
 def get_arguments(eval_string, index):
