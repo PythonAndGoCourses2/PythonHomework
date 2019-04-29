@@ -6,7 +6,6 @@ module which contains methods which make up base logic of the calculator
 import re
 import importlib
 import constants
-from typing import Any
 
 
 def parse_funcs_params(ex_list: list, methods: dict) -> list:
@@ -85,7 +84,7 @@ def import_usr_imports(usr_imports: list):
     return import_objects
 
 
-def _get_item_by_type(item: str, methods: dict) -> Any:
+def _get_item_by_type(item: str, methods: dict):
     """get item by its string according its type
 
     :param item: string of equivalent of some number
@@ -298,7 +297,7 @@ def _check_for_operation_priority(operation_list: list, polish_list: list, expre
     return operation_list, polish_list
 
 
-def ex_calc(polish_list: list, methods: dict) -> Any:
+def ex_calc(polish_list: list, methods: dict):
     """calculate mathematical expression writed as polish notation
 
     :param polish_list: list which contains mathematical expression writed as polish notation
@@ -387,7 +386,6 @@ def error_handle(ex_str: str, methods):
     re_scobes = re.compile(r'[()]')
     num_calc_operations = len(re_calc_operations.findall(ex_str))
     num_bool_operators = len(re_bool_operations.findall(ex_str))
-    test = re_multiple_plusses.findall(ex_str)
     nums_count = len(re_nums.findall(ex_str))
     for item in constants.RE_FUNCTIONS.findall(ex_str):
         if not callable(methods[item]):

@@ -6,7 +6,6 @@ module which contains unit tests for calculating methods
 import logic
 import constants
 import unittest
-import pycodestyle
 import main_funcs
 
 logic.import_usr_imports(constants.imports)

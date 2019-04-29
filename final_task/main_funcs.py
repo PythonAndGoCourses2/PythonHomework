@@ -6,7 +6,6 @@ module which pack main logic functions into functions which more easier to under
 
 import logic
 import constants
-from typing import Any
 
 
 def calc_init(user_imports=None)-> dict:
@@ -27,7 +26,7 @@ def calc_init(user_imports=None)-> dict:
         print('ERROR: {}\n'.format(ex))
 
 
-def calculate(expression_str: str, methods=None) -> Any:
+def calculate(expression_str: str, methods=None) -> str:
     """
     :param expression_str: mathematical expression to calculate
     :param methods: methods of user packages and package math
