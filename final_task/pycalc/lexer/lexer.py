@@ -1,35 +1,64 @@
-from pycalc.token.builder import build_token
+""""""
+
+from collections import namedtuple
+
+from pycalc.token.constants import TokenType
+from pycalc.matcher.matcher import matchers
+
+
+Token = namedtuple('Token', ('token_type', 'lexeme'))
 
 
 class Lexer:
-    def __init__(self, source):
+    def __init__(self, source, matchers):
         self.source = source
-        self.matchers = []
+        self.matchers = matchers
         self.pos = 0
         self.length = len(source)
-
-    def _advance_pos(self, value):
-        """"""
-
-        self.pos += value
 
     def get_next_token(self):
         """"""
 
-        if self.pos >= self.length:
-            return EOF
+        if self._check_source_end():
+            raise Exception('EOL')
 
-        for matcher in self.matchers:
-            result = matcher(self.source, self.pos)
+        token = self._next_token()
 
-            if not result:
+        if not token:
+            raise Exception('No match')
+
+        self._advance_pos_by_lexeme(token.lexeme)
+
+        return token
+
+    def _next_token(self):
+        """"""
+
+        for token_type, matcher in self.matchers:
+            lexeme = matcher(self.source, self.pos)
+
+            if not lexeme:
                 continue
 
-            (lexeme, token_type) = result
-            token = build_token(lexeme, token_type)
-
-            self._advance_pos(len(lexeme))
+            token = Token(token_type, lexeme)
 
             return token
 
-    raise Exception('No match')
+    def _advance_pos_by_lexeme(self, lexeme):
+        """"""
+
+        value = len(lexeme)
+        self.pos += value
+
+    def _check_source_end(self):
+        """"""
+
+        return self.pos >= self.length
+
+
+if __name__ == '__main__':
+
+    source = '1.3>=sin(pi+ e)'
+    l = Lexer(source, matchers)
+    while True:
+        print(l.get_next_token())
