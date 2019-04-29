@@ -146,10 +146,9 @@ def str_parse(ex_str: str, methods: dict) -> list:
     re_multiple_pluses = re.compile(r'[+]{2,}')
     re_function = re.compile(r'[a-zA-Z]+')
 
-    if not ex_str:
-        raise Exception('brackets are not balanced')
-    if ex_str.count('(') != ex_str.count(')'):
-        raise Exception('brackets are not balanced')
+    error_handle(ex_str, methods)
+
+    ex_str = ex_str.replace(' ', '')
 
     for match in constants.RE_INCOMPLETE_FLOAT.findall(ex_str):
         ex_str = ex_str.replace(match, match[0] + '0' + match[1:])
@@ -166,15 +165,13 @@ def str_parse(ex_str: str, methods: dict) -> list:
 
     while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
         for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
-            negative_func_start_index = ex_str.find(negative_func)+1
+            negative_func_start_index = ex_str.find(negative_func) + 1
             all_func = _find_negative_func(ex_str, negative_func_start_index)
-            ex_str = ex_str.replace(all_func, '(0'+all_func+')')
+            ex_str = ex_str.replace(all_func, '(0' + all_func + ')')
             continue
 
     if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
         ex_str = '0' + ex_str
-
-    ex_str = ex_str.replace(' ', '')
 
     for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
         if re_function.findall(negative_value) and \
@@ -330,7 +327,7 @@ def ex_calc(polish_list: list, methods: dict) -> Any:
         return _get_item_by_type(output_list[0], methods)
 
 
-def _find_negative_func(ex_str: str, func_index: int)-> str:
+def _find_negative_func(ex_str: str, func_index: int) -> str:
     last_bracket_index = func_index
     first_bracket_found = False
     brackets_count = 0
@@ -348,7 +345,7 @@ def _find_negative_func(ex_str: str, func_index: int)-> str:
     return ex_str[func_index:last_bracket_index]
 
 
-def check_for_scientific_notation(number_str: str)-> str:
+def check_for_scientific_notation(number_str: str) -> str:
     """
 
     convert scientific notation of float numbers into normal float
@@ -362,12 +359,32 @@ def check_for_scientific_notation(number_str: str)-> str:
         if '+' in number_str:
             number_str = number_str[:e_index]
             number_str = number_str.replace('.', '')
-            number_str = number_str[:remove_number]+'.'+number_str[remove_number:]
+            number_str = number_str[:remove_number] + '.' + number_str[remove_number:]
             if number_str[-1] == '.':
                 number_str = number_str + '0'
         elif '-' in number_str:
             number_str = number_str[:e_index]
             number_str = number_str.replace('.', '')
-            nulls = ['0' for _ in range(remove_number-1)]
+            nulls = ['0' for _ in range(remove_number - 1)]
             number_str = '0.' + ''.join(nulls) + number_str
     return number_str
+
+
+def error_handle(ex_str: str, methods):
+    re_calc_operations = re.compile(r'[+\-*/^%]+')
+    re_bool_operations = re.compile(r'[=<>!]+')
+    num_calc_operations = len(re_calc_operations.findall(ex_str))
+    num_bool_operators = len(re_bool_operations.findall(ex_str))
+    nums_count = len(constants.RE_INTS.findall(ex_str)) + len(constants.RE_FLOATS.findall(ex_str))
+    if not constants.RE_FUNCTIONS.findall(ex_str):
+        if num_calc_operations and nums_count > num_calc_operations + 1:
+            raise Exception('looks like you forgot an operation or a number')
+        if num_bool_operators and nums_count > num_bool_operators + 1 or nums_count < num_bool_operators + 1:
+            raise Exception('looks like you forgot an operation or a number')
+    if not ex_str:
+        raise Exception('nothing to calculate')
+    if ex_str.count('(') != ex_str.count(')'):
+        raise Exception('brackets are not balanced')
+    for item in constants.RE_FUNCTIONS.findall(ex_str):
+        if item not in methods.keys():
+            raise Exception('unknown function '+item+'()')
