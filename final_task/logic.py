@@ -380,6 +380,9 @@ def error_handle(ex_str: str, methods):
     num_bool_operators = len(re_bool_operations.findall(ex_str))
     test = re_multiple_plusses.findall(ex_str)
     nums_count = len(re_nums.findall(ex_str))
+    for item in constants.RE_FUNCTIONS.findall(ex_str):
+        if not callable(methods[item]):
+            nums_count += 1
     if not re_scobes.findall(ex_str):
         if not num_calc_operations and nums_count > 1:
             raise Exception('looks like you forgot an operation or a number')
