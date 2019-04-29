@@ -372,14 +372,19 @@ def check_for_scientific_notation(number_str: str) -> str:
 
 def error_handle(ex_str: str, methods):
     re_calc_operations = re.compile(r'[+\-*/^%]+')
+    re_multiple_plusses = re.compile('[+-]+')
     re_bool_operations = re.compile(r'[=<>!]+')
+    re_nums = re.compile(r'\d+[.]\d+|\d+')
     num_calc_operations = len(re_calc_operations.findall(ex_str))
     num_bool_operators = len(re_bool_operations.findall(ex_str))
-    nums_count = len(constants.RE_INTS.findall(ex_str)) + len(constants.RE_FLOATS.findall(ex_str))
+    nums_count = len(re_nums.findall(ex_str))
     if not constants.RE_FUNCTIONS.findall(ex_str):
-        if num_calc_operations and nums_count > num_calc_operations + 1:
+        if num_calc_operations and not num_bool_operators and nums_count > num_calc_operations + 1:
             raise Exception('looks like you forgot an operation or a number')
-        if num_bool_operators and nums_count > num_bool_operators + 1 or nums_count < num_bool_operators + 1:
+        if num_calc_operations and not num_bool_operators and not re_multiple_plusses.findall(ex_str) and \
+                nums_count > num_calc_operations + 1 or nums_count < num_calc_operations + 1:
+            raise Exception('looks like you forgot an operation or a number')
+        if num_bool_operators and not num_calc_operations and nums_count > num_bool_operators + 1 or nums_count < num_bool_operators + 1:
             raise Exception('looks like you forgot an operation or a number')
     if not ex_str:
         raise Exception('nothing to calculate')
@@ -387,4 +392,4 @@ def error_handle(ex_str: str, methods):
         raise Exception('brackets are not balanced')
     for item in constants.RE_FUNCTIONS.findall(ex_str):
         if item not in methods.keys():
-            raise Exception('unknown function '+item+'()')
+            raise Exception('unknown function ' + item + '()')
