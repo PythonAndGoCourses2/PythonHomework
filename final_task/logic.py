@@ -153,31 +153,11 @@ def str_parse(ex_str: str, methods: dict) -> list:
     for match in constants.RE_INCOMPLETE_FLOAT.findall(ex_str):
         ex_str = ex_str.replace(match, match[0] + '0' + match[1:])
 
-    for match in constants.RE_NEGATIVE_CONSTANTS.findall(ex_str):
-        if not callable(methods[match[2:]]):
-            ex_str = ex_str.replace(match, match[0] + '(0' + match[1:] + ')')
-
     while re_paired_operators.findall(ex_str):
         for operators in re_paired_operators.findall(ex_str):
             ex_str = ex_str.replace(operators, '-')
             if not ex_str.count(operators):
                 break
-
-    while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
-        for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
-            negative_func_start_index = ex_str.find(negative_func) + 1
-            all_func = _find_negative_func(ex_str, negative_func_start_index)
-            ex_str = ex_str.replace(all_func, '(0' + all_func + ')')
-            continue
-
-    if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
-        ex_str = '0' + ex_str
-
-    for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
-        if re_function.findall(negative_value) and \
-                callable(methods[re_function.findall(negative_value)[0]]):
-            continue
-        ex_str = ex_str.replace(negative_value, negative_value[0] + '(0' + negative_value[1:] + ')')
 
     while re_multiple_minuses.findall(ex_str) or re_multiple_pluses.findall(ex_str):
         for minuses in re_multiple_minuses.findall(ex_str):
@@ -187,6 +167,35 @@ def str_parse(ex_str: str, methods: dict) -> list:
                 ex_str = ex_str.replace(minuses, '-')
         for pluses in re_multiple_pluses.findall(ex_str):
             ex_str = ex_str.replace(pluses, '+')
+
+    for match in constants.RE_NEGATIVE_CONSTANTS.findall(ex_str):
+        if not callable(methods[match[2:]]):
+            ex_str = ex_str.replace(match, match[0] + '(0' + match[1:] + ')')
+
+    while constants.RE_NEGATIVE_FUNCS.findall(ex_str):
+        for negative_func in constants.RE_NEGATIVE_FUNCS.findall(ex_str):
+            negative_func_start_index = ex_str.find(negative_func) + 1
+            all_func = _find_negative_func(ex_str, negative_func_start_index)
+            ex_str = ex_str.replace(all_func, '(0' + all_func + ')')
+            continue
+
+    for negative_value in constants.RE_NEGATIVE_VALUES.findall(ex_str):
+        if re_function.findall(negative_value) and \
+                callable(methods[re_function.findall(negative_value)[0]]):
+            continue
+        ex_str = ex_str.replace(negative_value, negative_value[0] + '(0' + negative_value[1:] + ')')
+
+    for positive_value in constants.RE_POSITIVE_VALUES.findall(ex_str):
+        if re_function.findall(positive_value) and \
+                callable(methods[re_function.findall(positive_value)[0]]):
+            continue
+        ex_str = ex_str.replace(positive_value, positive_value[0] + '(0' + positive_value[1:] + ')')
+
+    if constants.RE_NEGATIVE_VALUES_ON_STR_BEG.findall(ex_str):
+        ex_str = '0' + ex_str
+
+    if constants.RE_POSITIVE_VALUES_ON_STR_BEG.findall(ex_str):
+        ex_str = '0' + ex_str
 
     parse_list = constants.RE_MAIN_PARSE_ARG.findall(ex_str)
 
