@@ -33,9 +33,7 @@ DICT_MATH['abs'] = abs
 
 
 class CALCULATOR:
-    expression = None
     error = None
-    result = None
     res_expression = []
     operations = []
 
@@ -43,7 +41,7 @@ class CALCULATOR:
         self.expression = expression
         self.translate_reverse_exception(dicts_modules)
         if self.error is None:
-            self.calculate_res_exception(dicts_modules)
+            self.result = self.calculate_res_exception(dicts_modules)
 
     def calculate_function(self, dicts_modules, i):
         number = self.res_expression.pop(i - 1)
@@ -86,10 +84,11 @@ class CALCULATOR:
                 break
             i += 1
         else:
-            self.result = self.res_expression[0]
             if type(self.result) is not float and type(self.result) is not bool and \
                     type(self.result) is not int:
                 self.error = 'ERROR: incomplete expression'
+            else:
+                return self.res_expression[0]
 
     def allocate_operations(self, item, i):
         if item == '-' and (not i or (self.expression[i - 1] in OPERATION_PRIORITIES and
