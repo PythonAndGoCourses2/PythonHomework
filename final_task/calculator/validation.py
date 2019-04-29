@@ -6,20 +6,18 @@ def parse_command_line():
     parser = ArgumentParser(description='Pure-python command-line calculator')
     parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
     parser.add_argument('-m', '--use-modules', required=False, nargs='+', help='additional modules to use')
-    return parser.parse_args().EXPRESSION, parser.parse_args().use_modules
+    args = parser.parse_args()
+    return args
 
 
 def parse_added_modules():
-    modules = parse_command_line()[1]
+    modules = parse_command_line().use_modules
     dicts_modules = []
     if modules is None:
         dicts_modules = None
     else:
-        try:
-            for item in modules:
-                dicts_modules.append(__import__(item).__dict__)
-        except ModuleNotFoundError:
-            return 'ERROR: Module Not Found'
+        for item in modules:
+            dicts_modules.append(__import__(item).__dict__)
     return dicts_modules
 
 
@@ -28,25 +26,14 @@ def is_error_spaces(expression):
      It then checks for spaces between functions and numbers and double operators.
     """
 
-    new_expression = expression[0]
-    for item in expression[1:]:
-        if item != ' ' or new_expression[-1] != ' ':
-            new_expression += item
-    for i in range(1, len(new_expression) - 1):
-        if new_expression[i] == ' ':
-            if new_expression[i - 1].isdigit() and new_expression[i + 1].isalnum():
+    expression = ' '.join(expression.split())
+    for i in range(1, len(expression) - 1):
+        if expression[i] == ' ':
+            if expression[i - 1].isdigit() and expression[i + 1].isalnum():
                 return True
-            elif new_expression[i - 1] + new_expression[i + 1] in calc.OPERATION_PRIORITIES:
+            elif expression[i - 1] + expression[i + 1] in calc.OPERATION_PRIORITIES:
                 return True
     return False
-
-
-def del_spaces(expression):
-    new_expression = ''
-    for i in expression:
-        if i != ' ':
-            new_expression += i
-    return new_expression
 
 
 def is_error_brackets(expression):
@@ -103,17 +90,21 @@ def is_error_operators(expression):
 
 
 def check_exception():
-    expression = parse_command_line()[0]
-    dicts_modules = parse_added_modules()
-    if expression is None or not expression.rstrip():
-        print('ERROR: expression argument is required')
-    elif is_error_spaces(expression):
-        print('ERROR: spaces')
+    expression = parse_command_line().EXPRESSION
+    try:
+        dicts_modules = parse_added_modules()
+    except ModuleNotFoundError:
+        print('ERROR: Module Not Found')
     else:
-        expression = del_spaces(expression)
-        if is_error_brackets(expression):
-            print('ERROR: brackets')
-        elif is_error_operators(expression):
-            print('ERROR: operator')
+        if expression is None or not expression.rstrip():
+            print('ERROR: expression argument is required')
+        elif is_error_spaces(expression):
+            print('ERROR: spaces')
         else:
-            return expression, dicts_modules
+            expression = ''.join(expression.split())
+            if is_error_brackets(expression):
+                print('ERROR: brackets')
+            elif is_error_operators(expression):
+                print('ERROR: operator')
+            else:
+                return expression, dicts_modules
