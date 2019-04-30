@@ -115,16 +115,12 @@ class CALCULATOR:
             self.operations.append(item)
 
     def allocate_numbers(self, i):
-        """Function first writes the expression into a res_expression as a string.
-        Then when the number ends or the expression ends, it leads to the type float
-        """
-
-        if i > 0 and self.expression[i - 1].isdigit() or self.expression[i - 1] == '.':
-            self.res_expression[-1] = self.res_expression[-1] + self.expression[i]
-        else:
-            self.res_expression.append(self.expression[i])
-        if i == len(self.expression) - 1 or not self.expression[i + 1].isdigit() and self.expression[i + 1] != '.':
-            self.res_expression[-1] = float(self.res_expression[-1])
+        number = ''
+        while i < len(self.expression) and (self.expression[i].isdigit() or self.expression[i] == '.'):
+            number += self.expression[i]
+            i += 1
+        self.res_expression.append(float(number))
+        return i
 
     def unloading_operations(self, prior_operation=-1, upload_bracket=False):
         while self.operations and self.operations[-1] != '(' and not self.operations[-1].isalnum() \
@@ -175,7 +171,7 @@ class CALCULATOR:
         i = 0
         while i < len(self.expression):
             if self.expression[i].isdigit() or self.expression[i] == '.':
-                self.allocate_numbers(i)
+                i = self.allocate_numbers(i) - 1
             elif self.expression[i] == ',':
                 self.operations[self.search_func() - 1] += 1
                 self.unloading_operations()
