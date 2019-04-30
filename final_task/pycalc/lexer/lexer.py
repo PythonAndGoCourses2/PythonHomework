@@ -4,31 +4,36 @@ import re
 from collections import namedtuple
 
 from pycalc.token.constants import TokenType
-from pycalc.matcher.matcher import matchers
+# from pycalc.matcher.matcher import matchers
 
 
-Token = namedtuple('Token', ('token_type', 'lexeme'))
-WHITESPACES = re.compile('\s+')
+Token = namedtuple("Token", ("token_type", "lexeme"))
+WHITESPACES = re.compile("\s+")
 
 
 class Lexer:
-    def __init__(self, source, matchers):
-        self.source = source
+    def __init__(self, matchers):
         self.matchers = matchers
-        self.pos = 0
-        self.length = len(source)
+        self._source = ""
+        self._pos = 0
+        self._length = 0
+
+    def init(self, source):
+        self._source = source
+        self._pos = 0
+        self._length = len(source)
 
     def get_next_token(self):
         """"""
         self._skip_whitespaces()
 
-        if self._check_source_end():
-            raise Exception('EOL')
+        if self._is_source_exhausted():
+            raise Exception("EOL")
 
         token = self._next_token()
 
         if not token:
-            raise Exception('No match')
+            raise Exception("No match")
 
         self._advance_pos_by_lexeme(token.lexeme)
 
@@ -38,7 +43,7 @@ class Lexer:
         """"""
 
         for token_type, matcher in self.matchers:
-            lexeme = matcher(self.source, self.pos)
+            lexeme = matcher(self._source, self._pos)
 
             if not lexeme:
                 continue
@@ -50,7 +55,7 @@ class Lexer:
     def _skip_whitespaces(self):
         """"""
 
-        whitespaces = WHITESPACES.match(self.source, self.pos)
+        whitespaces = WHITESPACES.match(self._source, self._pos)
         if whitespaces:
             self._advance_pos_by_lexeme(whitespaces.group())
 
@@ -58,17 +63,18 @@ class Lexer:
         """"""
 
         value = len(lexeme)
-        self.pos += value
+        self._pos += value
 
-    def _check_source_end(self):
+    def _is_source_exhausted(self):
         """"""
 
-        return self.pos >= self.length
+        return self._pos >= self._length
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    source = '  1.3 >=sin(pi   +e)  '
-    l = Lexer(source, matchers)
+    source = "  1.3 >=sin(pi   +e)  "
+    l = Lexer(matchers)
+    l.init(source)
     while True:
         print(l.get_next_token())
