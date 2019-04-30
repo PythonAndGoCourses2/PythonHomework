@@ -167,6 +167,16 @@ class CALCULATOR:
         except KeyError:
             self.error = 'ERROR: unknown constant'
 
+    def allocate_function(self, i, dicts_modules):
+        i, func = self.write_func(i)
+        if i < len(self.expression) and self.expression[i] == '(':
+            self.operations.append(1)
+            self.operations.append(func)
+        else:
+            self.add_constant_to_res_expression(func, dicts_modules)
+            i -= 1
+        return i
+
     def translate_reverse_exception(self, dicts_modules):
         i = 0
         while i < len(self.expression):
@@ -182,15 +192,9 @@ class CALCULATOR:
             elif self.expression[i] in OPERATION_PRIORITIES.keys():
                 self.allocate_operations(self.expression[i], i)
             elif self.expression[i].isalpha():
-                i, func = self.write_func(i)
-                if i < len(self.expression) and self.expression[i] == '(':
-                    self.operations.append(1)
-                    self.operations.append(func)
-                else:
-                    self.add_constant_to_res_expression(func, dicts_modules)
-                    i -= 1
-                    if self.error is not None:
-                        return
+                i = self.allocate_function(i, dicts_modules)
+                if self.error is not None:
+                    return
             else:
                 self.error = 'ERROR: unknown character'
                 return
