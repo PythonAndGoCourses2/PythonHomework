@@ -6,6 +6,6 @@ setup(name='pycalc',
       url='https://github.com/Vaires/PythonHomework', author='Volha Halynskaya',
       author_email='volha.halynskaya@gmail.com',
       license='free',
-      packages=['pycalc'],
+      packages=['final_task'],
       zip_safe=False,
       )
