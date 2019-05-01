@@ -1,16 +1,15 @@
 import sys
+import argparse
 
 
 def main(args=None):
     """The main routine."""
-    if args is None:
-        args = sys.argv[1:]
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', help='Turn on verbosity', action='store_true')
+    args = parser.parse_args()
+    if args.verbose:
+        print('Verbosity turned on')
 
-    print("This is the main routine.")
-    print("It should do something interesting.")
-
-    # Do argument parsing here (eg. with argparse) and anything else
-    # you want your project to do.
 
 if __name__ == "__main__":
     main()
