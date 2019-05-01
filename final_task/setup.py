@@ -9,9 +9,9 @@ setup(
     author = 'Mad',
     long_description = long_description,
     packages = find_packages(),
-    entry_points={ 
+    entry_points={
         'console_scripts': [
-            'pycalc=pycalc:main',
-        ],
+            'pycalc = pycalc.__main__:main'
+        ]
     }
 )
