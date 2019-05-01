@@ -2,7 +2,7 @@ import sys
 import argparse
 
 
-def main(args=None):
+def main():
     """The main routine."""
     stringToParse = parse_console()
     print(stringToParse)
