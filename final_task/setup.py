@@ -11,7 +11,7 @@ setup(
     packages = find_packages(),
     entry_points={
         'console_scripts': [
-            'pycalc = pycalc.pycalc:main'
+            'pycalc = pycalc.__main__:main'
         ]
     }
 )
