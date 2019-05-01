@@ -148,6 +148,7 @@ class ExpressionParser:
     __C_REGEXP_OPERATOR_THEN_PLUSMINUS = re.compile(r"[*%^][+\-]|[/=!<>]{1,2}[+\-]")
     __C_REGEXP_BEFORE_BRACKET = re.compile(r"[a-zA-Z]*[\d]*(?=[(])")
     __C_REGEXP_AFTER_BRACKET = re.compile(r"(?<=[)])[a-zA-Z]*[\d]*")
+    __C_REGEXP_EXPONENTIATION = re.compile(r"[\^]")
     __C_REGEXP_TOKENS = re.compile(r"[+\-*%^()]|[/=!<>]+|[a-zA-Z]+[\d]*|[\d]*[.][\d]+|[\d]+|[,]")
 
     math_funcs = {}
@@ -335,6 +336,58 @@ class ExpressionParser:
         return "".join(expression_chars)
 
     @classmethod
+    def __bracket_exponentiation_wrapper(cls, expression: str):
+        """
+        Add extra brackets for correct calculation of expression with exponentiation operator.
+        (Exponentiation operator is the only right-to-left associativity operator).
+        Take:  expression: str.
+        Return:  expression: str.
+        Example: "2^2^2^2^2" -> "2^(2^(2^(2^(2))))".
+        """
+        expression_chars = list(expression)
+
+        breaking_chars = set(cls.__OPERATORS.keys())
+        breaking_chars.remove("^")
+        breaking_chars.add(",")
+
+        shift = 0
+        delayed_shift_indexes = set()
+        delayed_shift_indexes_to_remove = set()
+
+        for exponentiation in cls.__C_REGEXP_EXPONENTIATION.finditer(expression):
+            opened_brackets = 0
+            exponentiation_end_index = exponentiation.end()
+
+            for delayed_shift_index in delayed_shift_indexes:
+                if exponentiation_end_index >= delayed_shift_index:
+                    shift += 1
+                    delayed_shift_indexes_to_remove.add(delayed_shift_index)
+            delayed_shift_indexes.difference_update(delayed_shift_indexes_to_remove)
+            delayed_shift_indexes_to_remove.clear()
+
+            expression_chars.insert(exponentiation_end_index+shift, "(")
+            shift += 1
+
+            for token in cls.__C_REGEXP_TOKENS.finditer(expression, exponentiation_end_index):
+                token_index = token.start()
+                token_string = token.group()
+
+                if token_string == "(":
+                    opened_brackets += 1
+                elif token_string == ")":
+                    opened_brackets -= 1
+
+                if opened_brackets < 0 or (not opened_brackets and token_string in breaking_chars):
+                    break
+            else:
+                token_index = token.end()
+
+            expression_chars.insert(token_index+shift, ")")
+            delayed_shift_indexes.add(token_index)
+
+        return "".join(expression_chars)
+
+    @classmethod
     def __is_number(cls, value: str):
         """
         Check if the value is a number (can be converting to a floating-point value).
@@ -500,6 +553,7 @@ class ExpressionParser:
         expression = cls.__squash_doubled_plusminus(expression)
         expression = cls.__bracket_unary_plusminus_wrapper(expression)
         expression = cls.__substitute_bracket_unary_plusminus(expression)
+        expression = cls.__bracket_exponentiation_wrapper(expression)
 
         try:
             result = cls.__polish_notation_calculate(cls.__token_handler(cls.__tokenizer(expression)))
