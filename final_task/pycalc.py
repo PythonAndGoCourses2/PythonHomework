@@ -2,40 +2,41 @@
 import argparse
 import re
 import string
+import math
+import operator
 
 
-def input_check(func):
-    def wrapper():
-        try:
-            func()
-            return func
-        except SystemExit:
-            print("ERROR string not recognized")
-            quit()
-        except RuntimeError as err:
-            print("ERROR: in execute_rpn " + str(err.args[0]))
-            quit()
-        except ValueError:
-            print("ERROR: in execute_rpn Unknown operand!")
-            quit()
-        except Exception:
-            print("ERROR: in execute_rpn Unknown error!")
-            quit()
-    return wrapper()
+def get_error(report):
+    print(f"ERROR: {report}\n")
+    exit(2)
 
 
-@input_check
 def create_arg_parser():
     global line
-    pars = argparse.ArgumentParser(prog='pycalc', description='Pure-python command-line calculator.')
-    pars.add_argument("EXPRESSION", type=str, help="expression string to evaluate")
-    pars.add_argument('-m', '--use-module', metavar='MODULE', type=str, nargs='+',
-                          help='additional user modules')
-    args = pars.parse_args()
-    line = args.EXPRESSION
+
+    pars = argparse.ArgumentParser(prog='pycalc', usage="pycalc [-h] EXPRESSION [-m MODULE [MODULE ...]]",
+                                   description="Pure-python command-line calculator.", add_help=True)
+    pars.add_argument('-m', '--use-module', metavar='MODULE',
+                      type=str, action="store", dest="modules", required=False, default=[],
+                      nargs="+", help='additional user modules')
+    pars.add_argument(metavar="EXPRESSION", type=str, action="store",
+                      dest="expression", help="expression string to evaluate")
+    if pars.parse_args() is None:
+        text_error = "parsing string"
+        get_error(text_error)
+    else:
+        args = pars.parse_args()
+        if args.expression is None:
+            line = args.modules
+        else:
+            line = args.expression
 
 
-create_arg_parser()
+try:
+    create_arg_parser()
+except SystemExit:
+    message = 'bad string,unrecognized arguments'
+    get_error(message)
 
 
 OPERATORS = {'>': (0, lambda x, y: x > y), "<": (0, lambda a, b: a < b),
@@ -51,6 +52,10 @@ numbers = string.digits + '.'
 mat = ('+', '-', '/', '*', '//', '**', '^', '%', '=')
 letters = string.ascii_letters
 result = 0
+math_pull = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
+math_name_func = list(math_pull.keys())
+constant = {'e': math.e, 'pi': math.pi, 'tau': math.tau, '-e': -math.e, '-pi': -math.pi,
+            '-tau': -math.tau, '+e': math.e, '+pi': math.pi, '+tau': math.tau}
 
 
 def split_operators(s):
@@ -92,6 +97,7 @@ matched(line)
 
 
 def only_letters(tested_string):
+    global check_math
     try:
         check_in_mat = 0
         check_in_numbers = 0
@@ -99,8 +105,15 @@ def only_letters(tested_string):
             if sign not in letters:
                 continue
             else:
-                print("ERROR: In the entered expression are not only numbers and math.")
-                quit()
+                check_math = 0
+                for math_func in math_name_func:
+                    if not re.search(math_func, tested_string):
+                        continue
+                    else:
+                        check_math += 1
+                    if check_math == 0:
+                        print("ERROR: In the entered expression are not only numbers and math.")
+                        quit()
         if tested_string in mat:
             check_in_mat = 1
         if tested_string in numbers:
@@ -130,6 +143,9 @@ def check_line(oneline):
         quit()
     elif oneline[0] == '-':
         line.insert(0, '0')
+    elif oneline[0] in mat:
+        print('ERROR: The first value cannot be early ' + oneline[0])
+        quit()
 
 
 line = split_operators(line)
@@ -168,7 +184,21 @@ def sign_replacement(text):
 
 sign_replacement(line)
 
-line = split_operators(line)
+
+def math_replace():
+    global line
+    line = re.split('(\+)', line)
+    line = "".join(str(item) for item in line)
+    for math_func in math_name_func:
+        line = re.sub(math_func, 'math.' + math_func, line)
+    line = re.sub('math.math.', 'math.', line)
+    line = split_operators(line)
+    for idx, stack in enumerate(line):
+        if stack in constant:
+            line[int(idx)] = constant[stack]
+
+
+math_replace()
 
 for idx, stack in enumerate(line):
     if stack == '(':
@@ -316,14 +346,10 @@ def eval_(formula):
         if formula.find("==") == -1:
             pass
         else:
-            equality_index = formula.split('==')[0]
-            if equality_index == '':
-                final_result = calc(shunting_yard(parse(formula.split("==")[-1])))
-            else:
-                x_result = calc(shunting_yard(parse(formula.split("==")[0])))
-                y_result = calc(shunting_yard(parse(formula.split("==")[-1])))
-                print(x_result == y_result)
-                exit(0)
+            x_result = calc(shunting_yard(parse(formula.split("==")[0])))
+            y_result = calc(shunting_yard(parse(formula.split("==")[-1])))
+            print(x_result == y_result)
+            exit(0)
         print(final_result)
     else:
         x_result = calc(shunting_yard(parse(formula.split("!=")[0])))
