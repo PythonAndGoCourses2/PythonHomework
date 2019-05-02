@@ -62,7 +62,6 @@ def parse(expression):
 def infix_to_postfix(parsed_formula):
     """This function translate infix form into postfix form"""
     polish_notation, stack = [], []
-    print("parsed_fomula: ", parsed_formula)
     for item in parsed_formula:
         if item in OPERATORS:
             while stack and stack[-1] != '(' and OPERATORS[item][0] <= OPERATORS[stack[-1]][0]:
@@ -101,15 +100,12 @@ def calculating(expression):
 def create_parser():
     parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
     parser.add_argument('EXPRESSION', help='expression string to evaluate', type=str)
-    print(parser.parse_args())
     return parser.parse_args()
 
 
 def main():
     a = calculating(create_parser().EXPRESSION)
     print(a)
-    print(calculating("log(2+pi*(2+e))+4"))
-
 
 if __name__ == '__main__':
     main()
