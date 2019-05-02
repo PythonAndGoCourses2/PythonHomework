@@ -32,7 +32,7 @@ def parse(expression):
                 symbol = expression[i]
                 func_expr += symbol  # Заносим значение, которое находится внутри функции
                 i += 1
-                #print(func_expr)
+                # print(func_expr)
             parsed_formula.append(math_function[func](calculating(func_expr)))
             func = ''
             continue
@@ -98,5 +98,11 @@ def calculating(expression):
     return calc(infix_to_postfix(parse(expression)))
 
 
-#print(calculating(parser.create_parser().EXPRESSION))
-print(calculating("log(2+pi*(2+e))+4"))
+def main():
+    print(calculating(parser.create_parser().EXPRESSION))
+    # print(calculating("log(2+pi*(2+e))+4"))
+
+
+
+if __name__ == '__main__':
+    main()
