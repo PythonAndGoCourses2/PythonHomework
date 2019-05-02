@@ -99,9 +99,9 @@ def calculating(expression):
 
 
 def main():
-    print(calculating(parser.create_parser().EXPRESSION))
-    # print(calculating("log(2+pi*(2+e))+4"))
-
+    a = calculating(parser.create_parser().EXPRESSION)
+    print(a)
+    print(calculating("log(2+pi*(2+e))+4"))
 
 
 if __name__ == '__main__':
