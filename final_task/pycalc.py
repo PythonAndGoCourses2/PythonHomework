@@ -71,7 +71,6 @@ def parse(expression):
 def infix_to_postfix(parsed_formula):
     """This function translate infix form into postfix form"""
     polish_notation, stack = [], []
-    print(parsed_formula)
     for item in parsed_formula:
         if item == '^':
             while stack and stack[-1] != '(' and OPERATORS[item][0] < OPERATORS[stack[-1]][0]:
@@ -112,8 +111,8 @@ def calculating(expression):
 
 
 def main():
-    # print(calculating(create_parser().EXPRESSION))
-    print(calculating("pow(2,3)"))
+    print(calculating(create_parser().EXPRESSION))
+    #print(calculating("2+3"))
 
 
 def create_parser():
