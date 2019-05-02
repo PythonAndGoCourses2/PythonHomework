@@ -19,20 +19,6 @@ class Parser:
 
         return self.expression()
 
-    def next(self):
-        """"""
-
-        self.token = self.next_token
-        self.next_token = self.lexer.get_next_token()
-
-    def advance(self, token_class=None):
-        """"""
-
-        if token_class and not self.next_token.is_instance(token_class):
-            raise SyntaxError(f"Expected: {token_class.__name__}")
-
-        self.next_token = self.lexer.get_next_token()
-
     def expression(self, rbp=0):
         """"""
 
@@ -44,6 +30,20 @@ class Parser:
             left = self.token.infix(left)
 
         return left
+
+    def advance(self, token_class=None):
+        """"""
+
+        if token_class and not self.next_token.is_instance(token_class):
+            raise SyntaxError(f"Expected: {token_class.__name__}")
+
+        self.next_token = self.lexer.get_next_token()
+
+    def next(self):
+        """"""
+
+        self.token = self.next_token
+        self.next_token = self.lexer.get_next_token()
 
 
 if __name__ == "__main__":
