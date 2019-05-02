@@ -2,7 +2,7 @@ from myParser import parse_console
 
 
 def main():
-    """The main routine."""
+    """The main routine    ."""
     infixstring = parse_console()
     print(infixstring)
 
