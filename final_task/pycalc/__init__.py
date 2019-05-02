@@ -1,10 +1,17 @@
-from myParser import parse_console
+import argparse
+
+
+def parse_console():
+    """Parse args from console and returns it"""
+    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    parser.add_argument('EXPRESSION', help='expression string to evaluate')
+    return parser.parse_args().EXPRESSION
 
 
 def main():
     """The main routine    ."""
-    infixstring = parse_console()
-    print(infixstring)
+    infix_string = parse_console()
+    print(infix_string)
 
 
 def is_number(s):
