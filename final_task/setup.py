@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pycalc',
-    version='0.3',
+    version='1.0',
     packages=find_packages(),
     description='Pure-python command-line calculator.',
     author='Petrovsky Denis',
