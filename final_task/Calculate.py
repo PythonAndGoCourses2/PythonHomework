@@ -2,8 +2,8 @@ import math
 import parser
 import operator
 
-OPERATORS = {'+': (1, operator.add),
-             '-': (1, operator.sub),
+OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
+             '-': (1, operator.sub),  # Второй элемент - операция
              '*': (2, operator.mul),
              '/': (2, operator.truediv),
              '//': (2, operator.floordiv),
@@ -11,70 +11,86 @@ OPERATORS = {'+': (1, operator.add),
              '^': (3, operator.pow)}
 math_const = {'e': math.e,
               'pi': math.pi}
-math_function = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])  # Need to redo
+math_function = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
+math_function["abs"], math_function["round"] = abs, round  # Добавляем 2 built-in функции
 
 
 def parse(expression):
-    number, func, op = '', '', ''
-    for symbol in expression:
-
+    number, func, op, func_expr = '', '', '', ''
+    func_list = []
+    parsed_formula = []
+    i = 0  # Символ строки
+    while i < len(expression):
+        symbol = expression[i]
         if symbol.isalpha():
             func += symbol
-        elif func in math_const:
-            yield math_const[func]
+        elif func in math_const:  # Если является мат. const
+            parsed_formula.append(math_const[func])
             func = ''
-        elif func in math_function:
-
-            yield math_function[func]()
-
+        elif func in math_function:  # Если является мат. функцией
+            while symbol != ')':
+                symbol = expression[i]
+                func_expr += symbol  # Заносим значение, которое находится внутри функции
+                i += 1
+                #print(func_expr)
+            parsed_formula.append(math_function[func](calculating(func_expr)))
+            func = ''
+            continue
         if symbol.isdigit() or symbol == '.':
             number += symbol
         elif number:
-            yield float(number)
+            parsed_formula.append(float(number))
             number = ''
+
         if symbol in OPERATORS:
             op += symbol
         elif op:
-            yield op
+            parsed_formula.append(op)
             op = ''
+
         if symbol in "()":
-            yield symbol
+            parsed_formula.append(symbol)
+        i += 1
+
     if number:
-        yield float(number)
-    elif func and func in math_const:
-        yield math_const[func]
+        parsed_formula.append(float(number))
+    elif func in math_const:
+        parsed_formula.append(math_const[func])
+    return parsed_formula
 
 
 def infix_to_postfix(parsed_formula):
     """This function translate infix form into postfix form"""
-    stack = []
-    for token in parsed_formula:
-        if token in OPERATORS:
-            while stack and stack[-1] != '(' and OPERATORS[token][0] <= OPERATORS[stack[-1]][0]:
-                yield stack.pop()
-            stack.append(token)
-        elif token == ')':
+    polish_notation, stack = [], []
+    print("parsed_fomula: ", parsed_formula)
+    for item in parsed_formula:
+        if item in OPERATORS:
+            while stack and stack[-1] != '(' and OPERATORS[item][0] <= OPERATORS[stack[-1]][0]:
+                polish_notation.append(stack.pop())
+            stack.append(item)
+        elif item == ')':
             while stack:
                 x = stack.pop()
                 if x == '(':
                     break
-                yield x
-        elif token == "(":
-            stack.append(token)
-        else:
-            yield token
+                polish_notation.append(x)
+        elif item == "(":
+            stack.append(item)
+        else:  # Если число
+            polish_notation.append(item)
     while stack:
-        yield stack.pop()
+        polish_notation.append(stack.pop())
+    return polish_notation
 
 
-def calc(polish):
+def calc(polish_notation):
     stack = []
-    for token in polish:
-        if token in OPERATORS:
+    for item in polish_notation:
+        if item in OPERATORS:
             y, x = stack.pop(), stack.pop()
-            stack.append(OPERATORS[token][1](x, y))
+            stack.append(OPERATORS[item][1](x, y))
         else:
-            stack.append(token)
+            stack.append(item)
     return stack[0]
 
 
@@ -82,5 +98,5 @@ def calculating(expression):
     return calc(infix_to_postfix(parse(expression)))
 
 
-# print(calculating(parser.create_parser().EXPRESSION))
-print(calculating("2+e"))
+#print(calculating(parser.create_parser().EXPRESSION))
+print(calculating("log(2+pi*(2+e))+4"))
