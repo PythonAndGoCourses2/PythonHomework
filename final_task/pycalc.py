@@ -16,9 +16,9 @@ math_function["abs"], math_function["round"] = abs, round  # Добавляем 
 
 
 def parse(expression):
-    number, func, op, func_expr = '', '', '', ''
-    func_list = []
+    number, func, op, first_argument, second_argument = '', '', '', '', ''
     parsed_formula = []
+    brackets = 0  # Счётчик скобок для функций
     i = 0  # Символ строки
     while i < len(expression):
         symbol = expression[i]
@@ -28,12 +28,21 @@ def parse(expression):
             parsed_formula.append(math_const[func])
             func = ''
         elif func in math_function:  # Если является мат. функцией
-            while symbol != ')':
-                symbol = expression[i]
-                func_expr += symbol  # Заносим значение, которое находится внутри функции
+            while expression[i] != '(':  # То что до скобок определяем как второй аргумент
+                second_argument += expression[i]
                 i += 1
-                # print(func_expr)
-            parsed_formula.append(math_function[func](calculating(func_expr)))
+            i += 1
+            while expression[i] != ')' or brackets != 0:
+                first_argument += expression[i]  # Заносим значение, которое находится внутри функции
+                if expression[i] == '(':
+                    brackets += 1
+                elif expression[i] == ')':
+                    brackets -= 1
+                i += 1
+            if not second_argument:
+                parsed_formula.append(math_function[func](calculating(first_argument)))
+            else:
+                parsed_formula.append(math_function[func](calculating(first_argument), float(second_argument)))
             func = ''
             continue
         if symbol.isdigit() or symbol == '.':
@@ -62,6 +71,7 @@ def parse(expression):
 def infix_to_postfix(parsed_formula):
     """This function translate infix form into postfix form"""
     polish_notation, stack = [], []
+    print(parsed_formula)
     for item in parsed_formula:
         if item == '^':
             while stack and stack[-1] != '(' and OPERATORS[item][0] < OPERATORS[stack[-1]][0]:
@@ -102,8 +112,8 @@ def calculating(expression):
 
 
 def main():
-    print(calculating(create_parser().EXPRESSION))
-
+    # print(calculating(create_parser().EXPRESSION))
+    print(calculating("pow(2,3)"))
 
 
 def create_parser():
