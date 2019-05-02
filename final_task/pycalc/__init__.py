@@ -1,19 +1,15 @@
-import sys
-import argparse
+from myParser import parse_console
 
 
 def main():
     """The main routine."""
-    stringToParse = parse_console()
-    print(stringToParse)
+    infixstring = parse_console()
+    print(infixstring)
 
 
-def parse_console():
-    """Parse args from console and give it to main"""
-    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
-    parser.add_argument('EXPRESSION', help='expression string to evaluate')
-    return parser.parse_args().EXPRESSION
-    
+def is_number(s):
+    return s.isdigit()
+
 
 if __name__ == "__main__":
     main()
