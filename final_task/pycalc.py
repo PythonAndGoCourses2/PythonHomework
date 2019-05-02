@@ -1,5 +1,5 @@
 import math
-import argparse
+import parser
 import operator
 
 OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
@@ -97,15 +97,10 @@ def calculating(expression):
     return calc(infix_to_postfix(parse(expression)))
 
 
-def create_parser():
-    parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
-    parser.add_argument('EXPRESSION', help='expression string to evaluate', type=str)
-    return parser.parse_args()
-
-
 def main():
-    a = calculating(create_parser().EXPRESSION)
+    a = calculating(parser.create_parser().EXPRESSION)
     print(a)
+
 
 if __name__ == '__main__':
     main()
