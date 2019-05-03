@@ -2,6 +2,8 @@ import re
 import pycalc.operators as operators
 import pycalc.difcalc as difcalc
 from numbers import Number
+import importlib.util
+from os import path
 
 
 class CheckAndChange():
@@ -16,27 +18,30 @@ class CheckAndChange():
 
     def addargs(self, modul):
         if modul is not None:
-            if modul[-3:] == ".py":
-                module = __import__(modul[:-3])
-                new_functions = {
-                    attr: getattr(
+            base = path.basename(modul)
+
+            module_name = path.splitext(base)[0]
+            spec = importlib.util.spec_from_file_location(module_name, modul)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            new_functions = {
+                attr: getattr(
+                    module,
+                    attr) for attr in dir(module) if callable(
+                    getattr(
                         module,
-                        attr) for attr in dir(module) if callable(
-                        getattr(
-                            module,
-                            attr))}
-                difcalc.ComplexCalc.math_functions.update(new_functions)
-                new_const = {
-                    attr: getattr(
+                        attr))}
+            difcalc.ComplexCalc.math_functions.update(new_functions)
+            new_const = {
+                attr: getattr(
+                    module,
+                    attr) for attr in dir(module) if isinstance(
+                    getattr(
                         module,
-                        attr) for attr in dir(module) if isinstance(
-                        getattr(
-                            module,
-                            attr),
-                        Number)}
-                difcalc.ComplexCalc.const.update(new_const)
-            else:
-                raise Exception("wrong file extension")
+                        attr),
+                    Number)}
+            difcalc.ComplexCalc.const.update(new_const)
 
     def correct_spaces(self, expr):
         searcher = expr.find(" ")
