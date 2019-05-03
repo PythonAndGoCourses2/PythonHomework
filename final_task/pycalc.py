@@ -73,7 +73,7 @@ def parse(xprstr):
     """ парсинг строки математического выражения.
     на выходе список в инфиксной нотации"""
     word = ''
-    xprlst=[]
+    xprlst = []
     exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
     xprset = set(xprstr)
     # проверка если строка выражения содержит недопустимые символы
@@ -89,7 +89,6 @@ def parse(xprstr):
     if xprset.issubset(string.punctuation):
         print('ERROR: no digits or functions')
         exit(0)
-
 
     for i in range(3):
         xprstr = xprstr.replace('  ', ' ')
@@ -197,13 +196,12 @@ def parse(xprstr):
             xprlst.pop(i)
         if xprlst[i] == '-' and xprlst[i-1] == '(' and xprlst[i+1] in funclist:
             xprlst[i] = -1
-            xprlst.insert(i+1,'*')
+            xprlst.insert(i+1, '*')
 
     if xprlst[0] == '-':
-            # print('минус',xprlst[i+1])
-            xprlst[0] = -1
-            xprlst.insert(1,'*')
-            # print(*xprlst, sep='')
+        xprlst[0] = -1
+        xprlst.insert(1, '*')
+        # print(*xprlst, sep='')
 
     # print (*xprlst, sep='|')
     return xprlst
@@ -283,14 +281,14 @@ def postfix(xprlst):
             else:
                 # # # print('оператор:', i, '<=stack', stack[-1], prior(i, stack[-1]))
                 while stack[-1] in oper+funclist and prior(i, stack[-1]):
-                        # пока наверху стека оператор с большим или равным приоритетом
-                        # # # print('пока на верху стэка оператор')
-                        # # # print ( 'PRIOR', i, '<=', stack[-1], prior(i, stack[-1]))
-                        output.append(stack.pop())  # переложить оператор из стека на выход
-                        # # # print('output=', *output, sep=' ')
-                        # # # print('stack=', *stack, sep=' ')
-                        if stack == []:
-                            break
+                    # пока наверху стека оператор с большим или равным приоритетом
+                    # # # print('пока на верху стэка оператор')
+                    # # # print ( 'PRIOR', i, '<=', stack[-1], prior(i, stack[-1]))
+                    output.append(stack.pop())  # переложить оператор из стека на выход
+                    # # # print('output=', *output, sep=' ')
+                    # # # print('stack=', *stack, sep=' ')
+                    if stack == []:
+                        break
                 stack.append(i)  # иначе положить оператор в стек
 
         elif i == '(':
