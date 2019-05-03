@@ -81,9 +81,11 @@ def parse(xprstr):
         print('ERROR: brackets are not balanced')
         exit(0)
     # проверка если выражение состоит только из знаков пунктуации
-    if xprset.issubset(string.punctuation) or xprset.issubset(funcset):
+    # print('funcset', funcset)
+    if xprset.issubset(string.punctuation):
         print('ERROR: no digits or functions')
         exit(0)
+
 
     xprstr = xprstr.replace('  ', ' ')
     xprstr = xprstr.replace(', ', ',')
@@ -171,66 +173,32 @@ def parse(xprstr):
             # print(word)
     xprlst.pop()    # удаляется добавленный пробел
 
+    xprset = set(xprlst)
+    if xprset.issubset(funcset):
+        print('ERROR: function has no arguments')
+        exit(0)
+
     # print('поииск операторов составных')
     for i, data in enumerate(xprlst):
         if i == len(xprlst) - 1:
             break
         # print(i, data)
         if str(xprlst[i]) + str(xprlst[i+1]) in oper:
-            # print(xprlst[i], xprlst[i+1])
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
             xprlst.pop(i)
-
         if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and type(xprlst[i+1]) == float:
-            # print('минус',xprlst[i-1],xprlst[i],xprlst[i+1])
             xprlst[i+1] = xprlst[i+1] * -1
             xprlst.pop(i)
-            # print(*xprlst, sep='')
-
         if xprlst[i] == '-' and xprlst[i-1] == '(' and xprlst[i+1] in funclist:
-            # print('минус',xprlst[i+1])
             xprlst[i] = -1
             xprlst.insert(i+1,'*')
+
+    if xprlst[0] == '-':
+            # print('минус',xprlst[i+1])
+            xprlst[0] = -1
+            xprlst.insert(1,'*')
             # print(*xprlst, sep='')
 
-
-
-        # if xprlst[i] == '/' and xprlst[i + 1] == '/':
-        #     xprlst[i] = '//'
-        #     xprlst.pop(i + 1)
-        # elif xprlst[i] == '>' and xprlst[i + 1] == '=':
-        #     xprlst[i] = '>='
-        #     xprlst.pop(i + 1)
-        # elif xprlst[i] == '<' and xprlst[i + 1] == '=':
-        #     xprlst[i] = '<='
-        #     xprlst.pop(i + 1)
-        # elif xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] == '=':
-        #     xprlst[i] = '=='
-        #     xprlst.pop(i + 1)
-        # elif xprlst[i] == '!' and xprlst[i + 1] == '=':
-        #     xprlst[i] = '!='
-        #     xprlst.pop(i + 1)
-
-        # if xprlst[i] == '-' and xprlst[i - 1] in oper and type(xprlst[i + 1]) == float:
-        #     xprlst[i + 1] = xprlst[i + 1] * - 1
-        #     xprlst.pop(i)
-        # elif (xprlst[i] == '-' and i == 0) or (xprlst[i] == '-' and xprlst[i - 1] in oper):
-        #     xprlst[i] = -1
-        #     xprlst.insert(i + 1, '*')
-        # elif xprlst[i] == '-' and xprlst[i - 1] == '/':
-        #     xprlst[i - 1] = '*'
-        #     xprlst[i] = -1
-        #     xprlst.insert(i + 1, '/')
-        # elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
-        #     pass
-        #
-        #     #  # # # print('ok', i)
-        # else:
-        #     print('ERROR: unknown', xprlst[i], i)
-        # xprset = set(xprlst)
-        # if xprset.issubset(funcset) or xprset.issubset(operset):
-        #     print('ERROR: только функция')
-        #     exit(0)
     # print (*xprlst, sep='|')
     return xprlst
 
