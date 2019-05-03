@@ -8,7 +8,6 @@ import importlib
 import importlib.util
 from math import *
 
-xprlst = []
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 splitset = set(split)
 funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
@@ -74,6 +73,7 @@ def parse(xprstr):
     """ парсинг строки математического выражения.
     на выходе список в инфиксной нотации"""
     word = ''
+    xprlst=[]
     exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
     xprset = set(xprstr)
     # проверка если строка выражения содержит недопустимые символы
@@ -209,53 +209,25 @@ def parse(xprstr):
     return xprlst
 
 
-def logargs(*args):
-    # # # print('START logoargs', args)
-    if ',' in args:
-        res = log(args[-3], args[-1])
-    else:
-        res = log(args[-1])
-    # # # print('RETURN logoargs', res)
-    return res
-
-
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
-    # print('OPERATOR=',operator,'ARGS=',args)
-
-    if operator in ['sum', 'fsum']:
-        # print('OPERATOR=',operator,'ARGS=',args)
+    try:
+        result = funcdic[operator](*args)
+    except TypeError:
         try:
             result = funcdic[operator](args)
-        except ArithmeticError:
+        except TypeError:
             print('ERROR: invalid argument for ', operator)
             exit(0)
-    elif operator in dir(math) + dir(operator)+['module'] and operator not in ['sum', 'fsum']:
-        # print('OPERATOR=',operator,'ARGS=',args, '*ARGS=',args)
-        if type(args) == float or type(args) == int or type(args) == bool:
-            try:
-                result = funcdic[operator](args)
-            except ArithmeticError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-            except TypeError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-            except ValueError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-        else:
-            try:
-                result = funcdic[operator](*args)
-            except ArithmeticError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-            except TypeError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-            except ValueError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
+        except ValueError:
+            print('ERROR: invalid argument for ', operator)
+            exit(0)
+    except ArithmeticError:
+        print('ERROR: invalid argument for ', operator)
+        exit(0)
+    except ValueError:
+        print('ERROR: invalid argument for ', operator)
+        exit(0)
     return result
 
 
@@ -275,20 +247,14 @@ def prior(op1, op2):
 
 
 def postfix(xprlst):
-    """
-    преобразование инфиксной нотации в постфиксную
-    на входе список элементов выражения инфиксной нотации, на выходе список элементов постфиксной нотации
-    """
-    # print('START CONVERT TO POSTFIX *********************')
+    """ преобразование инфиксной нотации в постфиксную
+    на входе список элементов выражения инфиксной нотации, на выходе список элементов постфиксной нотации """
     output = []
     stack = []
     for i in xprlst:
-        # # # print('-----------------------------------')
-        # # # print('i=', i)
-        if type(i) == float or type(i) == int:
+        if type(i) == float or type(i) == int:  # если цифра то положить на выход
             output.append(i)
-            # # # print('output=', *output, sep=' ')
-            # # # print('stack=', *stack, sep=' ')
+
         if i == ',':
             if stack != []:
                 while stack[-1] in oper+funclist and prior(i, stack[-1]):
@@ -312,11 +278,8 @@ def postfix(xprlst):
                 stack.append(i)
                 # # # print('output=', *output, sep=' ')
                 # # # print('stack=', *stack, sep=' ')
-            elif stack[-1] == '(':  # если стек содержит (
-                # # # print('( положить в стек')
+            elif stack[-1] == '(':  # если стек содержит ( положить в стек (
                 stack.append(i)
-                # # # print('output=', *output, sep=' ')
-                # # # print('stack=', *stack, sep=' ')
             else:
                 # # # print('оператор:', i, '<=stack', stack[-1], prior(i, stack[-1]))
                 while stack[-1] in oper+funclist and prior(i, stack[-1]):
@@ -330,18 +293,8 @@ def postfix(xprlst):
                             break
                 stack.append(i)  # иначе положить оператор в стек
 
-                # if i ==', ':
-                #     output.append(i) # если это , то на выход
-                # else:
-                #     stack.append(i) # иначе положить оператор в стек
-                # # # print('output=', *output, sep=' ')
-                # # # print('stack=', *stack, sep=' ')
-
         elif i == '(':
             stack.append(i)
-            # # # print('output=', *output, sep=' ')
-            # # # print('stack=', *stack, sep=' ')
-
         elif i == ')':
             # # # print(i)
             while stack[-1] != '(':  # пока верх стека не равен (
@@ -349,14 +302,10 @@ def postfix(xprlst):
                 output.append(stack.pop())
                 # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop()  # удаление из стека (
-            # # # print('output=', *output, sep=' ')
-            # # # print('stack=', *stack, sep=' ')
-        elif i in funclist:
-            # # # print(i, 'IN FUNCLIST помещаем в стек')
+
+        elif i in funclist:  # если функция то помещаем в стек
             stack.append(i)
-            # # # print('output=', *output, sep=' ')
-            # # # print('stack=', *stack, sep=' ')
-    # # # print('*******')
+
     # # # print('output=', *output, sep=' ')
     # # # print('stack=', *stack, sep=' ')
 
@@ -365,10 +314,8 @@ def postfix(xprlst):
 
 
 def evalpostfix(xprpstfx):
-    """
-    вычисление выражения в постфиксной нотации
-    на входе список элементов выражения
-    """
+    """ вычисление выражения в постфиксной нотации
+    на входе список элементов выражения """
     # print('START EVALUATE POSTFIX ********************')
     stack = []
     args = []
@@ -403,16 +350,13 @@ def evalpostfix(xprpstfx):
 
 
 def main():
-    # парсинг аргументов командной строки
+    # парсинг аргументов командной строки xpr выражение и module модуль функции
     parsecommand()
 
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
 
-
     # xpr = '-+---+-1'
-
-
 
     # разбор строики вырыжения в список
     xprlst = parse(xpr)
