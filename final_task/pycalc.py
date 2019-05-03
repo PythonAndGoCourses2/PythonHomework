@@ -16,7 +16,7 @@ xpr = args.EXPRESSION
 module = args.MODULE
 
 
-#xprstr = ''
+# xprstr = ''
 xprlst = []
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 splitset = set(split)
@@ -44,13 +44,6 @@ opdic = {
 funcdic.update(opdic)
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',']
 operset = set(oper)
-
-
-
-
-
-
-
 
 
 
@@ -238,7 +231,7 @@ def parse(xprstr):
         # if xprset.issubset(funcset) or xprset.issubset(operset):
         #     print('ERROR: только функция')
         #     exit(0)
-    print (*xprlst, sep='|')
+    # print (*xprlst, sep='|')
     return xprlst
 
 
