@@ -188,7 +188,7 @@ def parse(xprstr):
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
             xprlst.pop(i)
 
-        if xprlst[i] == '-' and xprlst[i-1] in split and type(xprlst[i+1]) == float:
+        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and type(xprlst[i+1]) == float:
             # print('минус',xprlst[i-1],xprlst[i],xprlst[i+1])
             xprlst[i+1] = xprlst[i+1] * -1
             xprlst.pop(i)
@@ -238,7 +238,7 @@ def parse(xprstr):
         # if xprset.issubset(funcset) or xprset.issubset(operset):
         #     print('ERROR: только функция')
         #     exit(0)
-    # print (*xprlst, sep='')
+    print (*xprlst, sep='|')
     return xprlst
 
 
