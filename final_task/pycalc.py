@@ -1,4 +1,4 @@
-# test 26 apr
+# test 29 apr
 import argparse
 import math
 import operator
@@ -15,15 +15,9 @@ args = ap.parse_args()
 xpr = args.EXPRESSION
 module = args.MODULE
 
-xprstr = ''
 
+#xprstr = ''
 xprlst = []
-a = 0.
-b = 0.
-result = 0.
-funcset = {}
-operset = {}
-splitset = {}
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 splitset = set(split)
 funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
@@ -52,6 +46,14 @@ oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',
 operset = set(oper)
 
 
+
+
+
+
+
+
+
+
 def addfunc(module):
     """ добавляет новую функцию из модуля """
     if module is not None:  # если введено имя модуля
@@ -65,7 +67,6 @@ def addfunc(module):
             exit(0)
         else:
             newfunc = importlib.import_module(module)  # импортирование нового модуля
-            # # print(dir(newfunc))
             funcdic[module] = newfunc.main
             funclist.append(module)
             funcset.add(module)
@@ -177,45 +178,56 @@ def parse(xprstr):
             # print(word)
     xprlst.pop()    # удаляется добавленный пробел
 
+    # print('поииск операторов составных')
     for i, data in enumerate(xprlst):
-        if xprlst[i] == '/' and xprlst[i + 1] == '/':
-            xprlst[i] = '//'
-            xprlst.pop(i + 1)
-        elif xprlst[i] == '>' and xprlst[i + 1] == '=':
-            xprlst[i] = '>='
-            xprlst.pop(i + 1)
-        elif xprlst[i] == '<' and xprlst[i + 1] == '=':
-            xprlst[i] = '<='
-            xprlst.pop(i + 1)
-        elif xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] == '=':
-            xprlst[i] = '=='
-            xprlst.pop(i + 1)
-        elif xprlst[i] == '!' and xprlst[i + 1] == '=':
-            xprlst[i] = '!='
-            xprlst.pop(i + 1)
-        elif xprlst[i] == '-' and xprlst[i - 1] in \
-                ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=')\
-                and type(xprlst[i + 1]) == float:
-            xprlst[i + 1] = xprlst[i + 1] * - 1
-            xprlst.pop(i)
-        elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1]
-                                              in('*', '^', '+', '-', '(', '<', '>', '=')):
-            xprlst[i] = -1
-            xprlst.insert(i + 1, '*')
-        elif xprlst[i] == '-' and xprlst[i - 1] == '/':
-            xprlst[i - 1] = '*'
-            xprlst[i] = -1
-            xprlst.insert(i + 1, '/')
-        elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
-            pass
+        if i == len(xprlst) - 1:
+            break
+        # print(i, data)
+        if str(xprlst[i]) + str(xprlst[i+1]) in operset:
+            # print(xprlst[i], xprlst[i+1])
+            xprlst[i] = str(xprlst[i]) + str(xprlst[i+1])
+            xprlst.pop(i+1)
 
-            #  # # # print('ok', i)
-        else:
-            print('ERROR: unknown', xprlst[i], i)
-        xprset = set(xprlst)
-        if xprset.issubset(funcset) or xprset.issubset(operset):
-            print('ERROR: только функция')
-            exit(0)
+
+
+        # if xprlst[i] == '/' and xprlst[i + 1] == '/':
+        #     xprlst[i] = '//'
+        #     xprlst.pop(i + 1)
+        # elif xprlst[i] == '>' and xprlst[i + 1] == '=':
+        #     xprlst[i] = '>='
+        #     xprlst.pop(i + 1)
+        # elif xprlst[i] == '<' and xprlst[i + 1] == '=':
+        #     xprlst[i] = '<='
+        #     xprlst.pop(i + 1)
+        # elif xprlst[i] == '=' and xprlst[i + 1] == '=' or xprlst[i] == '=':
+        #     xprlst[i] = '=='
+        #     xprlst.pop(i + 1)
+        # elif xprlst[i] == '!' and xprlst[i + 1] == '=':
+        #     xprlst[i] = '!='
+        #     xprlst.pop(i + 1)
+        # elif xprlst[i] == '-' and xprlst[i - 1] in \
+        #         ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=')\
+        #         and type(xprlst[i + 1]) == float:
+        #     xprlst[i + 1] = xprlst[i + 1] * - 1
+        #     xprlst.pop(i)
+        # elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1]
+        #                                       in('*', '^', '+', '-', '(', '<', '>', '=')):
+        #     xprlst[i] = -1
+        #     xprlst.insert(i + 1, '*')
+        # elif xprlst[i] == '-' and xprlst[i - 1] == '/':
+        #     xprlst[i - 1] = '*'
+        #     xprlst[i] = -1
+        #     xprlst.insert(i + 1, '/')
+        # elif type(xprlst[i]) == float or xprlst[i] in funclist or xprlst[i] in oper or xprlst[i] in split:
+        #     pass
+        #
+        #     #  # # # print('ok', i)
+        # else:
+        #     print('ERROR: unknown', xprlst[i], i)
+        # xprset = set(xprlst)
+        # if xprset.issubset(funcset) or xprset.issubset(operset):
+        #     print('ERROR: только функция')
+        #     exit(0)
     return xprlst
 
 
@@ -274,7 +286,7 @@ def operate(operator, args):
 def prior(op1, op2):
     """ сравнивает приоритеты математических опрераторов и функций op1 <= op2, возвращает bool """
     operhi = ['^'] + funclist                                           # 3
-    opermid = ['*', '/', '%']                                           # 2
+    opermid = ['*', '/', '%', '//']                                     # 2
     operlow = ['+', '-']                                                # 1
     operlowest = ['(', ')', '==', '<=', '>=', '<', '>', '!=', ',']      # 0
     priorset = [operlowest, operlow, opermid, operhi]
@@ -412,12 +424,6 @@ def evalpostfix(xprpstfx):
         else:
             stack.append(i)
     return stack[0]
-
-# EVAL TEST
-# test = xpr
-# test = test.replace('^', '**')
-# test = test.replace(' ', '')
-# test = test.replace(', ', '.')
 
 
 def main(xpr):
