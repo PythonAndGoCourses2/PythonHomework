@@ -13,13 +13,21 @@ WHITESPACES = re.compile(r"\s+")
 class Lexer:
     """Represents a lexer."""
 
-    def __init__(self, matchers, source):
+    def __init__(self, matchers):
         self.matchers = matchers
+        self.source = ''
+        self.pos = 0
+        self.length = 0
+
+        # a wrapper for caching the last peeked token
+        self._token_wrapper = []
+
+    def init(self, source):
+        """Init a lexer with a source string."""
+
         self.source = source
         self.pos = 0
         self.length = len(source)
-
-        # a wrapper for caching the last peeked token
         self._token_wrapper = []
 
     def is_source_exhausted(self):
@@ -96,4 +104,3 @@ if __name__ == "__main__":
         if not token:
             break
         print(token, l.source, l.pos, l.length)
-
