@@ -8,15 +8,6 @@ import importlib
 import importlib.util
 from math import *
 
-ap = argparse.ArgumentParser(description='Pure-python command-line calculator.')
-ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
-ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
-args = ap.parse_args()
-xpr = args.EXPRESSION
-module = args.MODULE
-
-
-# xprstr = ''
 xprlst = []
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 splitset = set(split)
@@ -46,9 +37,22 @@ oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', ',
 operset = set(oper)
 
 
+def parsecommand():
+    """ парсинг командной строки """
+    global xpr, module
+    ap = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    ap.add_argument('EXPRESSION', type=str, help='expression string to evalute')
+    ap.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
+    args = ap.parse_args()
+    xpr = args.EXPRESSION
+    module = args.MODULE
+    # print('def xpr', xpr)
+    # print('def module', module)
+    return
+
 
 def addfunc(module):
-    """ добавляет новую функцию из модуля """
+    """ добавление новой функцию из модуля (module)"""
     if module is not None:  # если введено имя модуля
         try:
             spec = importlib.util.find_spec(module)
@@ -87,21 +91,23 @@ def parse(xprstr):
         exit(0)
 
 
-    xprstr = xprstr.replace('  ', ' ')
-    xprstr = xprstr.replace(', ', ',')
-    xprstr = xprstr.replace(' *', '*')
-    xprstr = xprstr.replace('* ', '*')
-    xprstr = xprstr.replace(' +', '+')
-    xprstr = xprstr.replace('+ ', '+')
-    xprstr = xprstr.replace(' -', '-')
-    xprstr = xprstr.replace('- ', '-')
-    xprstr = xprstr.replace('--', '+')
-    xprstr = xprstr.replace('++', '+')
-    xprstr = xprstr.replace('+-', '-')
-    xprstr = xprstr.replace('-+', '-')
+    for i in range(3):
+        xprstr = xprstr.replace('  ', ' ')
+        xprstr = xprstr.replace(', ', ',')
+        xprstr = xprstr.replace(' *', '*')
+        xprstr = xprstr.replace('* ', '*')
+        xprstr = xprstr.replace(' +', '+')
+        xprstr = xprstr.replace('+ ', '+')
+        xprstr = xprstr.replace(' -', '-')
+        xprstr = xprstr.replace('- ', '-')
+        xprstr = xprstr.replace('--', '+')
+        xprstr = xprstr.replace('++', '+')
+        xprstr = xprstr.replace('+-', '-')
+        xprstr = xprstr.replace('-+', '-')
+        # print(xprstr)
 
     if xprstr[0] == '+':
-        xprstr = xprstr[1:]
+        xprstr.pop(0)
 
     # проверка лишних пробелов
     if xprstr.count(' ') > 0:
@@ -214,6 +220,7 @@ def logargs(*args):
 
 
 def operate(operator, args):
+    """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     # print('OPERATOR=',operator,'ARGS=',args)
 
     if operator in ['sum', 'fsum']:
@@ -249,9 +256,6 @@ def operate(operator, args):
             except ValueError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
-    # else:  # уже проверяется в парсинге и попыика импортировать модуль
-        # print('ERROR: unknown math operator', operator)
-        # result = 0
     return result
 
 
@@ -398,9 +402,17 @@ def evalpostfix(xprpstfx):
     return stack[0]
 
 
-def main(xpr):
+def main():
+    # парсинг аргументов командной строки
+    parsecommand()
+
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
+
+
+    # xpr = '-+---+-1'
+
+
 
     # разбор строики вырыжения в список
     xprlst = parse(xpr)
@@ -416,4 +428,4 @@ def main(xpr):
     return res
 
 
-print(main(xpr))
+print(main())
