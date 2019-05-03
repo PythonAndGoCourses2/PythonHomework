@@ -183,10 +183,22 @@ def parse(xprstr):
         if i == len(xprlst) - 1:
             break
         # print(i, data)
-        if str(xprlst[i]) + str(xprlst[i+1]) in operset:
+        if str(xprlst[i]) + str(xprlst[i+1]) in oper:
             # print(xprlst[i], xprlst[i+1])
-            xprlst[i] = str(xprlst[i]) + str(xprlst[i+1])
-            xprlst.pop(i+1)
+            xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
+            xprlst.pop(i)
+
+        if xprlst[i] == '-' and xprlst[i-1] in split and type(xprlst[i+1]) == float:
+            print('минус',xprlst[i-1],xprlst[i],xprlst[i+1])
+            xprlst[i+1] = xprlst[i+1] * -1
+            xprlst.pop(i)
+            print(*xprlst, sep='')
+
+        if xprlst[i] == '-' and xprlst[i-1] == '(' and xprlst[i+1] in funclist:
+            print('минус',xprlst[i+1])
+            xprlst[i] = -1
+            xprlst.insert(i+1,'*')
+            print(*xprlst, sep='')
 
 
 
@@ -205,13 +217,11 @@ def parse(xprstr):
         # elif xprlst[i] == '!' and xprlst[i + 1] == '=':
         #     xprlst[i] = '!='
         #     xprlst.pop(i + 1)
-        # elif xprlst[i] == '-' and xprlst[i - 1] in \
-        #         ('^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=', '=')\
-        #         and type(xprlst[i + 1]) == float:
+
+        # if xprlst[i] == '-' and xprlst[i - 1] in oper and type(xprlst[i + 1]) == float:
         #     xprlst[i + 1] = xprlst[i + 1] * - 1
         #     xprlst.pop(i)
-        # elif (xprlst[i] == '-' and i == 0) or(xprlst[i] == '-' and xprlst[i - 1]
-        #                                       in('*', '^', '+', '-', '(', '<', '>', '=')):
+        # elif (xprlst[i] == '-' and i == 0) or (xprlst[i] == '-' and xprlst[i - 1] in oper):
         #     xprlst[i] = -1
         #     xprlst.insert(i + 1, '*')
         # elif xprlst[i] == '-' and xprlst[i - 1] == '/':
@@ -228,6 +238,7 @@ def parse(xprstr):
         # if xprset.issubset(funcset) or xprset.issubset(operset):
         #     print('ERROR: только функция')
         #     exit(0)
+    print (*xprlst, sep='')
     return xprlst
 
 
