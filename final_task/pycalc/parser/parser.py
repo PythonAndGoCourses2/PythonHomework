@@ -6,8 +6,8 @@ Parser.
 class Parser:
     """"""
 
-    def __init__(self, registry, lexer):
-        self.registry = registry
+    def __init__(self, spec, lexer):
+        self.spec = spec
         self.lexer = lexer
 
     def parse(self, source):
@@ -21,25 +21,25 @@ class Parser:
 
         return result
 
-    def expression(self, power=0):
+    def expression(self, right_power=0):
         """"""
 
         token = self.consume()
         if not token:
             raise Exception('i expect something but nothing finded')
 
-        left = token.nud()
+        left = self._nud(token)
 
         while True:
             token = self.peek()
             if not token:
                 break
 
-            if power >= token.power.led:
+            if right_power >= self._left_power(token):
                 break
 
             self.consume()
-            left = token.led(left)
+            left = self._led(token, left)
 
         return left
 
@@ -65,6 +65,21 @@ class Parser:
             raise SyntaxError(f"Expected: {token_class.__name__}")
 
         self.consume()
+
+    def _nud(self, token):
+        """"""
+
+        return self.spec.nud.eval(self, token)
+
+    def _led(self, token, left):
+        """"""
+
+        return self.spec.led.eval(self, token, left)
+
+    def _left_power(self, token):
+        """"""
+
+        return self.spec.led.power(token)
 
 
 if __name__ == "__main__":
