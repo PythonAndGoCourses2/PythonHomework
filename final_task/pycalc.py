@@ -31,18 +31,23 @@ def parse(expression):
             while expression[i] != '(':  # То что до скобок определяем как второй аргумент
                 second_argument += expression[i]
                 i += 1
-            i += 1
-            while expression[i] != ')' or brackets != 0:
-                first_argument += expression[i]  # Заносим значение, которое находится внутри функции
-                if expression[i] == '(':
+            else:
+                first_argument += expression[i]  # Заносим "(" скобочку
+                brackets += 1
+                i += 1
+            while brackets != 0:
+                first_argument += expression[i]  # Заносим значение, которое находится внутри функции вместе с ")"
+                if expression[i] == '(':  # Проверка на скобки
                     brackets += 1
                 elif expression[i] == ')':
                     brackets -= 1
+                if expression[i] == ',':
+                    second_argument+=expression[i:]
                 i += 1
             if not second_argument:
                 parsed_formula.append(math_function[func](calculating(first_argument)))
             else:
-                parsed_formula.append(math_function[func](calculating(first_argument), float(second_argument)))
+                parsed_formula.append(math_function[func](calculating(first_argument), calculating(second_argument)))
             func = ''
             continue
         if symbol.isdigit() or symbol == '.':
@@ -112,7 +117,7 @@ def calculating(expression):
 
 def main():
     print(calculating(create_parser().EXPRESSION))
-    #print(calculating("2+3"))
+    # print(calculating("2+3"))
 
 
 def create_parser():
