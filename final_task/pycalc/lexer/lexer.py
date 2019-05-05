@@ -28,7 +28,7 @@ class Lexer:
         self.source = source
         self.pos = 0
         self.length = len(source)
-        self._token_wrapper = []
+        self._token_wrapper.clear()
 
     def is_source_exhausted(self):
         """Return `True` if the position pointer is out of the source string."""
