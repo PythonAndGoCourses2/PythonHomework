@@ -42,7 +42,7 @@ def parse(expression):
                 elif expression[i] == ')':
                     brackets -= 1
                 if expression[i] == ',':
-                    second_argument+=expression[i:]
+                    second_argument += expression[i:]
                 i += 1
             if not second_argument:
                 parsed_formula.append(math_function[func](calculating(first_argument)))
@@ -116,15 +116,45 @@ def calculating(expression):
 
 
 def main():
-    print(calculating(create_parser().EXPRESSION))
+    # print(create_parser())
+    expression = create_parser().expr
+    if brackets_check(expression) and whitespace_check(expression):
+        print(calculating(expression))
     # print(calculating("2+3"))
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def brackets_check(expr):
+    """Check brackets balance"""
+    brackets = 0
+    for symbol in expr:
+        if symbol == '(':
+            brackets += 1
+        elif symbol == ')':
+            brackets -= 1
+    if brackets != 0:
+        print("ERROR: brackets are not balanced")
+        return False
+    else:
+        return True
+
+
+def whitespace_check(expr):
+    for symbol in expr:
+        if symbol == ' ':
+            print("ERROR: too many whitespace")
+            return False
+    else:
+        return True
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 def create_parser():
     parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
-    parser.add_argument('EXPRESSION', help='expression string to evaluate', type=str)
+    parser.add_argument('expr', metavar='EXPRESSION', help='expression string to evaluate', type=str)
     return parser.parse_args()
 
 
+#######################################################################################################################
 if __name__ == '__main__':
     main()
