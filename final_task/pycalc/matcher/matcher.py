@@ -19,10 +19,10 @@ PREDEFINED_MATCHERS = {
     TokenType.NUMERIC: NUMBER_MATCHER
 }
 
-operators = ['+', '>', '-', '>=', '==', '<=', '!']
-functions = ['sin', 'arcsin', 'abs', 'time']
-constants = ['pi', 'e', 'nan']
-punctuations = ['(', ')', ',']
+# operators = ['+', '>', '-', '>=', '==', '<=', '!', '^']
+# functions = ['sin', 'arcsin', 'abs', 'time']
+# constants = ['pi', 'e', 'nan']
+# punctuations = ['(', ')', ',']
 
 
 class Matchers:
@@ -53,14 +53,40 @@ matchers = Matchers()
 
 matchers.register_matcher(TokenType.NUMERIC,
                           PREDEFINED_MATCHERS[TokenType.NUMERIC])
-matchers.register_matcher(TokenType.OPERATOR,
-                          matchers.create_matcher_from_literals_list(operators))
-matchers.register_matcher(TokenType.CONSTANT,
-                          matchers.create_matcher_from_literals_list(constants))
-matchers.register_matcher(TokenType.FUNCTION,
-                          matchers.create_matcher_from_literals_list(functions))
-matchers.register_matcher(TokenType.PUNCTUATION,
-                          matchers.create_matcher_from_literals_list(punctuations))
+
+matchers.register_matcher(TokenType.SUB,
+                          matchers.create_matcher_from_literals_list(['-']))
+
+matchers.register_matcher(TokenType.MUL,
+                          matchers.create_matcher_from_literals_list(['*']))
+
+matchers.register_matcher(TokenType.POW,
+                          matchers.create_matcher_from_literals_list(['^']))
+
+matchers.register_matcher(TokenType.GE,
+                          matchers.create_matcher_from_literals_list(['>=']))
+
+matchers.register_matcher(TokenType.GT,
+                          matchers.create_matcher_from_literals_list(['>']))
+
+matchers.register_matcher(TokenType.LEFT_PARENTHESIS,
+                          matchers.create_matcher_from_literals_list(['(']))
+
+matchers.register_matcher(TokenType.RIGHT_PARENTHESIS,
+                          matchers.create_matcher_from_literals_list([')']))
+
+matchers.register_matcher(TokenType.SUM,
+                          matchers.create_matcher_from_literals_list(['sum']))
+
+matchers.register_matcher(TokenType.COMMA,
+                          matchers.create_matcher_from_literals_list([',']))
+
+# matchers.register_matcher(TokenType.CONSTANT,
+#                           matchers.create_matcher_from_literals_list(constants))
+# matchers.register_matcher(TokenType.FUNCTION,
+#                           matchers.create_matcher_from_literals_list(functions))
+# matchers.register_matcher(TokenType.PUNCTUATION,
+#                           matchers.create_matcher_from_literals_list(punctuations))
 
 if __name__ == '__main__':
 
