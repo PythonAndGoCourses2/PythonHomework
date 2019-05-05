@@ -66,6 +66,15 @@ class Parser:
 
         self.consume()
 
+    def peek_and_check(self, token_type):
+        """"""
+
+        token = self.peek()
+        if not token or token.token_type != token_type:
+            return False
+
+        return True
+
     def _nud(self, token):
         """"""
 
