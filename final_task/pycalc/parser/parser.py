@@ -17,10 +17,13 @@ class Parser:
         print(f'input : {source}')
 
         self.lexer.init(source)
-        result = self.expression()
+        try:
+            result = self.expression()
+        except Exception as e:
+            print(f'{e}: (pos: {self.lexer.pos}), {self.lexer.format()}')
 
         assert self.lexer.source_exhausted(), \
-            f'Unparsed part of source left, (pos: {self.lexer._pos}).'
+            f'source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}'
 
         print(f'output: {result}')
 
@@ -31,7 +34,7 @@ class Parser:
 
         token = self.consume()
         if not token:
-            raise Exception('i expect something but nothing finded')
+            raise SyntaxError('i expect something but nothing finded')
 
         left = self._nud(token)
 
