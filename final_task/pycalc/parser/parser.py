@@ -22,7 +22,7 @@ class Parser:
         except Exception as e:
             print(f'{e}: (pos: {self.lexer.pos}), {self.lexer.format()}')
 
-        assert self.lexer.source_exhausted(), \
+        assert self.lexer.is_source_exhausted(), \
             f'source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}'
 
         print(f'output: {result}')
