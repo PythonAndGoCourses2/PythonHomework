@@ -58,16 +58,16 @@ class Parser:
 
         return self.lexer.peek()
 
-    def advance(self, token_class=None):
+    def advance(self, token_type=None):
         """"""
 
         token = self.peek()
 
         if not token or (
-                token_class and
-                not token.is_instance(token_class)
+                token_type and
+                not token.token_type == token_type
         ):
-            raise SyntaxError(f"Expected: {token_class.__name__}")
+            raise SyntaxError(f"Expected: {token_type}")
 
         self.consume()
 
