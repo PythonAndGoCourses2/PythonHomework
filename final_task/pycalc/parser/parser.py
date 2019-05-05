@@ -13,11 +13,16 @@ class Parser:
     def parse(self, source):
         """"""
 
+        print('=' * 30)
+        print(f'input : {source}')
+
         self.lexer.init(source)
         result = self.expression()
 
         assert self.lexer.source_exhausted(), \
             f'Unparsed part of source left, (pos: {self.lexer._pos}).'
+
+        print(f'output: {result}')
 
         return result
 
