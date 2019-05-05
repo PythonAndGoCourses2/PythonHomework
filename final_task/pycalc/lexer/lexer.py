@@ -58,6 +58,15 @@ class Lexer:
 
         return token
 
+    def format(self):
+        """"""
+
+        pos = self.pos
+        begin = self.source[:pos]
+        end = self.source[pos:]
+
+        return f'{begin}>{end}'
+
     def _next_token(self):
         """Try to match the next token."""
 
