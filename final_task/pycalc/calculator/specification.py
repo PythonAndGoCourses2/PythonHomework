@@ -1,9 +1,8 @@
 """
-
+Initializatioin of parser specification.
 """
 
 from math import pow as math_pow
-import math  # TODO: remove
 
 from pycalc.specification import Specification
 
@@ -11,7 +10,7 @@ from pycalc.token.constants import TokenType
 from pycalc.token.precedence import Precedence
 from pycalc.token.tokens import *
 
-# FIX: operator build and Operator from token same name
+# TODO: operator build and Operator from token same name
 import operator
 
 
