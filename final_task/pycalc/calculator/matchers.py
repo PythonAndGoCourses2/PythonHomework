@@ -50,6 +50,10 @@ def build_matchers(registry):
 
     matchers.register_matcher(TokenType.EQ,
                               matchers.create_matcher_from_literals_list(['==']))
+
+    matchers.register_matcher(TokenType.NE,
+                              matchers.create_matcher_from_literals_list(['!=']))
+
     matchers.register_matcher(TokenType.GE,
                               matchers.create_matcher_from_literals_list(['>=']))
 

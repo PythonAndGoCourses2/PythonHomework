@@ -75,10 +75,14 @@ def build_specification(registry):
                       power=Precedence.REMAINDER,
                       func=operator.mod)
 
-    # equal or greater
+    # equal
     spec.led.register(TokenType.EQ, BinaryInfixLeft,
                       power=Precedence.COMPARISONS,
                       func=operator.eq)
+    # not equal
+    spec.led.register(TokenType.NE, BinaryInfixLeft,
+                      power=Precedence.COMPARISONS,
+                      func=operator.ne)
 
     # greater
     spec.led.register(TokenType.GT, BinaryInfixLeft,
