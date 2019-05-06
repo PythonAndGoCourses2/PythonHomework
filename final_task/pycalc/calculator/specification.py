@@ -30,6 +30,11 @@ def build_specification(registry):
                       stop=TokenType.RIGHT_PARENTHESIS,
                       sep=TokenType.COMMA)
 
+    # CONSTANTS
+    spec.nud.register(TokenType.CONSTANT, Constant,
+                      power=Precedence.DEFAULT,
+                      const_registry=registry['constants'])
+
     # OPERATIONS
 
     # positive
