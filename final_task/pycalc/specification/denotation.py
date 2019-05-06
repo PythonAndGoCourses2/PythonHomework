@@ -3,7 +3,7 @@ Denotation.
 """
 
 
-class _Denotation:
+class Denotation:
     """
     The base class for nud- and led-denotation classes.
     """
@@ -29,7 +29,7 @@ class _Denotation:
 
     def _get_parselet(self, token):
         """
-        Find and return stored parselet for a given token.
+        Find and return appropriate stored parselet for a given token type.
         """
 
         token_type = token.token_type
@@ -49,39 +49,3 @@ class _Denotation:
         if token_type in self.registry:
             raise Exception(
                 f'Token of {token_type} type is already registered.')
-
-
-class Nud(_Denotation):
-    """
-    Null-Denotation.
-
-    The specification of how an operator consumes to the right with no left-context.
-    """
-
-    def eval(self, parser, token):
-        """
-        Evaluate and return result.
-        """
-
-        parselet = self._get_parselet(token)
-        result = parselet.nud(parser, token)
-
-        return result
-
-
-class Led(_Denotation):
-    """
-    Left-Denotation.
-
-    The specification of how an operator consumes to the right with a left-context.
-    """
-
-    def eval(self, parser, token, left):
-        """
-        Evaluate and return result.
-        """
-
-        parselet = self._get_parselet(token)
-        result = parselet.led(parser, token, left)
-
-        return result

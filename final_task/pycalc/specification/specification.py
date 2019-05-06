@@ -2,10 +2,11 @@
 Parser specification.
 """
 
-from .denotation import Nud, Led
+from .led import Led
+from .nud import Nud
 
 
-class ParserSpecification:
+class Specification:
     """
     Holds nud and led.
     """
