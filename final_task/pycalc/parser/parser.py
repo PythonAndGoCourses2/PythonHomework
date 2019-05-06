@@ -1,10 +1,13 @@
 """
-Parser.
+Parser package provides a Parser class for
+top down operator precedence parsing (Pratt parser).
 """
 
 
 class Parser:
-    """"""
+    """
+     Parser class for top down operator precedence parsing (Pratt parser).
+     """
 
     def __init__(self, spec, lexer):
         self.spec = spec
