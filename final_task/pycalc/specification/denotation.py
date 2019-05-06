@@ -85,16 +85,3 @@ class Led(_Denotation):
         result = parselet.led(parser, token, left)
 
         return result
-
-
-if __name__ == "__main__":
-    from collections import namedtuple
-    from pycalc.token.constants import TokenType, Predefined
-    from pycalc.token.description import PREDEFINED_TOKEN_DESC
-    from pycalc.token.precedence import Precedence
-    from pycalc.token.tokens import Number
-
-    Token = namedtuple("Token", ("token_type", "lexeme"))
-
-    token = Token('op', '+')
-    d = _Denotation()
