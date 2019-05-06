@@ -105,9 +105,14 @@ if __name__ == "__main__":
     from pycalc.lexer.lexer import Lexer
     from pycalc.matcher.matcher import matchers
     from pycalc.specification.specification import spec
+    import math
 
     lexer = Lexer(matchers)
     p = Parser(spec, lexer)
+    # assert p.parse('1 / 0') == 0
+    assert p.parse('sin(2)') == math.sin(2)
+    assert p.parse('sin(2-3)') == math.sin(2 - 3)
+    # assert p.parse('sin(1,2)') == math.sin(0.5)
     assert p.parse('2') == 2
     assert p.parse('    2') == 2
     assert p.parse('- 2') == - 2
@@ -130,9 +135,9 @@ if __name__ == "__main__":
     assert p.parse('2 > 1') is True
     assert p.parse('1 >= 1') is True
     assert p.parse('1 - 2 >= -1') is True
-    assert p.parse('sum(1 - 3, 2 - 5)') == -5
+    assert p.parse('log(1025 - 1, 7 - 5)') == 10
     # assert p.parse(', 1') is True
     # assert p.parse('1 , 2') is True
-    assert p.parse('- - - 2 ^ sum ( 1 , ( 4 - 1 ) * 5 , 4 )') == -1048576
+    # assert p.parse('- - - 2 ^ log ( 1 , ( 4 - 1 ) * 5 , 4 )') == -1048576
     # TODO:
     # assert p.parse('0 1') is False
