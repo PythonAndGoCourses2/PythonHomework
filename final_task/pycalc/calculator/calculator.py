@@ -35,7 +35,17 @@ def calculator(modules_names=None):
 if __name__ == "__main__":
     import math
 
+    def logger(fn):
+        def wrap(source):
+            print('=' * 30)
+            print(f'input : {source}')
+            result = fn(source)
+            print(f'output: {result}')
+            return result
+        return wrap
+
     p = calculator()
+    p.parse = logger(p.parse)
 
     assert p.parse('sin(2)') == math.sin(2)
     assert p.parse('sin(2-3)') == math.sin(2 - 3)
