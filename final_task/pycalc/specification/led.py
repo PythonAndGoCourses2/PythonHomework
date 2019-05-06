@@ -13,9 +13,7 @@ class Led(Denotation):
     """
 
     def eval(self, parser, token, left):
-        """
-        Evaluate and return result.
-        """
+        """Receive from left, evaluate and return result."""
 
         parselet = self._get_parselet(token)
         result = parselet.led(parser, token, left)

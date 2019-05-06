@@ -7,9 +7,7 @@ from .nud import Nud
 
 
 class Specification:
-    """
-    Holds nud and led.
-    """
+    """Holds nud and led specifications."""
 
     def __init__(self):
         self.nud = Nud()

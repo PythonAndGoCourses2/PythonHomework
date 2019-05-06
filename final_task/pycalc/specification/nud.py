@@ -13,9 +13,7 @@ class Nud(Denotation):
     """
 
     def eval(self, parser, token):
-        """
-        Evaluate and return result.
-        """
+        """Evaluate and return result."""
 
         parselet = self._get_parselet(token)
         result = parselet.nud(parser, token)
