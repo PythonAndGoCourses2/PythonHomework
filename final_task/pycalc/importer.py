@@ -1,98 +1,54 @@
-""""""
-# TODO: exception when import fails
+"""
+"""
+
+# TODO: handle exception when module importing fails
 
 from collections import OrderedDict
-from functools import partial
 from importlib import import_module
 from inspect import getmembers
-from types import BuiltinFunctionType, FunctionType, LambdaType
+from itertools import chain
 
-
-NUMERIC_TYPES = (int, float, complex)
-FUNCTION_TYPES = (BuiltinFunctionType, FunctionType, LambdaType, partial)
 UNDERSCORE = '_'
 
-DEFAULT_MODULE_NAMES = ('math',)
 
-
-def dedupe_to_list(iterable) -> list:
+def dedupe(iterables):
     """"""
 
-    return list(OrderedDict.fromkeys(iterable))
+    return (key for key in OrderedDict.fromkeys(chain(iterables)))
 
 
-def is_numeric(obj) -> bool:
-    """Return `True` if a object is one of numeric types."""
-
-    return isinstance(obj, (NUMERIC_TYPES))
-
-
-def is_function(obj) -> bool:
-    """Return `True` if a object is a function."""
-
-    return isinstance(obj, (FUNCTION_TYPES))
-
-
-def merge_module_names(module_names: tuple) -> list:
+def import_modules(*iterables):
     """"""
 
-    m_names = list(DEFAULT_MODULE_NAMES)
-    if module_names:
-        m_names.extend(module_names)
+    modules = []
 
-    return m_names
+    for iterable in dedupe(iterables):
+        for module_name in iterable:
+
+            try:
+                module = import_module(module_name)
+                modules.append(module)
+            except ModuleNotFoundError:
+                raise ModuleNotFoundError
+
+    return modules
 
 
-def get_module_members_names_by_type(module, type_checker) -> list:
+def module_members_by_type(module, type_checker, skip_underscored=True):
     """"""
 
-    return [
-        member[0] for member in getmembers(module, type_checker)
-        if not member[0].startswith(UNDERSCORE)
-    ]
+    for name, member in getmembers(module, type_checker):
+        if skip_underscored and name.startswith(UNDERSCORE):
+            continue
+        yield name, member
 
 
-MEMBER_TYPES = {
-    'functions': is_function,
-    'constants': is_numeric
-}
+def collect_members_by_type(modules, type_checker, skip_underscored=True, predefined=None):
 
+    accumulator = dict(predefined) if predefined else {}
 
-def get_module_members_names(module):
-    """"""
+    for module in modules:
+        for name, member in module_members_by_type(module, type_checker, skip_underscored):
+            accumulator[name] = member
 
-    return {type_: get_module_members_names_by_type(module, type_checker)
-            for type_, type_checker in MEMBER_TYPES.items()}
-
-
-def get(module_names: tuple = None) -> dict:
-    """"""
-
-    if not module_names:
-        module_names = tuple()
-
-    m_names = merge_module_names(module_names)
-    m_names = dedupe_to_list(m_names)
-
-    result = {}
-
-    for module_name in m_names:
-        try:
-            module = import_module(module_name)
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError
-
-        members = get_module_members_names(module)
-        result[module_name] = {}
-        result[module_name]['module'] = module
-        result[module_name]['members'] = members
-
-    return result
-
-
-if __name__ == '__main__':
-    MODULE_NAMES = ('calendar', 'pprint')
-    from pprint import pprint
-    for key, value in get(MODULE_NAMES).items():
-        print(key)
-        pprint(value)
+    return accumulator
