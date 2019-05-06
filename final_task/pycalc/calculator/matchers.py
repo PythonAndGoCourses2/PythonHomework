@@ -22,8 +22,13 @@ def build_matchers(registry):
 
     matchers.register_matcher(TokenType.FUNCTION,
                               matchers.create_matcher_from_literals_list(
-                                  registry['functions'].keys()
-                              ))
+                                  registry['functions'].keys())
+                              )
+
+    matchers.register_matcher(TokenType.CONSTANT,
+                              matchers.create_matcher_from_literals_list(
+                                  registry['constants'].keys())
+                              )
 
     matchers.register_matcher(TokenType.ADD,
                               matchers.create_matcher_from_literals_list(['+']))
