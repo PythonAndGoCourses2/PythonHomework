@@ -101,15 +101,3 @@ class Lexer:
 
         value = len(lexeme)
         self.pos += value
-
-
-if __name__ == "__main__":
-    from pycalc.matcher.matcher import matchers
-
-    source = "  1.3 >=sin(pi   +e)  "
-    l = Lexer(matchers, source)
-    while True:
-        token = l.consume()
-        if not token:
-            break
-        print(token, l.source, l.pos, l.length)
