@@ -1,8 +1,9 @@
 """
+Initializes a calculator and returns a parser object.
 """
 
-from pycalc.lexer.lexer import Lexer
-from pycalc.parser.parser import Parser
+from pycalc.lexer import Lexer
+from pycalc.parser import Parser
 
 from .importer import build_modules_registry
 from .matchers import build_matchers
@@ -30,6 +31,7 @@ def calculator(modules_names=None):
     return parser
 
 
+# TODO: remove
 if __name__ == "__main__":
     import math
 

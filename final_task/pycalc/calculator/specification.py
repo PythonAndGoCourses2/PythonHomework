@@ -5,7 +5,7 @@
 from math import pow as math_pow
 import math  # TODO: remove
 
-from pycalc.specification.specification import ParserSpecification
+from pycalc.specification import Specification
 
 from pycalc.token.constants import TokenType
 from pycalc.token.precedence import Precedence
@@ -17,7 +17,7 @@ import operator
 
 def build_specification(registry):
 
-    spec = ParserSpecification()
+    spec = Specification()
 
     # NUMBERS
     spec.nud.register(TokenType.NUMERIC, Number,
