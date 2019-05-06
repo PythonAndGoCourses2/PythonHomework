@@ -1,5 +1,5 @@
 """
-Initializatioin of parser specification.
+Initialization of parser specification.
 """
 
 from math import pow as math_pow
