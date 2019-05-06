@@ -16,10 +16,8 @@ class Parser:
     def parse(self, source):
         """"""
 
-        print('=' * 30)
-        print(f'input : {source}')
-
         self.lexer.init(source)
+
         try:
             result = self.expression()
         except Exception as e:
@@ -29,8 +27,6 @@ class Parser:
 
         assert self.lexer.is_source_exhausted(), \
             f'source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}'
-
-        print(f'output: {result}')
 
         return result
 
@@ -102,45 +98,3 @@ class Parser:
         """"""
 
         return self.spec.led.power(token)
-
-
-if __name__ == "__main__":
-    from pycalc.lexer.lexer import Lexer
-    from pycalc.matcher.matcher import matchers
-    from pycalc.specification.specification import spec
-    import math
-
-    lexer = Lexer(matchers)
-    p = Parser(spec, lexer)
-    # assert p.parse('1 / 0') == 0
-    assert p.parse('sin(2)') == math.sin(2)
-    assert p.parse('sin(2-3)') == math.sin(2 - 3)
-    # assert p.parse('sin(1,2)') == math.sin(0.5)
-    assert p.parse('2') == 2
-    assert p.parse('    2') == 2
-    assert p.parse('- 2') == - 2
-    assert p.parse('- - 2') == 2
-    assert p.parse('1 - 2') == -1
-    assert p.parse('    1    -    2   ') == -1
-    assert p.parse('1 - - 2') == 3
-    assert p.parse('1 - - - 2  ') == -1
-    # assert p.parse('2 ** 3 ') == 8
-    assert p.parse('1 - 2 * 3') == -5
-    assert p.parse('3 ^ 2 * 2') == 18
-    assert p.parse('3 * 2 ^ 2') == 12
-    assert p.parse('4 ^ 3 ^ 2') == 262144
-    assert p.parse('6-(-13)') == 19
-    assert p.parse('( 7 - 2 ) * 3') == 15
-    assert p.parse('(0)') == 0
-    # assert p.parse(') 2 ') == 15
-    assert p.parse('0 > 1') is False
-    assert p.parse('0 >= 1') is False
-    assert p.parse('2 > 1') is True
-    assert p.parse('1 >= 1') is True
-    assert p.parse('1 - 2 >= -1') is True
-    assert p.parse('log(1025 - 1, 7 - 5)') == 10
-    # assert p.parse(', 1') is True
-    # assert p.parse('1 , 2') is True
-    # assert p.parse('- - - 2 ^ log ( 1 , ( 4 - 1 ) * 5 , 4 )') == -1048576
-    # TODO:
-    # assert p.parse('0 1') is False
