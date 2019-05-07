@@ -1,72 +1,41 @@
 """
-Build matchers.
+Create and register matchers for token types.
 """
 
 from pycalc.matcher.matcher import Matchers
-from pycalc.matcher.number import NUMBER_MATCHER
+from pycalc.matcher.number import NUMBER_REGEX
 from pycalc.token.constants import TokenType
+from pycalc.token.lexeme import PREDEFINED
 
 
-PREDEFINED_MATCHERS = {
-    TokenType.NUMERIC: NUMBER_MATCHER
-}
-
-
-def build_matchers(registry):
-    """"""
+def build_matchers(imports_registry):
+    """Create and register matchers for token types."""
 
     matchers = Matchers()
 
-    matchers.register_matcher(TokenType.NUMERIC,
-                              PREDEFINED_MATCHERS[TokenType.NUMERIC])
+    # create matchers for token types with dynamically created lexemes
 
-    matchers.register_matcher(TokenType.FUNCTION,
-                              matchers.create_from.literals_list(
-                                  registry['functions'].keys())
-                              )
+    numeric_matcher = matchers.create_from.compiled_regex(NUMBER_REGEX)
 
-    matchers.register_matcher(TokenType.CONSTANT,
-                              matchers.create_from.literals_list(
-                                  registry['constants'].keys())
-                              )
+    functions_matcher = matchers.create_from.literals_list(
+        imports_registry['functions'].keys())
 
-    matchers.register_matcher(TokenType.ADD,
-                              matchers.create_from.literals_list(['+']))
+    constants_matcher = matchers.create_from.literals_list(
+        imports_registry['constants'].keys())
 
-    matchers.register_matcher(TokenType.SUB,
-                              matchers.create_from.literals_list(['-']))
+    # register matchers for token types with dynamically created lexemes
+    matchers.register_matcher(TokenType.NUMERIC, numeric_matcher)
+    matchers.register_matcher(TokenType.FUNCTION, functions_matcher)
+    matchers.register_matcher(TokenType.CONSTANT, constants_matcher)
 
-    matchers.register_matcher(TokenType.MUL,
-                              matchers.create_from.literals_list(['*']))
+    # sort predefined lexemes map by lexeme length in reversed order
+    lexemes_map = sorted(PREDEFINED.items(),
+                         key=lambda kv: len(kv[1]),
+                         reverse=True)
 
-    matchers.register_matcher(TokenType.TRUEDIV,
-                              matchers.create_from.literals_list(['/']))
-
-    matchers.register_matcher(TokenType.MOD,
-                              matchers.create_from.literals_list(['%']))
-
-    matchers.register_matcher(TokenType.POW,
-                              matchers.create_from.literals_list(['^']))
-
-    matchers.register_matcher(TokenType.EQ,
-                              matchers.create_from.literals_list(['==']))
-
-    matchers.register_matcher(TokenType.NE,
-                              matchers.create_from.literals_list(['!=']))
-
-    matchers.register_matcher(TokenType.GE,
-                              matchers.create_from.literals_list(['>=']))
-
-    matchers.register_matcher(TokenType.GT,
-                              matchers.create_from.literals_list(['>']))
-
-    matchers.register_matcher(TokenType.LEFT_PARENTHESIS,
-                              matchers.create_from.literals_list(['(']))
-
-    matchers.register_matcher(TokenType.RIGHT_PARENTHESIS,
-                              matchers.create_from.literals_list([')']))
-
-    matchers.register_matcher(TokenType.COMMA,
-                              matchers.create_from.literals_list([',']))
+    # create and register matchers for predefined lexemes
+    for token_type, lexeme in lexemes_map:
+        matchers.register_matcher(token_type,
+                                  matchers.create_from.literals_list([lexeme]))
 
     return matchers
