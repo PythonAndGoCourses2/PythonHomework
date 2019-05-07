@@ -55,11 +55,6 @@ def build_specification(registry):
                       power=Precedence.SUBTRACTION,
                       func=operator.sub)
 
-    # exponentiation
-    spec.led.register(TokenType.POW, BinaryInfixRight,
-                      power=Precedence.EXPONENTIATION,
-                      func=math_pow)
-
     # multiplication
     spec.led.register(TokenType.MUL, BinaryInfixLeft,
                       power=Precedence.MULTIPLICATION,
@@ -69,6 +64,16 @@ def build_specification(registry):
     spec.led.register(TokenType.TRUEDIV, BinaryInfixLeft,
                       power=Precedence.DIVISION,
                       func=operator.truediv)
+
+    # floor division
+    spec.led.register(TokenType.FLOORDIV, BinaryInfixLeft,
+                      power=Precedence.FLOOR_DIVISION,
+                      func=operator.floordiv)
+
+    # exponentiation
+    spec.led.register(TokenType.POW, BinaryInfixRight,
+                      power=Precedence.EXPONENTIATION,
+                      func=math_pow)
 
     # remainder
     spec.led.register(TokenType.MOD, BinaryInfixLeft,
@@ -93,6 +98,16 @@ def build_specification(registry):
     spec.led.register(TokenType.GE, BinaryInfixLeft,
                       power=Precedence.COMPARISONS,
                       func=operator.ge)
+
+    # less
+    spec.led.register(TokenType.LT, BinaryInfixLeft,
+                      power=Precedence.COMPARISONS,
+                      func=operator.lt)
+
+    # equal or less
+    spec.led.register(TokenType.LE, BinaryInfixLeft,
+                      power=Precedence.COMPARISONS,
+                      func=operator.le)
 
     # PUNCTUATION
     spec.nud.register(TokenType.LEFT_PARENTHESIS, GroupedExpressionStart,
