@@ -5,16 +5,14 @@ top down operator precedence parsing (Pratt parser).
 
 
 class Parser:
-    """
-     Parser class for top down operator precedence parsing (Pratt parser).
-     """
+    """Parser class for top down operator precedence parsing (Pratt parser)."""
 
     def __init__(self, spec, lexer):
         self.spec = spec
         self.lexer = lexer
 
     def parse(self, source):
-        """"""
+        """Parse a source and return a result of parsing."""
 
         self.lexer.init(source)
 
@@ -32,7 +30,7 @@ class Parser:
         return result
 
     def expression(self, right_power=0):
-        """"""
+        """The main parsing function of Pratt parser."""
 
         token = self.consume()
         if not token:
@@ -54,17 +52,20 @@ class Parser:
         return left
 
     def consume(self):
-        """"""
+        """Return the next token and advance the source position pointer."""
 
         return self.lexer.consume()
 
     def peek(self):
-        """"""
+        """Return the next token without advancing the source position pointer."""
 
         return self.lexer.peek()
 
     def advance(self, token_type=None):
-        """"""
+        """
+        Consume a next token if that one is of given type.
+        Raise an exception if types don’t match.
+        """
 
         token = self.peek()
 
@@ -77,7 +78,7 @@ class Parser:
         self.consume()
 
     def peek_and_check(self, token_type):
-        """"""
+        """Check if the next token is of given type."""
 
         token = self.peek()
         if not token or token.token_type != token_type:
@@ -96,6 +97,6 @@ class Parser:
         return self.spec.led.eval(self, token, left)
 
     def _left_power(self, token):
-        """"""
+        """Get token binding power."""
 
         return self.spec.led.power(token)
