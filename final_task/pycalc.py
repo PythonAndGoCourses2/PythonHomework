@@ -18,7 +18,7 @@ COMPARISON_OPERATORS = {'==': operator.eq,
 MATH_CONST = {'e': math.e,
               'pi': math.pi}
 MATH_FUNC = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
-MATH_FUNC["abs"], MATH_CONST["round"] = abs, round  # Добавляем 2 built-in функции
+MATH_FUNC["abs"], MATH_FUNC["round"] = abs, round  # Добавляем 2 built-in функции
 
 
 def parse(expression):
@@ -48,14 +48,20 @@ def parse(expression):
                 elif expression[i] == ')':
                     brackets -= 1
                 if expression[i] == ',':
-                    second_argument += expression[i:]
-                    break
+                    i += 1
+                    while brackets != 0:
+                        second_argument += expression[i]
+                        if expression[i] == '(':  # Проверка на скобки
+                            brackets += 1
+                        elif expression[i] == ')':
+                            brackets -= 1
+                        i += 1
                 i += 1
             if not second_argument:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument)))
             else:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument), calculating(second_argument)))
-            func = ''
+            func, first_argument, second_argument = '', '', ''
             continue
         if symbol.isdigit() or symbol == '.':
             number += symbol
@@ -123,17 +129,21 @@ def calculating(expression):
 
 
 def main():
-    # print(create_parser())
-    expression = create_parser().expr
-    comparison = comparison_check(expression)  # Определяем подаётся ли строка на сравнение
-    if not comparison:
-        if brackets_check(expression):
-            print(calculating(expression))
-    else:
-        print(comparison_calc(expression, comparison))
+    try:  # WIP(Обрабатывает не все типы исключений)
+        expression = create_parser().expr
+        comparison = comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
+        if not comparison:
+            if brackets_check(expression):
+                print(calculating(expression))
+        else:
+            print(comparison_calc(expression, comparison))
+    except Exception:
+        print("ERROR: incorrect expression")
 
-    # print(calculating("2+3"))
 
+# print(calculating("2+3"))
+
+#######################################################################################################################
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def brackets_check(expr):
@@ -162,12 +172,13 @@ def comparison_check(expr):
 
 def comparison_calc(expr, item):
     first_argument = expr[:expr.find(item)]
-    second_argument = expr[expr.rfind(item)+1:]
-    x,y = calculating(first_argument), calculating(second_argument)
+    second_argument = expr[expr.rfind(item) + 1:]
+    x, y = calculating(first_argument), calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 def create_parser():
     parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
