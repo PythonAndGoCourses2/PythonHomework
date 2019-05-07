@@ -42,22 +42,13 @@ def regex_matcher(regex):
     """Return a regex matcher function."""
 
     def matcher(string, pos):
-        """"""
+        """
+        Return a substring that match a string from
+        a given position or `None` if there are no matches.
+        """
+
         result = regex.match(string, pos)
         if result:
             return result.group()
-
-    return matcher
-
-
-def text_matcher(literals):
-    """Return a matcher function that matchs by iterating over a list of literals."""
-
-    def matcher(string, pos):
-        """"""
-
-        for literal in literals:
-            if string.startswith(literal, pos):
-                return literal
 
     return matcher

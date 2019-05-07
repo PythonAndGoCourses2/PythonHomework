@@ -4,7 +4,7 @@ Matchers class.
 
 from collections import namedtuple
 
-from .helpers import construct_regex, regex_matcher
+from .creator import MatcherCreator
 
 
 Matcher = namedtuple("Matcher", ("token_type", "matcher"))
@@ -18,6 +18,7 @@ class Matchers:
 
     def __init__(self):
         self.matchers = []
+        self.create_from = MatcherCreator
 
     def __iter__(self):
         for matcher in self.matchers:
@@ -27,15 +28,3 @@ class Matchers:
         """Register a matcher with a corresponding token type."""
 
         self.matchers.append(Matcher(token_type, matcher))
-
-    @staticmethod
-    def create_matcher_from_regex(regex):
-        """Create a matcher from compiled regex object."""
-
-        return regex_matcher(regex)
-
-    @staticmethod
-    def create_matcher_from_literals_list(literals):
-        """Create a matcher from a list of literals"""
-
-        return regex_matcher(construct_regex(literals))
