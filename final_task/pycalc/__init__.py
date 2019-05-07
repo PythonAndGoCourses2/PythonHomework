@@ -1,14 +1,12 @@
-import parser
+import Parser
+import Tokenizer
 
 
 def main():
     """The main routine    ."""
-    infix_string = parser.parse_console()
-    print(infix_string)
-
-
-def is_number(s):
-    return s.isdigit()
+    infix_string = Parser.parse_console()
+    tokens = Tokenizer.tokenize(infix_string)
+    print(tokens)
 
 
 if __name__ == "__main__":
