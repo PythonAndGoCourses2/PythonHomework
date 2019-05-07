@@ -9,10 +9,16 @@ OPERATORS = {'+': (1, operator.add),  # Первый элемент кортеж
              '//': (2, operator.floordiv),
              '%': (2, operator.mod),
              '^': (3, operator.pow)}
-math_const = {'e': math.e,
+COMPARISON_OPERATORS = {'==': operator.eq,
+                        '>': operator.gt,
+                        '<': operator.lt,
+                        '>=': operator.ge,
+                        '<=': operator.le,
+                        '!=': operator.ne}
+MATH_CONST = {'e': math.e,
               'pi': math.pi}
-math_function = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
-math_function["abs"], math_function["round"] = abs, round  # Добавляем 2 built-in функции
+MATH_CONST = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
+MATH_CONST["abs"], MATH_CONST["round"] = abs, round  # Добавляем 2 built-in функции
 
 
 def parse(expression):
@@ -24,10 +30,10 @@ def parse(expression):
         symbol = expression[i]
         if symbol.isalpha():
             func += symbol
-        elif func in math_const:  # Если является мат. const
-            parsed_formula.append(math_const[func])
+        elif func in MATH_CONST:  # Если является мат. const
+            parsed_formula.append(MATH_CONST[func])
             func = ''
-        elif func in math_function:  # Если является мат. функцией
+        elif func in MATH_CONST:  # Если является мат. функцией
             while expression[i] != '(':  # То что до скобок определяем как второй аргумент
                 second_argument += expression[i]
                 i += 1
@@ -45,9 +51,9 @@ def parse(expression):
                     second_argument += expression[i:]
                 i += 1
             if not second_argument:
-                parsed_formula.append(math_function[func](calculating(first_argument)))
+                parsed_formula.append(MATH_CONST[func](calculating(first_argument)))
             else:
-                parsed_formula.append(math_function[func](calculating(first_argument), calculating(second_argument)))
+                parsed_formula.append(MATH_CONST[func](calculating(first_argument), calculating(second_argument)))
             func = ''
             continue
         if symbol.isdigit() or symbol == '.':
@@ -68,8 +74,8 @@ def parse(expression):
 
     if number:
         parsed_formula.append(float(number))
-    elif func in math_const:
-        parsed_formula.append(math_const[func])
+    elif func in MATH_CONST:
+        parsed_formula.append(MATH_CONST[func])
     return parsed_formula
 
 
@@ -118,8 +124,13 @@ def calculating(expression):
 def main():
     # print(create_parser())
     expression = create_parser().expr
-    if brackets_check(expression) and whitespace_check(expression):
-        print(calculating(expression))
+    comparison = comparison_check(expression)  # Определяем подаётся ли строка на сравнение
+    if not comparison:
+        if brackets_check(expression):
+            print(calculating(expression))
+    else:
+        print(comparison_calc(expression, comparison))
+
     # print(calculating("2+3"))
 
 
@@ -139,13 +150,21 @@ def brackets_check(expr):
         return True
 
 
-def whitespace_check(expr):
-    for symbol in expr:
-        if symbol == ' ':
-            print("ERROR: too many whitespace")
-            return False
+def comparison_check(expr):
+    """return True if the operation type is a comparison"""
+    for key in COMPARISON_OPERATORS.keys():
+        if key in expr:
+            return key
     else:
-        return True
+        return False
+
+
+def comparison_calc(expr, item):
+    first_argument = expr[:expr.find(item)]
+    second_argument = expr[expr.rfind(item)+1:]
+    x,y = calculating(first_argument), calculating(second_argument)
+    return COMPARISON_OPERATORS[item](x, y)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
