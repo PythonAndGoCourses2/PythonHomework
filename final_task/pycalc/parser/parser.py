@@ -25,8 +25,9 @@ class Parser:
                 f'ERROR: {e}: (pos: {self.lexer.pos}), {self.lexer.format()}')
             raise e
 
-        assert self.lexer.is_source_exhausted(), \
-            f'source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}'
+        if not self.lexer.is_source_exhausted():
+            raise Exception(
+                f'ERROR: source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}')
 
         return result
 
