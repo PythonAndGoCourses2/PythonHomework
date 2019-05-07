@@ -21,52 +21,52 @@ def build_matchers(registry):
                               PREDEFINED_MATCHERS[TokenType.NUMERIC])
 
     matchers.register_matcher(TokenType.FUNCTION,
-                              matchers.create_matcher_from_literals_list(
+                              matchers.create_from.literals_list(
                                   registry['functions'].keys())
                               )
 
     matchers.register_matcher(TokenType.CONSTANT,
-                              matchers.create_matcher_from_literals_list(
+                              matchers.create_from.literals_list(
                                   registry['constants'].keys())
                               )
 
     matchers.register_matcher(TokenType.ADD,
-                              matchers.create_matcher_from_literals_list(['+']))
+                              matchers.create_from.literals_list(['+']))
 
     matchers.register_matcher(TokenType.SUB,
-                              matchers.create_matcher_from_literals_list(['-']))
+                              matchers.create_from.literals_list(['-']))
 
     matchers.register_matcher(TokenType.MUL,
-                              matchers.create_matcher_from_literals_list(['*']))
+                              matchers.create_from.literals_list(['*']))
 
     matchers.register_matcher(TokenType.TRUEDIV,
-                              matchers.create_matcher_from_literals_list(['/']))
+                              matchers.create_from.literals_list(['/']))
 
     matchers.register_matcher(TokenType.MOD,
-                              matchers.create_matcher_from_literals_list(['%']))
+                              matchers.create_from.literals_list(['%']))
 
     matchers.register_matcher(TokenType.POW,
-                              matchers.create_matcher_from_literals_list(['^']))
+                              matchers.create_from.literals_list(['^']))
 
     matchers.register_matcher(TokenType.EQ,
-                              matchers.create_matcher_from_literals_list(['==']))
+                              matchers.create_from.literals_list(['==']))
 
     matchers.register_matcher(TokenType.NE,
-                              matchers.create_matcher_from_literals_list(['!=']))
+                              matchers.create_from.literals_list(['!=']))
 
     matchers.register_matcher(TokenType.GE,
-                              matchers.create_matcher_from_literals_list(['>=']))
+                              matchers.create_from.literals_list(['>=']))
 
     matchers.register_matcher(TokenType.GT,
-                              matchers.create_matcher_from_literals_list(['>']))
+                              matchers.create_from.literals_list(['>']))
 
     matchers.register_matcher(TokenType.LEFT_PARENTHESIS,
-                              matchers.create_matcher_from_literals_list(['(']))
+                              matchers.create_from.literals_list(['(']))
 
     matchers.register_matcher(TokenType.RIGHT_PARENTHESIS,
-                              matchers.create_matcher_from_literals_list([')']))
+                              matchers.create_from.literals_list([')']))
 
     matchers.register_matcher(TokenType.COMMA,
-                              matchers.create_matcher_from_literals_list([',']))
+                              matchers.create_from.literals_list([',']))
 
     return matchers
