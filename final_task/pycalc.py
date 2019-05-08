@@ -330,7 +330,7 @@ def main():
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
-    
+
     return result
 
 
