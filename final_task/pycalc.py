@@ -1,6 +1,7 @@
 import math
 import argparse
 import operator
+import re
 
 OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
              '-': (1, operator.sub),  # Второй элемент - операция
@@ -131,17 +132,21 @@ def calculating(expression):
 def main():
     try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
+        expression = fix_unary(expression)
+        expression = replace_plus_minus(expression)
         comparison = comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
         if not comparison:
             if brackets_check(expression):
                 print(calculating(expression))
         else:
             print(comparison_calc(expression, comparison))
+
+
+    except ZeroDivisionError:
+        print("ERROR: division by zero")
     except Exception:
         print("ERROR: incorrect expression")
 
-
-# print(calculating("2+3"))
 
 #######################################################################################################################
 
@@ -176,6 +181,27 @@ def comparison_calc(expr, item):
     x, y = calculating(first_argument), calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
+
+def fix_unary(expr):
+    """Replace unary operations"""
+    if expr[0] == '-':
+        expr = "0" + expr
+    elif expr[0] == '+':
+        expr = "0" + expr
+    expr = re.sub(r'\(\-', '(0-', expr)
+    expr = re.sub(r'\(\+', '(0+', expr)
+    return expr
+
+
+def replace_plus_minus(expr):
+    if expr.find('++') != -1:
+        expr.replace("++", "+")
+    if expr.find('--') != -1:
+        expr.replace("--", "-")
+    if expr.find('+-') != -1 or expr.find('-+') != -1:
+        expr.replace("+-", "-")
+        expr.replace("-+", "-")
+    return expr
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
