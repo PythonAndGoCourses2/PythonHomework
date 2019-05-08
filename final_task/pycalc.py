@@ -84,21 +84,27 @@ def parse(xprstr):
     if xprset.issubset(string.punctuation):
         print('ERROR: no digits or functions')
         exit(0)
+
+    if xprstr.count('> =') > 0  or  xprstr.count('< =') > 0 or  xprstr.count('/ /') > 0 or  xprstr.count('* *') > 0:
+        print('ERROR: usles spaces')
+
     # устранение пробелов с операторами и повторов операторов
-    while xprstr.count('++') > 0  or  xprstr.count('--') > 0 or xprstr.count('  ') > 0 or xprstr.count('-+') > 0 or xprstr.count('+-') > 0:
-        xprstr = xprstr.replace('  ', ' ')
+    xprstr = xprstr.replace(' ', '')
+
+    # xprstr = xprstr.replace(' *', '*')
+    # xprstr = xprstr.replace('* ', '*')
+    # xprstr = xprstr.replace(' +', '+')
+    # xprstr = xprstr.replace('+ ', '+')
+    # xprstr = xprstr.replace(' -', '-')
+    # xprstr = xprstr.replace('- ', '-')
+    # xprstr = xprstr.replace(', ', ',')
+
+    while xprstr.count('++') > 0  or  xprstr.count('--') > 0 or xprstr.count('-+') > 0 or xprstr.count('+-') > 0:
         xprstr = xprstr.replace('--', '+')
         xprstr = xprstr.replace('++', '+')
         xprstr = xprstr.replace('+-', '-')
         xprstr = xprstr.replace('-+', '-')
-
-    xprstr = xprstr.replace(' *', '*')
-    xprstr = xprstr.replace('* ', '*')
-    xprstr = xprstr.replace(' +', '+')
-    xprstr = xprstr.replace('+ ', '+')
-    xprstr = xprstr.replace(' -', '-')
-    xprstr = xprstr.replace('- ', '-')
-    xprstr = xprstr.replace(', ', ',')
+        
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
