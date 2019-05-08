@@ -85,30 +85,35 @@ def parse(xprstr):
         print('ERROR: no digits or functions')
         exit(0)
 
-    if xprstr.count('> =') > 0  or  xprstr.count('< =') > 0 or  xprstr.count('/ /') > 0 or  xprstr.count('* *') > 0:
-        print('ERROR: usles spaces')
-
     # устранение пробелов с операторами и повторов операторов
-    xprstr = xprstr.replace(' ', '')
-
-    # xprstr = xprstr.replace(' *', '*')
-    # xprstr = xprstr.replace('* ', '*')
-    # xprstr = xprstr.replace(' +', '+')
-    # xprstr = xprstr.replace('+ ', '+')
-    # xprstr = xprstr.replace(' -', '-')
-    # xprstr = xprstr.replace('- ', '-')
-    # xprstr = xprstr.replace(', ', ',')
-
-    while xprstr.count('++') > 0  or  xprstr.count('--') > 0 or xprstr.count('-+') > 0 or xprstr.count('+-') > 0:
+    while xprstr.count('  ') > 0  or xprstr.count('++') > 0 or \
+            xprstr.count('--') > 0 or \
+            xprstr.count('-+') > 0 or \
+            xprstr.count('+-') > 0 or \
+            xprstr.count(' *') > 0 or \
+            xprstr.count('* ') > 0 or \
+            xprstr.count(' +') > 0 or \
+            xprstr.count('+ ') > 0 or \
+            xprstr.count(' -') > 0 or \
+            xprstr.count('- ') > 0 or \
+            xprstr.count(', ') > 0:
+        xprstr = xprstr.replace('  ', ' ')
         xprstr = xprstr.replace('--', '+')
         xprstr = xprstr.replace('++', '+')
         xprstr = xprstr.replace('+-', '-')
         xprstr = xprstr.replace('-+', '-')
-        
+        xprstr = xprstr.replace(' *', '*')
+        xprstr = xprstr.replace('* ', '*')
+        xprstr = xprstr.replace(' +', '+')
+        xprstr = xprstr.replace('+ ', '+')
+        xprstr = xprstr.replace(' -', '-')
+        xprstr = xprstr.replace('- ', '-')
+        xprstr = xprstr.replace(', ', ',')
+
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
-    # print(xprstr)
+    #print(xprstr)
 
     # проверка лишних пробелов
     if xprstr.count(' ') > 0:
