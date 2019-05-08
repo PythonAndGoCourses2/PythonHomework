@@ -35,6 +35,7 @@ oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=']
 operset = set(oper)
 xpr = ' '
 
+
 def parsecmd():
     """ парсинг командной строки """
     global xpr, module
@@ -86,7 +87,7 @@ def parse(xprstr):
         exit(0)
 
     # устранение пробелов с операторами и повторов операторов
-    while xprstr.count('  ') > 0  or xprstr.count('++') > 0 or \
+    while xprstr.count('  ') > 0 or xprstr.count('++') > 0 or \
             xprstr.count('--') > 0 or \
             xprstr.count('-+') > 0 or \
             xprstr.count('+-') > 0 or \
@@ -113,7 +114,7 @@ def parse(xprstr):
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
-    #print(xprstr)
+    # print(xprstr)
 
     # проверка лишних пробелов
     if xprstr.count(' ') > 0:
@@ -248,7 +249,7 @@ def postfix(xprlst):
         elif i == ',':  # если , то положить на выход
             if stack != []:
                 while stack != [] and stack[-1] in oper+funclist and prior(i, stack[-1]):
-                # пока наверху стека оператор с большим или равным приоритетом
+                    # пока наверху стека оператор с большим или равным приоритетом
                     output.append(stack.pop())  # переложить оператор из стека на выход
             output.append(i)
 
@@ -259,7 +260,7 @@ def postfix(xprlst):
                 stack.append(i)
             else:
                 while stack != [] and stack[-1] in oper+funclist and prior(i, stack[-1]):
-                # пока наверху стека оператор с большим или равным приоритетом
+                    # пока наверху стека оператор с большим или равным приоритетом
                     output.append(stack.pop())  # переложить оператор из стека на выход
                 stack.append(i)  # иначе положить оператор в стек
 
