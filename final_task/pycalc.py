@@ -57,7 +57,7 @@ def addfunc(module):
             print('ERROR: module ', module, 'not found, or unknown symbol')
             exit(0)
         if spec is None:  # проверка возможности импорта модуля
-            print('ERROR: module ', module, 'not found')
+            print('ERROR: unknown function or module ', module, 'not found')
             exit(0)
         else:
             newfunc = importlib.import_module(module)  # импортирование нового модуля
@@ -67,27 +67,29 @@ def addfunc(module):
     return
 
 
+
 def parse(xprstr):
     """ парсинг строки математического выражения. на выходе список в инфиксной нотации"""
     word = ''
     xprlst = []
-    exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
+    #exset = {'"', '#', '$', '&', "'", ':', ';', '?', '@', '[', ']', '_', '`', '{', '|', '}', '~', '\\'}
     xprset = set(xprstr)
     # проверка если строка выражения содержит недопустимые символы
-    if not exset.isdisjoint(xprset):
-        print('ERROR: unknown symbol')
-        exit(0)
+    # if not exset.isdisjoint(xprset):
+    #     print('ERROR: unknown symbol')
+    #     exit(0)
     # проверка скобок в строке
     if xpr.count('(') != xpr.count(')'):
         print('ERROR: brackets are not balanced')
         exit(0)
     # проверка если выражение состоит только из знаков пунктуации
-    if xprset.issubset(string.punctuation):
-        print('ERROR: no digits or functions')
-        exit(0)
+    #if xprset.issubset(string.punctuation):
+    #    print('ERROR: no digits or functions')
+    #    exit(0)
 
     # устранение пробелов с операторами и повторов операторов
-    while xprstr.count('  ') > 0 or xprstr.count('++') > 0 or \
+    while xprstr.count('  ') > 0 or \
+            xprstr.count('++') > 0 or \
             xprstr.count('--') > 0 or \
             xprstr.count('-+') > 0 or \
             xprstr.count('+-') > 0 or \
@@ -282,7 +284,6 @@ def evalpostfix(xprpstfx):
     """ вычисление выражения в постфиксной нотации """
     stack = []
     args = []
-    # print(xprpstfx)
     for i in xprpstfx:
         # # print('EVAL i = ', i, 'STACK=',stack)
         if i in funclist:
@@ -301,7 +302,6 @@ def evalpostfix(xprpstfx):
                 tmp = operate(i, args)
                 args = []
                 stack.append(tmp)
-
         elif i in oper:  # для операторов типа a + b
             tmp = operate(i, stack[-2:])
             # print(stack[-2:])
@@ -320,7 +320,7 @@ def main():
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
 
-    # разбор строики вырыжения в список
+    # разбор строки вырыжения в список
     xprlst = parse(xpr)
     # print(*xprlst, sep=' ')
 
