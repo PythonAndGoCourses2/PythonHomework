@@ -91,15 +91,18 @@ def parse(xprstr):
         xprstr = xprstr.replace('++', '+')
         xprstr = xprstr.replace('+-', '-')
         xprstr = xprstr.replace('-+', '-')
-        xprstr = xprstr.replace(', ', ',')
-        xprstr = xprstr.replace(' *', '*')
-        xprstr = xprstr.replace('* ', '*')
-        xprstr = xprstr.replace(' +', '+')
-        xprstr = xprstr.replace('+ ', '+')
-        xprstr = xprstr.replace(' -', '-')
-        xprstr = xprstr.replace('- ', '-')
+
+    xprstr = xprstr.replace(' *', '*')
+    xprstr = xprstr.replace('* ', '*')
+    xprstr = xprstr.replace(' +', '+')
+    xprstr = xprstr.replace('+ ', '+')
+    xprstr = xprstr.replace(' -', '-')
+    xprstr = xprstr.replace('- ', '-')
+    xprstr = xprstr.replace(', ', ',')
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
+
+    print(xprstr)
 
     # проверка лишних пробелов
     if xprstr.count(' ') > 0:
