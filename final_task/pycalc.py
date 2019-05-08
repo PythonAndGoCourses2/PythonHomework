@@ -301,7 +301,7 @@ def evalpostfix(xprpstfx):
                 tmp = operate(i, args)
                 args = []
                 stack.append(tmp)
-        
+
         elif i in oper:  # для операторов типа a + b
             tmp = operate(i, stack[-2:])
             # print(stack[-2:])
