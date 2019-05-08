@@ -79,7 +79,10 @@ def parse(xprstr):
     #     print('ERROR: unknown symbol')
     #     exit(0)
     # проверка скобок в строке
-    if xpr.count('(') != xpr.count(')'):
+
+
+
+    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:
         print('ERROR: brackets are not balanced')
         exit(0)
     # проверка если выражение состоит только из знаков пунктуации
