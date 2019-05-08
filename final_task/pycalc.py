@@ -102,7 +102,7 @@ def parse(xprstr):
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
 
-    print(xprstr)
+    # print(xprstr)
 
     # проверка лишних пробелов
     if xprstr.count(' ') > 0:
