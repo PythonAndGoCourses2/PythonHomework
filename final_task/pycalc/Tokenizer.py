@@ -8,12 +8,12 @@ brackets = '(){}[]'
 categories = [lower, digits, space, punctuation, brackets]
 
 
-def tokenize(string):
+def tokenize(expression):
     global categories
     token = ''
     tokens = []
     category = None
-    for char in string:
+    for char in expression:
         if token:
             if category and char in category:
                 token += char
