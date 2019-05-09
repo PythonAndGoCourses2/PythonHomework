@@ -1,5 +1,5 @@
 """
-Specification for a parser.
+Specification for a Pratt parser.
 """
 
 from .specification import Specification

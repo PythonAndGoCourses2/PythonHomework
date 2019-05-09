@@ -1,5 +1,5 @@
 """
-Parser specification.
+A generic parser specification.
 """
 
 from .led import Led
