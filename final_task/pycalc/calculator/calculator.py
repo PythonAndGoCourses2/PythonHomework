@@ -1,5 +1,5 @@
 """
-Initialization of a calculator. Returns a parser object.
+Initialization of a calculator. Returns a calculator instance.
 """
 
 from pycalc.lexer import Lexer
