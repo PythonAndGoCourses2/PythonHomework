@@ -4,7 +4,7 @@ Exceptions for the importer module.
 
 
 class ModuleImportErrors(ModuleNotFoundError):
-    """"""
+    """Raise when at least one of module imports failed."""
 
     def __init__(self, module_names):
         super().__init__()

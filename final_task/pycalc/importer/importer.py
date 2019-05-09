@@ -1,7 +1,6 @@
 """
+Functions for modules importing and module members collecting.
 """
-
-# TODO: handle exception when module importing fails
 
 from collections import OrderedDict
 from importlib import import_module
@@ -15,15 +14,17 @@ UNDERSCORE = '_'
 
 
 def iter_uniq(iterables):
-    """
-    Returns a generator that iterates over unique elements of iterables.
-    """
+    """Returns a generator that iterates over unique elements of iterables."""
 
     return (key for key in OrderedDict.fromkeys(chain(*iterables)))
 
 
 def import_modules(*iterables):
-    """"""
+    """
+    Return a list of imported modules.
+
+    Raise an `ModuleImportErrors` exception if at least one of imports fails.
+    """
 
     modules = []
     failed_imports = []
@@ -43,7 +44,10 @@ def import_modules(*iterables):
 
 
 def module_members_by_type(module, type_checker, skip_underscored=True):
-    """"""
+    """
+    Create a generator over tuples of names and
+    members of a certain type in a module.
+    """
 
     for name, member in getmembers(module, type_checker):
         if skip_underscored and name.startswith(UNDERSCORE):
@@ -52,7 +56,7 @@ def module_members_by_type(module, type_checker, skip_underscored=True):
 
 
 def collect_members_by_type(modules, type_checker, skip_underscored=True, predefined=None):
-    """"""
+    """Collect members of modules by types into an dictionary."""
 
     accumulator = dict(predefined) if predefined else {}
 

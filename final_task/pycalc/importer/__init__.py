@@ -1,5 +1,5 @@
 """
-Importer package provides functions for
+The importer package provides functions for
 modules importing and module members collecting.
 """
 
