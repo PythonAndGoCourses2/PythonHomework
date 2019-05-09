@@ -49,7 +49,7 @@ class Lexer:
         return self.pos >= self.length
 
     def peek(self):
-        """"""
+        """Return the next token without advancing the pointer position."""
 
         if self._token_wrapper:
             return self._token_wrapper[-1]
@@ -60,7 +60,7 @@ class Lexer:
         return token
 
     def consume(self):
-        """"""
+        """Return the next token and advance the pointer position."""
 
         token = self.peek()
         self._token_wrapper.pop()
@@ -70,7 +70,7 @@ class Lexer:
         return token
 
     def _next_token(self):
-        """Try to match the next token."""
+        """Skip whitespaces and return the next token."""
 
         self._skip_whitespaces()
         token = self._match()
@@ -78,7 +78,7 @@ class Lexer:
         return token
 
     def _match(self):
-        """Return `Token` or `None`."""
+        """Try to match the next token. Return a `Token` instance or `None`."""
 
         for token_type, matcher in self.matchers:
             lexeme = matcher(self.source, self.pos)
@@ -99,7 +99,7 @@ class Lexer:
             self._advance_pos_by_lexeme(whitespaces.group())
 
     def _advance_pos_by_lexeme(self, lexeme):
-        """Advance the position index by lexeme lenght."""
+        """Advance the position index by lexeme length."""
 
         value = len(lexeme)
         self.prev_pos = self.pos
