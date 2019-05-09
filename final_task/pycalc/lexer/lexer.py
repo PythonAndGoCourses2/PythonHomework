@@ -7,6 +7,8 @@ from collections import namedtuple
 
 
 Token = namedtuple("Token", ("token_type", "lexeme"))
+LexerContext = namedtuple('LexerContext', ('source', 'pos'))
+
 WHITESPACES = re.compile(r"\s+")
 
 
@@ -17,6 +19,7 @@ class Lexer:
         self.matchers = matchers
         self.source = ''
         self.pos = 0
+        self.prev_pos = 0
         self.length = 0
 
         # a wrapper for caching the last peeked token
@@ -27,8 +30,16 @@ class Lexer:
 
         self.source = source
         self.pos = 0
+        self.prev_pos = 0
         self.length = len(source)
         self._token_wrapper.clear()
+
+    def context(self, previous=False):
+        """Return a lexer context."""
+
+        pos = self.prev_pos if previous else self.pos
+
+        return LexerContext(self.source, pos)
 
     def is_source_exhausted(self):
         """Return `True` if the position pointer is out of the source string."""
@@ -100,4 +111,5 @@ class Lexer:
         """Advance the position index by lexeme lenght."""
 
         value = len(lexeme)
+        self.prev_pos = self.pos
         self.pos += value
