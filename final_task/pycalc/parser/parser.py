@@ -86,6 +86,11 @@ class Parser:
 
         return True
 
+    def context(self, previous=False):
+        """Return parsing context."""
+
+        return self.lexer.context(previous)
+
     def _nud(self, token):
         """"""
 
