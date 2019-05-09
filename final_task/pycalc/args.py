@@ -1,3 +1,7 @@
+"""
+Parse command-line options.
+"""
+
 import argparse
 
 PARSER = {
