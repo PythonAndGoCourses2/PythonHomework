@@ -13,6 +13,7 @@ def tokenize(expression):
     token = ''
     tokens = []
     category = None
+    expression = expression.replace(' ', '')
     for char in expression:
         if token:
             if category and char in category:
