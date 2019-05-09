@@ -4,6 +4,14 @@ top down operator precedence parsing (Pratt parser).
 """
 
 
+from .errors import (
+    ParserExpectedTokenAbsent,
+    ParserNoTokenReceived,
+    ParserGenericError,
+    ParserSourceNotExhausted
+)
+
+
 class Parser:
     """Parser class for top down operator precedence parsing (Pratt parser)."""
 
@@ -18,14 +26,11 @@ class Parser:
 
         try:
             result = self.expression()
-        except Exception as e:
-            print(
-                f'ERROR: {e}: (pos: {self.lexer.pos}), {self.lexer.format()}')
-            raise e
+        except Exception as exc:
+            raise ParserGenericError(self.context()) from exc
 
         if not self.lexer.is_source_exhausted():
-            raise Exception(
-                f'ERROR: source not parsed completely, (pos: {self.lexer.pos}), {self.lexer.format()}')
+            raise ParserSourceNotExhausted(self.context())
 
         return result
 
@@ -34,7 +39,7 @@ class Parser:
 
         token = self.consume()
         if not token:
-            raise SyntaxError('i expect something but nothing finded')
+            raise ParserNoTokenReceived(self.context())
 
         left = self._nud(token)
 
@@ -64,7 +69,8 @@ class Parser:
     def advance(self, token_type=None):
         """
         Consume a next token if that one is of given type.
-        Raise an exception if types don’t match.
+
+        Raise an `ParserExpectedTokenAbsent` exception if types don’t match.
         """
 
         token = self.peek()
@@ -73,7 +79,7 @@ class Parser:
                 token_type and
                 not token.token_type == token_type
         ):
-            raise SyntaxError(f"Expected: {token_type}")
+            raise ParserExpectedTokenAbsent(self.context())
 
         self.consume()
 
