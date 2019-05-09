@@ -3,8 +3,6 @@ Collect maps of module member’s names
 to module member’s objects of specified types.
 """
 
-# TODO: handle exception when module importing fails
-
 
 from functools import partial
 from types import BuiltinFunctionType, FunctionType, LambdaType
