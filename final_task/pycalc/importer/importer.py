@@ -8,6 +8,9 @@ from importlib import import_module
 from inspect import getmembers
 from itertools import chain
 
+from .errors import ModuleImportErrors
+
+
 UNDERSCORE = '_'
 
 
@@ -23,6 +26,7 @@ def import_modules(*iterables):
     """"""
 
     modules = []
+    failed_imports = []
 
     for module_name in iter_uniq(iterables):
 
@@ -30,7 +34,10 @@ def import_modules(*iterables):
             module = import_module(module_name)
             modules.append(module)
         except ModuleNotFoundError:
-            raise ModuleNotFoundError
+            failed_imports.append(module_name)
+
+    if failed_imports:
+        raise ModuleImportErrors(failed_imports)
 
     return modules
 
