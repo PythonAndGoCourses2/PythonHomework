@@ -9,6 +9,11 @@ from os import path
 class CheckAndChange():
 
     def do_all_changes(self, expr, module):
+
+        if re.search(
+                r'[0-9]+', expr) is None and re.search(r'[A-ZAa-z]+', expr) is None:
+            raise Exception("No Numbers in expression")
+
         expr = expr.replace("//", "&")
         self.correct_brackets(expr)
         self.correct_spaces(expr)
@@ -71,11 +76,6 @@ class CheckAndChange():
                     expression = expression[1:]
 
     def correct_brackets(self, expr):
-
-        if re.search(
-                r'[0-9]+', expr) is None and re.search(r'[A-ZAa-z]+', expr) is None:
-            raise Exception("No Numbers in expression")
-
         i = 0
         for one in expr:
 

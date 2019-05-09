@@ -102,7 +102,7 @@ class ComplexCalc():
         ">": lambda a, b: a > b,
         ">=": lambda a, b: a >= b,
         "<=": lambda a, b: a <= b,
-        "=": lambda a, b: a == b,
+        "==": lambda a, b: a == b,
         "<": lambda a, b: a < b,
         "!=": lambda a, b: a != b
 
@@ -111,12 +111,12 @@ class ComplexCalc():
 
     def calculate(self, expr):
 
-        place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|=', expr)
+        place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
         if place:
             a = self.expression_search(expr[:place.start()])
             b = self.expression_search(expr[place.end():])
-
             if a and b:
+
                 return ComplexCalc.compare[place[0]](a, b)
             else:
                 raise Exception(

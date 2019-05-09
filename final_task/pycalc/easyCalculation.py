@@ -31,7 +31,11 @@ class Calculator():
         while expr != "":
             find = re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr)
             number = expr[:find.end()]
-            if number.count("-") % 2 == 1:
+            minus = number.count("-")
+            plus = number.count("+")
+            if minus + plus != find.start():
+                raise Exception("Undefine operator")
+            if minus % 2 == 1:
                 a = float("-" + find[0])
             else:
                 a = float(find[0])
@@ -41,7 +45,7 @@ class Calculator():
 
     def calculate(self, expr):
         expr = expr.replace(" ", "")
-        # посмотреть где выскакивает лишний " "
+
         while "(" in expr:
 
             end = expr.find(")")
@@ -50,6 +54,8 @@ class Calculator():
                 Exception("no operator after brackets")
 
             begin = expr[:end].rfind("(")
+            if begin + 1 == end:
+                raise Exception("no Number in brakets")
 
             if begin != 0 and expr[begin - 1] not in operators.operators \
                     and expr[begin - 1] != '-' and expr[begin - 1] != '+':
