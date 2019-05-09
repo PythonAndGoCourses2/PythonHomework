@@ -3,11 +3,77 @@ Initialization of a calculator. Returns a calculator instance.
 """
 
 from pycalc.lexer import Lexer
-from pycalc.parser import Parser
+from pycalc.parser import Parser, ParserGenericError
+from pycalc.token.precedence import Precedence
 
+from .formatters import err_msg_formatter, err_ctx_formatter
 from .importer import build_modules_registry
 from .matchers import build_matchers
+from .messages import EMPTY_EXPRESSION_PROVIDED, SYNTAX_ERROR
 from .specification import build_specification
+
+
+class Calculator:
+    """
+    The calculator class.
+
+    Provide a method to calculate an expression from a string.
+    """
+
+    def __init__(self, parser):
+        self._parser = parser
+
+    def calculate(self, expression):
+        """
+        Calculate an expression.
+
+        Return result of a calculation or an error message
+        if the calculation fails.
+        """
+
+        # empty expression
+        if not expression:
+            return err_msg_formatter(EMPTY_EXPRESSION_PROVIDED)
+
+        # calculate an expression
+        try:
+            result = self._parser.parse(expression)
+            return result
+
+        # handle calculation errors
+        except ParserGenericError as exc:
+
+            # ’unwrap’ an original exception if that one has a stored context ??
+
+            # print('wrapper :', type(exc))
+            # print('original:', type(exc.__cause__))
+
+            exc = exc.__cause__ if hasattr(exc.__cause__, 'ctx') else exc
+            ctx = exc.ctx
+
+            # print(exc)
+            # print(ctx)
+
+            # print(exc.__cause__.ctx)
+            # print(ctx)
+            # print(exc.__cause__.ctx)
+
+            err_msg = err_msg_formatter(f'{SYNTAX_ERROR}')
+            ctx_msg = err_ctx_formatter(ctx)
+            # print(type(exc), exc, exc.ctx)
+            # print(exc.__cause__)
+
+            return f'{err_msg}\n{ctx_msg}'
+
+        # except (ArithmeticError, ZeroDivisionError) as exc:
+        #     print(type(exc), exc)
+        #     err_msg = err_msg_formatter(exc)
+        #     return err_msg
+
+        except Exception as exc:
+            print(type(exc), exc)
+            print(f'CALCULATOR: exception: {exc}')
+            return 'Calculation failed.'
 
 
 def calculator(modules_names=None):
@@ -26,9 +92,13 @@ def calculator(modules_names=None):
     spec = build_specification(modules_registry)
 
     # create a parser
-    parser = Parser(spec, lexer)
+    power = Precedence.DEFAULT
+    parser = Parser(spec, lexer, power)
 
-    return parser
+    # create a calculator
+    calculator_ = Calculator(parser)
+
+    return calculator_
 
 
 # TODO: remove
