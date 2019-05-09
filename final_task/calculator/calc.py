@@ -34,14 +34,21 @@ DICT_MATH['abs'] = abs
 
 class CALCULATOR:
     error = None
+    result = None
     res_expression = []
     operations = []
 
-    def __init__(self, expression, dicts_modules):
+    def __init__(self, expression, dicts_modules=None):
         self.expression = expression
         self.translate_reverse_exception(dicts_modules)
         if self.error is None:
             self.result = self.calculate_res_exception(dicts_modules)
+
+    def get_result(self):
+        if self.error is None:
+            return self.result
+        else:
+            return self.error
 
     def calculate_function(self, dicts_modules, i):
         number = self.res_expression.pop(i - 1)
@@ -209,10 +216,7 @@ def main():
     else:
         expression, dicts_modules = check_exception()
         calculator = CALCULATOR(expression, dicts_modules)
-        if calculator.error is None:
-            print(calculator.result)
-        else:
-            print(calculator.error)
+        print(calculator.get_result())
 
 
 if __name__ == '__main__':
