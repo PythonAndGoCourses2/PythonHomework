@@ -15,9 +15,10 @@ from .errors import (
 class Parser:
     """Parser class for top down operator precedence parsing (Pratt parser)."""
 
-    def __init__(self, spec, lexer):
+    def __init__(self, spec, lexer, default_power):
         self.spec = spec
         self.lexer = lexer
+        self.default_power = default_power
 
     def parse(self, source):
         """Parse a source and return a result of parsing."""
@@ -34,7 +35,7 @@ class Parser:
 
         return result
 
-    def expression(self, right_power=0):
+    def expression(self, right_power=None):
         """The main parsing function of Pratt parser."""
 
         token = self.consume()
@@ -48,6 +49,7 @@ class Parser:
             if not token:
                 break
 
+            right_power = right_power if right_power is not None else self.default_power
             if right_power >= self._left_power(token):
                 break
 
