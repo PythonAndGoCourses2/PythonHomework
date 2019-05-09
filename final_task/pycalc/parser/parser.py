@@ -26,9 +26,20 @@ class Parser:
         self.lexer.init(source)
 
         try:
-            result = self.expression()
+            result = self._parse()
         except Exception as exc:
             raise ParserGenericError(self.context()) from exc
+
+        return result
+
+    def _parse(self):
+        """The inner parsing function.
+
+        Splitted from the main parsing function to allow
+        catching all parsing error exceptions in one place.
+        """
+
+        result = self.expression()
 
         if not self.lexer.is_source_exhausted():
             raise ParserSourceNotExhausted(self.context())
