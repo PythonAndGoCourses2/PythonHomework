@@ -32,7 +32,7 @@ class TestFunctions(unittest.TestCase):
             self.cheker.do_all_changes(" ", None)
 
     def test_module(self):
-        
+
         with self.assertRaises(Exception):
             self.cheker.addargs("module.py")
 
