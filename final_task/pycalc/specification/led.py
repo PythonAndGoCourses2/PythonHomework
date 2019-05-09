@@ -3,6 +3,7 @@ Left-Denotation.
 """
 
 from .denotation import Denotation
+from .errors import LedDenotationError
 
 
 class Led(Denotation):
@@ -15,7 +16,12 @@ class Led(Denotation):
     def eval(self, parser, token, left):
         """Receive from left, evaluate and return result."""
 
-        parselet = self._get_parselet(token)
+        try:
+            parselet = self._get_parselet(token)
+        except KeyError:
+            ctx = parser.context(previous=True)
+            raise LedDenotationError(ctx, token)
+
         result = parselet.led(parser, token, left)
 
         return result

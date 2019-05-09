@@ -2,6 +2,8 @@
 Denotation.
 """
 
+from .errors import DuplicatedTokenType
+
 
 class Denotation:
     """
@@ -28,11 +30,7 @@ class Denotation:
         """Find and return appropriate stored parselet for a given token type."""
 
         token_type = token.token_type
-
-        try:
-            parselet = self.registry[token_type]
-        except KeyError:
-            raise SyntaxError(f'not in specification: {token_type}')
+        parselet = self.registry[token_type]
 
         return parselet
 
@@ -42,5 +40,4 @@ class Denotation:
         """
 
         if token_type in self.registry:
-            raise Exception(
-                f'Token of {token_type} type is already registered.')
+            raise DuplicatedTokenType(token_type)
