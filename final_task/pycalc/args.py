@@ -24,14 +24,14 @@ MODULE = {
     }
 }
 
-arguments = [
+ARGUMENTS = [
     EXPRESSION,
     MODULE,
 ]
 
 parser = argparse.ArgumentParser(**PARSER)
 
-for arg in arguments:
+for arg in ARGUMENTS:
     parser.add_argument(*arg['name_or_flags'], **arg['keyword_arguments'])
 
 args = parser.parse_args()
