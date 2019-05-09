@@ -115,7 +115,7 @@ if __name__ == "__main__":
         return wrap
 
     p = calculator()
-    p.parse = logger(p.parse)
+    p.parse = logger(p.calculate)
 
     assert p.parse('sin(2)') == math.sin(2)
     assert p.parse('sin(2-3)') == math.sin(2 - 3)
@@ -141,12 +141,40 @@ if __name__ == "__main__":
     assert p.parse('1 >= 1') is True
     assert p.parse('1 - 2 >= -1') is True
     assert p.parse('log(1025 - 1, 7 - 5)') == 10
+    assert p.parse('1 + tau') == 1 + math.tau
+    assert p.parse('1 + inf') == math.inf
+    assert p.parse('1 - inf') == -math.inf
+    assert p.parse('-inf + 1') == -math.inf
+    assert str(p.parse('-inf + inf')) == str(math.nan)
 
-    # assert p.parse('1 / 0')
-    # assert p.parse('sin(1,2)')
-    # assert p.parse(', 1')
-    # assert p.parse('1 , 2')
-    # assert p.parse(') 2 ') == 15
-    # assert p.parse('0 1')
-    # assert p.parse('- - - 2 ^ log ( 1 , ( 4 - 1 ) * 5 , 4 )') == -1048576
-    # TODO:
+    assert p.parse('1 / (1-1) + 1')       # ZeroDivisionError
+    assert p.parse('100^100^100^100')     # OverflowError
+    assert p.parse('sin(1,2)')
+    assert p.parse(', 1')                 # from nud
+    assert p.parse(') 2 ')                # from nud
+    assert p.parse('1 , 2')               # not parsed completely
+    assert p.parse('(2')                  # expected
+    assert p.parse('sin2')                # expected
+    assert p.parse('0 1')
+    assert p.parse('a')                   # expected token in expr begin
+
+    # asserts from pycalc_checker.py error cases
+    p.parse('+')
+    p.parse('1-')
+    p.parse('1 2')
+    p.parse('==7')
+    p.parse('1+2(3*4))')
+    p.parse('((1+2)')
+    p.parse('1+1 2 3 4 5 6')
+    p.parse('log100(100)')
+    p.parse('------')
+    p.parse('5> =6')
+    p.parse('5/ /6')
+    p.parse('6<=6')
+    p.parse('6* *6')
+    p.parse('(((((')
+    p.parse('abs')
+    p.parse('pow(2, 3, 4)')
+
+    p.parse('1 / 0')
+    p.parse('10 ^ 10 ^ 10 ^ 10')
