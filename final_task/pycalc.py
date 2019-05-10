@@ -50,13 +50,21 @@ operator_dict = {
 
 def check_expression(expression_line):
     if not expression_line:
-        raise SyntaxError('ERROR: Expression cannot be empty')
+        raise SyntaxError('Expression cannot be empty')
     if expression_line[-1] in operator_dict.keys():
-        raise SyntaxError('ERROR: Extra operator {} at the end of an expression!'.format(expression_line[-1]))
+        raise SyntaxError('Extra operator {} at the end of an expression!'.format(expression_line[-1]))
     if expression_line.count('(') < expression_line.count(')'):
-        raise SyntaxError('ERROR: Opening bracket required!')
+        raise SyntaxError('Opening bracket required!')
     elif expression_line.count('(') > expression_line.count(')'):
-        raise SyntaxError('ERROR: Closing bracket required!')
+        raise SyntaxError('Closing bracket required!')
+    return True
+
+
+def check_converted_list(converted_list):
+    if len(converted_list) == 1:
+        if type(converted_list[0]) is int or type(converted_list[0]) is float:
+            return True
+        raise SyntaxError('Expression must include at list one operand or one function with arguments!')
     return True
 
 
@@ -75,7 +83,10 @@ def function_parser(function_name):
             return function_dict[function_name]['operator']
         else:
             return 2 * function_dict['e']['operator']
-    return function_name
+    elif function_name in function_dict.keys():
+        return function_name
+    else:
+        raise SyntaxError('There is no function with this name {}!'.format(function_name))
 
 
 def split_operators(expression_line):
@@ -99,7 +110,7 @@ def split_operators(expression_line):
                     last_letter = ""
             if i.isnumeric() or i is '.':
                 if blank_item and type(parsing_list[-1]) is not str:
-                    raise SyntaxError('Blank symbol between two operands')
+                    raise SyntaxError('Blank symbol between two operands!')
                 elif blank_item:
                     blank_item = False
                 if last_symbol:
@@ -109,7 +120,7 @@ def split_operators(expression_line):
                     last_letter += i
                 else:
                     if '.' in last_number and i == '.':
-                        raise SyntaxError('ERROR: Typo in the operand (two comma)')
+                        raise SyntaxError('Typo in the operand (two comma)!')
                     else:
                         last_number += i
             elif i.isalpha():
@@ -119,7 +130,7 @@ def split_operators(expression_line):
                 last_letter += i
             elif i in "!=<>/":
                 if blank_item and str(parsing_list[-1]) in '!=<>/*':
-                    raise SyntaxError('ERROR: Blank symbol between twice operator')
+                    raise SyntaxError('Blank symbol between twice operator')
                 elif blank_item:
                     blank_item = False
                 if last_number:
@@ -209,6 +220,7 @@ def converter(parsing_list):
                 converted_list.append(operator_dict['-'])
                 last_item = ""
             converted_list.append(i)
+    check_converted_list(converted_list)
     return converted_list
 
 
@@ -323,7 +335,7 @@ def main():
         result = calculate(converted_list)
         print(result)
     except SyntaxError as err:
-        print(err)
+        print('ERROR: {}'.format(err))
     except ZeroDivisionError as err:
         print('ERROR: {}!'.format(err))
     except ValueError as err:
