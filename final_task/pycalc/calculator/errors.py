@@ -5,7 +5,7 @@ according to an exception type.
 
 from pycalc.parser import errors as parser_err
 from pycalc.specification import errors as spec_err
-from .parselets import errors as token_err
+from .parselets import errors as parselet_err
 
 from .messages import SYNTAX_ERROR, CANT_PARSE_EXPRESSION
 
@@ -22,7 +22,7 @@ def get_err_msg(exc):
     """Return an error message according to an exception type."""
 
     # for function calls and operator applying errors
-    if isinstance(exc, token_err.CallError):
+    if isinstance(exc, parselet_err.CallError):
         # get the error message of the original exception
         err_msg = str(exc.__cause__)
 
