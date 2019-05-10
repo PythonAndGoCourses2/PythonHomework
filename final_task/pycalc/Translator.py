@@ -27,12 +27,13 @@ def get_postfix(input_string):
             continue
         if token in t.OPERATORS:
             if token == '-' or token == '+':
-                if (not is_number(input_string[index - 1])) or not index:
+                if ((not is_number(input_string[index - 1])) or not index) and (
+                        input_string[index - 1] != t.closeBracket):
                     if not input_string[index - 1] in t.CONSTANTS:
                         output_string += '0'
             while stack[-1] in t.OPERATORS and \
                     ((token in t.left_associativity and t.OPERATORS[token].priority <= t.OPERATORS[
-                        stack[-1]].priority) or \
+                        stack[-1]].priority) or
                      (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
                          stack[-1]].priority)):
                 output_string += [stack.pop()]
@@ -64,4 +65,6 @@ def get_postfix(input_string):
 
 
 def is_number(s):
+    if '.' in s:
+        return True
     return s.isdigit()
