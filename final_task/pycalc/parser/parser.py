@@ -46,7 +46,7 @@ class Parser:
 
         return result
 
-    def expression(self, right_power=None):
+    def expression(self, power=None):
         """The main parsing function of Pratt parser."""
 
         token = self.consume()
@@ -60,8 +60,7 @@ class Parser:
             if not token:
                 break
 
-            right_power = right_power if right_power is not None else self.default_power
-            if right_power >= self._left_power(token):
+            if self._right_power(power) >= self._left_power(token):
                 break
 
             self.consume()
@@ -120,7 +119,15 @@ class Parser:
 
         return self.spec.led.eval(self, token, left)
 
+    def _right_power(self, power):
+        """Return token binding power."""
+
+        if power is not None:
+            return power
+
+        return self.default_power
+
     def _left_power(self, token):
         """Get token binding power."""
 
-        return self.spec.led.power(token)
+        return self.spec.led.power(self, token)
