@@ -3,13 +3,20 @@
 import operator
 import math
 import sys
-from argparse import ArgumentParser
+import argparse
 
 
 def arg_parser():
-    parser = ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
-    parser.add_argument('-m', '--use-modules', help='additional modules to use', metavar='MODULE [MODULE ...]')
-    parser.add_argument('EXPRESSION', help='expression string to calculate')
+    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
+    parser.add_argument(
+        '-m',
+        '--use-modules',
+        help='additional modules to use',
+        metavar='MODULE [MODULE ...]'
+    )
+    parser.add_argument(
+        'EXPRESSION', help='expression string to calculate'
+    )
     expression_line = parser.parse_args().EXPRESSION
     return expression_line
 
@@ -20,7 +27,7 @@ function_dict = {
     'abs': {'operator': abs, 'priority': 0},
     'round': {'operator': round, 'priority': 0}
 }
-for k,v in math.__dict__.items():
+for k, v in math.__dict__.items():
     if k.startswith('_'):
         continue
     function_dict[k] = {'operator': v, 'priority': 0}
@@ -77,7 +84,7 @@ def check_expression(expression_line):
 def number_parser(number):
     try:
         return int(number)
-    except:
+    except ValueError:
         return float(number)
 
 
@@ -176,7 +183,8 @@ def converter(parsing_list):
                 converted_list.append(operator_dict[last_item])
                 last_item = ''
         if type(i) is float or type(i) is int:
-            if last_item == '-' and converted_list[-1] != '(' and converted_list[-1] not in operator_dict.values():
+            if last_item == '-' and converted_list[-1] != '(' \
+                    and converted_list[-1] not in operator_dict.values():
                 converted_list.append(operator_dict[last_item])
                 converted_list.append(i)
                 last_item = ""
@@ -318,12 +326,10 @@ def main():
     expression_line = arg_parser()
     operands = OperandStack()
     function = OperandStack()
-
-    if type(expression_line) is str:
-        parser = split_operators(expression_line)
-        converted_list = converter(parser)
-        result = calculate(converted_list)
-        print(result)
+    parser = split_operators(expression_line)
+    converted_list = converter(parser)
+    result = calculate(converted_list)
+    print(result)
 
 
 if __name__ == '__main__':
