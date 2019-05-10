@@ -17,6 +17,12 @@ def functions(token, *args):
     except TypeError:
         print('ERROR: invalid number of arguments!')
         sys.exit(1)
+    except ValueError:
+        print('ERROR: incorrect value!')
+        sys.exit(1)
+    except OverflowError:
+        print('ERROR: results that overflow!')
+        sys.exit(1)
 
 
 def constants_calculation(token):

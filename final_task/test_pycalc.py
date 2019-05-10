@@ -65,6 +65,7 @@ class TestMyCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main('erfc(3)'), m.erfc(3))
         self.assertEqual(pycalc.main('gamma(3)'), m.gamma(3))
         self.assertEqual(pycalc.main('lgamma(3)'), m.lgamma(3))
+        self.assertEqual(pycalc.main('gcd(1,2)'), m.gcd(1, 2))
 
     def test_round_brackets(self):
         self.assertEqual(pycalc.main('(2+2)*2'), (2+2)*2)
