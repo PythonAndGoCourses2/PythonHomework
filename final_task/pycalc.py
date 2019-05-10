@@ -21,8 +21,6 @@ def arg_parser():
     return expression_line
 
 
-arg_parser()
-
 function_dict = {
     'abs': {'operator': abs, 'priority': 0},
     'round': {'operator': round, 'priority': 0}
@@ -55,6 +53,8 @@ errors = {
     3: 'ERROR: Opening bracket required!',
     4: 'ERROR: Closing bracket required!',
     5: 'ERROR: Blank symbol between two operands',
+    6: 'ERROR: Typo in the operand (two comma)',
+    7: 'ERROR: Blank symbol between twice operator'
     }
 
 
@@ -129,13 +129,20 @@ def split_operators(expression_line):
                 if last_letter:
                     last_letter += i
                 else:
-                    last_number += i
+                    if '.' in last_number and i == '.':
+                        raise Error(id=6, arg=last_number)
+                    else:
+                        last_number += i
             elif i.isalpha():
                 if last_symbol:
                     parsing_list.append(last_symbol)
                     last_symbol = ""
                 last_letter += i
             elif i in "!=<>/":
+                if blank_item and str(parsing_list[-1]) in '!=<>/*':
+                    raise Error(id=7)
+                elif blank_item:
+                    blank_item = False
                 if last_number:
                     parsing_list.append(number_parser(last_number))
                     last_number = ""
@@ -150,7 +157,10 @@ def split_operators(expression_line):
                 if last_letter:
                     parsing_list.append(function_parser(last_letter))
                     last_letter = ""
-                if i:
+                if last_symbol:
+                    parsing_list.append(last_symbol)
+                    last_symbol = ""
+                if i != ' ':
                     parsing_list.append(i)
         if last_number:
             parsing_list.append(number_parser(last_number))
@@ -177,6 +187,8 @@ def converter(parsing_list):
         converted_list = []
     last_item = ""
     for i in parsing_list:
+        if i == " ":
+            continue
         if i != '-' and i != '+' and last_item:
             last_item = clean_add_sub_operators(last_item, converted_list)
             if last_item == '+':
