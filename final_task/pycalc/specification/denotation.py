@@ -19,13 +19,6 @@ class Denotation:
         self._check_for_dup(token_type)
         self.registry[token_type] = parselet(**kwargs)
 
-    def power(self, token):
-        """Return power for a given token."""
-
-        power = self._get_parselet(token).power
-
-        return power
-
     def _get_parselet(self, token):
         """Find and return a parselet for a given token type."""
 
