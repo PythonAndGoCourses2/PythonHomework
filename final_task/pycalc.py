@@ -47,44 +47,23 @@ operator_dict = {
     '<=': {'operator': operator.le, 'priority': 4},
 }
 
-errors = {
-    1: 'ERROR: Expression cannot be empty',
-    2: lambda arg: 'ERROR: Extra operator {} at the end of an expression!'.format(arg),
-    3: 'ERROR: Opening bracket required!',
-    4: 'ERROR: Closing bracket required!',
-    5: 'ERROR: Blank symbol between two operands',
-    6: 'ERROR: Typo in the operand (two comma)',
-    7: 'ERROR: Blank symbol between twice operator'
-    }
-
-
-class Error(Exception):
-
-    def __init__(self, id, arg=None):
-        self.arg = arg
-        self.id = id
-        if self.arg is not None:
-            self.text = errors[self.id](self.arg)
-        else:
-            self.text = errors[self.id]
-
 
 def check_expression(expression_line):
     if not expression_line:
-        raise Error(id=1)
+        raise SyntaxError('Expression cannot be empty')
     if expression_line[-1] in operator_dict.keys():
-        raise Error(id=2, arg=expression_line[-1])
+        raise SyntaxError('ERROR: Extra operator {} at the end of an expression!'.format(expression_line[-1]))
     if expression_line.count('(') < expression_line.count(')'):
-        raise Error(id=3)
+        raise SyntaxError('ERROR: Closing bracket required!')
     elif expression_line.count('(') > expression_line.count(')'):
-        raise Error(id=4)
+        raise SyntaxError('ERROR: Closing bracket required!')
     return True
 
 
 def number_parser(number):
     try:
         return int(number)
-    except ValueError:
+    except SyntaxError:
         return float(number)
 
 
@@ -120,7 +99,7 @@ def split_operators(expression_line):
                     last_letter = ""
             if i.isnumeric() or i is '.':
                 if blank_item and type(parsing_list[-1]) is not str:
-                    raise Error(id=5)
+                    raise SyntaxError('Blank symbol between two operands')
                 elif blank_item:
                     blank_item = False
                 if last_symbol:
@@ -130,7 +109,7 @@ def split_operators(expression_line):
                     last_letter += i
                 else:
                     if '.' in last_number and i == '.':
-                        raise Error(id=6, arg=last_number)
+                        raise SyntaxError('ERROR: Typo in the operand (two comma)')
                     else:
                         last_number += i
             elif i.isalpha():
@@ -140,7 +119,7 @@ def split_operators(expression_line):
                 last_letter += i
             elif i in "!=<>/":
                 if blank_item and str(parsing_list[-1]) in '!=<>/*':
-                    raise Error(id=7)
+                    raise SyntaxError('ERROR: Blank symbol between twice operator')
                 elif blank_item:
                     blank_item = False
                 if last_number:
@@ -347,5 +326,9 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Error as err:
-        print(err.text)
+    except SyntaxError as err:
+        print(err)
+    except ZeroDivisionError as err:
+        print('ERROR: {}!'.format(err))
+    except ValueError as err:
+        print('ERROR: math error!')
