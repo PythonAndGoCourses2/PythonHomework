@@ -6,6 +6,12 @@ CONSTANTS = {'pi': math.pi, 'e': math.e}
 # -----------------------------------------------
 Operator = namedtuple("Operator", ("priority", "function"))
 OPERATORS = dict()
+OPERATORS['>'] = Operator(2, lambda a, b: a > b)
+OPERATORS['>='] = Operator(2, lambda a, b: a >= b)
+OPERATORS['<'] = Operator(2, lambda a, b: a < b)
+OPERATORS['<='] = Operator(2, lambda a, b: a <= b)
+OPERATORS['=='] = Operator(2, lambda a, b: a == b)
+OPERATORS['!='] = Operator(2, lambda a, b: a != b)
 OPERATORS['+'] = Operator(2, lambda a, b: a + b)
 OPERATORS['-'] = Operator(2, lambda a, b: a - b)
 OPERATORS['*'] = Operator(3, lambda a, b: a * b)
