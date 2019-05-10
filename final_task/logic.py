@@ -6,9 +6,10 @@ module which contains methods which make up base logic of the calculator
 import re
 import importlib
 import constants
+from typing import List, Any
 
 
-def parse_funcs_params(ex_list: list, methods: dict) -> list:
+def parse_funcs_params(ex_list: List[str], methods: dict) -> List[str]:
     """
 
     function which write function parameters into list, its work recursively if find another function in one of
@@ -72,7 +73,7 @@ def parse_funcs_params(ex_list: list, methods: dict) -> list:
     return output_list
 
 
-def import_usr_imports(usr_imports: list):
+def import_usr_imports(usr_imports: List[str]):
     """import user files
 
     function gets objects of user imports and added it to global namespace
@@ -84,7 +85,7 @@ def import_usr_imports(usr_imports: list):
     return import_objects
 
 
-def _get_item_by_type(item: str, methods: dict):
+def _get_item_by_type(item: str, methods: dict) -> Any:
     """get item by its string according its type
 
     :param item: string of equivalent of some number
@@ -105,7 +106,7 @@ def _get_item_by_type(item: str, methods: dict):
     return output_value
 
 
-def get_imports_attrs(user_imports: list, available_units: dict) -> dict:
+def get_imports_attrs(user_imports: List[str], available_units: dict) -> dict:
     """get methods of user imports as dictionary
 
     :param available_units: units which contains functions and constants which user can use
@@ -262,7 +263,7 @@ def rebuild_into_polish_notation(expression_list: list, methods: dict) -> list:
     return output_expression
 
 
-def _push_operations_while_bracket(operation_list: list, polish_list: list) -> tuple:
+def _push_operations_while_bracket(operation_list: List[str], polish_list: List[str]) -> tuple:
     while operation_list[-1] != '(':
         if operation_list:
             polish_list.append(operation_list.pop())
@@ -274,7 +275,7 @@ def _push_operations_while_bracket(operation_list: list, polish_list: list) -> t
     return operation_list, polish_list
 
 
-def _check_for_operation_priority(operation_list: list, polish_list: list, expression: str):
+def _check_for_operation_priority(operation_list: List[str], polish_list: List[str], expression: str):
     if (not operation_list or _get_priority(expression) > _get_priority(operation_list[-1])) and expression != '(':
         # if we found operator or function and it's priority higher than priority of operator on the top of
         # stack of operators add it into stack of operators
@@ -297,7 +298,7 @@ def _check_for_operation_priority(operation_list: list, polish_list: list, expre
     return operation_list, polish_list
 
 
-def ex_calc(polish_list: list, methods: dict):
+def ex_calc(polish_list: List[str], methods: dict):
     """calculate mathematical expression writed as polish notation
 
     :param polish_list: list which contains mathematical expression writed as polish notation
@@ -381,7 +382,7 @@ def check_for_scientific_notation(number_str: str) -> str:
 def error_handle(ex_str: str, methods):
     """
 
-    function which catching errors
+    function which catches errors
 
     :param ex_str: string which contains mathematical expressions
     :param methods: methods of all imports we need as dict
