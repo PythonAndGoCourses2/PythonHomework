@@ -223,7 +223,6 @@ def converter(parsing_list):
     check_converted_list(converted_list)
     return converted_list
 
-
 class OperandStack:
 
     def __init__(self):
@@ -300,6 +299,8 @@ def calculate(converted_list):
         else:
             for i in range(len(function.stack)):
                 if item is ',' and function.top() is '(':
+                    if func_arguments:
+                        raise SyntaxError('This fucntion can have only two arguments')
                     func_arguments = True
                     break
                 elif func_arguments:
