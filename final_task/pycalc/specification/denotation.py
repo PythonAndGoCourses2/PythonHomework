@@ -1,5 +1,5 @@
 """
-Denotation.
+Provides the base class for nud- and led-denotation classes.
 """
 
 from .errors import DuplicatedTokenType
@@ -14,7 +14,7 @@ class Denotation:
         self.registry = {}
 
     def register(self, token_type, parselet, **kwargs):
-        """Register token type with an appropriate parselet."""
+        """Register a parselet for a given token type."""
 
         self._check_for_dup(token_type)
         self.registry[token_type] = parselet(**kwargs)
@@ -27,7 +27,7 @@ class Denotation:
         return power
 
     def _get_parselet(self, token):
-        """Find and return appropriate stored parselet for a given token type."""
+        """Find and return a parselet for a given token type."""
 
         token_type = token.token_type
         parselet = self.registry[token_type]
