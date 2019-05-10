@@ -43,6 +43,8 @@ def get_postfix(input_string):
             if stack[-1] in FUNCTIONS:
                 output_string += [stack.pop()]
             continue
+        print(f'ERROR: no such function or operator: \'{token}\'')
+        sys.exit(1)
     while stack[-1]:
         if stack[-1] == openBracket:
             print('ERROR: expected close bracket')

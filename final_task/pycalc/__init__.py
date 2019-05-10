@@ -1,6 +1,7 @@
 import Parser
 import Tokenizer
 import Translator
+import Calculator
 
 
 def main():
@@ -8,7 +9,8 @@ def main():
     infix_string = Parser.parse_console()
     tokens = Tokenizer.tokenize(infix_string)
     postfix_string = Translator.get_postfix(tokens)
-    print(postfix_string)
+    res = Calculator.calc(postfix_string)
+    print(res)
 
 
 if __name__ == "__main__":
