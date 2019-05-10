@@ -27,7 +27,8 @@ def get_postfix(input_string):
         if token in Tokens.OPERATORS:
             if token == '-' or token == '+':
                 if (not is_number(input_string[index - 1])) or not index:
-                    output_string += '0'
+                    if not input_string[index - 1] in Tokens.CONSTANTS:
+                        output_string += '0'
             while (stack[-1] in Tokens.OPERATORS) and (
                     Tokens.OPERATORS[token].priority <= Tokens.OPERATORS[stack[-1]].priority):
                 output_string += stack.pop()
