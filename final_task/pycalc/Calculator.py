@@ -1,4 +1,4 @@
-import Tokens
+from . import Tokens
 
 
 def calc(expr):

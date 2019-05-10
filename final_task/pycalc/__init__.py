@@ -1,7 +1,7 @@
-import Parser
-import Tokenizer
-import Translator
-import Calculator
+from . import Parser
+from . import Tokenizer
+from . import Translator
+from . import Calculator
 
 
 def main():
