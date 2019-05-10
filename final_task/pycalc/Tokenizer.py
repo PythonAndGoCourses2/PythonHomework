@@ -1,9 +1,9 @@
 import string
 
 lower = string.ascii_lowercase
-digits = string.digits
+digits = string.digits + '.'
 space = string.whitespace
-punctuation = '!"#$%&\'*+,-./:;<=>?@\\^_`|~'
+punctuation = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
 brackets = '(){}[]'
 categories = [lower, digits, space, punctuation, brackets]
 

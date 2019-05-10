@@ -8,6 +8,9 @@ def get_postfix(input_string):
     output_string = []
     stack = [0]
     for index, token in enumerate(input_string):
+        if '.' in token:
+            output_string.append(float(token))
+            continue
         if is_number(token):
             output_string.append(token)
             continue
