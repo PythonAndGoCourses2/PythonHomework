@@ -32,7 +32,7 @@ def call_func_with_args(Func, Args):
 
 def get_func_arguments(eval_string, index):
     # Читает со строки аргументы функции
-    params = []
+    arguments = []
     while index < len(eval_string) and eval_string[index] != ')':
         temp = solve_equality(eval_string, index)
         index = temp[1]
@@ -41,9 +41,9 @@ def get_func_arguments(eval_string, index):
             raise ValueError("ERROR: no zapyataya")
         elif index < len(eval_string) and eval_string[index] == ',':
             index += 1
-        params.append(temp[0])
+        arguments.append(temp[0])
     if index < len(eval_string) and eval_string[index] == ')':
-        return params, index
+        return arguments, index
     else:
         raise ValueError('ERROR: no closing bracket')
 
@@ -256,8 +256,7 @@ def solve_equality(eval_string, index):
 def solve(eval_string, index=0):
     """
         Считает математическое выражение в строке
-        Значение index по умолчанию стоит для красоты
-        Так как мы ее вызываем один раз в самом начале работы калькулятора
+        Вызывается один раз в самом начале работы калькулятора
     """
     index = skip_space(eval_string, index)
     if index >= len(eval_string):
