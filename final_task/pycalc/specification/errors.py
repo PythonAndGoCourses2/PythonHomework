@@ -17,6 +17,14 @@ class DuplicatedTokenType(Exception):
         self.token_type = token_type
 
 
+class ParseletNotRegistered(Exception):
+    """Raise when there is no registered parselet for a given token type."""
+
+    def __init__(self, token_type):
+        super().__init__()
+        self.token_type = token_type
+
+
 class DenotationError(SyntaxError):
     """The generic exception class for denotation errors."""
 
