@@ -18,6 +18,6 @@ def calc(expr):
             else:
                 op = stack.pop()
                 stack.append(Tokens.FUNCTIONS[token](op))
-        elif token:
+        else:
             stack.append(float(token))
     return stack.pop()
