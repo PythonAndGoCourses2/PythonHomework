@@ -1,8 +1,9 @@
 """
-Exceptions for the parser module.
+Exceptions for the parser package.
 """
 
 GENERIC_PARSER_ERROR = 'encountered an error while parsing'
+GENERIC_PARSER_SYNTAX_ERROR = 'syntax error'
 
 
 class ParserGenericError(SyntaxError):
@@ -14,6 +15,13 @@ class ParserGenericError(SyntaxError):
 
     def __str__(self):
         return GENERIC_PARSER_ERROR
+
+
+class ParserSyntaxError(ParserGenericError):
+    """A generic parser exception that represents a syntax error."""
+
+    def __str__(self):
+        return GENERIC_PARSER_SYNTAX_ERROR
 
 
 class ParserNoTokenReceived(ParserGenericError):
