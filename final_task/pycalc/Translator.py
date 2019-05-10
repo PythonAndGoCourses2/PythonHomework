@@ -20,7 +20,7 @@ def get_postfix(input_string):
             continue
         if token == t.func_delimiter:
             while not stack[-1] == t.openBracket:
-                output_string += stack.pop()
+                output_string += [stack.pop()]
                 if not stack:
                     print('ERROR: miss delimiter or open bracket')
                     sys.exit(1)
@@ -35,7 +35,7 @@ def get_postfix(input_string):
                         stack[-1]].priority) or \
                      (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
                          stack[-1]].priority)):
-                output_string += stack.pop()
+                output_string += [stack.pop()]
             else:
                 stack.append(token)
             continue
@@ -44,7 +44,7 @@ def get_postfix(input_string):
             continue
         if token == t.closeBracket:
             while not stack[-1] == t.openBracket:
-                output_string += stack.pop()
+                output_string += [stack.pop()]
                 if not stack:
                     print('ERROR: miss bracket')
                     sys.exit(1)
