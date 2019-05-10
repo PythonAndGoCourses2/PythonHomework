@@ -19,7 +19,11 @@ def tokenize(expression):
             if category and char in category:
                 token += char
             else:
-                tokens.append(token)
+                if '+' in token or '-' in token:
+                    for c in token:
+                        tokens.append(c)
+                else:
+                    tokens.append(token)
                 token = char
                 category = None
                 for cat in categories:

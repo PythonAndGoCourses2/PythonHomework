@@ -1,39 +1,10 @@
-import math
 import sys
-from collections import namedtuple
-
-# -----------------------------------------------
-CONSTANTS = {'pi': math.pi, 'e': math.e}
-# -----------------------------------------------
-Operator = namedtuple("Operator", ("priority", "function"))
-OPERATORS = dict()
-OPERATORS['+'] = Operator(2, lambda a, b: a + b)
-OPERATORS['-'] = Operator(2, lambda a, b: a - b)
-OPERATORS['*'] = Operator(3, lambda a, b: a * b)
-OPERATORS['/'] = Operator(3, lambda a, b: a / b)
-OPERATORS['//'] = Operator(3, lambda a, b: a // b)
-OPERATORS['%'] = Operator(3, lambda a, b: a % b)
-OPERATORS['^'] = Operator(3, lambda a, b: a ** b)
-# ------------------------------------------------
-math_functions = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
-FUNCTIONS = dict()
-for func in math_functions:
-    FUNCTIONS[func.__name__] = func
-FUNCTIONS['abs'] = abs
-FUNCTIONS['round'] = round
-func_delimiter = ','
-# -----------------------------------------------
-openBracket = '('
-closeBracket = ')'
-
-
-# ------------------------------------------------
-
+from Tokens import CONSTANTS, FUNCTIONS, func_delimiter, openBracket, closeBracket, OPERATORS
 
 def get_postfix(input_string):
     output_string = []
     stack = [0]
-    for token in input_string:
+    for index, token in enumerate(input_string):
         if is_number(token):
             output_string.append(token)
             continue
@@ -51,6 +22,9 @@ def get_postfix(input_string):
                     sys.exit(1)
             continue
         if token in OPERATORS:
+            if token == '-' or token == '+':
+                if (not is_number(input_string[index - 1])) or not index:
+                    output_string += '0'
             while (stack[-1] in OPERATORS) and (OPERATORS[token].priority <= OPERATORS[stack[-1]].priority):
                 output_string += stack.pop()
             else:
