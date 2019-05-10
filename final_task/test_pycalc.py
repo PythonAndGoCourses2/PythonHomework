@@ -159,7 +159,7 @@ class TestEpamErrorCaseCalculator(unittest.TestCase):
         with self.assertRaises(SystemExit):
             pycalc.main("((1+2)")
         with self.assertRaises(SystemExit):
-            pycalc.main("1 + 1 2 3 4 5 6 ")
+            pycalc.main("1 + 1 2 3 4 5 6")
         with self.assertRaises(SystemExit):
             pycalc.main("log100(100)")
         with self.assertRaises(SystemExit):
@@ -171,7 +171,7 @@ class TestEpamErrorCaseCalculator(unittest.TestCase):
         with self.assertRaises(SystemExit):
             pycalc.main("6 < = 6")
         with self.assertRaises(SystemExit):
-            pycalc.main( "6 * * 6")
+            pycalc.main("6 * * 6")
         with self.assertRaises(SystemExit):
             pycalc.main("(((((")
         with self.assertRaises(SystemExit):
