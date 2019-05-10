@@ -2,7 +2,7 @@
 Provides the base class for nud- and led-denotation classes.
 """
 
-from .errors import DuplicatedTokenType
+from .errors import DuplicatedTokenType, ParseletNotRegistered
 
 
 class Denotation:
@@ -30,7 +30,10 @@ class Denotation:
         """Find and return a parselet for a given token type."""
 
         token_type = token.token_type
-        parselet = self.registry[token_type]
+        try:
+            parselet = self.registry[token_type]
+        except KeyError:
+            raise ParseletNotRegistered(token_type)
 
         return parselet
 

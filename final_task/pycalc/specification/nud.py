@@ -3,7 +3,7 @@ Null-Denotation.
 """
 
 from .denotation import Denotation
-from .errors import NudDenotationError
+from .errors import NudDenotationError, ParseletNotRegistered
 
 
 class Nud(Denotation):
@@ -18,7 +18,7 @@ class Nud(Denotation):
 
         try:
             parselet = self._get_parselet(token)
-        except KeyError:
+        except ParseletNotRegistered:
             ctx = parser.context(previous=True)
             raise NudDenotationError(ctx, token)
 
