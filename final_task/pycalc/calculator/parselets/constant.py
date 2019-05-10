@@ -6,7 +6,7 @@ from .base import Base
 
 
 class Constant(Base):
-    """Parselet parselet to handle constants."""
+    """The parselet class for constants."""
 
     def __init__(self, power, const_registry):
         super().__init__(power)

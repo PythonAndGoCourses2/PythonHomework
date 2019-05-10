@@ -1,5 +1,5 @@
 """
-Parselet types.
+Parselets for a calculator.
 """
 
 from .constant import Constant
