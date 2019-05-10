@@ -7,9 +7,13 @@ from pycalc.parser import Parser, ParserGenericError
 from pycalc.token.precedence import Precedence
 
 from .formatters import err_msg_formatter, err_ctx_formatter
+from .errors import get_err_msg
 from .importer import build_modules_registry
 from .matchers import build_matchers
-from .messages import EMPTY_EXPRESSION_PROVIDED, SYNTAX_ERROR
+from .messages import (
+    CANT_PARSE_EXPRESSION,
+    EMPTY_EXPRESSION_PROVIDED,
+)
 from .specification import build_specification
 
 
@@ -41,39 +45,27 @@ class Calculator:
             return result
 
         # handle calculation errors
-        except ParserGenericError as exc:
+        except ParserGenericError as exc_wrapper:
 
-            # ’unwrap’ an original exception if that one has a stored context ??
+            # ’unwrap’ an original exception and get context
+            exc = exc_wrapper.__cause__
+            ctx = exc.ctx if hasattr(exc, 'ctx') else exc_wrapper.ctx
 
-            # print('wrapper :', type(exc))
-            # print('original:', type(exc.__cause__))
+            # an error message
+            err_msg = get_err_msg(exc)
+            err_msg = err_msg_formatter(err_msg)
 
-            exc = exc.__cause__ if hasattr(exc.__cause__, 'ctx') else exc
-            ctx = exc.ctx
-
-            # print(exc)
-            # print(ctx)
-
-            # print(exc.__cause__.ctx)
-            # print(ctx)
-            # print(exc.__cause__.ctx)
-
-            err_msg = err_msg_formatter(f'{SYNTAX_ERROR}')
+            # an context message
             ctx_msg = err_ctx_formatter(ctx)
-            # print(type(exc), exc, exc.ctx)
-            # print(exc.__cause__)
 
             return f'{err_msg}\n{ctx_msg}'
 
-        # except (ArithmeticError, ZeroDivisionError) as exc:
-        #     print(type(exc), exc)
-        #     err_msg = err_msg_formatter(exc)
-        #     return err_msg
-
+        # probably not reacheable code but better save than sorry
         except Exception as exc:
-            print(type(exc), exc)
-            print(f'CALCULATOR: exception: {exc}')
-            return 'Calculation failed.'
+
+            err_msg = err_msg_formatter(CANT_PARSE_EXPRESSION)
+
+            return err_msg
 
 
 def calculator(modules_names=None):
