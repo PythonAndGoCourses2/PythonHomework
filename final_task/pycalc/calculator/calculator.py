@@ -4,7 +4,6 @@ Initialization of a calculator. Returns a calculator instance.
 
 from pycalc.lexer import Lexer
 from pycalc.parser import Parser, ParserGenericError
-from pycalc.token.precedence import Precedence
 
 from .formatters import err_msg_formatter, err_ctx_formatter
 from .errors import get_err_msg
@@ -14,6 +13,7 @@ from .messages import (
     CANT_PARSE_EXPRESSION,
     EMPTY_EXPRESSION_PROVIDED,
 )
+from .precedence import Precedence
 from .specification import build_specification
 
 

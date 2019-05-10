@@ -5,7 +5,7 @@ according to an exception type.
 
 from pycalc.parser import errors as parser_err
 from pycalc.specification import errors as spec_err
-from pycalc.token.tokens import errors as token_err
+from .parselets import errors as token_err
 
 from .messages import SYNTAX_ERROR, CANT_PARSE_EXPRESSION
 

@@ -2,16 +2,14 @@
 Initialization of parser specification.
 """
 
+import operator
 from math import pow as math_pow
 
 from pycalc.specification import Specification
 
-from pycalc.token.constants import TokenType
-from pycalc.token.precedence import Precedence
-from pycalc.token.tokens import *
-
-# TODO: operator build and Operator from token same name
-import operator
+from .parselets import *
+from .precedence import Precedence
+from .tokens.types import TokenType
 
 
 def build_specification(registry):

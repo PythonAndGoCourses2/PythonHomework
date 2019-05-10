@@ -2,10 +2,11 @@
 Create and register matchers for token types.
 """
 
-from pycalc.matcher.matcher import Matchers
-from pycalc.matcher.number import NUMBER_REGEX
-from pycalc.token.constants import TokenType
-from pycalc.token.lexeme import PREDEFINED
+
+from pycalc.matcher import Matchers
+
+from .tokens.types import TokenType
+from .tokens.lexemes import PREDEFINED
 
 
 def build_matchers(imports_registry):
