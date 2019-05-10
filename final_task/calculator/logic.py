@@ -22,11 +22,11 @@ def skip_space(eval_string, index):
 
 
 def call_func_with_args(Func, Args):
-    """ 
-	    Вызов функции с аргументами 
-	    Func - адрес вызываемой функции
-		Args - список аргументов функции
-	"""
+    """
+        Вызов функции с аргументами
+        Func - адрес вызываемой функции
+        Args - список аргументов функции
+    """
     return Func(*Args)
 
 
@@ -49,12 +49,12 @@ def get_func_arguments(eval_string, index):
 
 
 def error(args):
-	# Используется один раз в 141 строчке
+    # Используется один раз в 141 строчке
     raise Exception("ERROR: invalid argument")
 
 
 def search_float(eval_string, index):
-	# Читает со строки число 
+    # Читает со строки число
     num = ""
     index = skip_space(eval_string, index)
     if index < len(eval_string) and eval_string[index] == '-':
@@ -98,9 +98,9 @@ def get_bracket(eval_string, index):
 
 def number_sign(eval_string, index):
     """
-	   Читает со строки знак числа (+ и -)
-	   Умеет считать выражения вида +-+---+математическое_выражение
-	"""
+       Читает со строки знак числа (+ и -)
+       Умеет считать выражения вида +-+---+математическое_выражение
+    """
     if eval_string[index] == '+':
         index += 1
         if index >= len(eval_string):
@@ -117,9 +117,9 @@ def number_sign(eval_string, index):
 
 def get_variable(eval_string, index):
     """
-	   Считывает со строки математический объект 
-	   И в зависимости от его типа передает управление другой функции
-	"""
+       Считывает со строки математический объект
+       И в зависимости от его типа передает управление другой функции
+    """
     index = skip_space(eval_string, index)
     variable = ""
     if index < len(eval_string) and (eval_string[index].isdigit() or eval_string[index] == '.'):
@@ -164,7 +164,7 @@ def get_variable(eval_string, index):
 
 
 def get_degree(eval_string, index):
-	# Производит операцию возведения числа в степень
+    # Производит операцию возведения числа в степень
     result, num1, index = 0, 0, skip_space(eval_string, index)
     result, index = get_variable(eval_string, index)
     index = skip_space(eval_string, index)
@@ -252,12 +252,13 @@ def solve_equality(eval_string, index):
 
 def solve(eval_string, index=0):
     """
-	    Считает математическое выражение в строке
+        Считает математическое выражение в строке
         Значение index по умолчанию стоит для красоты
-        Так как мы ее вызываем один раз в самом начале работы калькулятора		
-	"""
+        Так как мы ее вызываем один раз в самом начале работы калькулятора
+    """
     index = skip_space(eval_string, index)
     if index >= len(eval_string):
         raise ValueError("ERROR: invalid argument on position {}".format(index))
     result, index = solve_equality(eval_string, index)
     return result
+
