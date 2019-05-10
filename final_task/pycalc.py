@@ -63,7 +63,7 @@ def check_expression(expression_line):
 def number_parser(number):
     try:
         return int(number)
-    except SyntaxError:
+    except ValueError:
         return float(number)
 
 
