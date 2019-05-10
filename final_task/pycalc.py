@@ -100,14 +100,13 @@ def py_calculator(math_expression: str):
 
             """
             parse_list = []
-            number = ''
-            function = ''
-            if bool(re.compile(r'[\d\w()]\s+[.\d\w()]').findall(expr)) \
-                    or bool(re.compile(r'[+-/*%^=<>]$').findall(expr)) \
-                    or bool(re.compile(r'^[/*%^=<>!]').findall(expr)) \
-                    or bool(re.compile(r'[+-/*%^=<>]\)').findall(expr)) \
-                    or bool(re.compile(r'[<>/*=!]\s+[=/*]').findall(expr)) \
-                    or bool(re.compile(r'\(\)').findall(expr)):
+            number, function = '', ''
+            if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(expr) \
+                    or re.compile(r'[+-/*%^=<>]$').findall(expr) \
+                    or re.compile(r'^[/*%^=<>!]').findall(expr) \
+                    or re.compile(r'[+-/*%^=<>]\)').findall(expr) \
+                    or re.compile(r'[<>/*=!]\s+[=/*]').findall(expr) \
+                    or re.compile(r'\(\)').findall(expr):
                 raise ValueError(f'invalid expression')
             elif not expr:
                 raise ValueError(f'nothing entered')
@@ -118,12 +117,9 @@ def py_calculator(math_expression: str):
                     number += element
                     parse_list.append(function)
                     function = ''
-                elif element in OPERATORS or element in LOGIC_OPERATORS or element in "(,)":
-                    parse_list.append(function)
-                    parse_list.append(number)
-                    parse_list.append(element)
-                    number = ''
-                    function = ''
+                elif element in OPERATORS or element in LOGIC_OPERATORS or element in ['(', ',', ')']:
+                    parse_list.extend([function, number, element])
+                    number, function = '', ''
             if number:
                 parse_list.append(number)
             elif function:
@@ -162,7 +158,7 @@ def py_calculator(math_expression: str):
             :return: Updated list.
 
             """
-            for elem in range(len(parse_list)):
+            for _ in range(len(parse_list)):
                 for index, element in enumerate(parse_list):
                     if element == '-' and parse_list[index + 1] == '-' \
                             or element == '+' and parse_list[index + 1] == '+':
@@ -197,8 +193,8 @@ def py_calculator(math_expression: str):
                         parse_list[index] = '-1'
                         parse_list.insert(index + 1, '*')
             except IndexError:
-                return parse_list
-            else:
+                pass
+            finally:
                 return parse_list
 
         return parse_step4(parse_step3(parse_step2(parse_step1(expression))))
@@ -278,7 +274,7 @@ def py_calculator(math_expression: str):
             return math.isclose(self.arg1, self.arg2, rel_tol=self.rel_tol, abs_tol=self.abs_tol)
 
     def exec_isclose(parse_list):
-        """
+        """Calculates math function isclose.
 
         :param parse_list: List with items of expression.
         :return: List with isclose function result.
