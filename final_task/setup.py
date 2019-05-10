@@ -4,6 +4,7 @@ setup(
     name='pycalc',
     version='1.0',
     packages=find_packages(),
+    py_modules=["pycalc", "tests"],
     description='Pure-python command-line calculator.',
     entry_points={'console_script': ['pycalc=pycalc:main']},
     platforms='any',
