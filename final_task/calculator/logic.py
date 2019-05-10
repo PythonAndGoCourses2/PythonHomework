@@ -261,4 +261,3 @@ def solve(eval_string, index=0):
         raise ValueError("ERROR: invalid argument on position {}".format(index))
     result, index = solve_equality(eval_string, index)
     return result
-
