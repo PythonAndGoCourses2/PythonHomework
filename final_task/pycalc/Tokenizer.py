@@ -39,5 +39,9 @@ def tokenize(expression):
                         break
             token += char
     if token:
-        tokens.append(token)
+        if '+' in token or '-' in token or ')' in token:
+            for c in token:
+                tokens.append(c)
+        else:
+            tokens.append(token)
     return tokens
