@@ -2,14 +2,19 @@
 
 import operator
 import math
+import sys
 from argparse import ArgumentParser
 
 
-parser = ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
-parser.add_argument('-m', '--use-modules', help='additional modules to use', metavar='MODULE [MODULE ...]')
-parser.add_argument('EXPRESSION', help='expression string to calculate')
-expression_line = parser.parse_args().EXPRESSION
+def arg_parser():
+    parser = ArgumentParser(description='Pure-python command-line calculator.', prog='pycalc')
+    parser.add_argument('-m', '--use-modules', help='additional modules to use', metavar='MODULE [MODULE ...]')
+    parser.add_argument('EXPRESSION', help='expression string to calculate')
+    expression_line = parser.parse_args().EXPRESSION
+    return expression_line
 
+
+arg_parser()
 
 function_dict = {
     'abs': {'operator': abs, 'priority': 0},
@@ -79,6 +84,11 @@ def number_parser(number):
 def function_parser(function_name):
     if function_name == 'e' or function_name == 'pi':
         return function_dict[function_name]['operator']
+    elif function_name == 'tau':
+        if sys.version_info >= (3, 6):
+            return function_dict[function_name]['operator']
+        else:
+            return 2 * function_dict['e']['operator']
     return function_name
 
 
@@ -305,6 +315,7 @@ def calculate(converted_list):
 
 
 def main():
+    expression_line = arg_parser()
     operands = OperandStack()
     function = OperandStack()
 
