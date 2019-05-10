@@ -14,6 +14,7 @@ def tokenize(expression):
     tokens = []
     category = None
     expression = expression.replace(' ', '')
+    expression = expression.replace('log10', 'lg')
     for char in expression:
         if token:
             if category and char in category:

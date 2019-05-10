@@ -28,6 +28,7 @@ for func in math_functions:
     FUNCTIONS[func.__name__] = func
 FUNCTIONS['abs'] = abs
 FUNCTIONS['round'] = round
+FUNCTIONS['lg'] = math.log10
 func_delimiter = ','
 # -----------------------------------------------
 openBracket = '('
