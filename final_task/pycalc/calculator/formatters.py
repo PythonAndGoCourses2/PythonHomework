@@ -9,15 +9,15 @@ ERROR_PLACE_INDICATOR = '^'
 
 
 def err_msg_formatter(msg):
-    """Return an error message with error prefix."""
+    """Return an error message with an error prefix."""
 
     return f'{ERROR_MSG_PREFIX}{msg}'
 
 
 def err_ctx_formatter(ctx):
     """
-    Return a two-line string with a source in the first string
-    and a sign in the second one wich indicate
+    Return a two-line string with a source in the first line
+    and a sign in the second one which indicate
     a place where an error occured.
     """
 

@@ -30,7 +30,10 @@ def is_function(obj) -> bool:
 
 
 def build_modules_registry(modules_names):
-    """"""
+    """
+    Collect maps of module member’s names
+    to module member’s objects of specified types.
+    """
 
     if not modules_names:
         modules_names = tuple()

@@ -77,7 +77,7 @@ class Calculator:
 
 
 def calculator(modules_names=None):
-    """Initialize of a calculator and return a parser object."""
+    """Initialize a calculator and return a parser object."""
 
     # import constants and functions from default and requested modules
     modules_registry = build_modules_registry(modules_names)
