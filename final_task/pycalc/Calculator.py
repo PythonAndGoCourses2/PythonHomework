@@ -10,7 +10,11 @@ def calc(expr):
         elif token in Tokens.FUNCTIONS:
             if token == 'pow' or token == 'log':
                 op2, op1 = stack.pop(), stack.pop()
-                stack.append(Tokens.FUNCTIONS[token](op1, op2))
+                try:
+                    stack.append(Tokens.FUNCTIONS[token](op1, op2))
+                except ValueError:
+                    stack.append(op1)
+                    stack.append(Tokens.FUNCTIONS[token](op2))
             else:
                 op = stack.pop()
                 stack.append(Tokens.FUNCTIONS[token](op))
