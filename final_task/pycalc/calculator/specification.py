@@ -15,6 +15,7 @@ import operator
 
 
 def build_specification(registry):
+    """Initialize a parser specification."""
 
     spec = Specification()
 
