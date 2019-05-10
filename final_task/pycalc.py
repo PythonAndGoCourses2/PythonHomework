@@ -50,11 +50,11 @@ operator_dict = {
 
 def check_expression(expression_line):
     if not expression_line:
-        raise SyntaxError('Expression cannot be empty')
+        raise SyntaxError('ERROR: Expression cannot be empty')
     if expression_line[-1] in operator_dict.keys():
         raise SyntaxError('ERROR: Extra operator {} at the end of an expression!'.format(expression_line[-1]))
     if expression_line.count('(') < expression_line.count(')'):
-        raise SyntaxError('ERROR: Closing bracket required!')
+        raise SyntaxError('ERROR: Opening bracket required!')
     elif expression_line.count('(') > expression_line.count(')'):
         raise SyntaxError('ERROR: Closing bracket required!')
     return True
@@ -314,21 +314,21 @@ def calculate(converted_list):
 
 
 def main():
-    expression_line = arg_parser()
-    operands = OperandStack()
-    function = OperandStack()
-    parser = split_operators(expression_line)
-    converted_list = converter(parser)
-    result = calculate(converted_list)
-    print(result)
-
-
-if __name__ == '__main__':
     try:
-        main()
+        expression_line = arg_parser()
+        operands = OperandStack()
+        function = OperandStack()
+        parser = split_operators(expression_line)
+        converted_list = converter(parser)
+        result = calculate(converted_list)
+        print(result)
     except SyntaxError as err:
         print(err)
     except ZeroDivisionError as err:
         print('ERROR: {}!'.format(err))
     except ValueError as err:
         print('ERROR: math error!')
+
+
+if __name__ == '__main__':
+    main()
