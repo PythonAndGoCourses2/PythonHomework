@@ -137,3 +137,46 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.main("sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"),
                          m.sin(m.e**m.log(m.e**m.e**m.sin(23.0), 45.0) +
                                m.cos(3.0+m.log10(m.e**-m.e))))
+
+
+class TestEpamErrorCaseCalculator(unittest.TestCase):
+
+    def test_unary_operators(self):
+        with self.assertRaises(SystemExit):
+            pycalc.main("")
+        with self.assertRaises(SystemExit):
+            pycalc.main("+")
+        with self.assertRaises(SystemExit):
+            pycalc.main("1-")
+        with self.assertRaises(SystemExit):
+            pycalc.main("1 2")
+        with self.assertRaises(SystemExit):
+            pycalc.main("ee")
+        with self.assertRaises(SystemExit):
+            pycalc.main("==7")
+        with self.assertRaises(SystemExit):
+            pycalc.main("1 + 2(3 * 4))")
+        with self.assertRaises(SystemExit):
+            pycalc.main("((1+2)")
+        with self.assertRaises(SystemExit):
+            pycalc.main("1 + 1 2 3 4 5 6 ")
+        with self.assertRaises(SystemExit):
+            pycalc.main("log100(100)")
+        with self.assertRaises(SystemExit):
+            pycalc.main("------")
+        with self.assertRaises(SystemExit):
+            pycalc.main("5 > = 6")
+        with self.assertRaises(SystemExit):
+            pycalc.main("5 / / 6")
+        with self.assertRaises(SystemExit):
+            pycalc.main("6 < = 6")
+        with self.assertRaises(SystemExit):
+            pycalc.main( "6 * * 6")
+        with self.assertRaises(SystemExit):
+            pycalc.main("(((((")
+        with self.assertRaises(SystemExit):
+            pycalc.main("pow(2, 3, 4)")
+        with self.assertRaises(SystemExit):
+            pycalc.main("sqrt(-1)")
+        with self.assertRaises(SystemExit):
+            pycalc.main("exp(1000.0)")
