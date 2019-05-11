@@ -1,7 +1,7 @@
 import math
 import argparse
 import operator
-from check import *
+import check
 
 OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
              '-': (1, operator.sub),  # Второй элемент - операция
@@ -122,14 +122,17 @@ def calculating(expression):
 def main():
     try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
-        expression = fix_unary(expression)
-        expression = replace_plus_minus(expression)
-        comparison = comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
-        if not comparison:
-            if brackets_check(expression):
-                print(calculating(expression))
+        expression = check.fix_unary(expression)
+        expression = check.replace_plus_minus(expression)
+        comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
+        if check.correct_check(expression) and expression:
+            if not comparison:
+                if check.brackets_check(expression):
+                    print(calculating(expression))
+            else:
+                print(check.comparison_calc(expression, comparison))
         else:
-            print(comparison_calc(expression, comparison))
+            print("ERROR: no symbols to calculate")
     except ZeroDivisionError:
         print("ERROR: division by zero")
     except Exception:

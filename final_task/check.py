@@ -1,6 +1,7 @@
 import re
 import operator
-from pycalc import *
+from pycalc import calculating
+from pycalc import OPERATORS
 
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
@@ -53,11 +54,21 @@ def fix_unary(expr):
 
 
 def replace_plus_minus(expr):
-    if expr.find('++') != -1:
-        expr.replace("++", "+")
-    if expr.find('--') != -1:
-        expr.replace("--", "-")
-    if expr.find('+-') != -1 or expr.find('-+') != -1:
-        expr.replace("+-", "-")
-        expr.replace("-+", "-")
+    while True:
+        if expr.find('++') != -1:
+            expr = expr.replace("++", "+")
+        elif expr.find('--') != -1:
+            expr = expr.replace("--", "-")
+        elif expr.find('+-') != -1 or expr.find('-+') != -1:
+            expr = expr.replace("+-", "-")
+            expr = expr.replace("-+", "-")
+        else:
+            break
     return expr
+
+
+def correct_check(expr):
+    for operation in OPERATORS:
+        if expr.endswith(operation):
+            return False
+    return True
