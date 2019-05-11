@@ -81,18 +81,25 @@ def check_unars(infix_string):
         if token in t.OPERATORS:
             if token == '-' or token == '+':
                 if is_unar(infix_string, index):
-                    output_string.append('(')
+                    # if not infix_string[index +1] in t.FUNCTIONS:
+                    #     output_string.append('(')
+                    #     prev_unar = True
+                    #     bracket_counter += 1
+                    if infix_string[index - 1] in t.OPERATORS and \
+                            t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
+                        output_string.append('(')
+                        prev_unar = True
+                        bracket_counter += 1
                     output_string.append('0')
                     output_string.append(token)
-                    prev_unar = True
-                    bracket_counter += 1
                     continue
         output_string.append(token)
         if prev_unar:
-            output_string.append(')')
+            for i in range(bracket_counter):
+                output_string.append(')')
+                bracket_counter -= 1
             prev_unar = False
-            bracket_counter -= 1
-            for i in range(bracket_counter): output_string.append(')')
+
     return output_string
 
 
