@@ -51,6 +51,8 @@ def pycalc():
             raise ValueError(f'Invalid expression')
         elif not the_input:
             raise ValueError(f'Empty field')
+        elif the_input.count('(') != the_input.count(')'):
+            raise ValueError(f'brackets are not balanced')
         for char in the_input:
             if token:
                 if category and char in category:
@@ -214,21 +216,7 @@ def pycalc():
         else:
             return stack.pop()
 
-    def Check_All():
-
-        def check_brackets(parse_information):
-            """Check count of '(',')'."""
-            if parse_information.count('(') != parse_information.count(')'):
-                raise ValueError(f'brackets are not balanced')
-            else:
-                return parse_information
-
-        def check_function_and_constants(parse_information):
-            """Checks functions or constants."""
-                
-        return check_brackets(ParseInformation(InputFromCommandLine()))
-
-    return Calc(Polish_Notation(Check_All()))
+    return Calc(Polish_Notation(ParseInformation(InputFromCommandLine())))
 
 
 def main():
@@ -240,4 +228,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
