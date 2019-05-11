@@ -125,8 +125,11 @@ def is_unary(s, index):
 def chek_invalid_func(tokens):
     try:
         for index, token in enumerate(tokens):
-            if token in t.FUNCTIONS and is_number(tokens[index + 1]):
-                raise Exeptions.InvalidStringError()
+            if token in t.FUNCTIONS:
+                if len(tokens) <= 1:
+                    raise Exeptions.InvalidStringError()
+                elif is_number(tokens[index + 1]):
+                    raise Exeptions.InvalidStringError()
     except Exeptions.InvalidStringError:
         print('ERROR: invalid string input')
         exit(1)
