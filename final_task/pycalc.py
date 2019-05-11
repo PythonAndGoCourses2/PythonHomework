@@ -33,7 +33,7 @@ operdic = {
 funcdic.update(operdic)
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=']
 operset = set(oper)
-xpr = ' '
+xpr = ''
 
 
 def parsecmd():
@@ -175,13 +175,9 @@ def parse(xprstr):
     if xprlst[0] == '-':
         xprlst[0] = -1
         xprlst.insert(1, '*')
-        # # print(*xprlst, sep='')
 
     # print (*xprlst, sep='|')
     return xprlst
-
-
-
 
 
 def prior(op1, op2):
@@ -239,39 +235,27 @@ def postfix(xprlst):
     stack.reverse()
     # print(output + stack)
 
-
     # xprset = set(output + stack)
     # if xprset.issubset(funcset):  # проверка если функция без аргументов
     #     print('ERROR: function has no arguments')
     #     exit(0)
-
-
-
     return output + stack
 
 
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    global flag
-
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
-        result = funcdic[operator](*args)
+        result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
-        # print('FUNC *args')
     except TypeError:
         try:
-            result = funcdic[operator](args)
+            result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
             stack.pop()
-            # print('FUNC list args')
         except TypeError:
-            # print('ERROR: invalid argument for ', operator)
-            # exit(0)
             try:
-                result = funcdic[operator]
-                flag = 1
-                # print('FUNC no args')
+                result = funcdic[operator] # если функция без аргументов типа pi, e, tau
             except TypeError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
@@ -285,60 +269,52 @@ def operate(operator, args):
     except ValueError:
         print('ERROR: invalid argument for ', operator)
         exit(0)
-    # print('RESULT', result)
+    print('RESULT', result)
     return result
-
-
 
 
 def evalpostfix(xprpstfx):
     """ вычисление выражения в постфиксной нотации """
     global stack
-    global flag
     stack = []
     args = []
-    flag = 0
     for i in xprpstfx:
-        # print('i = ', i, 'stack', stack)
-        if i in funclist:
-
-
+        print('evalpostfix i=',i)
+        if i in funclist:  # если функция типа sin, pow, sum, tau
             if len(stack) == 0:
-                args = 0
+                args = 0  # функция без аргументов типа pi, e, tau
             if len(stack) == 1:
-                args = stack[0]
-            if len(stack) > 1:  # для функций типа sum(a,b,c,d...) формирование списка аргументов функции
-                # print('stack > 2')
+                args = stack[0]  # один аргумент функции типа sin(x)
+            if len(stack) > 1:
                 j = len(stack)-2
-                args.append(stack[-1])
-                while stack[j] == ',':
-                    args.append(stack[j-1])
-                    stack.pop()
-                    stack.pop()
+                args.append(stack[-1])  # один аргумент функции типа sin(x)
+                while stack[j] == ',':  # если в стэке список аргументов разделенных запятой ,
+                    args.append(stack[j-1])  # добавить в список агрументов функции типа pow(x,y), sum(x,y,z,...)
+                    stack.pop()  # удалить из стэка ,
+                    stack.pop()  # удалить из стэка аргумент
                     j = j - 2
-                #stack.pop()
                 args.reverse()
                 # print('STACK', stack)
-
-            tmp = operate(i, args)
+            stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
+        elif i in oper:  # если оператор типа a + b
+            print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
+
+            try:
+                tmp = funcdic[i](*stack[-2:])
+            except TypeError:
+                print('ERROR: invalid argument for ', i)
+                exit(0)
+            
+
+            stack.pop()  # удалить из стэка аргумент a
+            stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
-
-
-
-
-        elif i in oper:  # для операторов типа a + b
-            # print('OPERATE', i,*stack[-2:])
-            tmp = funcdic[i](*stack[-2:])
-            #tmp = operate(i, stack[-2:])
-            # # print(stack[-2:])
-            stack.pop()
-            stack.pop()
-            stack.append(tmp)
+            print('RESULT', tmp)
         else:
-            stack.append(i)  # если число то добавить его в стек
-        # print('STACK',stack)
+            stack.append(i)  # если число то добавить его в стэк
+        print('STACK',stack)
     return stack[0]
 
 
@@ -351,11 +327,11 @@ def main():
 
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
-    # print('PARSE ', *xprlst, sep=' ')
+    print('PARSE ', *xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    # print('POSTFIX ', *xprlst, sep=' ')
+    print('POSTFIX ', *xprlst, sep=' ')
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
