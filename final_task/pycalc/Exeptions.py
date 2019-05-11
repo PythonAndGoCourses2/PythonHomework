@@ -1,4 +1,4 @@
-"""Module for custom exeptions"""
+"""Module for custom exceptions"""
 
 
 class GeneralError(Exception):
