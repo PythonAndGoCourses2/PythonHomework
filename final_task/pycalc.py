@@ -1,7 +1,7 @@
 import math
 import argparse
 import operator
-import re
+from check import *
 
 OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
              '-': (1, operator.sub),  # Второй элемент - операция
@@ -10,12 +10,6 @@ OPERATORS = {'+': (1, operator.add),  # Первый элемент кортеж
              '//': (2, operator.floordiv),
              '%': (2, operator.mod),
              '^': (3, operator.pow)}
-COMPARISON_OPERATORS = {'==': operator.eq,
-                        '>': operator.gt,
-                        '<': operator.lt,
-                        '>=': operator.ge,
-                        '<=': operator.le,
-                        '!=': operator.ne}
 MATH_CONST = {'e': math.e,
               'pi': math.pi}
 MATH_FUNC = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
@@ -35,13 +29,9 @@ def parse(expression):
             parsed_formula.append(MATH_CONST[func])
             func = ''
         elif func in MATH_FUNC:  # Если является мат. функцией
-            while expression[i] != '(':  # То что до скобок определяем как второй аргумент
-                second_argument += expression[i]
-                i += 1
-            else:
-                first_argument += expression[i]  # Заносим "(" скобочку
-                brackets += 1
-                i += 1
+            first_argument += expression[i]  # Заносим "(" скобочку
+            brackets += 1
+            i += 1
             while brackets != 0:
                 first_argument += expression[i]  # Заносим значение, которое находится внутри функции вместе с ")"
                 if expression[i] == '(':  # Проверка на скобки
@@ -140,8 +130,6 @@ def main():
                 print(calculating(expression))
         else:
             print(comparison_calc(expression, comparison))
-
-
     except ZeroDivisionError:
         print("ERROR: division by zero")
     except Exception:
@@ -151,57 +139,6 @@ def main():
 #######################################################################################################################
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def brackets_check(expr):
-    """Check brackets balance"""
-    brackets = 0
-    for symbol in expr:
-        if symbol == '(':
-            brackets += 1
-        elif symbol == ')':
-            brackets -= 1
-    if brackets != 0:
-        print("ERROR: brackets are not balanced")
-        return False
-    else:
-        return True
-
-
-def comparison_check(expr):
-    """return True if the operation type is a comparison"""
-    for key in COMPARISON_OPERATORS.keys():
-        if key in expr:
-            return key
-    else:
-        return False
-
-
-def comparison_calc(expr, item):
-    first_argument = expr[:expr.find(item)]
-    second_argument = expr[expr.rfind(item) + 1:]
-    x, y = calculating(first_argument), calculating(second_argument)
-    return COMPARISON_OPERATORS[item](x, y)
-
-
-def fix_unary(expr):
-    """Replace unary operations"""
-    if expr[0] == '-':
-        expr = "0" + expr
-    elif expr[0] == '+':
-        expr = "0" + expr
-    expr = re.sub(r'\(\-', '(0-', expr)
-    expr = re.sub(r'\(\+', '(0+', expr)
-    return expr
-
-
-def replace_plus_minus(expr):
-    if expr.find('++') != -1:
-        expr.replace("++", "+")
-    if expr.find('--') != -1:
-        expr.replace("--", "-")
-    if expr.find('+-') != -1 or expr.find('-+') != -1:
-        expr.replace("+-", "-")
-        expr.replace("-+", "-")
-    return expr
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
