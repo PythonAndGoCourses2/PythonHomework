@@ -9,11 +9,11 @@ categories = [lower, digits, space, punctuation, brackets]
 
 
 def tokenize(expression):
+    """Returns list of tokens from input string"""
     global categories
     token = ''
     tokens = []
     category = None
-    expression = expression.replace(' ', '')
     expression = expression.replace('--', '+')
     expression = expression.replace('log10', 'lg')
     for char in expression:
@@ -40,8 +40,8 @@ def tokenize(expression):
                         category = cat
                         break
             token += char
-    if token:
-        if '+' in token or '-' in token or ')' in token:
+    if token:  # if token contains multy +, - or () characters, split it
+        if '+' in token or '-' in token or ')' in token or '(' in token:
             for c in token:
                 tokens.append(c)
         else:

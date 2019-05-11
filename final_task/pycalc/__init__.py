@@ -5,7 +5,7 @@ from . import Calculator
 
 
 def main():
-    """The main routine    ."""
+    """Call of all needed methods and return result"""
     infix_string = Parser.parse_console()
     tokens = Tokenizer.tokenize(infix_string)
     postfix_string = Translator.get_postfix(tokens)

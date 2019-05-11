@@ -1,70 +1,73 @@
 import sys
 from . import Tokens as t
+from . import Exeptions
 
 
 def get_postfix(input_string):
-    input_string = check_unars(input_string)
+    """Translate infix notation into postfix
+
+    Returns list of tokens"""
+    input_string = check_unarys(input_string)
     output_string = []
     stack = [0]
-    for index, token in enumerate(input_string):
-        if '.' in token:
-            output_string.append(float(token))
-            continue
-        if is_number(token):
-            output_string.append(token)
-            continue
-        if token in t.CONSTANTS:
-            output_string.append(t.CONSTANTS[token])
-            continue
-        if token in t.FUNCTIONS:
-            stack.append(token)
-            continue
-        if token == t.func_delimiter:
-            while not stack[-1] == t.openBracket:
-                output_string += [stack.pop()]
-                if not stack:
-                    print('ERROR: miss delimiter or open bracket')
-                    sys.exit(1)
-            continue
-        if token in t.OPERATORS:
-            # if token == '-' or token == '+':
-            #     if is_unar(input_string[index - 1], index):
-            #         output_string += '0'
-            # if ((not is_number(input_string[index - 1])) or not index) and (
-            #         input_string[index - 1] != t.closeBracket):
-            #     if not input_string[index - 1] in t.CONSTANTS:
-            #         output_string += '0'
-            while stack[-1] in t.OPERATORS and \
-                    ((token in t.left_associativity and t.OPERATORS[token].priority <= t.OPERATORS[
-                        stack[-1]].priority) or
-                     (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
-                         stack[-1]].priority)):
-                output_string += [stack.pop()]
-            else:
+    try:
+        for index, token in enumerate(input_string):
+            if '.' in token:
+                output_string.append(float(token))
+                continue
+            if is_number(token):
+                output_string.append(token)
+                continue
+            if token in t.CONSTANTS:
+                output_string.append(t.CONSTANTS[token])
+                continue
+            if token in t.FUNCTIONS:
                 stack.append(token)
-            continue
-        if token == t.openBracket:
-            stack.append(token)
-            continue
-        if token == t.closeBracket:
-            while not stack[-1] == t.openBracket:
+                continue
+            if token == t.func_delimiter:
+                while not stack[-1] == t.openBracket:
+                    output_string += [stack.pop()]
+                    if not stack:
+                        raise Exeptions.BracketsError()
+                continue
+            if token in t.OPERATORS:
+                while stack[-1] in t.OPERATORS and \
+                        ((token in t.left_associativity and t.OPERATORS[token].priority <= t.OPERATORS[
+                            stack[-1]].priority) or
+                         (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
+                             stack[-1]].priority)):
+                    output_string += [stack.pop()]
+                else:
+                    stack.append(token)
+                continue
+            if token == t.openBracket:
+                stack.append(token)
+                continue
+            if token == t.closeBracket:
+                while not stack[-1] == t.openBracket:
+                    output_string += [stack.pop()]
+                    if not stack:
+                        raise Exeptions.BracketsError()
+                stack.pop()
+                if stack[-1] in t.FUNCTIONS:
+                    output_string += [stack.pop()]
+                continue
+            raise Exeptions.UnknownFunctionError(token)
+        while stack[-1]:
+            if stack[-1] == t.openBracket:
+                raise Exeptions.BracketsError()
+            if stack[-1] in t.OPERATORS:
                 output_string += [stack.pop()]
-                if not stack:
-                    print('ERROR: miss bracket')
-                    sys.exit(1)
-            stack.pop()
-            if stack[-1] in t.FUNCTIONS:
-                output_string += [stack.pop()]
-            continue
-        print(f'ERROR: no such function or operator: \'{token}\'')
-        sys.exit(1)
-    while stack[-1]:
-        if stack[-1] == t.openBracket:
-            print('ERROR: expected close bracket')
-            sys.exit(1)
-        if stack[-1] in t.OPERATORS:
-            output_string += [stack.pop()]
-    return output_string
+        return output_string
+    except Exeptions.BracketsError:
+        print('ERROR: brackets are not balanced')
+        exit(1)
+    except Exeptions.UnknownFunctionError as ex:
+        print(f'ERROR: no such function or operator: \'{ex.token}\'')
+        exit(1)
+    except Exception:
+        print('ERROR: something went wrong')
+        exit(1)
 
 
 def is_number(s):
@@ -73,37 +76,36 @@ def is_number(s):
     return s.isdigit()
 
 
-def check_unars(infix_string):
+def check_unarys(infix_string):
+    """Translate unary operators in list
+
+    into '0 operator operand'"""
     output_string = list()
-    prev_unar = False
+    prev_unary = False
     bracket_counter = 0
     for index, token in enumerate(infix_string):
         if token in t.OPERATORS:
             if token == '-' or token == '+':
-                if is_unar(infix_string, index):
-                    # if not infix_string[index +1] in t.FUNCTIONS:
-                    #     output_string.append('(')
-                    #     prev_unar = True
-                    #     bracket_counter += 1
+                if is_unary(infix_string, index):
                     if infix_string[index - 1] in t.OPERATORS and \
                             t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
                         output_string.append('(')
-                        prev_unar = True
+                        prev_unary = True
                         bracket_counter += 1
                     output_string.append('0')
                     output_string.append(token)
                     continue
         output_string.append(token)
-        if prev_unar:
+        if prev_unary:
             for i in range(bracket_counter):
                 output_string.append(')')
                 bracket_counter -= 1
-            prev_unar = False
-
+            prev_unary = False
     return output_string
 
 
-def is_unar(s, index):
+def is_unary(s, index):
+    """Check if operator in s with index is unary"""
     s = s[index - 1]
     return (s in t.OPERATORS or
             s in t.FUNCTIONS or
