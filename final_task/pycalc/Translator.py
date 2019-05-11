@@ -83,25 +83,34 @@ def check_unarys(infix_string):
     output_string = list()
     prev_unary = False
     bracket_counter = 0
-    for index, token in enumerate(infix_string):
-        if token in t.OPERATORS:
-            if token == '-' or token == '+':
-                if is_unary(infix_string, index):
-                    if infix_string[index - 1] in t.OPERATORS and \
-                            t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
-                        output_string.append('(')
-                        prev_unary = True
-                        bracket_counter += 1
-                    output_string.append('0')
-                    output_string.append(token)
+    try:
+        for index, token in enumerate(infix_string):
+            if token == ' ':
+                if is_number(infix_string[index - 1]) and is_number(infix_string[index + 1]):
+                    raise Exeptions.InvalidStringError()
+                else:
                     continue
-        output_string.append(token)
-        if prev_unary:
-            for i in range(bracket_counter):
-                output_string.append(')')
-                bracket_counter -= 1
-            prev_unary = False
-    return output_string
+            if token in t.OPERATORS:
+                if token == '-' or token == '+':
+                    if is_unary(infix_string, index):
+                        if infix_string[index - 1] in t.OPERATORS and \
+                                t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
+                            output_string.append('(')
+                            prev_unary = True
+                            bracket_counter += 1
+                        output_string.append('0')
+                        output_string.append(token)
+                        continue
+            output_string.append(token)
+            if prev_unary:
+                for i in range(bracket_counter):
+                    output_string.append(')')
+                    bracket_counter -= 1
+                prev_unary = False
+        return output_string
+    except Exeptions.InvalidStringError:
+        print('ERROR: invalid string input')
+        exit(1)
 
 
 def is_unary(s, index):
