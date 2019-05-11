@@ -251,7 +251,7 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
