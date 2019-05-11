@@ -1,6 +1,6 @@
 import re
 import operator
-from pycalc import calculating
+from pycalc import *
 
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
