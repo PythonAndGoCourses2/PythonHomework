@@ -16,7 +16,7 @@ def tokenize(expression):
     category = None
     expression = expression.replace('--', '+')
     expression = expression.replace('- -', '+')
-    expression = expression.replace('log10', 'lg')
+    expression = expression.replace('log10(', 'lg(')
     for char in expression:
         if token:
             if category and char in category:
