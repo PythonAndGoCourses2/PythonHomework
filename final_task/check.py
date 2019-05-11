@@ -37,7 +37,7 @@ def comparison_check(expr):
 def comparison_calc(expr, item):
     first_argument = expr[:expr.find(item)]
     second_argument = expr[expr.rfind(item) + 1:]
-    x, y = pycalc.calculating(first_argument), calculating(second_argument)
+    x, y = pycalc.calculating(first_argument), pycalc.calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
 
