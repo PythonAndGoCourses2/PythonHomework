@@ -76,6 +76,7 @@ def is_number(s):
 def check_unars(infix_string):
     output_string = list()
     prev_unar = False
+    bracket_counter = 0
     for index, token in enumerate(infix_string):
         if token in t.OPERATORS:
             if token == '-' or token == '+':
@@ -84,11 +85,14 @@ def check_unars(infix_string):
                     output_string.append('0')
                     output_string.append(token)
                     prev_unar = True
+                    bracket_counter += 1
                     continue
         output_string.append(token)
         if prev_unar:
             output_string.append(')')
             prev_unar = False
+            bracket_counter -= 1
+            for i in range(bracket_counter): output_string.append(')')
     return output_string
 
 
