@@ -3,6 +3,7 @@ from . import Tokens as t
 
 
 def get_postfix(input_string):
+    input_string = check_unars(input_string)
     output_string = []
     stack = [0]
     for index, token in enumerate(input_string):
@@ -26,6 +27,9 @@ def get_postfix(input_string):
                     sys.exit(1)
             continue
         if token in t.OPERATORS:
+            # if token == '-' or token == '+':
+            #     if is_unar(input_string[index - 1], index):
+            #         output_string += '0'
             # if ((not is_number(input_string[index - 1])) or not index) and (
             #         input_string[index - 1] != t.closeBracket):
             #     if not input_string[index - 1] in t.CONSTANTS:
@@ -38,9 +42,6 @@ def get_postfix(input_string):
                 output_string += [stack.pop()]
             else:
                 stack.append(token)
-            if token == '-' or token == '+':
-                if is_unar(input_string[index - 1], index):
-                    output_string += '0'
             continue
         if token == t.openBracket:
             stack.append(token)
@@ -72,7 +73,27 @@ def is_number(s):
     return s.isdigit()
 
 
+def check_unars(infix_string):
+    output_string = list()
+    prev_unar = False
+    for index, token in enumerate(infix_string):
+        if token in t.OPERATORS:
+            if token == '-' or token == '+':
+                if is_unar(infix_string, index):
+                    output_string.append('(')
+                    output_string.append('0')
+                    output_string.append(token)
+                    prev_unar = True
+                    continue
+        output_string.append(token)
+        if prev_unar:
+            output_string.append(')')
+            prev_unar = False
+    return output_string
+
+
 def is_unar(s, index):
+    s = s[index - 1]
     return (s in t.OPERATORS or
             s in t.FUNCTIONS or
             s == t.func_delimiter or
