@@ -23,13 +23,7 @@ def construct_literals_list(literals):
 
 
 def construct_regex(literals):
-    r"""
-    Return regex string for... .
-
-    >>> construct_regex_string(['🏇', cos', 'arcsin', 'sin', pi()'])
-    arcsin|pi\(\)|cos|sin|\🏇
-
-    """
+    """Return compiled regex object for a list of string literals."""
 
     literals_list = construct_literals_list(literals)
     regex_string = '|'.join(map(re.escape, literals_list))

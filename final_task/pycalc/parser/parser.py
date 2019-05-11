@@ -33,7 +33,8 @@ class Parser:
         return result
 
     def _parse(self):
-        """The inner parsing function.
+        """
+        The inner parsing function.
 
         Splitted from the main parsing function to allow
         catching all parsing error exceptions in one place.
