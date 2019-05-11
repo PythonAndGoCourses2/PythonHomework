@@ -251,7 +251,7 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
@@ -315,7 +315,7 @@ def evalpostfix(xprpstfx):
             try:
                 tmp = funcdic[i](*stack[-2:])
             except TypeError:
-                # print('ERROR: invalid argument for ', i)
+                print('ERROR: invalid argument for ', i)
                 exit(0)
 
 
