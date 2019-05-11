@@ -71,6 +71,12 @@ def parse(xprstr):
     """ парсинг строки математического выражения. на выходе список в инфиксной нотации"""
     word = ''
     xprlst = []
+    xprset = set(xpr)
+
+    if xprset.issubset(operset):
+        print('ERROR: no digits or funcs in expr')
+        exit(0)
+
     # проверка скобок в строке
     if xpr.count('(') != xpr.count(')') or len(xpr) == 0:
         print('ERROR: brackets are not balanced')
@@ -245,17 +251,22 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
     except TypeError:
         try:
+            print(operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
-            stack.pop()
+            try:
+                stack.pop()
+            except IndexError:
+                print('ERROR: invalid argument for ', operator)
+                exit(0)
         except TypeError:
             try:
-                result = funcdic[operator] # если функция без аргументов типа pi, e, tau
+                result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
             except TypeError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
@@ -279,7 +290,7 @@ def evalpostfix(xprpstfx):
     stack = []
     args = []
     for i in xprpstfx:
-        # print('evalpostfix i=',i)
+        print('evalpostfix i=',i)
         if i in funclist:  # если функция типа sin, pow, sum, tau
             if len(stack) == 0:
                 args = 0  # функция без аргументов типа pi, e, tau
@@ -294,19 +305,19 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-                # # print('STACK', stack)
+                print('STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
         elif i in oper:  # если оператор типа a + b
-            # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
 
             try:
                 tmp = funcdic[i](*stack[-2:])
             except TypeError:
                 print('ERROR: invalid argument for ', i)
                 exit(0)
-            
+
 
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
@@ -314,7 +325,7 @@ def evalpostfix(xprpstfx):
             # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        # print('STACK',stack)
+        print('STACK',stack)
     return stack[0]
 
 
@@ -327,11 +338,11 @@ def main():
 
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
-    # print('PARSE ', *xprlst, sep=' ')
+    print('PARSE ', *xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    # print('POSTFIX ', *xprlst, sep=' ')
+    print('POSTFIX ', *xprlst, sep=' ')
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
