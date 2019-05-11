@@ -4,11 +4,13 @@ import argparse
 import string
 import math
 import operator
+import re
 
 
 def pycalc():
     FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
     FUNCTIONS['abs'], FUNCTIONS['round'], FUNCTIONS['lg'] = abs, round, math.log10
+    FUNCTIONS['log10'] = math.log10
     """Math functions + build-in python functions"""
 
     OPERATORS = {
@@ -40,6 +42,15 @@ def pycalc():
         token = ''
         tokensarray = []
         category = None
+        if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
+                or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
+                or re.compile(r'^[/*%^=<>!]').findall(the_input) \
+                or re.compile(r'[+-/*%^=<>]\)').findall(the_input) \
+                or re.compile(r'[<>/*=!]\s+[=/*]').findall(the_input) \
+                or re.compile(r'\(\)').findall(the_input):
+            raise ValueError(f'Invalid expression')
+        elif not the_input:
+            raise ValueError(f'Empty field')
         for char in the_input:
             if token:
                 if category and char in category:
@@ -203,14 +214,22 @@ def pycalc():
         else:
             return stack.pop()
 
-    return Calc(Polish_Notation(ParseInformation(InputFromCommandLine())))
+    def Check_All():
 
+        def check_brackets(parse_information):
+            """Check count of '(',')'."""
+            if parse_information.count('(') != parse_information.count(')'):
+                raise ValueError(f'brackets are not balanced')
+            else:
+                return parse_information
 
-# a = InputFromCommandLine()
-# b = ParseInformation(a)
-# c = Polish_Notation(b)
-# d = Calc(b)
-# print(d)
+        def check_function_and_constants(parse_information):
+            """Checks functions or constants."""
+                
+        return check_brackets(ParseInformation(InputFromCommandLine()))
+
+    return Calc(Polish_Notation(Check_All()))
+
 
 def main():
     try:
@@ -221,3 +240,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
