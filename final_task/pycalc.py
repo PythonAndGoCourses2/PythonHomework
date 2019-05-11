@@ -290,7 +290,7 @@ def evalpostfix(xprpstfx):
     stack = []
     args = []
     for i in xprpstfx:
-        print('evalpostfix i=',i)
+        # print('evalpostfix i=',i)
         if i in funclist:  # если функция типа sin, pow, sum, tau
             if len(stack) == 0:
                 args = 0  # функция без аргументов типа pi, e, tau
@@ -305,17 +305,17 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-                print('STACK', stack)
+                # print('STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
         elif i in oper:  # если оператор типа a + b
-            print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
 
             try:
                 tmp = funcdic[i](*stack[-2:])
             except TypeError:
-                print('ERROR: invalid argument for ', i)
+                # print('ERROR: invalid argument for ', i)
                 exit(0)
 
 
@@ -325,7 +325,7 @@ def evalpostfix(xprpstfx):
             # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        print('STACK',stack)
+        # print('STACK',stack)
     return stack[0]
 
 
@@ -338,11 +338,11 @@ def main():
 
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
-    print('PARSE ', *xprlst, sep=' ')
+    # print('PARSE ', *xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    print('POSTFIX ', *xprlst, sep=' ')
+    # print('POSTFIX ', *xprlst, sep=' ')
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
