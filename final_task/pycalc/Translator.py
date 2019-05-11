@@ -27,9 +27,9 @@ def get_postfix(input_string):
                     sys.exit(1)
             continue
         if token in t.OPERATORS:
-            # if token == '-' or token == '+':
-            #     if is_unar(input_string[index - 1], index):
-            #         output_string += '0'
+            if token == '-' or token == '+':
+                if is_unar(input_string, index):
+                    output_string += '0'
             # if ((not is_number(input_string[index - 1])) or not index) and (
             #         input_string[index - 1] != t.closeBracket):
             #     if not input_string[index - 1] in t.CONSTANTS:
@@ -80,7 +80,7 @@ def check_unars(infix_string):
     for index, token in enumerate(infix_string):
         if token in t.OPERATORS:
             if token == '-' or token == '+':
-                if is_unar(infix_string, index):
+                if is_unar(infix_string, index) and infix_string[index + 1] not in t.FUNCTIONS:
                     output_string.append('(')
                     output_string.append('0')
                     output_string.append(token)
