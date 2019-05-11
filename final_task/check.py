@@ -1,7 +1,6 @@
 import re
 import operator
-from pycalc import calculating
-from pycalc import OPERATORS
+import pycalc
 
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
@@ -38,7 +37,7 @@ def comparison_check(expr):
 def comparison_calc(expr, item):
     first_argument = expr[:expr.find(item)]
     second_argument = expr[expr.rfind(item) + 1:]
-    x, y = calculating(first_argument), calculating(second_argument)
+    x, y = pycalc.calculating(first_argument), calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
 
@@ -68,7 +67,7 @@ def replace_plus_minus(expr):
 
 
 def correct_check(expr):
-    for operation in OPERATORS:
+    for operation in pycalc.OPERATORS:
         if expr.endswith(operation):
             return False
     return True
