@@ -213,7 +213,10 @@ def pycalc():
 # print(d)
 
 def main():
-    print(pycalc())
+    try:
+        print(pycalc())
+    except Exception as exeption:
+        print(f'ERROR: {exeption}')
 
 
 if __name__ == '__main__':
