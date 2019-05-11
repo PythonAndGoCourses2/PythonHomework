@@ -135,7 +135,7 @@ def parse(xprstr):
     for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
             if word == 'pi':
-                xprlst.append('pi')
+                xprlst.append(pi)
             elif word == 'e':
                 xprlst.append(e)
             elif word in funclist:  # если функция
@@ -253,24 +253,20 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    global flag
 
-    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, stack)
     try:
         result = funcdic[operator](*args)
-        stack.pop()
         print('FUNC *args')
     except TypeError:
         try:
             result = funcdic[operator](args)
-            stack.pop()
             print('FUNC list args')
         except TypeError:
-            # print('ERROR: invalid argument for ', operator)
-            # exit(0)
+
+
             try:
                 result = funcdic[operator]
-                flag = 1
                 print('FUNC no args')
             except TypeError:
                 print('ERROR: invalid argument for ', operator)
@@ -294,21 +290,21 @@ def operate(operator, args):
 def evalpostfix(xprpstfx):
     """ вычисление выражения в постфиксной нотации """
     global stack
-    global flag
     stack = []
     args = []
-    flag = 0
     for i in xprpstfx:
-        print('i = ', i, 'stack', stack)
+        #print('i = ', i)
         if i in funclist:
 
+            if len(stack) == 0:  # для функций типа sin(x)
+                print('               STACK = 0')
+                stack.append(operate(i))
+            
 
-            if len(stack) == 0:
-                args = 0
-            if len(stack) == 1:
-                args = stack[0]
-            if len(stack) > 1:  # для функций типа sum(a,b,c,d...) формирование списка аргументов функции
-                print('stack > 2')
+            if len(stack) == 1:  # для функций типа sin(x)
+                print('               STACK = 1')
+                stack[0] = operate(i, stack[0])
+            elif len(stack) > 1:  # для функций типа sum(a,b,c,d...) формирование списка аргументов функции
                 j = len(stack)-2
                 args.append(stack[-1])
                 while stack[j] == ',':
@@ -316,22 +312,13 @@ def evalpostfix(xprpstfx):
                     stack.pop()
                     stack.pop()
                     j = j - 2
-                #stack.pop()
+                stack.pop()
                 args.reverse()
-                print('STACK', stack)
-
-            tmp = operate(i, args)
-            args = []
-
-            stack.append(tmp)
-
-
-
-
+                tmp = operate(i, args)
+                args = []
+                stack.append(tmp)
         elif i in oper:  # для операторов типа a + b
-            print('OPERATE', i,*stack[-2:])
-            tmp = funcdic[i](*stack[-2:])
-            #tmp = operate(i, stack[-2:])
+            tmp = operate(i, stack[-2:])
             # print(stack[-2:])
             stack.pop()
             stack.pop()
