@@ -14,7 +14,8 @@ def calc(expr):
                     stack_copy = stack[:]
                     try:
                         op2, op1 = stack_copy.pop(), stack_copy.pop()
-                        stack.append(Tokens.FUNCTIONS[token](op1, op2))
+                        stack_copy.append(Tokens.FUNCTIONS[token](op1, op2))
+                        stack = stack_copy[:]
                     except Exception:
                         op = stack.pop()
                         stack.append(Tokens.FUNCTIONS[token](op))
