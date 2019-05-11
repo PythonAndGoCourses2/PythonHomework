@@ -24,7 +24,8 @@ def calc(expr):
                     stack.append(Tokens.FUNCTIONS[token](op))
             else:
                 stack.append(float(token))
-        if not len(stack) == 1: raise Exeptions.InvalidStringError()
+        if not len(stack) == 1:
+            raise Exeptions.InvalidStringError()
         return stack.pop()
     except Exeptions.InvalidStringError:
         print('ERROR: invalid string input')
