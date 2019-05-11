@@ -10,7 +10,7 @@ def main():
     tokens = Tokenizer.tokenize(infix_string)
     postfix_string = Translator.get_postfix(tokens)
     res = Calculator.calc(postfix_string)
-    print(postfix_string)
+    print(res)
 
 
 if __name__ == "__main__":
