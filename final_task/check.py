@@ -36,7 +36,13 @@ def comparison_check(expr):
 
 def comparison_calc(expr, item):
     first_argument = expr[:expr.find(item)]
-    second_argument = expr[expr.rfind(item) + 1:]
+    if item in '<>':  # For '>', '<'
+        second_argument = expr[expr.rfind(item) + 1:]
+    else:
+        second_argument = expr[expr.rfind(item) + 2:]
+    if '=' in second_argument:
+        print("ERROR: incorrect expression.")
+        exit(-1)
     x, y = pycalc.calculating(first_argument), pycalc.calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
@@ -67,7 +73,9 @@ def replace_plus_minus(expr):
 
 
 def correct_check(expr):
-    for operation in pycalc.OPERATORS:
+    for operation in pycalc.OPERATORS: # Если последний символ строки операция
         if expr.endswith(operation):
             return False
+
     return True
+

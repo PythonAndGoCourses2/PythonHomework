@@ -29,25 +29,28 @@ def parse(expression):
             parsed_formula.append(MATH_CONST[func])
             func = ''
         elif func in MATH_FUNC:  # Если является мат. функцией
-            first_argument += expression[i]  # Заносим "(" скобочку
+            while expression[i] != '(':  # Для таких функций как log10,log2 и т.д.
+                func += expression[i]
+                i += 1
             brackets += 1
+            temp_string = expression[i]
             i += 1
             while brackets != 0:
-                first_argument += expression[i]  # Заносим значение, которое находится внутри функции вместе с ")"
-                if expression[i] == '(':  # Проверка на скобки
+                if expression[i] == '(':
                     brackets += 1
                 elif expression[i] == ')':
                     brackets -= 1
-                if expression[i] == ',':
-                    i += 1
-                    while brackets != 0:
-                        second_argument += expression[i]
-                        if expression[i] == '(':  # Проверка на скобки
-                            brackets += 1
-                        elif expression[i] == ')':
-                            brackets -= 1
-                        i += 1
+                temp_string += expression[i]
                 i += 1
+            j = 1
+            if temp_string.count(",") > 1:  # Если много параметров
+                break
+            while j < len(temp_string) - 1:
+                first_argument += temp_string[j]
+                j += 1
+                if temp_string[j] == ',':
+                    second_argument += temp_string[j + 1:-1]
+                    break
             if not second_argument:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument)))
             else:
@@ -139,19 +142,11 @@ def main():
         print("ERROR: incorrect expression")
 
 
-#######################################################################################################################
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 def create_parser():
     parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
     parser.add_argument('expr', metavar='EXPRESSION', help='expression string to evaluate', type=str)
     return parser.parse_args()
 
 
-#######################################################################################################################
 if __name__ == '__main__':
     main()
