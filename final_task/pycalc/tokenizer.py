@@ -1,16 +1,16 @@
+"""Contains categories for tokens and tokenize function"""
 import string
 
-lower = string.ascii_lowercase
-digits = string.digits + '.'
-space = string.whitespace
-punctuation = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
-brackets = '(){}[]'
-categories = [lower, digits, space, punctuation, brackets]
+LOWER = string.ascii_lowercase
+DIGITS = string.digits + '.'
+SPACE = string.whitespace
+PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
+BRACKETS = '(){}[]'
 
 
 def tokenize(expression):
     """Returns list of tokens from input string"""
-    global categories
+    categories = [LOWER, DIGITS, SPACE, PUNCTUATION, BRACKETS]
     token = ''
     tokens = []
     category = None
@@ -22,11 +22,7 @@ def tokenize(expression):
             if category and char in category:
                 token += char
             else:
-                if '+' in token or '-' in token or ')' in token or '(' in token:
-                    for c in token:
-                        tokens.append(c)
-                else:
-                    tokens.append(token)
+                tokens = append_token(tokens, token)
                 token = char
                 category = None
                 for cat in categories:
@@ -41,10 +37,16 @@ def tokenize(expression):
                         category = cat
                         break
             token += char
-    if token:  # if token contains multy +, - or () characters, split it
-        if '+' in token or '-' in token or ')' in token or '(' in token:
-            for c in token:
-                tokens.append(c)
-        else:
-            tokens.append(token)
+    if token:
+        tokens = append_token(tokens, token)
+    return tokens
+
+
+def append_token(tokens, token):
+    """append token to tokens"""
+    if '+' in token or '-' in token or ')' in token or '(' in token:
+        for char in token:  # if token contains multy +, - or () characters, split it
+            tokens.append(char)
+    else:
+        tokens.append(token)
     return tokens
