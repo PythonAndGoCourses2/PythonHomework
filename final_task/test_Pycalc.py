@@ -27,9 +27,14 @@ class TestTranslator(unittest.TestCase):
         self.assertFalse(Translator.is_unary(['2', '-', '1'], 1))
         self.assertTrue(Translator.is_unary(['2', '+', '-', '1'], 2))
 
-    def test_check_unarys(self):
-        pass
+    def test_make_unarys(self):
+        self.assertEqual(['3', '+', '0', '-', '1'], Translator.make_unarys(['3', '+', '-', '1']))
+        self.assertEqual(['3', '/', '(', '0', '-', '1', ')'], Translator.make_unarys(['3', '/', '-', '1']))
 
+    def test_is_number(self):
+        self.assertTrue(Translator.is_number('10'))
+        self.assertTrue(Translator.is_number('10.0'))
+        self.assertFalse(Translator.is_number('p'))
 
 if __name__ == '__main__':
     unittest.main()

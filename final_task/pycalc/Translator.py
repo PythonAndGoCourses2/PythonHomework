@@ -8,7 +8,7 @@ def get_postfix(input_string):
 
     Returns list of tokens"""
     input_string = dell_spaces(input_string)
-    input_string = check_unarys(input_string)
+    input_string = make_unarys(input_string)
     chek_invalid_func(input_string)
     output_string = []
     stack = [0]
@@ -78,7 +78,7 @@ def is_number(s):
     return s.isdigit()
 
 
-def check_unarys(infix_string):
+def make_unarys(infix_string):
     """Translate unary operators in list
 
     into '0 operator operand'"""
