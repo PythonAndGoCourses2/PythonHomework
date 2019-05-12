@@ -51,8 +51,6 @@ operator_dict = {
 def check_expression(expression_line):
     if not expression_line:
         raise SyntaxError('Expression cannot be empty')
-    if expression_line[-1] in operator_dict.keys():
-        raise SyntaxError('Extra operator {} at the end of an expression!'.format(expression_line[-1]))
     if expression_line.count('(') < expression_line.count(')'):
         raise SyntaxError('Opening bracket required!')
     elif expression_line.count('(') > expression_line.count(')'):
@@ -60,11 +58,21 @@ def check_expression(expression_line):
     return True
 
 
-def check_converted_list(converted_list):
-    if len(converted_list) == 1:
-        if type(converted_list[0]) is int or type(converted_list[0]) is float:
+def check_parsing_list(parsing_list):
+    if parsing_list[0] in operator_dict.keys():
+        if parsing_list[0] is '+' or parsing_list[0] is '-':
+            pass
+        else:
+            raise SyntaxError('Expression cannot start with "{}"'.format(parsing_list[0]))
+    if len(parsing_list) == 1:
+        if type(parsing_list[0]) is int or type(parsing_list[0]) is float:
             return True
         raise SyntaxError('Expression must include at list one operand or one function with arguments!')
+    if parsing_list[-1] in operator_dict.keys():
+        raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(parsing_list[-1]))
+    if parsing_list[-1] in function_dict.keys():
+        raise SyntaxError('Function "{}" without argument in the end of expression'.format(parsing_list[-1]))
+    print(parsing_list)
     return True
 
 
@@ -98,6 +106,8 @@ def split_operators(expression_line):
     if check_expression(expression_line):
         for i in expression_line:
             if i == " ":
+                if blank_item:
+                    continue
                 blank_item = True
                 if last_symbol:
                     parsing_list.append(last_symbol)
@@ -156,6 +166,8 @@ def split_operators(expression_line):
             parsing_list.append(number_parser(last_number))
         elif last_letter:
             parsing_list.append(function_parser(last_letter))
+        elif last_symbol:
+            raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(last_symbol))
     return parsing_list
 
 
@@ -171,7 +183,8 @@ def clean_add_sub_operators(last_item, converted_list):
 
 
 def converter(parsing_list):
-    if parsing_list[0] == "-":
+    check_parsing_list(parsing_list)
+    if parsing_list[0] == "-" or parsing_list[0] == "+":
         converted_list = [0]
     else:
         converted_list = []
@@ -220,7 +233,6 @@ def converter(parsing_list):
                 converted_list.append(operator_dict['-'])
                 last_item = ""
             converted_list.append(i)
-    check_converted_list(converted_list)
     return converted_list
 
 class OperandStack:
