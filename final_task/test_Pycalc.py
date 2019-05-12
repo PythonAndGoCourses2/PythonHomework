@@ -21,11 +21,9 @@ class TestTranslator(unittest.TestCase):
         self.assertEqual(['+', '19', '-', '2'], Translator.dell_spaces(['+', ' ', '19', ' ', '-', '2']))
         self.assertRaises(SystemExit, Translator.dell_spaces, ['4', ' ', '5'])
 
-
     def test_check_invalid_func(self):
         self.assertRaises(SystemExit, Translator.chek_invalid_func, ['sin'])
         self.assertRaises(SystemExit, Translator.chek_invalid_func, ['log', '15'])
-
 
     def test_is_unary(self):
         self.assertFalse(Translator.is_unary(['2', '-', '1'], 1))

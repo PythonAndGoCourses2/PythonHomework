@@ -20,4 +20,3 @@ class UnknownFunctionError(Exception):
 class InvalidStringError(Exception):
     def __init__(self):
         Exception.__init__(self)
-
