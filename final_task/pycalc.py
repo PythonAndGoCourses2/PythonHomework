@@ -127,9 +127,9 @@ def parse(xprstr):
             xprstr = xprstr[:left]+'('+xprstr[left:]
             left = right+2
             right = len(xprstr)
-            for i, data in enumerate(xprstr[left:]):
+            for j, data in enumerate(xprstr[left:]):
                 if data in split and data != '(':
-                    right = left+i
+                    right = left+j
                     break
             tmp = xprstr[left:right]
             xprstr = xprstr[:right]+')'+xprstr[right:]
@@ -271,7 +271,7 @@ def operate(operator, args):
             try:
                 # print('TRY no args', operator, args)
                 result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
-                if type(result) !=  float:
+                if type(result) != float:
                     print('ERROR: invalid argument for ', operator)
                     exit(0)
                 # # print('ok')
@@ -325,8 +325,6 @@ def evalpostfix(xprpstfx):
             except TypeError:
                 print('ERROR: invalid argument for ', i)
                 exit(0)
-
-
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
@@ -356,7 +354,6 @@ def main():
     result = evalpostfix(xprlst)
 
     return result
-
 
 
 print(main())
