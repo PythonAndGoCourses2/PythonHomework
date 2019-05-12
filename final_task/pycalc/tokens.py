@@ -1,35 +1,36 @@
+"""Custom library for all handled operators, constants functions"""
 import math
 from collections import namedtuple
 
-# -----------------------------------------------
+
 CONSTANTS = {'pi': math.pi, 'e': math.e}
 # -----------------------------------------------
 Operator = namedtuple("Operator", ("priority", "function"))
-right_associativity = dict()
-left_associativity = dict()
-left_associativity['>'] = Operator(1, lambda a, b: a > b)
-left_associativity['>='] = Operator(1, lambda a, b: a >= b)
-left_associativity['<'] = Operator(1, lambda a, b: a < b)
-left_associativity['<='] = Operator(1, lambda a, b: a <= b)
-left_associativity['=='] = Operator(1, lambda a, b: a == b)
-left_associativity['!='] = Operator(1, lambda a, b: a != b)
-left_associativity['+'] = Operator(2, lambda a, b: a + b)
-left_associativity['-'] = Operator(2, lambda a, b: a - b)
-left_associativity['*'] = Operator(3, lambda a, b: a * b)
-left_associativity['/'] = Operator(3, lambda a, b: a / b)
-left_associativity['//'] = Operator(3, lambda a, b: a // b)
-left_associativity['%'] = Operator(3, lambda a, b: a % b)
-right_associativity['^'] = Operator(4, lambda a, b: a ** b)
-OPERATORS = {**left_associativity, **right_associativity}
+RIGHT_ASSOCIATIVITY = dict()
+LEFT_ASSOCIATIVITY = dict()
+LEFT_ASSOCIATIVITY['>'] = Operator(1, lambda a, b: a > b)
+LEFT_ASSOCIATIVITY['>='] = Operator(1, lambda a, b: a >= b)
+LEFT_ASSOCIATIVITY['<'] = Operator(1, lambda a, b: a < b)
+LEFT_ASSOCIATIVITY['<='] = Operator(1, lambda a, b: a <= b)
+LEFT_ASSOCIATIVITY['=='] = Operator(1, lambda a, b: a == b)
+LEFT_ASSOCIATIVITY['!='] = Operator(1, lambda a, b: a != b)
+LEFT_ASSOCIATIVITY['+'] = Operator(2, lambda a, b: a + b)
+LEFT_ASSOCIATIVITY['-'] = Operator(2, lambda a, b: a - b)
+LEFT_ASSOCIATIVITY['*'] = Operator(3, lambda a, b: a * b)
+LEFT_ASSOCIATIVITY['/'] = Operator(3, lambda a, b: a / b)
+LEFT_ASSOCIATIVITY['//'] = Operator(3, lambda a, b: a // b)
+LEFT_ASSOCIATIVITY['%'] = Operator(3, lambda a, b: a % b)
+RIGHT_ASSOCIATIVITY['^'] = Operator(4, lambda a, b: a ** b)
+OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 # ------------------------------------------------
-math_functions = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
+MATH_FUNCTIONS = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
 FUNCTIONS = dict()
-for func in math_functions:
+for func in MATH_FUNCTIONS:
     FUNCTIONS[func.__name__] = func
 FUNCTIONS['abs'] = abs
 FUNCTIONS['round'] = round
 FUNCTIONS['lg'] = math.log10
-func_delimiter = ','
+FUNC_DELIMITER = ','
 # -----------------------------------------------
-openBracket = '('
-closeBracket = ')'
+O_BRACKET = '('
+C_BRACKET = ')'

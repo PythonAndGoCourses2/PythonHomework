@@ -20,27 +20,27 @@ def get_postfix(input_string):
         if token in t.FUNCTIONS:
             stack.append(token)
             continue
-        if token == t.func_delimiter:
-            while stack[-1] != t.openBracket:
+        if token == t.FUNC_DELIMITER:
+            while stack[-1] != t.O_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError()
             continue
         if token in t.OPERATORS:
             while stack[-1] in t.OPERATORS and \
-                    ((token in t.left_associativity and t.OPERATORS[token].priority <= t.OPERATORS[
+                    ((token in t.LEFT_ASSOCIATIVITY and t.OPERATORS[token].priority <= t.OPERATORS[
                         stack[-1]].priority) or
-                     (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
+                     (token in t.RIGHT_ASSOCIATIVITY and t.OPERATORS[token].priority < t.OPERATORS[
                          stack[-1]].priority)):
                 output_string += [stack.pop()]
                 continue
             stack.append(token)
             continue
-        if token == t.openBracket:
+        if token == t.O_BRACKET:
             stack.append(token)
             continue
-        if token == t.closeBracket:
-            while stack[-1] != t.openBracket:
+        if token == t.C_BRACKET:
+            while stack[-1] != t.O_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError()
@@ -50,7 +50,7 @@ def get_postfix(input_string):
             continue
         raise exeptions.UnknownFunctionError(token)
     while stack[-1]:
-        if stack[-1] == t.openBracket:
+        if stack[-1] == t.O_BRACKET:
             raise exeptions.BracketsError()
         if stack[-1] in t.OPERATORS:
             output_string += [stack.pop()]
@@ -59,17 +59,10 @@ def get_postfix(input_string):
 
 def make_valid(expression):
     """Call all validation functions and return valid string"""
-    try:
-        expression = dell_spaces(expression)
-        expression = make_unarys(expression)
-        chek_invalid_func(expression)
-        return expression
-    except exeptions.InvalidStringError:
-        print('ERROR: invalid string input')
-        exit(1)
-    except Exception:
-        print('ERROR: something went wrong')
-        exit(1)
+    expression = dell_spaces(expression)
+    expression = make_unarys(expression)
+    chek_invalid_func(expression)
+    return expression
 
 
 def is_number(token):
@@ -93,7 +86,7 @@ def make_unarys(infix_string):
                 if is_unary(infix_string, index):
                     if last_token in t.OPERATORS and \
                             t.OPERATORS[last_token].priority > t.OPERATORS[token].priority:
-                        output_string.append('(')
+                        output_string.append(t.O_BRACKET)
                         prev_unary = True
                         bracket_counter += 1
                     output_string.append('0')
@@ -102,7 +95,7 @@ def make_unarys(infix_string):
         output_string.append(token)
         if prev_unary:
             while bracket_counter:
-                output_string.append(')')
+                output_string.append(t.C_BRACKET)
                 bracket_counter -= 1
             prev_unary = False
     return output_string
@@ -115,9 +108,9 @@ def is_unary(tokens, index):
         token = tokens[index - 2]
     return (token in t.OPERATORS or
             token in t.FUNCTIONS or
-            token == t.func_delimiter or
+            token == t.FUNC_DELIMITER or
             not index or
-            token == t.openBracket)
+            token == t.O_BRACKET)
 
 
 def chek_invalid_func(tokens):
