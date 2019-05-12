@@ -19,6 +19,8 @@ Attributes:
     
 """
 
+import re
+
 REGEXP_DIGIT = r'[+-]?\d+\.\d+e\+\d+|[+-]?\d+\.?\d*|[+-]?\d*\.?\d+'
 REGEXP_SIMPLE_DIGIT = rf'^({REGEXP_DIGIT})$'
 REGEXP_SCREENING = rf'\{{operation}}'
@@ -42,3 +44,11 @@ REGEXP_INCORECT_EXPRETION = (
     r'^[\/*^%<=!>]|'
     r'[-+*^\/%<=!>]$'
 )
+
+def has_comparator(expr):
+    match = re.search(REGEXP_COMPARATOR, expr)
+    return bool(match)
+
+def has_non_zero_fraction_part(expr):
+    match = re.search(REGEXP_NON_ZERO_FRACTION_PART, expr)
+    return bool(match)
