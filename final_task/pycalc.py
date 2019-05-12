@@ -36,7 +36,7 @@ def pycalc():
     def ParseInformation(the_input):
         """Pars information and write it to list """
 
-        categories = [string.digits + '.', '()', '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
+        categories = [string.digits + '.', '(', ')' '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
                       string.ascii_lowercase,
                       string.whitespace]
         token = ''
@@ -53,12 +53,19 @@ def pycalc():
             raise ValueError(f'Empty field')
         elif the_input.count('(') != the_input.count(')'):
             raise ValueError(f'brackets are not balanced')
+        the_input = the_input.replace('--', '+')
+        the_input = the_input.replace('- -', '+')
+        the_input = the_input.replace('log10(', 'lg(')
         for char in the_input:
             if token:
                 if category and char in category:
                     token += char
                 else:
-                    tokensarray.append(token)
+                    if '+' in token or '-' in token or ')' in token or '(' in token:
+                        for c in token:
+                            tokensarray.append(c)
+                    else:
+                        tokensarray.append(token)
                     token = char
                     category = None
                     for cat in categories:
@@ -74,7 +81,11 @@ def pycalc():
                             break
                 token += char
         if token:
-            tokensarray.append(token)
+            if '+' in token or '-' in token or ')' in token or '(' in token:
+                for c in token:
+                    tokensarray.append(c)
+            else:
+                tokensarray.append(token)
         return tokensarray
 
     def is_number(s):
@@ -89,7 +100,7 @@ def pycalc():
         for token in parsed_information:
             if is_number(token):
                 reverse_polish_notation += token + separator
-            if token == ')':
+            elif token == ')':
                 for element in stack[::-1]:
                     if element == '(':
                         break
@@ -215,6 +226,29 @@ def pycalc():
             return int(stack.pop())
         else:
             return stack.pop()
+
+    def Check_All():
+
+        def Check_Function_And_Constants(parse_information):
+            """Checks functions or constants."""
+            copy_check_expression = parse_information.copy()
+            for index, element in enumerate(copy_check_expression):
+                if is_number(element):
+                    copy_check_expression.pop(index)
+            diff = set(copy_check_expression).difference(
+                set(FUNCTIONS),
+                set(OPERATORS),
+                set(CONSTANTS),
+                set(string.digits),
+                {'{', '[', '(', ',', ')', ']', '}'},
+                {'True', 'False', 'rel_tol', 'abs_tol'}
+            )
+            if diff:
+                raise ValueError(f'unknown function or constant {diff}')
+            else:
+                return parse_information
+
+        return Check_Function_And_Constants(ParseInformation(InputFromCommandLine()))
 
     return Calc(Polish_Notation(ParseInformation(InputFromCommandLine())))
 
