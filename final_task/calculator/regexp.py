@@ -2,6 +2,19 @@
 """
 The module is a regular expression library for searching math expressions.
 
+Example:
+        has_comparator('1==3')
+        >>> True
+
+        has_comparator('1+2')
+        >>> False
+
+        has_non_zero_fraction_part('1.0')
+        >>> False
+
+        has_non_zero_fraction_part('1.01')
+        >>> True
+
 Attributes:
     REGEXP_DIGIT (rstr): regular expressions for finding numbers.
     REGEXP_SIMPLE_DIGIT (rstr): regular expressions for checking common digits.
@@ -45,11 +58,19 @@ REGEXP_INCORECT_EXPRETION = (
 )
 
 
-def has_comparator(expr):
+def has_comparator(expr: str) -> bool:
+    """
+    Checks if expression has a comparator.
+    Returns True if the expression contains, otherwise False.
+    """
     match = re.search(REGEXP_COMPARATOR, expr)
     return bool(match)
 
 
-def has_non_zero_fraction_part(expr):
+def has_non_zero_fraction_part(expr: str) -> bool:
+    """
+    Checks if expression has a non zero fraction part
+    Returns True if the expression contains, otherwise False.
+    """
     match = re.search(REGEXP_NON_ZERO_FRACTION_PART, expr)
     return bool(match)

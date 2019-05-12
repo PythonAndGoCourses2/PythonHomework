@@ -1,14 +1,14 @@
-import argparse
+from argparse import ArgumentParser, Namespace
 
 
-def parse_query():
+def parse_query() -> Namespace:
     """
     Convert argument strings to objects and assign them as attributes of the namespace.
 
     Returns:
         Namespace: got data from command line.
     """
-    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    parser = ArgumentParser(description='Pure-python command-line calculator.')
     parser.add_argument('expr', metavar='EXPRESSION', help='expression string to evaluate')
     parser.add_argument('-m',
                         '--use-modules',

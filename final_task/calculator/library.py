@@ -1,3 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+The module is designed for dynamic creation of module libraries.
+
+Example:
+        lib = Library('math', 'os')
+        lib.update('time', 'os')
+
+        lib['e']
+        >>> 2.718281828459045
+
+        lib['sum'](5, 10)
+        >>> 15
+"""
+
+
 class Library(dict):
     """Class is designed to work with modules."""
     def __init__(self, *modules: list):

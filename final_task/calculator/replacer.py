@@ -32,6 +32,7 @@ def replace_constant(expr: str, library: Library) -> str:
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Returns:
         str: Updated expression.
@@ -156,6 +157,7 @@ def replace_brackets(expr: str, library: Library) -> str:
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Returns:
         str: Updated expression.
@@ -175,6 +177,7 @@ def replace_all_mathes(expr: str, library: Library) -> str:
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Returns:
         str: result of calculations.

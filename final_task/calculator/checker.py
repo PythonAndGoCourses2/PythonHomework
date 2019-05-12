@@ -7,13 +7,14 @@ Example:
         >>> '1+3/2'
 
         check_brackets('2*(3+5)')
+        >>> '2*(3+5)'
 
         lib = {
             'e': 2.718281828459045,
             'sum': sum
         }
-        check_constant('e', lib)
         check_function('sum(100, 50)', lib)
+        >>> 'sum(100, 50)'
 """
 
 import re
@@ -69,6 +70,7 @@ def check_constant(expr: str, library: Library):
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Raises:
         ValueError: If `expr` is not correct`.
@@ -93,6 +95,7 @@ def check_function(expr: str, library: Library):
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Raises:
         ValueError: If `expr` is not correct`.
@@ -115,6 +118,7 @@ def check_expression(expr: str, library: Library) -> str:
 
     Args:
         expr (str): String mathematical expression.
+        library (Library): dictionary of functions and constant.
 
     Returns:
         str: cleared expression.
