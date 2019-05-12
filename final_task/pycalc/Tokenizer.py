@@ -22,7 +22,7 @@ def tokenize(expression):
             if category and char in category:
                 token += char
             else:
-                if '+' in token or '-' in token or ')' in token:
+                if '+' in token or '-' in token or ')' in token or '(' in token:
                     for c in token:
                         tokens.append(c)
                 else:
