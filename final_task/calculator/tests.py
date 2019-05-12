@@ -285,32 +285,45 @@ class TestCalcFunction(unittest.TestCase):
             self.assertEqual(args.expr, 'time()/60')
             self.assertEqual(args.modules, ['time', 'os', 'math'])
 
-    def test_convert_answer(self):
-        with self.subTest("returns correct answer"):
+    def test_print_answer(self):
+        with self.subTest("print correct answer"), \
+             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             pycalc.HAS_COMPARE = False
-            self.assertEqual(pycalc.convert_answer('-1'), -1)
-            self.assertEqual(pycalc.convert_answer('0'), 0)
+            pycalc.print_answer('-1')
+            self.assertEqual(mock_stdout.getvalue(), '-1\n')
+
+            mock_stdout.truncate(0)
+            mock_stdout.seek(0)
+            pycalc.print_answer('0')
+            self.assertEqual(mock_stdout.getvalue(), '0\n')
+
             pycalc.HAS_COMPARE = True
-            self.assertEqual(pycalc.convert_answer('-1'), True)
-            self.assertEqual(pycalc.convert_answer('0'), False)
+
+            mock_stdout.truncate(0)
+            mock_stdout.seek(0)
+            pycalc.print_answer('-1')
+            self.assertEqual(mock_stdout.getvalue(), 'True\n')
+
+            mock_stdout.truncate(0)
+            mock_stdout.seek(0)
+            pycalc.print_answer('0')
+            self.assertEqual(mock_stdout.getvalue(), 'False\n')
 
     def test_main(self):
-        with self.subTest("calls methods parse_query, import_modules, check_expression, calc, convert_answer"), \
+        with self.subTest("calls methods parse_query, import_modules, check_expression, calc, print_answer"), \
              patch('pycalc.parse_query') as parse_query, \
              patch('pycalc.import_modules') as import_modules, \
              patch('pycalc.check_expression') as check_expression, \
-             patch('pycalc.calc') as calc, \
-             patch('pycalc.convert_answer', return_value='1') as convert_answer, \
-             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+             patch('pycalc.calc', return_value='1') as calc, \
+             patch('pycalc.print_answer') as print_answer:
 
             pycalc.main()
-            self.assertEqual(mock_stdout.getvalue(), '1\n')
 
             self.assertTrue(parse_query.called)
             self.assertTrue(import_modules.called)
             self.assertTrue(calc.called)
             self.assertTrue(check_expression.called)
-            self.assertTrue(convert_answer.called)
+            self.assertTrue(print_answer.called)
 
         with self.subTest("catchs exception"), \
                 patch('pycalc.parse_query') as parse_query, \
