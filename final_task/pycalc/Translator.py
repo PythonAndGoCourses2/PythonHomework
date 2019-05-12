@@ -7,9 +7,7 @@ def get_postfix(input_string):
     """Translate infix notation into postfix
 
     Returns list of tokens"""
-    input_string = dell_spaces(input_string)
-    input_string = make_unarys(input_string)
-    chek_invalid_func(input_string)
+    input_string = make_valid(input_string)
     output_string = []
     stack = [0]
     try:
@@ -72,7 +70,22 @@ def get_postfix(input_string):
         exit(1)
 
 
+def make_valid(expression):
+    try:
+        expression = dell_spaces(expression)
+        expression = make_unarys(expression)
+        chek_invalid_func(expression)
+        return expression
+    except Exeptions.InvalidStringError:
+        print('ERROR: invalid string input')
+        exit(1)
+    except Exception:
+        print('ERROR: something went wrong')
+        exit(1)
+
+
 def is_number(s):
+    """Check if s is number"""
     if '.' in s:
         return True
     return s.isdigit()
@@ -85,29 +98,48 @@ def make_unarys(infix_string):
     output_string = list()
     prev_unary = False
     bracket_counter = 0
-    try:
-        for index, token in enumerate(infix_string):
-            if token in t.OPERATORS:
-                if token == '-' or token == '+':
-                    if is_unary(infix_string, index):
-                        if infix_string[index - 1] in t.OPERATORS and \
-                                t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
-                            output_string.append('(')
-                            prev_unary = True
-                            bracket_counter += 1
-                        output_string.append('0')
-                        output_string.append(token)
-                        continue
-            output_string.append(token)
-            if prev_unary:
-                for i in range(bracket_counter):
-                    output_string.append(')')
-                    bracket_counter -= 1
-                prev_unary = False
-        return output_string
-    except Exeptions.InvalidStringError:
-        print('ERROR: invalid string input')
-        exit(1)
+    for index, token in enumerate(infix_string):
+        if token in t.OPERATORS:
+            if token == '-' or token == '+':
+                if is_unary(infix_string, index):
+                    if infix_string[index - 1] in t.OPERATORS and \
+                            t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
+                        output_string.append('(')
+                        prev_unary = True
+                        bracket_counter += 1
+                    output_string.append('0')
+                    output_string.append(token)
+                    continue
+        output_string.append(token)
+        if prev_unary:
+            for i in range(bracket_counter):
+                output_string.append(')')
+                bracket_counter -= 1
+            prev_unary = False
+    return output_string
+    # try:
+    #     for index, token in enumerate(infix_string):
+    #         if token in t.OPERATORS:
+    #             if token == '-' or token == '+':
+    #                 if is_unary(infix_string, index):
+    #                     if infix_string[index - 1] in t.OPERATORS and \
+    #                             t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
+    #                         output_string.append('(')
+    #                         prev_unary = True
+    #                         bracket_counter += 1
+    #                     output_string.append('0')
+    #                     output_string.append(token)
+    #                     continue
+    #         output_string.append(token)
+    #         if prev_unary:
+    #             for i in range(bracket_counter):
+    #                 output_string.append(')')
+    #                 bracket_counter -= 1
+    #             prev_unary = False
+    #     return output_string
+    # except Exeptions.InvalidStringError:
+    #     print('ERROR: invalid string input')
+    #     exit(1)
 
 
 def is_unary(s, index):
@@ -123,30 +155,48 @@ def is_unary(s, index):
 
 
 def chek_invalid_func(tokens):
-    try:
-        for index, token in enumerate(tokens):
-            if token in t.FUNCTIONS:
-                if len(tokens) <= 1:
-                    raise Exeptions.InvalidStringError()
-                elif is_number(tokens[index + 1]):
-                    raise Exeptions.InvalidStringError()
-    except Exeptions.InvalidStringError:
-        print('ERROR: invalid string input')
-        exit(1)
+    """Check for all func tokens valid"""
+    for index, token in enumerate(tokens):
+        if token in t.FUNCTIONS:
+            if len(tokens) <= 1:
+                raise Exeptions.InvalidStringError()
+            elif is_number(tokens[index + 1]):
+                raise Exeptions.InvalidStringError()
+    # try:
+    #     for index, token in enumerate(tokens):
+    #         if token in t.FUNCTIONS:
+    #             if len(tokens) <= 1:
+    #                 raise Exeptions.InvalidStringError()
+    #             elif is_number(tokens[index + 1]):
+    #                 raise Exeptions.InvalidStringError()
+    # except Exeptions.InvalidStringError:
+    #     print('ERROR: invalid string input')
+    #     exit(1)
 
 
 def dell_spaces(tokens):
-    try:
-        no_spaces_tokens = []
-        for index, token in enumerate(tokens):
-            if token == ' ':
-                if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
-                    raise Exeptions.InvalidStringError()
-                else:
-                    continue
+    """Delete all space tokens"""
+    no_spaces_tokens = []
+    for index, token in enumerate(tokens):
+        if token == ' ':
+            if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
+                raise Exeptions.InvalidStringError()
             else:
-                no_spaces_tokens.append(token)
-        return no_spaces_tokens
-    except Exeptions.InvalidStringError:
-        print('ERROR: invalid string input')
-        exit(1)
+                continue
+        else:
+            no_spaces_tokens.append(token)
+    return no_spaces_tokens
+    # try:
+    #     no_spaces_tokens = []
+    #     for index, token in enumerate(tokens):
+    #         if token == ' ':
+    #             if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
+    #                 raise Exeptions.InvalidStringError()
+    #             else:
+    #                 continue
+    #         else:
+    #             no_spaces_tokens.append(token)
+    #     return no_spaces_tokens
+    # except Exeptions.InvalidStringError:
+    #     print('ERROR: invalid string input')
+    #     exit(1)
