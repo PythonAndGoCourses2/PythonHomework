@@ -17,7 +17,7 @@ class TestMyCaseCalculator(unittest.TestCase):
     def test_with_floating_numbers(self):
         self.assertEqual(pycalc.py_calculator('0.4 + 1.5'), 0.4 + 1.5)
         self.assertEqual(pycalc.py_calculator('.4 + 1.5'), .4 + 1.5)
-        self.assertEqual(pycalc.py_calculator('.4^-1.5'), eval('0.4**-1.5'))
+        self.assertEqual(pycalc.py_calculator('.4^-(1.5+0.5)'), eval('.4**-(1.5+0.5)'))
 
     def test_number_theoretic_and_representation_functions(self):
         self.assertEqual(pycalc.py_calculator('ceil(2.5)'), math.ceil(2.5))
@@ -29,9 +29,14 @@ class TestMyCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.py_calculator('frexp(5)'), math.frexp(5))
         self.assertEqual(pycalc.py_calculator('ldexp(3,10)'), math.ldexp(3, 10))
         self.assertEqual(pycalc.py_calculator('fsum([.1, .1, .1])'), math.fsum([.1, .1, .1]))
+        self.assertEqual(pycalc.py_calculator('fsum({1:2, 5:8, 6:120})'), math.fsum({1: 2, 5: 8, 6: 120}))
         self.assertEqual(pycalc.py_calculator('gcd(5, 10)'), math.gcd(5, 10))
         self.assertEqual(pycalc.py_calculator('isclose(1, 2, rel_tol=0.05, abs_tol=0.0)'),
                          math.isclose(1, 2, rel_tol=0.05, abs_tol=0.0))
+        self.assertEqual(pycalc.py_calculator('isclose(1, 2)'),
+                         math.isclose(1, 2))
+        self.assertEqual(pycalc.py_calculator('isclose(1, 2, rel_tol=0.05)'),
+                         math.isclose(1, 2, rel_tol=0.05))
         self.assertEqual(pycalc.py_calculator('isfinite(3)'), math.isfinite(3))
         self.assertEqual(pycalc.py_calculator('isinf(3)'), math.isinf(3))
         self.assertEqual(pycalc.py_calculator('isnan(3)'), math.isnan(3))
@@ -104,6 +109,7 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.py_calculator("pow(2, 3)"), math.pow(2, 3))
         self.assertEqual(pycalc.py_calculator("abs(-5)"), abs(-5))
         self.assertEqual(pycalc.py_calculator("round(123.4567890)"), round(123.4567890))
+        self.assertEqual(pycalc.py_calculator("round(123.4567890,2)"), round(123.4567890, 2))
 
     def test_associative(self):
         self.assertEqual(pycalc.py_calculator("102%12%7"), 102 % 12 % 7)
@@ -114,6 +120,7 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertEqual(pycalc.py_calculator("1+2*3==1+2*3"), 1+2*3 == 1+2*3)
         self.assertAlmostEqual(pycalc.py_calculator("e^5>=e^5+1"), math.e**5 >= math.e**5+1)
         self.assertAlmostEqual(pycalc.py_calculator("1+2*4/3+1!=1+2*4/3+2"), 1+2*4/3+1 != 1+2*4/3+2)
+        self.assertAlmostEqual(pycalc.py_calculator("True+1"), True + 1)
 
     def test_common_tests(self):
         self.assertEqual(pycalc.py_calculator("(100)"), eval("(100)"))
@@ -160,7 +167,12 @@ class TestEpamCaseCalculator(unittest.TestCase):
         self.assertRaises(ValueError, pycalc.py_calculator, "6 * * 6")
         self.assertRaises(ValueError, pycalc.py_calculator, "(((((")
         self.assertRaises(ValueError, pycalc.py_calculator, "abs")
+        self.assertRaises(ValueError, pycalc.py_calculator, "abs+1")
+        self.assertRaises(ValueError, pycalc.py_calculator, "isclose(1)")
+        self.assertRaises(ValueError, pycalc.py_calculator, "cos(2,1)")
+        self.assertRaises(ValueError, pycalc.py_calculator, "2**2")
         self.assertRaises(ValueError, pycalc.py_calculator, "pow(2, 3, 4)")
+        self.assertRaises(ValueError, pycalc.py_calculator, "fsum[1,,2,3]")
 
 
 if __name__ == '__main__':

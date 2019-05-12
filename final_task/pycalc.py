@@ -14,23 +14,16 @@ Attributes:
     BUILT_IN_FUNCTION: dictionary of numeric functions;
     FUNCTIONS: dictionary of mathematical functions;
     CONSTANTS: dictionary of mathematical constants;
-    LOGIC_OPERATORS: list of logical operator character;
-    NEGATIVE_FLOAT_TYPE1: possible representations of a negative float number like -.5;
-    NEGATIVE_FLOAT_TYPE2: possible representations of a negative float number like -0.5;
-    NEGATIVE_INTEGER: possible representations of a negative integer number like -5;
-    FLOAT_TYPE1: possible representations of a float number like 0.5;
-    FLOAT_TYPE2: possible representations of a float number like .5;
-    INTEGER: possible representations of a integer number like 5;
+    ALL_NUMBERS: possible representations of a numbers like -.5, -0.5, -5, 0.5, .5, 5, 1e-05;
+    INVALID_EXPRESSIONS: list of  possible representations of a invalid expression.
 
 """
 
 import argparse
 import math
 import operator
-import string
 import re
 from json import loads
-
 OPERATORS = {
     '+': (operator.add, 2),
     '-': (operator.sub, 2),
@@ -47,14 +40,11 @@ OPERATORS = {
     '>=': (operator.ge, 0),
     '>': (operator.gt, 0),
 }
-
 BUILT_IN_FUNCTION = {
     'abs': abs,
     'round': round
 }
-
 FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
-
 CONSTANTS = {
     'e': math.e,
     'pi': math.pi,
@@ -66,15 +56,15 @@ CONSTANTS = {
     '-inf': -math.inf,
     'nan': math.inf
 }
-
-LOGIC_OPERATORS = ['=', '!', '<', '>']
-
-NEGATIVE_FLOAT_TYPE1 = re.compile(r'^-\.\d+$')
-NEGATIVE_FLOAT_TYPE2 = re.compile(r'^-\d+\.\d+$')
-NEGATIVE_INTEGER = re.compile(r'^-\d+$')
-FLOAT_TYPE1 = re.compile(r'^\d+\.\d+$')
-FLOAT_TYPE2 = re.compile(r'^\.\d+$')
-INTEGER = re.compile(r'^\d+$')
+ALL_NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
+INVALID_EXPRESSIONS = [
+    r'[\d\w()]\s+[.\d\w()]',
+    r'[+-/*%^=<>]$',
+    r'^[/*%^=<>!]',
+    r'[+-/*%^=<>]\)',
+    r'[<>/*=!]\s+[=/*]',
+    r'\(\)'
+]
 
 
 def py_calculator(math_expression):
@@ -85,7 +75,7 @@ def py_calculator(math_expression):
 
     """
     def parse(expression: str) -> list:
-        """Split mathematic expression, consists of four  steps
+        """Split mathematic expression, consists of 3 steps
 
         :param expression: String of mathematic expression
         :return: Parsed line by items in the list
@@ -99,59 +89,22 @@ def py_calculator(math_expression):
             :raises: ValueError if nothing entered or invalid expression
 
             """
-            parse_list = []
-            number, function = '', ''
-            if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(expr) \
-                    or re.compile(r'[+-/*%^=<>]$').findall(expr) \
-                    or re.compile(r'^[/*%^=<>!]').findall(expr) \
-                    or re.compile(r'[+-/*%^=<>]\)').findall(expr) \
-                    or re.compile(r'[<>/*=!]\s+[=/*]').findall(expr) \
-                    or re.compile(r'\(\)').findall(expr):
-                raise ValueError(f'invalid expression')
-            elif not expr:
+            # this regular expression contains all possible elements of the expression,
+            # such as numbers, constants, functions, brackets, operators
+            items_of_expression = r'(?:(?:[a-zA-Z]+[\d]+[\w]?' \
+                                  r'|[a-zA-Z_]+)' \
+                                  r'|(?:\d+(?:\.\d*)?' \
+                                  r'|\.\d+)(?:[eE][-+]?\d+)?' \
+                                  r'|[,+\-/*%^=<>!][=/]?|[(:)])'
+            for invalid_expr in INVALID_EXPRESSIONS:
+                if re.search(invalid_expr, expr):
+                    raise ValueError(f'invalid expression')
+            if not expr:
                 raise ValueError(f'nothing entered')
-            for element in expr:
-                if element in string.ascii_letters or element == '_':
-                    function += element
-                elif element in string.digits or element == '.':
-                    number += element
-                    parse_list.append(function)
-                    function = ''
-                elif element in OPERATORS or element in LOGIC_OPERATORS or element in ['(', ',', ')']:
-                    parse_list.extend([function, number, element])
-                    number, function = '', ''
-            if number:
-                parse_list.append(number)
-            elif function:
-                parse_list.append(function)
-            return list(filter(None, parse_list))
+            parse_list = re.compile(items_of_expression).findall(expr)
+            return parse_list
 
         def parse_step2(parse_list: list) -> list:
-            """Finishes the parsing functions and collects logical operators and //.
-
-            :param parse_list: List with items of expression
-            :return: Updated list.
-            :raise: ValueError if function arguments not entered
-
-            """
-            try:
-                for index, element in enumerate(parse_list):
-                    if element == 'log' and parse_list[index + 1] == 'p' and parse_list[index + 2] == '1':
-                        parse_list[index] += parse_list.pop(index + 2) + parse_list.pop(index + 1)
-                    elif (element in FUNCTIONS or element in BUILT_IN_FUNCTION) and parse_list[index + 1] != '(':
-                        parse_list[index] += parse_list.pop(index + 1)
-                    elif element == 'expm' and parse_list[index + 1] == '1':
-                        parse_list[index] += parse_list.pop(index + 1)
-                    elif element == '/' and parse_list[index + 1] == '/':
-                        parse_list[index] += parse_list.pop(index + 1)
-                    elif element in LOGIC_OPERATORS and parse_list[index + 1] == '=':
-                        parse_list[index] += parse_list.pop(index + 1)
-            except IndexError:
-                raise ValueError(f'function arguments not entered')
-            else:
-                return parse_list
-
-        def parse_step3(parse_list: list) -> list:
             """Converts multiple + and -.
 
             :param parse_list: List with items of expression.
@@ -170,33 +123,33 @@ def py_calculator(math_expression):
                         parse_list.pop(index + 1)
             return parse_list
 
-        def parse_step4(parse_list: list) -> list:
+        def parse_step3(parse_list: list) -> list:
             """Working with minuses in expression.
 
             :param parse_list: List with items of expression.
             :return: Updated list.
 
             """
-            try:
-                for index, element in enumerate(parse_list):
-                    if element == '-' and (parse_list[index + 1].isdigit()
-                                           or parse_list[index + 1].replace('.', '', 1).isdigit()
-                                           or parse_list[index + 1] in CONSTANTS):
-                        if parse_list[index - 1] in '(*/%//^,':
-                            parse_list[index] += parse_list.pop(index + 1)
-                        elif parse_list.index(element) == 0:
-                            parse_list[index] += parse_list.pop(index + 1)
-                        elif parse_list[index + 2] in '*/%//':
+
+            for index, element in enumerate(parse_list):
+                if element == '-' and (re.fullmatch(ALL_NUMBERS, parse_list[index + 1])
+                                       or parse_list[index + 1] in CONSTANTS):
+                    if parse_list[index - 1] in '(*/%//^,':
+                        parse_list[index] += parse_list.pop(index + 1)
+                    elif parse_list.index(element) == 0:
+                        parse_list[index] += parse_list.pop(index + 1)
+                    elif index == len(parse_list) - 2:
+                        if re.search(ALL_NUMBERS, parse_list[index + 1]):
                             parse_list[index] += parse_list.pop(index + 1)
                             parse_list.insert(index, '+')
-                    elif element == '-' and parse_list[index + 1] in FUNCTIONS and parse_list[index - 1] == '(':
-                        parse_list[index] = '-1'
-                        parse_list.insert(index + 1, '*')
-            except IndexError:
-                pass
-            finally:
-                return parse_list
-        return parse_step4(parse_step3(parse_step2(parse_step1(expression))))
+                    elif parse_list[index + 2] in '*/%//' and re.search(ALL_NUMBERS, parse_list[index + 1]):
+                        parse_list[index] += parse_list.pop(index + 1)
+                        parse_list.insert(index, '+')
+                elif element == '-' and parse_list[index + 1] in FUNCTIONS and parse_list[index - 1] == '(':
+                    parse_list[index] = '-1'
+                    parse_list.insert(index + 1, '*')
+            return parse_list
+        return parse_step3(parse_step2(parse_step1(expression)))
 
     def check_expression(parse_expression):
         """Contains functions that validate the input expression.
@@ -227,20 +180,18 @@ def py_calculator(math_expression):
             """
             copy_parse_expression = parse_list.copy()
             for index, element in enumerate(copy_parse_expression):
-                if element == ''.join(INTEGER.findall(element)) \
-                        or element == ''.join(FLOAT_TYPE1.findall(element)) \
-                        or element == ''.join(FLOAT_TYPE2.findall(element)) \
-                        or element == ''.join(NEGATIVE_INTEGER.findall(element)) \
-                        or element == ''.join(NEGATIVE_FLOAT_TYPE1.findall(element)) \
-                        or element == ''.join(NEGATIVE_FLOAT_TYPE2.findall(element)):
+                if index == len(copy_parse_expression) - 1 and (element in FUNCTIONS or element in BUILT_IN_FUNCTION):
+                    raise ValueError(f'function arguments not entered')
+                elif (element in FUNCTIONS or element in BUILT_IN_FUNCTION) and copy_parse_expression[index + 1] != '(':
+                    raise ValueError(f'function arguments not entered')
+                elif re.fullmatch(ALL_NUMBERS, element):
                     copy_parse_expression.pop(index)
             diff = set(copy_parse_expression).difference(
                                                     set(FUNCTIONS),
                                                     set(OPERATORS),
                                                     set(CONSTANTS),
                                                     set(BUILT_IN_FUNCTION),
-                                                    set(string.digits),
-                                                    {'{', '[', '(', ',', ')', ']', '}'},
+                                                    {'{', '[', '(', ',', ':', ')', ']', '}'},
                                                     {'True', 'False', 'abs_tol', 'rel_tol'}
                                                     )
             if diff:
@@ -283,12 +234,7 @@ def py_calculator(math_expression):
         for element in parse_list:
             if element == 'isclose':
                 for argument in parse_list:
-                    if argument == ''.join(INTEGER.findall(argument)) \
-                            or argument == ''.join(FLOAT_TYPE1.findall(argument)) \
-                            or argument == ''.join(FLOAT_TYPE2.findall(argument)) \
-                            or argument == ''.join(NEGATIVE_INTEGER.findall(argument)) \
-                            or argument == ''.join(NEGATIVE_FLOAT_TYPE1.findall(argument)) \
-                            or argument == ''.join(NEGATIVE_FLOAT_TYPE2.findall(argument)):
+                    if re.fullmatch(ALL_NUMBERS, argument):
                         arguments.append(float(argument))
                 if len(arguments) == 1 or len(arguments) > 4:
                     raise ValueError(f'invalid number of arguments')
@@ -315,13 +261,9 @@ def py_calculator(math_expression):
         reverse_polish_notation = ''
         separator = ' '
         for token in parse_expression:
-            if token == ''.join(INTEGER.findall(token)) \
-                    or token == ''.join(FLOAT_TYPE1.findall(token)) \
-                    or token == ''.join(FLOAT_TYPE2.findall(token)):
+            if re.fullmatch(ALL_NUMBERS, token) and float(token) >= 0:
                 reverse_polish_notation += token + separator
-            elif token == ''.join(NEGATIVE_INTEGER.findall(token)) \
-                    or token == ''.join(NEGATIVE_FLOAT_TYPE1.findall(token)) \
-                    or token == ''.join(NEGATIVE_FLOAT_TYPE2.findall(token)):
+            elif re.fullmatch(ALL_NUMBERS, token) and float(token) < 0:
                 # writes a negative number of -5 in the form of 0 5 -, according to the rules of the reverse notation
                 reverse_polish_notation += '0' + separator + token[1:] + separator + token[0] + separator
             elif token == ')':
@@ -336,7 +278,7 @@ def py_calculator(math_expression):
                         break
                     reverse_polish_notation += stack.pop() + separator
                 reverse_polish_notation += token + separator
-            elif token == '(':
+            elif token in ['(', ':']:
                 stack.append(token)
             elif token in FUNCTIONS or token in BUILT_IN_FUNCTION:
                 stack.append(token)
@@ -416,14 +358,17 @@ def py_calculator(math_expression):
                 if quantity_of_arguments(FUNCTIONS[token]) == 1:
                     if token == 'fsum':
                         numbers = []
-                        for number in stack[::-1]:
+                        for index, number in enumerate(stack[::-1]):
                             if isinstance(number, (int, float)) and stack[::-1][1] == ',':
-                                numbers.append(stack.pop())
-                                stack.pop()
-                            elif stack[::-1][0] == ',' and isinstance(number, (int, float)):
-                                raise ValueError(f'invalid expression')
-                        numbers.append(stack.pop())
-                        stack.append(numbers)
+                                numbers.append(stack.pop()), stack.pop()
+                            elif len(stack) > index + 2:
+                                if isinstance(stack[::-1][index + 2], (int, float)) and stack[::-1][3] == ',':
+                                    numbers.append(stack.pop(-3)), stack.pop(), stack.pop(), stack.pop()
+                        if stack[-1] == ':':
+                            numbers.append(stack.pop(-3)), stack.pop(), stack.pop()
+                        else:
+                            numbers.append(stack.pop())
+                        stack.extend([numbers])
                         op = stack.pop()
                         stack.append(FUNCTIONS[token](op))
                         numbers.clear()
@@ -448,13 +393,13 @@ def py_calculator(math_expression):
                     else:
                         op = stack.pop()
                         stack.append(FUNCTIONS[token](op))
-            elif token == ',':
+            elif token in [',', ':']:
                 stack.append(token)
             elif token in CONSTANTS:
                 stack.append(CONSTANTS[token])
             elif token in ('True', 'False'):
                 stack.append(loads(token.lower()))
-            elif token.isdigit() or token.replace('.', '', 1).isdigit() or token.replace('-', '', 1).isdigit():
+            elif re.search(ALL_NUMBERS, token):
                 stack.append(float(token))
         if isinstance(stack[-1], bool):
             return stack.pop()
@@ -462,8 +407,6 @@ def py_calculator(math_expression):
             return stack.pop()
         elif isinstance(stack[-1], tuple):
             return stack.pop()
-        elif stack[-1].is_integer():
-            return int(stack.pop())
         else:
             return stack.pop()
     return calculate(transform_to_polish_notation(exec_isclose(check_expression(parse(math_expression)))))
