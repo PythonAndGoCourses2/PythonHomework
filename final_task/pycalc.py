@@ -339,8 +339,7 @@ def calculate(converted_list):
 
 def main():
     try:
-        # expression_line = arg_parser()
-        expression_line = '-13'
+        expression_line = arg_parser()
         operands = OperandStack()
         function = OperandStack()
         parser = split_operators(expression_line)
