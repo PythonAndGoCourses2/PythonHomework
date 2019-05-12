@@ -1,4 +1,4 @@
-import sys
+"""Module contains functions to translate infix notation into postfix"""
 from . import tokens as t
 from . import exeptions
 
@@ -10,7 +10,7 @@ def get_postfix(input_string):
     input_string = make_valid(input_string)
     output_string = []
     stack = [0]
-    for index, token in enumerate(input_string):
+    for token in input_string:
         if is_number(token):
             output_string.append(float(token))
             continue
@@ -21,7 +21,7 @@ def get_postfix(input_string):
             stack.append(token)
             continue
         if token == t.func_delimiter:
-            while not stack[-1] == t.openBracket:
+            while stack[-1] != t.openBracket:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError()
@@ -33,14 +33,14 @@ def get_postfix(input_string):
                      (token in t.right_associativity and t.OPERATORS[token].priority < t.OPERATORS[
                          stack[-1]].priority)):
                 output_string += [stack.pop()]
-            else:
-                stack.append(token)
+                continue
+            stack.append(token)
             continue
         if token == t.openBracket:
             stack.append(token)
             continue
         if token == t.closeBracket:
-            while not stack[-1] == t.openBracket:
+            while stack[-1] != t.openBracket:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError()
@@ -58,6 +58,7 @@ def get_postfix(input_string):
 
 
 def make_valid(expression):
+    """Call all validation functions and return valid string"""
     try:
         expression = dell_spaces(expression)
         expression = make_unarys(expression)
@@ -71,11 +72,11 @@ def make_valid(expression):
         exit(1)
 
 
-def is_number(s):
+def is_number(token):
     """Check if s is number"""
-    if '.' in s:
+    if '.' in token:
         return True
-    return s.isdigit()
+    return token.isdigit()
 
 
 def make_unarys(infix_string):
@@ -86,11 +87,12 @@ def make_unarys(infix_string):
     prev_unary = False
     bracket_counter = 0
     for index, token in enumerate(infix_string):
+        last_token = infix_string[index - 1]
         if token in t.OPERATORS:
-            if token == '-' or token == '+':
+            if token in ('+', '-'):
                 if is_unary(infix_string, index):
-                    if infix_string[index - 1] in t.OPERATORS and \
-                            t.OPERATORS[infix_string[index - 1]].priority > t.OPERATORS[token].priority:
+                    if last_token in t.OPERATORS and \
+                            t.OPERATORS[last_token].priority > t.OPERATORS[token].priority:
                         output_string.append('(')
                         prev_unary = True
                         bracket_counter += 1
@@ -99,18 +101,18 @@ def make_unarys(infix_string):
                     continue
         output_string.append(token)
         if prev_unary:
-            for i in range(bracket_counter):
+            while bracket_counter:
                 output_string.append(')')
                 bracket_counter -= 1
             prev_unary = False
     return output_string
 
 
-def is_unary(s, index):
+def is_unary(tokens, index):
     """Check if operator in s with index is unary"""
-    token = s[index - 1]
+    token = tokens[index - 1]
     if token == ' ':
-        token = s[index - 2]
+        token = tokens[index - 2]
     return (token in t.OPERATORS or
             token in t.FUNCTIONS or
             token == t.func_delimiter or
@@ -124,7 +126,7 @@ def chek_invalid_func(tokens):
         if token in t.FUNCTIONS:
             if len(tokens) <= 1:
                 raise exeptions.InvalidStringError()
-            elif is_number(tokens[index + 1]):
+            if is_number(tokens[index + 1]):
                 raise exeptions.InvalidStringError()
 
 
@@ -135,8 +137,6 @@ def dell_spaces(tokens):
         if token == ' ':
             if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
                 raise exeptions.InvalidStringError()
-            else:
-                continue
         else:
             no_spaces_tokens.append(token)
     return no_spaces_tokens
