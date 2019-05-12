@@ -137,7 +137,7 @@ def split_operators(expression_line):
                     parsing_list.append(last_symbol)
                     last_symbol = ""
                 last_letter += i
-            elif i in "!=<>/":
+            elif i in "!=<>/*":
                 if blank_item and str(parsing_list[-1]) in '!=<>/*':
                     raise SyntaxError('Blank symbol between twice operator')
                 elif blank_item:
