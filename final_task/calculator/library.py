@@ -7,7 +7,7 @@ class Library(dict):
         self['round'] = round
 
         self.update(*modules)
-    
+
     def update(self, *modules: list):
         """Adds functions and veriables from got module names to dictionary."""
         for module in modules:

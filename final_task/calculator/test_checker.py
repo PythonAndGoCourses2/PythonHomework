@@ -3,6 +3,7 @@ from unittest.mock import patch
 from library import Library
 from checker import check_brackets, check_constant, check_expression, check_function, check_spaces
 
+
 class TestCheckFunction(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -116,6 +117,7 @@ class TestCheckFunction(unittest.TestCase):
             self.assertEqual(check_expression('1-2', self.lib), '1-2')
             self.assertEqual(check_expression('1 * - 2', self.lib), '1*-2')
             self.assertEqual(check_expression('1 - sin  (1,    2,  3) + - 2', self.lib), '1-sin(1,2,3)+-2')
+
 
 if __name__ == '__main__':
     unittest.main()

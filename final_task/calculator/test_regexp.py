@@ -1,6 +1,7 @@
 import unittest
 from regexp import has_comparator, has_non_zero_fraction_part
 
+
 class TestRegexpFunction(unittest.TestCase):
     def test_has_comparator(self):
         with self.subTest("returns correct answer"):
@@ -16,6 +17,7 @@ class TestRegexpFunction(unittest.TestCase):
             self.assertTrue(has_non_zero_fraction_part('1.9'))
             self.assertTrue(has_non_zero_fraction_part('1.09'))
             self.assertTrue(has_non_zero_fraction_part('1.00000000000001'))
+
 
 if __name__ == '__main__':
     unittest.main()

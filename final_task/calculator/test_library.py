@@ -1,11 +1,12 @@
 import unittest
 from library import Library
 
+
 class TestLibraryClass(unittest.TestCase):
     def test__init__(self):
         with self.subTest("contains around and abs functon by default"):
             lib = Library()
-            
+
             self.assertTrue('round' in lib)
             self.assertTrue('abs' in lib)
 
@@ -31,6 +32,7 @@ class TestLibraryClass(unittest.TestCase):
         with self.subTest("raises error if veriable is not found"):
             self.assertRaises(ModuleNotFoundError, lambda: lib.update('bad_module'))
             self.assertRaises(ModuleNotFoundError, lambda: lib.update('new_math'))
-            
+
+
 if __name__ == '__main__':
     unittest.main()

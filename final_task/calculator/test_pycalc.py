@@ -3,9 +3,10 @@ import unittest
 from unittest.mock import patch
 from pycalc import main
 
+
 class TestPycalcFunction(unittest.TestCase):
     def test_main(self):
-        with self.subTest("calls methods parse_query, Library.update, check_expression, replace_all_mathes, convert_answer"), \
+        with self.subTest("calls methods parse_query, update, check_expression, replace_all_mathes, convert_answer"), \
              patch('pycalc.parse_query') as parse_query, \
              patch('pycalc.Library.update') as import_modules, \
              patch('pycalc.check_expression') as check_expression, \
@@ -30,6 +31,7 @@ class TestPycalcFunction(unittest.TestCase):
 
             main()
             self.assertTrue(mock_stdout.getvalue().startswith('ERROR: '))
+
 
 if __name__ == '__main__':
     unittest.main()

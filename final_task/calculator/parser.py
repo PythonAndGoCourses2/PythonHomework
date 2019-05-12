@@ -1,5 +1,6 @@
 import argparse
 
+
 def parse_query():
     """
     Convert argument strings to objects and assign them as attributes of the namespace.

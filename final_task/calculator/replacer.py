@@ -25,6 +25,7 @@ from library import Library
 from operators import LEFT_BRACKET, MINUS, PLUS, MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, \
                       EQUAL, NOT_EQUAL, GREAT, GREAT_OR_EQUAL, LESS, LESS_OR_EQUAL, exec_operation
 
+
 def replace_constant(expr: str, library: Library) -> str:
     """
     Calculates constant operations.

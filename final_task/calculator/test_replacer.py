@@ -4,11 +4,12 @@ from replacer import replace_constant, replace_fanction, replace_brackets, repla
                      replace_bynary_operator, replace_compare_operator, replace_all_mathes
 from operators import MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, PLUS, MINUS
 
+
 class TestReplaceFunction(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.lib = Library('math', 'time')
-    
+
     def test_replace_constant(self):
         with self.subTest("Replaces constant name to constant value"):
             self.assertEqual(replace_constant('e', self.lib), '2.718281828459045')
@@ -100,7 +101,7 @@ class TestReplaceFunction(unittest.TestCase):
         with self.subTest("Calculates assotiacive operations"):
             self.assertEqual(replace_all_mathes('102%12%7', self.lib), '+6.0')
             self.assertEqual(replace_all_mathes('100/4/3', self.lib), '+8.333333333333334')
-            self.assertIn(replace_all_mathes('2^3^4', self.lib), ['2417851639229258349412352.0', '+2.4178516392292583e+24'])
+            self.assertEqual(replace_all_mathes('2^3^4', self.lib), '+2.4178516392292583e+24')
 
         with self.subTest("Calculates comparation operations"):
             self.assertEqual(replace_all_mathes('1+2*3==1+2*3', self.lib), '1')
@@ -118,13 +119,18 @@ class TestReplaceFunction(unittest.TestCase):
             self.assertEqual(replace_all_mathes('(2.0^(pi/pi+e/e+2.0^0.0))', self.lib), '+8.0')
             self.assertEqual(replace_all_mathes('(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)', self.lib), '+2.0')
             self.assertEqual(replace_all_mathes('sin(pi/2^1)+log(1*4+2^2+1,3^2)', self.lib), '+2.0')
-            self.assertEqual(replace_all_mathes('10*e^0*log10(.4-5/-0.1-10)--abs(-53/10)+-5', self.lib), '+16.36381365110605')
             self.assertEqual(replace_all_mathes('2.0^(2.0^2.0*2.0^2.0)', self.lib), '+65536.0')
-            self.assertEqual(replace_all_mathes('sin(e^log(e^e^sin(23.0),45.0)+cos(3.0+log10(e^-e)))', self.lib), '0.76638122986603')
+
+            val = '10*e^0*log10(.4-5/-0.1-10)--abs(-53/10)+-5'
+            self.assertEqual(replace_all_mathes(val, self.lib), '+16.36381365110605')
+
+            val = 'sin(e^log(e^e^sin(23.0),45.0)+cos(3.0+log10(e^-e)))'
+            self.assertEqual(replace_all_mathes(val, self.lib), '0.76638122986603')
 
             val = ('sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))'
                    '+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)')
             self.assertEqual(replace_all_mathes(val, self.lib), '0.5361064001012783')
+
 
 if __name__ == '__main__':
     unittest.main()

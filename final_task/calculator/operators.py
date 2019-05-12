@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The module is designed to calculate mathematical operations. 
+The module is designed to calculate mathematical operations.
 Also contains string representations of operations.
 
 Attributes:
@@ -43,9 +43,11 @@ GREAT_OR_EQUAL = '>='
 EQUAL = '=='
 NOT_EQUAL = '!='
 
+
 class Type:
     ARITHMETIC = 0
     COMPARISON = 1
+
 
 Operator = namedtuple('Operator', 'func type')
 OPERATORS = {
@@ -63,6 +65,7 @@ OPERATORS = {
     GREAT_OR_EQUAL: Operator(ge, Type.COMPARISON),
     GREAT: Operator(gt, Type.COMPARISON),
 }
+
 
 def exec_operation(x: str, y: str, operation=MULTIPLE) -> str:
     """Executes the operation and returns the result.

@@ -2,6 +2,7 @@ import unittest
 from operators import MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, PLUS, MINUS, LESS, GREAT, EQUAL, \
                       LESS_OR_EQUAL, GREAT_OR_EQUAL, NOT_EQUAL, exec_operation
 
+
 class TestOperatorFunction(unittest.TestCase):
     def test_exec_operation(self):
         a, b = '3', '7'
@@ -27,6 +28,7 @@ class TestOperatorFunction(unittest.TestCase):
             self.assertRaises(ValueError, lambda: exec_operation(a, b, '**'))
             self.assertRaises(ValueError, lambda: exec_operation(a, b, '&&'))
             self.assertRaises(ValueError, lambda: exec_operation(a, b, '||'))
+
 
 if __name__ == '__main__':
     unittest.main()

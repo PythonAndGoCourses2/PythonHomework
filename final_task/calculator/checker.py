@@ -21,6 +21,7 @@ import regexp as mre
 from operators import LEFT_BRACKET, RIGHT_BRACKET
 from library import Library
 
+
 def check_spaces(expr: str) -> str:
     """
     Checks if an expression has the wrong elements.

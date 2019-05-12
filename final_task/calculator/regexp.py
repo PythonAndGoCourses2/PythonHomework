@@ -16,7 +16,6 @@ Attributes:
     REGEXP_NON_ZERO_FRACTION_PART (rstr): regular expressions for finding non-zero fraction part.
     REGEXP_COMPARATOR (rstr): regular expressions for finding comparator.
     REGEXP_INCORECT_EXPRETION (rstr): regular expressions for defining invalid expressions.
-    
 """
 
 import re
@@ -45,9 +44,11 @@ REGEXP_INCORECT_EXPRETION = (
     r'[-+*^\/%<=!>]$'
 )
 
+
 def has_comparator(expr):
     match = re.search(REGEXP_COMPARATOR, expr)
     return bool(match)
+
 
 def has_non_zero_fraction_part(expr):
     match = re.search(REGEXP_NON_ZERO_FRACTION_PART, expr)
