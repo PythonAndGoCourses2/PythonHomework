@@ -72,7 +72,6 @@ def check_parsing_list(parsing_list):
         raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(parsing_list[-1]))
     if parsing_list[-1] in function_dict.keys():
         raise SyntaxError('Function "{}" without argument in the end of expression'.format(parsing_list[-1]))
-    print(parsing_list)
     return True
 
 
@@ -340,7 +339,8 @@ def calculate(converted_list):
 
 def main():
     try:
-        expression_line = arg_parser()
+        # expression_line = arg_parser()
+        expression_line = '-13'
         operands = OperandStack()
         function = OperandStack()
         parser = split_operators(expression_line)
