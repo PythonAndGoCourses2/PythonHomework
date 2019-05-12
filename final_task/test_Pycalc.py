@@ -36,5 +36,6 @@ class TestTranslator(unittest.TestCase):
         self.assertTrue(Translator.is_number('10.0'))
         self.assertFalse(Translator.is_number('p'))
 
+
 if __name__ == '__main__':
     unittest.main()
