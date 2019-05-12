@@ -32,7 +32,7 @@ import re
 from collections import namedtuple
 from functools import reduce
 from operator import mul, truediv, floordiv, mod, add, sub, lt, le, eq, ne, ge, gt
-import math_regexp as mre
+import regexp as mre
 
 HAS_COMPARE = False
 LIBRARY = {
