@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name='pycalc',
-    version='0.1',
+    version='1.0',
     author='Mad',
     long_description=long_description,
     packages=find_packages(),
