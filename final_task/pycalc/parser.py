@@ -1,5 +1,6 @@
+"""Module to parse console args into string"""
 import argparse
-from . import Exeptions
+from . import exeptions
 
 
 def parse_console():
@@ -9,4 +10,4 @@ def parse_console():
     if parser.parse_args().EXPRESSION:
         return parser.parse_args().EXPRESSION
     else:
-        raise Exeptions.GeneralError()
+        raise exeptions.GeneralError()

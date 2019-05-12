@@ -1,6 +1,6 @@
 import sys
-from . import Tokens as t
-from . import Exeptions
+from . import tokens as t
+from . import exeptions
 
 
 def get_postfix(input_string):
@@ -27,7 +27,7 @@ def get_postfix(input_string):
             while not stack[-1] == t.openBracket:
                 output_string += [stack.pop()]
                 if not stack:
-                    raise Exeptions.BracketsError()
+                    raise exeptions.BracketsError()
             continue
         if token in t.OPERATORS:
             while stack[-1] in t.OPERATORS and \
@@ -46,15 +46,15 @@ def get_postfix(input_string):
             while not stack[-1] == t.openBracket:
                 output_string += [stack.pop()]
                 if not stack:
-                    raise Exeptions.BracketsError()
+                    raise exeptions.BracketsError()
             stack.pop()
             if stack[-1] in t.FUNCTIONS:
                 output_string += [stack.pop()]
             continue
-        raise Exeptions.UnknownFunctionError(token)
+        raise exeptions.UnknownFunctionError(token)
     while stack[-1]:
         if stack[-1] == t.openBracket:
-            raise Exeptions.BracketsError()
+            raise exeptions.BracketsError()
         if stack[-1] in t.OPERATORS:
             output_string += [stack.pop()]
     return output_string
@@ -66,7 +66,7 @@ def make_valid(expression):
         expression = make_unarys(expression)
         chek_invalid_func(expression)
         return expression
-    except Exeptions.InvalidStringError:
+    except exeptions.InvalidStringError:
         print('ERROR: invalid string input')
         exit(1)
     except Exception:
@@ -126,9 +126,9 @@ def chek_invalid_func(tokens):
     for index, token in enumerate(tokens):
         if token in t.FUNCTIONS:
             if len(tokens) <= 1:
-                raise Exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError()
             elif is_number(tokens[index + 1]):
-                raise Exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError()
 
 
 def dell_spaces(tokens):
@@ -137,7 +137,7 @@ def dell_spaces(tokens):
     for index, token in enumerate(tokens):
         if token == ' ':
             if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
-                raise Exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError()
             else:
                 continue
         else:

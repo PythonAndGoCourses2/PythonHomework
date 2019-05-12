@@ -1,29 +1,29 @@
 """Module to group all other modules"""
-from . import Parser
-from . import Tokenizer
-from . import Translator
-from . import Calculator
-from . import Exeptions
+from . import parser
+from . import tokenizer
+from . import translator
+from . import calculator
+from . import exeptions
 
 
 def main():
     """Call of all needed methods and return result"""
     try:
-        infix_string = Parser.parse_console()
-        tokens = Tokenizer.tokenize(infix_string)
-        postfix_string = Translator.get_postfix(tokens)
-        res = Calculator.calc(postfix_string)
+        infix_string = parser.parse_console()
+        tokens = tokenizer.tokenize(infix_string)
+        postfix_string = translator.get_postfix(tokens)
+        res = calculator.calc(postfix_string)
         print(res)
-    except Exeptions.GeneralError:
+    except exeptions.GeneralError:
         print('ERROR: empty input')
         exit(1)
-    except Exeptions.InvalidStringError:
+    except exeptions.InvalidStringError:
         print('ERROR: invalid string input')
         exit(1)
-    except Exeptions.BracketsError:
+    except exeptions.BracketsError:
         print('ERROR: brackets are not balanced')
         exit(1)
-    except Exeptions.UnknownFunctionError as ex:
+    except exeptions.UnknownFunctionError as ex:
         print(f'ERROR: no such function or operator: \'{ex.token}\'')
         exit(1)
     except Exception:
