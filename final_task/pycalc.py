@@ -67,11 +67,11 @@ def check_parsing_list(parsing_list):
     if len(parsing_list) == 1:
         if type(parsing_list[0]) is int or type(parsing_list[0]) is float:
             return True
-        raise SyntaxError('Expression must include at list one operand or one function with arguments!')
+        raise SyntaxError('Expression must include at list one operand!')
     if parsing_list[-1] in operator_dict.keys():
         raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(parsing_list[-1]))
     if parsing_list[-1] in function_dict.keys():
-        raise SyntaxError('Function "{}" without argument in the end of expression'.format(parsing_list[-1]))
+        raise SyntaxError('Function "{}" without argument'.format(parsing_list[-1]))
     return True
 
 
@@ -233,6 +233,7 @@ def converter(parsing_list):
                 last_item = ""
             converted_list.append(i)
     return converted_list
+
 
 class OperandStack:
 
