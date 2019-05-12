@@ -39,9 +39,9 @@ class TestTranslator(unittest.TestCase):
         self.assertFalse(translator.is_number('p'))
 
     def test_get_postfix(self):
-        self.assertEqual(['1', '1', '+'], translator.get_postfix(['1', '+', '1']))
-        self.assertEqual(['10', 'sin'], translator.get_postfix(['sin', '(', '10', ')']))
-        self.assertEqual(['30', '15', '2', '^', '+'], translator.get_postfix(['30', '+', '15', '^', '2']))
+        self.assertEqual([1.0, 1.0, '+'], translator.get_postfix(['1', '+', '1']))
+        self.assertEqual([10.0, 'sin'], translator.get_postfix(['sin', '(', '10', ')']))
+        self.assertEqual([30.0, 15.0, 2.0, '^', '+'], translator.get_postfix(['30', '+', '15', '^', '2']))
 
 
 class TestCalculator(unittest.TestCase):
