@@ -81,17 +81,15 @@ def make_unarys(infix_string):
     bracket_counter = 0
     for index, token in enumerate(infix_string):
         last_token = infix_string[index - 1]
-        if token in t.OPERATORS:
-            if token in ('+', '-'):
-                if is_unary(infix_string, index):
-                    if last_token in t.OPERATORS and \
-                            t.OPERATORS[last_token].priority > t.OPERATORS[token].priority:
-                        output_string.append(t.O_BRACKET)
-                        prev_unary = True
-                        bracket_counter += 1
-                    output_string.append('0')
-                    output_string.append(token)
-                    continue
+        if token in t.OPERATORS and token in ('+', '-') and is_unary(infix_string, index):
+            if last_token in t.OPERATORS and \
+                    t.OPERATORS[last_token].priority > t.OPERATORS[token].priority:
+                output_string.append(t.O_BRACKET)
+                prev_unary = True
+                bracket_counter += 1
+            output_string.append('0')
+            output_string.append(token)
+            continue
         output_string.append(token)
         if prev_unary:
             while bracket_counter:
