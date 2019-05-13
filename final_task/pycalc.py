@@ -5,10 +5,6 @@ import argparse
 import operator
 from math import pi, e
 
-parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
-parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
-expr = parser.parse_args().EXPRESSION
-
 MATH_FUNCTIONS = {name: (5, "left", getattr(math, name)) for name in dir(math)}
 MATH_FUNCTIONS_NEG = {"-" + name: (5, "left", getattr(math, name)) for name in dir(math)}
 OPERATORS = {
@@ -26,6 +22,7 @@ arg_count = 0
 def counting(expression):
     def checklog(expression):
         expression = re.sub(r'(?<=-)[+]+|[+]+(?=-)', "", expression)
+        expression = re.sub(r'[+]{2,}', "+", expression)
         match = re.search(r'^[-]{2,}', expression)
         if match is not None:
             check_expr = match.group(0)
@@ -234,4 +231,12 @@ def counting(expression):
     return check_entrence(expression)
 
 
-print(counting(expr))
+def main():
+    parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
+    parser.add_argument('EXPRESSION', type=str, help='expression string to evaluate')
+    expr = parser.parse_args().EXPRESSION
+    print(counting(expr))
+
+
+if __name__ == '__main__':
+    main()
