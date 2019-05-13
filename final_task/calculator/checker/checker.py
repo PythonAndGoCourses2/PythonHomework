@@ -18,12 +18,12 @@ Example:
 """
 
 import re
-from .library import Library
-from .operators import (
+from ..library import Library
+from ..operators import (
     LEFT_BRACKET,
     RIGHT_BRACKET,
 )
-from .regexp import (
+from ..regexp import (
     REGEXP_INCORECT_EXPRETION,
     REGEXP_CONSTANT,
     REGEXP_DIGIT,

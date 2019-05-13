@@ -16,7 +16,7 @@ Example:
         >>> 'False'
 """
 
-from .regexp import has_non_zero_fraction_part
+from ..regexp import has_non_zero_fraction_part
 
 
 def convert_answer(expr: str, has_compare: bool) -> str:

@@ -20,8 +20,8 @@ Example:
 import re
 from collections import namedtuple
 from functools import reduce
-from .library import Library
-from .operators import (
+from ..library import Library
+from ..operators import (
     LEFT_BRACKET,
     MINUS,
     PLUS,
@@ -38,7 +38,7 @@ from .operators import (
     LESS_OR_EQUAL,
     exec_operation,
 )
-from .regexp import (
+from ..regexp import (
     REGEXP_BACKETS,
     REGEXP_CONSTANT,
     REGEXP_DIGIT,

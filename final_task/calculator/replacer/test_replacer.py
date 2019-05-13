@@ -1,5 +1,5 @@
 import unittest
-from .library import Library
+from ..library import Library
 from .replacer import (
     replace_constant,
     replace_fanction,
@@ -9,7 +9,7 @@ from .replacer import (
     replace_compare_operator,
     replace_all_mathes
 )
-from .operators import (
+from ..operators import (
     MULTIPLE,
     POWER,
     TRUE_DIVISION,
