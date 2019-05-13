@@ -27,11 +27,12 @@ def get_postfix(input_string):
                     raise exeptions.BracketsError()
             continue
         if token in t.OPERATORS:
-            while stack[-1] in t.OPERATORS and \
-                    ((token in t.LEFT_ASSOCIATIVITY and t.OPERATORS[token].priority <= t.OPERATORS[
-                        stack[-1]].priority) or
-                     (token in t.RIGHT_ASSOCIATIVITY and t.OPERATORS[token].priority < t.OPERATORS[
-                         stack[-1]].priority)):
+            suits = False
+            if stack[-1] in t.OPERATORS and token in t.LEFT_ASSOCIATIVITY:
+                suits = t.OPERATORS[token].priority <= t.OPERATORS[stack[-1]].priority
+            if stack[-1] in t.OPERATORS and token in t.RIGHT_ASSOCIATIVITY:
+                suits = t.OPERATORS[token].priority < t.OPERATORS[stack[-1]].priority
+            while suits:
                 output_string += [stack.pop()]
                 continue
             stack.append(token)
@@ -133,3 +134,4 @@ def dell_spaces(tokens):
         else:
             no_spaces_tokens.append(token)
     return no_spaces_tokens
+
