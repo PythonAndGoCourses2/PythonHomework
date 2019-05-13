@@ -141,7 +141,7 @@ def parse(xprstr):
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
 
-        # проверка digit( , )digit  без оператора
+        # проверка digit( или )digit
         if i < len(xprstr)-1:
             if xprstr[i].isdigit() and xprstr[i+1] == '(':
                 print('ERROR: digit ', xprstr[i], 'and ( without operator')
