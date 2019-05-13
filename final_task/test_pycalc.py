@@ -72,6 +72,5 @@ class TestCalculator(unittest.TestCase):
         self.assertRaises(exeptions.InvalidStringError, calculator.calc, ['15', '+', '15'])
 
 
-
 if __name__ == '__main__':
     unittest.main()
