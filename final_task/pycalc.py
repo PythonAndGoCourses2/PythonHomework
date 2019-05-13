@@ -24,6 +24,7 @@ import math
 import operator
 import re
 from json import loads
+from typing import List, TypeVar, Union
 OPERATORS = {
     '+': (operator.add, 2),
     '-': (operator.sub, 2),
@@ -67,21 +68,23 @@ INVALID_EXPRESSIONS = [
 ]
 
 
-def py_calculator(math_expression):
+def py_calculator(math_expression: str) -> Union[int, float, bool, tuple]:
     """
 
     :param math_expression: String of math expression
     :return: Result of calculation
 
     """
-    def parse(expression: str) -> list:
+    elements_of_expression = TypeVar('elements_of_expression')
+
+    def parse(expression: str) -> List[elements_of_expression]:
         """Split math expression, consists of 2 steps
 
         :param expression: String of math expression
         :return: Parsed line by items in the list
 
         """
-        def parse_step1(expr: str) -> list:
+        def parse_step1(expr: str) -> List[elements_of_expression]:
             """Creates a list with numbers, functions and constants from a mathematical expression
 
             :param expr: String of math expression
@@ -110,7 +113,7 @@ def py_calculator(math_expression):
             parse_list = re.compile(items_of_expression).findall(expr)
             return parse_list
 
-        def parse_step2(parse_list: list) -> list:
+        def parse_step2(parse_list: List[elements_of_expression]) -> List[elements_of_expression]:
             """Working with minuses in expression.
 
             :param parse_list: List with items of expression.
@@ -138,14 +141,14 @@ def py_calculator(math_expression):
             return parse_list
         return parse_step2(parse_step1(expression))
 
-    def check_expression(parse_expression):
+    def check_expression(parse_expression: List[elements_of_expression]):
         """Contains functions that validate the input expression.
 
         :param parse_expression: List with items of expression
         :return: List with expression elements if the expression passed all checks
 
         """
-        def check_operators(parse_list):
+        def check_operators(parse_list: List[elements_of_expression]):
             """Checks the validity of the entered operators.
 
             :param parse_list: List with items of expression.
@@ -158,7 +161,7 @@ def py_calculator(math_expression):
                     raise ValueError(f'unknown operation {element + parse_list[index + 1]}')
             return parse_list
 
-        def check_function_and_constants(parse_list):
+        def check_function_and_constants(parse_list: List[elements_of_expression]):
             """Checks the validity of the entered functions or constants
 
             :param parse_list: List with items of expression.
@@ -186,7 +189,7 @@ def py_calculator(math_expression):
             else:
                 return parse_list
 
-        def check_brackets(parse_list):
+        def check_brackets(parse_list: List[elements_of_expression]):
             """Check count of '(',')'.
 
             :param parse_list: List with items of expression.
@@ -210,7 +213,7 @@ def py_calculator(math_expression):
         def calc(self):
             return math.isclose(self.arg1, self.arg2, rel_tol=self.rel_tol, abs_tol=self.abs_tol)
 
-    def exec_isclose(parse_list):
+    def exec_isclose(parse_list: List[elements_of_expression]):
         """calculates the mathematical function isclose
 
         :param parse_list: List with items of expression.
@@ -237,7 +240,7 @@ def py_calculator(math_expression):
             else:
                 return parse_list
 
-    def transform_to_polish_notation(parse_expression: list) -> str:
+    def transform_to_polish_notation(parse_expression: List[elements_of_expression]) -> str:
         """
 
         :param parse_expression: list after parsing
@@ -312,7 +315,7 @@ def py_calculator(math_expression):
             reverse_polish_notation += stack.pop() + separator
         return reverse_polish_notation
 
-    def quantity_of_arguments(function):
+    def quantity_of_arguments(function: str) -> int:
         """From the description of the function determines how many arguments it includes
 
         :param function: mathematical or numerical functions
@@ -323,7 +326,7 @@ def py_calculator(math_expression):
         args = spec[spec.find('(') + 1:spec.find(')')]
         return args.count(',') + 1 if args else 0
 
-    def calculate(reverse_polish_notation):
+    def calculate(reverse_polish_notation: str) -> Union[int, float, bool, tuple]:
         stack = [0]
         for token in reverse_polish_notation.split(' '):
             if token in OPERATORS:
