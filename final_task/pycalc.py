@@ -207,8 +207,6 @@ def converter(parsing_list):
                 except TypeError:
                     converted_list.append(operator_dict[last_item])
                     last_item = ''
-                converted_list.append(operator_dict[last_item])
-                last_item = ''
         if isinstance(i, float) or isinstance(i, int):
             if last_item == '-' and converted_list[-1] != '(' \
                     and converted_list[-1] not in operator_dict.values():
