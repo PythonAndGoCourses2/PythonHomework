@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from .library import Library
 from .checker import (
     check_brackets,
