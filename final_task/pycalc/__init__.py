@@ -26,9 +26,9 @@ def main():
     except exeptions.UnknownFunctionError as ex:
         print(f'ERROR: no such function or operator: \'{ex.token}\'')
         exit(1)
-    except Exception:
-        print('ERROR: something went wrong')
-        exit(1)
+    # except Exception:
+    #     print('ERROR: something went wrong')
+    #     exit(1)
 
 
 if __name__ == "__main__":
