@@ -11,32 +11,51 @@ class TestParser(unittest.TestCase):
 
 class TestTokenizer(unittest.TestCase):
     def test_tokenize(self):
-        self.assertEqual(['(', '(', '('], tokenizer.tokenize('((('))
         self.assertEqual(['lg', '(', '10', ')'], tokenizer.tokenize('log10(10)'))
         self.assertEqual(['+', ' ', '17'], tokenizer.tokenize('- - 17'))
+        self.assertEqual(['sin', '(', '15', '/', 'e', ')', '*', '100', '^', '3'], tokenizer.tokenize('sin(15/e)*100^3'))
+
+    def test_append_token(self):
+        self.assertEqual(['(', '(', '('], tokenizer.append_token([], '((('))
+        self.assertEqual(['15', 'sin'], tokenizer.append_token(['15'], 'sin'))
+        self.assertEqual(['sin', '(', '('], tokenizer.append_token(['sin'], '(('))
 
 
 class TestTranslator(unittest.TestCase):
     def test_dell_spaces(self):
         self.assertEqual(['+', '19', '-', '2'], translator.dell_spaces(['+', ' ', '19', ' ', '-', '2']))
+        self.assertEqual(['15', '*', '4', '^', '3'], translator.dell_spaces(['15', '*', '4', '^', '3']))
         self.assertRaises(exeptions.InvalidStringError, translator.dell_spaces, ['4', ' ', '5'])
 
     def test_check_invalid_func(self):
         self.assertRaises(exeptions.InvalidStringError, translator.chek_invalid_func, ['sin'])
         self.assertRaises(exeptions.InvalidStringError, translator.chek_invalid_func, ['log', '15'])
+        self.assertRaises(exeptions.InvalidStringError, translator.chek_invalid_func,
+                          ['cos', '(', '15', ')', '*', 'abs', '10'])
 
     def test_is_unary(self):
         self.assertFalse(translator.is_unary(['2', '-', '1'], 1))
+        self.assertTrue(translator.is_unary(['15.3', '/', '-', '3'], 2))
+        self.assertTrue(translator.is_unary(['sin', '(', '-', '15', ')'], 2))
         self.assertTrue(translator.is_unary(['2', '+', '-', '1'], 2))
 
     def test_make_unarys(self):
         self.assertEqual(['3', '+', '0', '-', '1'], translator.make_unarys(['3', '+', '-', '1']))
         self.assertEqual(['3', '/', '(', '0', '-', '1', ')'], translator.make_unarys(['3', '/', '-', '1']))
+        self.assertEqual(['(', '19', '+', '40', ')', '-', '100'],
+                         translator.make_unarys(['(', '19', '+', '40', ')', '-', '100']))
 
     def test_is_number(self):
         self.assertTrue(translator.is_number('10'))
         self.assertTrue(translator.is_number('10.0'))
         self.assertFalse(translator.is_number('p'))
+
+    def test_make_valid(self):
+        self.assertEqual(['0', '+', '19', '/', '(', '0', '-', '2', ')'],
+                         translator.make_valid(['+', ' ', '19', ' ', '/', '-', '2']))
+        self.assertEqual(['0', '-', 'sin', '(', '15', ')', '==', '0', '-', '15'],
+                         translator.make_valid(['-', 'sin', '(', '15', ')', '==', '-', '15']))
+        self.assertRaises(exeptions.InvalidStringError, translator.make_valid, ['cos', '15'])
 
     def test_get_postfix(self):
         self.assertEqual([1.0, 1.0, '+'], translator.get_postfix(['1', '+', '1']))
@@ -47,6 +66,11 @@ class TestTranslator(unittest.TestCase):
 class TestCalculator(unittest.TestCase):
     def test_calc(self):
         self.assertEqual(2.0, calculator.calc(['1', '1', '+']))
+        self.assertRaises(ZeroDivisionError, calculator.calc, ['15', '0', '/'])
+        self.assertRaises(OverflowError, calculator.calc, ['100', '100', '^', '100', '^', '100', '^', '100', '^'])
+        self.assertRaises(exeptions.InvalidStringError, calculator.calc, ['+'])
+        self.assertRaises(exeptions.InvalidStringError, calculator.calc, ['15', '+', '15'])
+
 
 
 if __name__ == '__main__':

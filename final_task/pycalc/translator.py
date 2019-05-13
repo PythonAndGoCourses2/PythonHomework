@@ -66,7 +66,7 @@ def make_valid(expression):
 
 
 def is_number(token):
-    """Check if s is number"""
+    """Check if token is number"""
     if '.' in token:
         return True
     return token.isdigit()
@@ -100,7 +100,7 @@ def make_unarys(infix_string):
 
 
 def is_unary(tokens, index):
-    """Check if operator in s with index is unary"""
+    """Check if operator in tokens with index is unary"""
     token = tokens[index - 1]
     if token == ' ':
         token = tokens[index - 2]
