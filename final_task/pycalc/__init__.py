@@ -14,9 +14,6 @@ def main():
         postfix_string = translator.get_postfix(tokens)
         res = calculator.calc(postfix_string)
         print(res)
-    except IndexError:
-        print('ERROR: invalid string input')
-        exit(1)
     except exeptions.GeneralError:
         print('ERROR: empty input')
         exit(1)
@@ -29,9 +26,6 @@ def main():
     except exeptions.UnknownFunctionError as ex:
         print(f'ERROR: no such function or operator: \'{ex.token}\'')
         exit(1)
-    # except Exception:
-    #     print('ERROR: something went wrong')
-    #     exit(1)
 
 
 if __name__ == "__main__":
