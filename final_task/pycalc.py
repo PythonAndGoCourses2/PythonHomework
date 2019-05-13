@@ -73,14 +73,15 @@ def parse(xprstr):
     xprlst = []
     xprset = set(xpr)
 
-    if xprset.issubset(operset):
+    operset.add(' ')
+    if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов или пробелов
         print('ERROR: no digits or funcs in expr')
         exit(0)
 
-    # проверка скобок в строке
-    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:
+    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:  # проверка скобок в строке
         print('ERROR: brackets are not balanced')
         exit(0)
+
     # устранение пробелов с операторами и повторов операторов
     while xprstr.count('  ') > 0 or \
             xprstr.count('++') > 0 or \
@@ -113,7 +114,7 @@ def parse(xprstr):
         print('ERROR: useles spaces')
         exit(0)
 
-    # добавление скобок для возведения в степень 2^3^4
+    # добавление скобок для возведения в степень в степени типа 2^3^4
     right = len(xprstr)
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
@@ -123,7 +124,7 @@ def parse(xprstr):
         tmp = xprstr[left:right]
         tmpset = set(tmp)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
-            # # # # # print('надо скобки для степени')
+            # print('надо скобки')
             xprstr = xprstr[:left]+'('+xprstr[left:]
             left = right+2
             right = len(xprstr)
@@ -134,11 +135,21 @@ def parse(xprstr):
             tmp = xprstr[left:right]
             xprstr = xprstr[:right]+')'+xprstr[right:]
         else:
-            # # # # # print('НЕ надо скобки', left, right)
+            # print('НЕ надо скобки', left, right)
             right = left
 
     # разбор строки
-    for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
+    for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
+
+        # проверка digit( , )digit  без оператора
+        if i < len(xprstr)-1:
+            if xprstr[i].isdigit() and xprstr[i+1] == '(':
+                print('ERROR: digit ', xprstr[i], 'and ( without operator')
+                exit(0)
+            if xprstr[i] == ')' and xprstr[i+1].isdigit():
+                print('ERROR: ) and digit without operator')
+                exit(0)
+
         if sym in split or i == len(xprstr):
             if word == 'pi':
                 xprlst.append('pi')
@@ -155,19 +166,13 @@ def parse(xprstr):
             word = ''
         else:
             word = word + sym
-    xprlst.pop()    # удаляется добавленный пробел
+    xprlst.pop()  # удаляется добавленный пробел
 
-    # если выражение содержит только функции без аргументов
-    # xprset = set(xprlst)
-    # if xprset.issubset(funcset):
-    #     print('ERROR: function has no arguments')
-    #     exit(0)
-
-    # # # # # print('поииск операторов составных')
+    # поииск операторов составных типа <= >= == != содержащихся в списке oper
     for i, data in enumerate(xprlst):
         if i == len(xprlst) - 1:
             break
-        # # # # # print(i, data)
+        # print(i, data)
         if str(xprlst[i]) + str(xprlst[i+1]) in oper:
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
             xprlst.pop(i)
@@ -182,7 +187,7 @@ def parse(xprstr):
         xprlst[0] = -1
         xprlst.insert(1, '*')
 
-    # # # # print (*xprlst, sep='|')
+    # print (*xprlst, sep='|')
     return xprlst
 
 
@@ -236,10 +241,10 @@ def postfix(xprlst):
                 output.append(stack.pop())
                 # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop()  # удаление из стека (
-    # # # # # print('output=', *output, sep=' ')
-    # # # # # print('stack=', *stack, sep=' ')
+    # print('output=', *output, sep=' ')
+    # print('stack=', *stack, sep=' ')
     stack.reverse()
-    # # # # print(output + stack)
+    # print(output + stack)
 
     # xprset = set(output + stack)
     # if xprset.issubset(funcset):  # проверка если функция без аргументов
@@ -251,7 +256,7 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         # print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
@@ -288,7 +293,7 @@ def operate(operator, args):
     except ValueError:
         print('ERROR: invalid argument for ', operator)
         exit(0)
-    # # print('RESULT', result)
+    print('RESULT', result)
     return result
 
 
@@ -298,7 +303,7 @@ def evalpostfix(xprpstfx):
     stack = []
     args = []
     for i in xprpstfx:
-        # # # print('evalpostfix i=',i)
+        # print('evalpostfix i=',i)
         if i in funclist:  # если функция типа sin, pow, sum, tau
             if len(stack) == 0:
                 args = 0  # функция без аргументов типа pi, e, tau
@@ -313,12 +318,12 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-                # # # print('STACK', stack)
+                # print('STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
         elif i in oper:  # если оператор типа a + b
-            # # # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
 
             try:
                 tmp = funcdic[i](*stack[-2:])
@@ -328,10 +333,10 @@ def evalpostfix(xprpstfx):
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
-            # # # print('RESULT', tmp)
+            # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        # # # print('STACK',stack)
+        # print('STACK',stack)
     return stack[0]
 
 
@@ -344,11 +349,11 @@ def main():
 
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
-    # # # print('PARSE ', *xprlst, sep=' ')
+    print('PARSE ', *xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    # # # print('POSTFIX ', *xprlst, sep=' ')
+    print('POSTFIX ', *xprlst, sep=' ')
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
