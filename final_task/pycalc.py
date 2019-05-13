@@ -26,7 +26,7 @@ def pycalc():
     CONSTANTS = {'pi': math.pi, 'e': math.e}
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
-    def InputFromCommandLine():
+    def input_from_command_line():
         """Get information about input from command line """
 
         parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
@@ -34,7 +34,7 @@ def pycalc():
         args = parser.parse_args()
         return args.EXPRESSION
 
-    def ParseInformation(the_input):
+    def parse_information(the_input):
         """Pars information and write it to list """
 
         categories = [string.digits + '.', '(', ')' '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
@@ -90,7 +90,28 @@ def pycalc():
                 tokensarray.append(token)
         return tokensarray
 
-    def Polish_Notation(parsed_information):
+    def negative_numbers(parse_information):
+        """Working with negative numbers in parse information from command line"""
+        for index, element in enumerate(parse_information):
+            if element == '-' and (re.fullmatch(NUMBERS, parse_information[index + 1])
+                                   or parse_information[index + 1] in CONSTANTS):
+                if parse_information[index - 1] in '(*/%//^,':
+                    parse_information[index] += parse_information.pop(index + 1)
+                elif parse_information.index(element) == 0:
+                    parse_information[index] += parse_information.pop(index + 1)
+                elif index == len(parse_information) - 2:
+                    if re.search(NUMBERS, parse_information[index + 1]):
+                        parse_information[index] += parse_information.pop(index + 1)
+                        parse_information.insert(index, '+')
+                elif parse_information[index + 2] in '*/%//' and re.search(NUMBERS, parse_information[index + 1]):
+                    parse_information[index] += parse_information.pop(index + 1)
+                    parse_information.insert(index, '+')
+            elif element == '-' and parse_information[index + 1] in FUNCTIONS and parse_information[index - 1] == '(':
+                parse_information[index] = '-1'
+                parse_information(index + 1, '*')
+        return parse_information
+
+    def polish_notation(parsed_information):
         stack = []
         reverse_polish_notation = ''
         separator = ' '
@@ -158,21 +179,21 @@ def pycalc():
             reverse_polish_notation += stack.pop() + separator
         return reverse_polish_notation
 
-    def Arguments(function):
+    def arguments(function):
         """Determines how many arguments function includes."""
 
         spec = function.__doc__.split('\n')[0]
         arg = spec[spec.find('(') + 1:spec.find(')')]
         return arg.count(',') + 1 if arg else 0
 
-    def Calc(polish_iformation):
+    def calc(polish_information):
         stack = [0]
-        for token in polish_iformation.split(' '):
+        for token in polish_information.split(' '):
             if token in OPERATORS:
                 op2, op1 = stack.pop(), stack.pop()
                 stack.append(OPERATORS[token][0](op1, op2))
             elif token in FUNCTIONS:
-                if Arguments(FUNCTIONS[token]) == 1:
+                if arguments(FUNCTIONS[token]) == 1:
                     if token == 'fsum':
                         numbers = []
                         for number in stack[::-1]:
@@ -191,7 +212,7 @@ def pycalc():
                         if stack[-1] == ',':
                             raise ValueError(f'invalid number of arguments')
                         stack.append(FUNCTIONS[token](op))
-                elif Arguments(FUNCTIONS[token]) == 2:
+                elif arguments(FUNCTIONS[token]) == 2:
                     if stack[-2] == ',':
                         op2 = stack.pop()
                         stack.pop()
@@ -226,9 +247,9 @@ def pycalc():
         else:
             return stack.pop()
 
-    def Check_All():
+    def check_all():
 
-        def Check_Function_And_Constants(parse_information):
+        def check_function_and_constants(parse_information):
             """Checks functions or constants."""
             copy_check_expression = parse_information.copy()
             for index, element in enumerate(copy_check_expression):
@@ -251,9 +272,9 @@ def pycalc():
             else:
                 return parse_information
 
-        return Check_Function_And_Constants(ParseInformation(InputFromCommandLine()))
+        return check_function_and_constants(negative_numbers(parse_information(input_from_command_line())))
 
-    return Calc(Polish_Notation(Check_All()))
+    return calc(polish_notation(check_all()))
 
 
 def main():
