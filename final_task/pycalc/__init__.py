@@ -26,6 +26,12 @@ def main():
     except exeptions.UnknownFunctionError as ex:
         print(f'ERROR: no such function or operator: \'{ex.token}\'')
         exit(1)
+    except OverflowError:
+        print("ERROR: numerical result out of range")
+        exit(1)
+    except ZeroDivisionError:
+        print("ERROR: division by zero")
+        exit(1)
 
 
 if __name__ == "__main__":
