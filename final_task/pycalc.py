@@ -201,12 +201,8 @@ def converter(parsing_list):
         if i != '-' and i != '+' and last_item:
             last_item = clean_add_sub_operators(last_item, converted_list)
             if last_item == '+':
-                try:
-                    if converted_list[-1]['operator']:
-                        raise SyntaxError('Missing operand between two math operators!')
-                except TypeError:
-                    converted_list.append(operator_dict[last_item])
-                    last_item = ''
+                converted_list.append(operator_dict[last_item])
+                last_item = ''
         if isinstance(i, float) or isinstance(i, int):
             if last_item == '-' and converted_list[-1] != '(' \
                     and converted_list[-1] not in operator_dict.values():
