@@ -57,6 +57,7 @@ def pycalc():
         the_input = the_input.replace('--', '+')
         the_input = the_input.replace('- -', '+')
         the_input = the_input.replace('log10(', 'lg(')
+        the_input = the_input.replace(' ', '')
         for char in the_input:
             if token:
                 if category and char in category:
@@ -253,7 +254,6 @@ def pycalc():
         return Check_Function_And_Constants(ParseInformation(InputFromCommandLine()))
 
     return Calc(Polish_Notation(Check_All()))
-    # return Check_All()
 
 
 def main():
