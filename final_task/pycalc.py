@@ -73,14 +73,15 @@ def parse(xprstr):
     xprlst = []
     xprset = set(xpr)
 
-    if xprset.issubset(operset):
+    operset.add(' ')
+    if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов
         print('ERROR: no digits or funcs in expr')
         exit(0)
 
-    # проверка скобок в строке
-    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:
+    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:  # проверка скобок в строке
         print('ERROR: brackets are not balanced')
         exit(0)
+
     # устранение пробелов с операторами и повторов операторов
     while xprstr.count('  ') > 0 or \
             xprstr.count('++') > 0 or \
@@ -113,7 +114,7 @@ def parse(xprstr):
         print('ERROR: useles spaces')
         exit(0)
 
-    # добавление скобок для возведения в степень 2^3^4
+    # добавление скобок для возведения в степень в степени типа 2^3^4
     right = len(xprstr)
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
@@ -123,7 +124,7 @@ def parse(xprstr):
         tmp = xprstr[left:right]
         tmpset = set(tmp)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
-            # # # # # print('надо скобки для степени')
+            # # # # # print('надо скобки')
             xprstr = xprstr[:left]+'('+xprstr[left:]
             left = right+2
             right = len(xprstr)
@@ -138,7 +139,7 @@ def parse(xprstr):
             right = left
 
     # разбор строки
-    for i, sym in enumerate(xprstr + ' '):     # добавлен дополнительный пробел
+    for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
             if word == 'pi':
                 xprlst.append('pi')
@@ -155,7 +156,7 @@ def parse(xprstr):
             word = ''
         else:
             word = word + sym
-    xprlst.pop()    # удаляется добавленный пробел
+    xprlst.pop()  # удаляется добавленный пробел
 
     # если выражение содержит только функции без аргументов
     # xprset = set(xprlst)
