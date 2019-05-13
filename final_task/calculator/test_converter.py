@@ -1,5 +1,5 @@
 import unittest
-from converter import convert_answer
+from .converter import convert_answer
 
 
 class TestConverterFunction(unittest.TestCase):

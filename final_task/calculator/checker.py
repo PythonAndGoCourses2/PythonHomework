@@ -18,9 +18,17 @@ Example:
 """
 
 import re
-import regexp as mre
-from operators import LEFT_BRACKET, RIGHT_BRACKET
-from library import Library
+from .library import Library
+from .operators import (
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
+)
+from .regexp import (
+    REGEXP_INCORECT_EXPRETION,
+    REGEXP_CONSTANT,
+    REGEXP_DIGIT,
+    REGEXP_FUNCTION,
+)
 
 
 def check_spaces(expr: str) -> str:
@@ -36,7 +44,7 @@ def check_spaces(expr: str) -> str:
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    matches = re.findall(mre.REGEXP_INCORECT_EXPRETION, expr)
+    matches = re.findall(REGEXP_INCORECT_EXPRETION, expr)
     if matches:
         raise ValueError('expression is not correct')
 
@@ -75,11 +83,11 @@ def check_constant(expr: str, library: Library):
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    matches = re.finditer(mre.REGEXP_CONSTANT, expr)
+    matches = re.finditer(REGEXP_CONSTANT, expr)
     for match in matches:
         name = match.group('name')
 
-        if name[-1] == LEFT_BRACKET or re.match(mre.REGEXP_DIGIT, name):
+        if name[-1] == LEFT_BRACKET or re.match(REGEXP_DIGIT, name):
             continue
 
         if name[0].isdigit():
@@ -100,7 +108,7 @@ def check_function(expr: str, library: Library):
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    matches = re.finditer(mre.REGEXP_FUNCTION, expr)
+    matches = re.finditer(REGEXP_FUNCTION, expr)
     for match in matches:
         name = match.group('name')
         pattern = match.group('pattern')

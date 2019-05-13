@@ -1,5 +1,5 @@
 import unittest
-from regexp import has_comparator, has_non_zero_fraction_part
+from .regexp import has_comparator, has_non_zero_fraction_part
 
 
 class TestRegexpFunction(unittest.TestCase):

@@ -1,8 +1,23 @@
 import unittest
-from library import Library
-from replacer import replace_constant, replace_fanction, replace_brackets, replace_unary_operator, \
-                     replace_bynary_operator, replace_compare_operator, replace_all_mathes
-from operators import MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, PLUS, MINUS
+from .library import Library
+from .replacer import (
+    replace_constant,
+    replace_fanction,
+    replace_brackets,
+    replace_unary_operator,
+    replace_bynary_operator,
+    replace_compare_operator,
+    replace_all_mathes
+)
+from .operators import (
+    MULTIPLE,
+    POWER,
+    TRUE_DIVISION,
+    FLOOR_DIVISION,
+    MODULE,
+    PLUS,
+    MINUS,
+)
 
 
 class TestReplaceFunction(unittest.TestCase):

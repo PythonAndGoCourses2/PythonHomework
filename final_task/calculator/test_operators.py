@@ -1,6 +1,20 @@
 import unittest
-from operators import MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, PLUS, MINUS, LESS, GREAT, EQUAL, \
-                      LESS_OR_EQUAL, GREAT_OR_EQUAL, NOT_EQUAL, exec_operation
+from .operators import (
+    PLUS,
+    MINUS,
+    POWER,
+    MODULE,
+    MULTIPLE,
+    TRUE_DIVISION,
+    FLOOR_DIVISION,
+    LESS,
+    GREAT,
+    EQUAL,
+    NOT_EQUAL,
+    LESS_OR_EQUAL,
+    GREAT_OR_EQUAL,
+    exec_operation,
+)
 
 
 class TestOperatorFunction(unittest.TestCase):

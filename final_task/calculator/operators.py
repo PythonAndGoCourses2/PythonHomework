@@ -25,7 +25,7 @@ Attributes:
 import re
 from collections import namedtuple
 from operator import mul, truediv, floordiv, mod, add, sub, lt, le, eq, ne, ge, gt
-from mtypes import ARITHMETIC, COMPARISON
+from .mtypes import ARITHMETIC, COMPARISON
 
 
 LEFT_BRACKET = '('

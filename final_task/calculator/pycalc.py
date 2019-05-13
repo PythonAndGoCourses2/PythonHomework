@@ -9,12 +9,12 @@ Example:
 """
 
 import re
-from library import Library
-from parser import parse_query
-from checker import check_expression
-from replacer import replace_all_mathes
-from regexp import has_comparator
-from converter import convert_answer
+from .library import Library
+from .parser import parse_query
+from .checker import check_expression
+from .replacer import replace_all_mathes
+from .regexp import has_comparator
+from .converter import convert_answer
 
 
 def main():

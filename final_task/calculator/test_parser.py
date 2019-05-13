@@ -1,5 +1,5 @@
 import unittest
-from parser import parse_query
+from .parser import parse_query
 
 
 class TestParserFunction(unittest.TestCase):

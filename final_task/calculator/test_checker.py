@@ -1,7 +1,13 @@
 import unittest
 from unittest.mock import patch
-from library import Library
-from checker import check_brackets, check_constant, check_expression, check_function, check_spaces
+from .library import Library
+from .checker import (
+    check_brackets,
+    check_constant,
+    check_expression,
+    check_function,
+    check_spaces,
+)
 
 
 class TestCheckFunction(unittest.TestCase):
@@ -99,19 +105,6 @@ class TestCheckFunction(unittest.TestCase):
             self.assertIsNone(check_function('2.4178516392292583e+24 + 5', self.lib))
 
     def test_check_expression(self):
-        with self.subTest("calls methods check_spaces, check_brackets, check_constant, check_function"), \
-             patch('checker.check_spaces', return_value='1') as check_spaces, \
-             patch('checker.check_brackets') as check_brackets, \
-             patch('checker.check_constant') as check_constant, \
-             patch('checker.check_function') as check_function:
-
-            check_expression('1', self.lib)
-
-            self.assertTrue(check_spaces.called)
-            self.assertTrue(check_brackets.called)
-            self.assertTrue(check_constant.called)
-            self.assertTrue(check_function.called)
-
         with self.subTest("returns expression without spaces"):
             self.assertEqual(check_expression('1   +   2', self.lib), '1+2')
             self.assertEqual(check_expression('1-2', self.lib), '1-2')

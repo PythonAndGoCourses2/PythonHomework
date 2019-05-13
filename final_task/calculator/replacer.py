@@ -20,10 +20,35 @@ Example:
 import re
 from collections import namedtuple
 from functools import reduce
-import regexp as mre
-from library import Library
-from operators import LEFT_BRACKET, MINUS, PLUS, MULTIPLE, POWER, TRUE_DIVISION, FLOOR_DIVISION, MODULE, \
-                      EQUAL, NOT_EQUAL, GREAT, GREAT_OR_EQUAL, LESS, LESS_OR_EQUAL, exec_operation
+from .library import Library
+from .operators import (
+    LEFT_BRACKET,
+    MINUS,
+    PLUS,
+    MULTIPLE,
+    POWER,
+    TRUE_DIVISION,
+    FLOOR_DIVISION,
+    MODULE,
+    EQUAL,
+    NOT_EQUAL,
+    GREAT,
+    GREAT_OR_EQUAL,
+    LESS,
+    LESS_OR_EQUAL,
+    exec_operation,
+)
+from .regexp import (
+    REGEXP_BACKETS,
+    REGEXP_CONSTANT,
+    REGEXP_DIGIT,
+    REGEXP_SCREENING,
+    REGEXP_BYNARY,
+    REGEXP_COMPARE,
+    REGEXP_UNARY,
+    REGEXP_FUNCTION,
+    REGEXP_SIMPLE_DIGIT,
+)
 
 
 def replace_constant(expr: str, library: Library) -> str:
@@ -37,12 +62,12 @@ def replace_constant(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    matches = re.finditer(mre.REGEXP_CONSTANT, expr)
+    matches = re.finditer(REGEXP_CONSTANT, expr)
 
     for match in matches:
         name = match.group('name')
 
-        if name[-1] == LEFT_BRACKET or re.match(mre.REGEXP_DIGIT, name):
+        if name[-1] == LEFT_BRACKET or re.match(REGEXP_DIGIT, name):
             continue
 
         result = str(library[name])
@@ -70,7 +95,7 @@ def replace_fanction(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    matches = re.finditer(mre.REGEXP_FUNCTION, expr)
+    matches = re.finditer(REGEXP_FUNCTION, expr)
 
     for match in matches:
         func = match.group('name')
@@ -93,7 +118,7 @@ def replace_unary_operator(expr: str) -> str:
     Returns:
         str: Updated expression.
     """
-    matches = re.findall(mre.REGEXP_UNARY, expr)
+    matches = re.findall(REGEXP_UNARY, expr)
     matches.sort(key=len, reverse=True)
 
     for match in matches:
@@ -114,7 +139,7 @@ def replace_compare_operator(expr: str, *operations: list) -> str:
     Returns:
         str: Updated expression.
     """
-    if re.search(mre.REGEXP_COMPARE, expr):
+    if re.search(REGEXP_COMPARE, expr):
         return replace_bynary_operator(expr, *operations)
 
     return expr
@@ -134,9 +159,9 @@ def replace_bynary_operator(expr: str, *operations: list) -> str:
     for operation in operations:
         delimeter = operation
         if operation == PLUS or operation == MULTIPLE or operation == POWER:
-            delimeter = mre.REGEXP_SCREENING.format(operation=operation)
+            delimeter = REGEXP_SCREENING.format(operation=operation)
 
-        regexp = mre.REGEXP_BYNARY.format(operation=delimeter)
+        regexp = REGEXP_BYNARY.format(operation=delimeter)
         matches = re.findall(regexp, expr)
         for match in matches:
             operands = list(filter(bool, match.split(operation)))
@@ -162,7 +187,7 @@ def replace_brackets(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    matches = re.findall(mre.REGEXP_BACKETS, expr)
+    matches = re.findall(REGEXP_BACKETS, expr)
 
     for match in matches:
         result = replace_all_mathes(match[1:-1], library)
@@ -194,7 +219,7 @@ def replace_all_mathes(expr: str, library: Library) -> str:
         Operation(replace_compare_operator, [EQUAL, NOT_EQUAL, GREAT, GREAT_OR_EQUAL, LESS, LESS_OR_EQUAL]),
     ]
 
-    pattern = re.compile(mre.REGEXP_SIMPLE_DIGIT)
+    pattern = re.compile(REGEXP_SIMPLE_DIGIT)
     while True:
         for operation in OPERATION_PRIORITY:
             expr = operation.func(expr, *operation.args)
