@@ -214,12 +214,8 @@ def converter(parsing_list):
                 converted_list.append(i)
                 last_item = ""
             elif last_item == '-':
-                try:
-                    if converted_list[-1]['operator']:
-                        raise SyntaxError('Missing operand between two math operators!')
-                except TypeError:
-                    converted_list.append(operator_dict[-i])
-                    last_item = ""
+                converted_list.append(-i)
+                last_item = ""
             else:
                 converted_list.append(i)
         elif i in operator_dict.keys():
