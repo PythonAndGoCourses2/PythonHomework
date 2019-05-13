@@ -15,7 +15,10 @@ Example:
 
 
 class Library(dict):
-    """Class is designed to work with modules."""
+    """
+    Class is designed to work with modules.
+    It is a dictionary of functions and constants.
+    """
     def __init__(self, *modules: list):
         super().__init__()
 

@@ -37,22 +37,22 @@ def replace_constant(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    results = re.finditer(mre.REGEXP_CONSTANT, expr)
+    matches = re.finditer(mre.REGEXP_CONSTANT, expr)
 
-    for m in results:
-        name = m.group('name')
+    for match in matches:
+        name = match.group('name')
 
         if name[-1] == LEFT_BRACKET or re.match(mre.REGEXP_DIGIT, name):
             continue
 
-        answer = str(library[name])
+        result = str(library[name])
         arr = expr.split(name)
 
         for idx, piece in enumerate(arr[:-1]):
             if piece and piece[-1].isalnum():
                 arr[idx] = f'{piece}{name}'
             elif piece or not idx:
-                arr[idx] = f'{piece}{answer}'
+                arr[idx] = f'{piece}{result}'
 
         expr = ''.join(arr)
 
@@ -70,15 +70,15 @@ def replace_fanction(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    results = re.finditer(mre.REGEXP_FUNCTION, expr)
+    matches = re.finditer(mre.REGEXP_FUNCTION, expr)
 
-    for m in results:
-        func = m.group('name')
-        pattern = m.group('pattern')
-        args = filter(bool, m.group('args').split(','))
+    for match in matches:
+        func = match.group('name')
+        pattern = match.group('pattern')
+        args = filter(bool, match.group('args').split(','))
         args = [float(v) for v in args]
-        answer = str(library[func](*args))
-        expr = expr.replace(pattern, answer)
+        result = str(library[func](*args))
+        expr = expr.replace(pattern, result)
 
     return expr
 
@@ -93,12 +93,12 @@ def replace_unary_operator(expr: str) -> str:
     Returns:
         str: Updated expression.
     """
-    results = re.findall(mre.REGEXP_UNARY, expr)
-    results.sort(key=len, reverse=True)
+    matches = re.findall(mre.REGEXP_UNARY, expr)
+    matches.sort(key=len, reverse=True)
 
-    for m in results:
-        answer = MINUS if m.count(MINUS) % 2 else PLUS
-        expr = expr.replace(m, answer)
+    for match in matches:
+        result = MINUS if match.count(MINUS) % 2 else PLUS
+        expr = expr.replace(match, result)
 
     return expr
 
@@ -131,22 +131,22 @@ def replace_bynary_operator(expr: str, *operations: list) -> str:
     Returns:
         str: Updated expression.
     """
-    for o in operations:
-        delimeter = o
-        if o == PLUS or o == MULTIPLE or o == POWER:
-            delimeter = mre.REGEXP_SCREENING.format(operation=o)
+    for operation in operations:
+        delimeter = operation
+        if operation == PLUS or operation == MULTIPLE or operation == POWER:
+            delimeter = mre.REGEXP_SCREENING.format(operation=operation)
 
         regexp = mre.REGEXP_BYNARY.format(operation=delimeter)
-        results = re.findall(regexp, expr)
-        for m in results:
-            arr = list(filter(bool, m.split(o)))
-            if o == MINUS and m[0] == MINUS:
-                arr[0] = f'{MINUS}{arr[0]}'
-            if o == POWER:
-                arr = arr[::-1]
+        matches = re.findall(regexp, expr)
+        for match in matches:
+            operands = list(filter(bool, match.split(operation)))
+            if operation == MINUS and match[0] == MINUS:
+                operands[0] = f'{MINUS}{operands[0]}'
+            if operation == POWER:
+                operands = operands[::-1]
 
-            answer = reduce(lambda a, b: exec_operation(a, b, operation=o), arr)
-            expr = expr.replace(m, answer)
+            result = reduce(lambda acc, val: exec_operation(acc, val, operation=operation), operands)
+            expr = expr.replace(match, result)
 
     return expr
 
@@ -162,11 +162,11 @@ def replace_brackets(expr: str, library: Library) -> str:
     Returns:
         str: Updated expression.
     """
-    results = re.findall(mre.REGEXP_BACKETS, expr)
+    matches = re.findall(mre.REGEXP_BACKETS, expr)
 
-    for m in results:
-        answer = replace_all_mathes(m[1:-1], library)
-        expr = expr.replace(m, answer)
+    for match in matches:
+        result = replace_all_mathes(match[1:-1], library)
+        expr = expr.replace(match, result)
 
     return expr
 
@@ -196,8 +196,8 @@ def replace_all_mathes(expr: str, library: Library) -> str:
 
     pattern = re.compile(mre.REGEXP_SIMPLE_DIGIT)
     while True:
-        for inst in OPERATION_PRIORITY:
-            expr = inst.func(expr, *inst.args)
+        for operation in OPERATION_PRIORITY:
+            expr = operation.func(expr, *operation.args)
             if pattern.match(expr):
                 return expr
 

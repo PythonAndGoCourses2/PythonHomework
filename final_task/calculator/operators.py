@@ -63,12 +63,12 @@ OPERATORS = {
 }
 
 
-def exec_operation(x: str, y: str, operation=MULTIPLE) -> str:
+def exec_operation(val1: str, val2: str, operation=MULTIPLE) -> str:
     """Executes the operation and returns the result.
 
     Args:
-        x (str): String representation of a number.
-        y (str): String representation of a number.
+        val1 (str): String representation of a number.
+        val2 (str): String representation of a number.
 
     Returns:
         str:  result of calculations.
@@ -79,18 +79,18 @@ def exec_operation(x: str, y: str, operation=MULTIPLE) -> str:
     if operation not in OPERATORS:
         raise ValueError('operation was not found')
 
-    if operation == POWER and y[0] == MINUS:
-        a, b = float(y[1:]), float(x)
+    if operation == POWER and val2[0] == MINUS:
+        converted_val1, converted_val2 = float(val2[1:]), float(val1)
     if operation == POWER:
-        a, b = float(y), float(x)
+        converted_val1, converted_val2 = float(val2), float(val1)
     else:
-        a, b = float(x), float(y)
+        converted_val1, converted_val2 = float(val1), float(val2)
 
     operator = OPERATORS[operation]
-    result = operator.func(a, b)
+    result = operator.func(converted_val1, converted_val2)
 
     if operator.type == ARITHMETIC:
-        if operation == POWER and y[0] == MINUS:
+        if operation == POWER and val2[0] == MINUS:
             return f'{MINUS}{result}'
         return f'{PLUS}{result}' if result > 0 else str(result)
 

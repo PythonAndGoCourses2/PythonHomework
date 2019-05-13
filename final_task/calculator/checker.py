@@ -36,8 +36,8 @@ def check_spaces(expr: str) -> str:
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    res = re.findall(mre.REGEXP_INCORECT_EXPRETION, expr)
-    if res:
+    matches = re.findall(mre.REGEXP_INCORECT_EXPRETION, expr)
+    if matches:
         raise ValueError('expression is not correct')
 
     return expr.replace(' ', '')
@@ -54,10 +54,10 @@ def check_brackets(expr: str):
         ValueError: If `expr` is not correct`.
     """
     stack = []
-    for c in expr:
-        if c == LEFT_BRACKET:
-            stack.append(c)
-        elif c == RIGHT_BRACKET and (not stack or stack.pop() != LEFT_BRACKET):
+    for symbol in expr:
+        if symbol == LEFT_BRACKET:
+            stack.append(symbol)
+        elif symbol == RIGHT_BRACKET and (not stack or stack.pop() != LEFT_BRACKET):
             raise ValueError('brackets are not balanced')
 
     if stack:
@@ -75,9 +75,9 @@ def check_constant(expr: str, library: Library):
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    results = re.finditer(mre.REGEXP_CONSTANT, expr)
-    for m in results:
-        name = m.group('name')
+    matches = re.finditer(mre.REGEXP_CONSTANT, expr)
+    for match in matches:
+        name = match.group('name')
 
         if name[-1] == LEFT_BRACKET or re.match(mre.REGEXP_DIGIT, name):
             continue
@@ -100,10 +100,10 @@ def check_function(expr: str, library: Library):
     Raises:
         ValueError: If `expr` is not correct`.
     """
-    results = re.finditer(mre.REGEXP_FUNCTION, expr)
-    for m in results:
-        name = m.group('name')
-        pattern = m.group('pattern')
+    matches = re.finditer(mre.REGEXP_FUNCTION, expr)
+    for match in matches:
+        name = match.group('name')
+        pattern = match.group('pattern')
 
         if name[0].isdigit():
             raise ValueError(f'function {pattern} can not start with digit')

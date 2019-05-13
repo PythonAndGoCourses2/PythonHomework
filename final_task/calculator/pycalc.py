@@ -18,16 +18,19 @@ from converter import convert_answer
 
 
 def main():
-    """Performs processing and calculation of the request from the command line and displays it on the screen."""
+    """
+    Performs processing and calculation of the request
+    from the command line and displays it on the screen.
+    """
     try:
         lib = Library('math')
         args = parse_query()
         lib.update(*args.modules)
         expr = check_expression(args.expr, lib)
         has_compare = has_comparator(expr)
-        answer = replace_all_mathes(expr, lib)
-        answer = convert_answer(answer, has_compare)
-        print(answer)
+        result = replace_all_mathes(expr, lib)
+        result = convert_answer(result, has_compare)
+        print(result)
     except Exception as e:
         print(f'ERROR: {e}')
 
