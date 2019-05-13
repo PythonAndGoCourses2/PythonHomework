@@ -70,19 +70,19 @@ INVALID_EXPRESSIONS = [
 def py_calculator(math_expression):
     """
 
-    :param math_expression: String of mathematic expression
+    :param math_expression: String of math expression
     :return: Result of calculation
 
     """
     def parse(expression: str) -> list:
-        """Split mathematic expression, consists of 3 steps
+        """Split math expression, consists of 2 steps
 
-        :param expression: String of mathematic expression
+        :param expression: String of math expression
         :return: Parsed line by items in the list
 
         """
         def parse_step1(expr: str) -> list:
-            """Сreates a list with numbers, functions and constants from a mathematical expression
+            """Creates a list with numbers, functions and constants from a mathematical expression
 
             :param expr: String of math expression
             :return: List with items of expression
@@ -101,29 +101,16 @@ def py_calculator(math_expression):
                     raise ValueError(f'invalid expression')
             if not expr:
                 raise ValueError(f'nothing entered')
+            expr = expr.replace(' ', '')
+            while '++' in expr or '--' in expr or '+-' in expr or '-+' in expr:
+                expr = re.sub(r'\+\+', '+', expr)
+                expr = re.sub(r'\+-', '-', expr)
+                expr = re.sub(r'-\+', '-', expr)
+                expr = re.sub(r'--', '+', expr)
             parse_list = re.compile(items_of_expression).findall(expr)
             return parse_list
 
         def parse_step2(parse_list: list) -> list:
-            """Converts multiple + and -.
-
-            :param parse_list: List with items of expression.
-            :return: Updated list.
-
-            """
-            for _ in range(len(parse_list)):
-                for index, element in enumerate(parse_list):
-                    if element == '-' and parse_list[index + 1] == '-' \
-                            or element == '+' and parse_list[index + 1] == '+':
-                        parse_list[index] = '+'
-                        parse_list.pop(index + 1)
-                    elif element == '+' and parse_list[index + 1] == '-' \
-                            or element == '-' and parse_list[index + 1] == '+':
-                        parse_list[index] = '-'
-                        parse_list.pop(index + 1)
-            return parse_list
-
-        def parse_step3(parse_list: list) -> list:
             """Working with minuses in expression.
 
             :param parse_list: List with items of expression.
@@ -149,7 +136,7 @@ def py_calculator(math_expression):
                     parse_list[index] = '-1'
                     parse_list.insert(index + 1, '*')
             return parse_list
-        return parse_step3(parse_step2(parse_step1(expression)))
+        return parse_step2(parse_step1(expression))
 
     def check_expression(parse_expression):
         """Contains functions that validate the input expression.
@@ -203,7 +190,7 @@ def py_calculator(math_expression):
             """Check count of '(',')'.
 
             :param parse_list: List with items of expression.
-            :raise: ValueError if Amount '(' not equal to quantity ')' in expression
+            :raise: ValueError if amount '(' not equal to quantity ')' in expression
 
             """
             if parse_list.count('(') != parse_list.count(')'):
