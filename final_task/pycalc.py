@@ -359,7 +359,7 @@ def calculate(converted_list):
 
 def main():
     try:
-        expression_line = '2**-3'#arg_parser()
+        expression_line = arg_parser()
         operands = OperandStack()
         function = OperandStack()
         parser = split_operators(expression_line)
