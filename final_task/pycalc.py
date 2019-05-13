@@ -24,7 +24,6 @@ def pycalc():
     LOGIC_OPERATORS = ['=', '!', '<', '>']
 
     CONSTANTS = {'pi': math.pi, 'e': math.e}
-    NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
     def InputFromCommandLine():
         """Get information about input from command line """
@@ -89,15 +88,18 @@ def pycalc():
                 tokensarray.append(token)
         return tokensarray
 
+    def is_number(s):
+        """The function that checks the number or not"""
+        if '.' in s: return True
+        return s.isdigit()
+
     def Polish_Notation(parsed_information):
         stack = []
         reverse_polish_notation = ''
         separator = ' '
         for token in parsed_information:
-            if re.fullmatch(NUMBERS, token) and float(token) >= 0:
+            if is_number(token):
                 reverse_polish_notation += token + separator
-            elif re.fullmatch(NUMBERS, token) and float(token) < 0:
-                reverse_polish_notation += '0' + separator + token[1:] + separator + token[0] + separator
             elif token == ')':
                 for element in stack[::-1]:
                     if element == '(':
@@ -231,11 +233,7 @@ def pycalc():
             """Checks functions or constants."""
             copy_check_expression = parse_information.copy()
             for index, element in enumerate(copy_check_expression):
-                if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
-                    raise ValueError(f'function arguments not entered')
-                elif (element in FUNCTIONS) and copy_check_expression[index + 1] != '(':
-                    raise ValueError(f'function arguments not entered')
-                elif re.fullmatch(NUMBERS, element):
+                if is_number(element):
                     copy_check_expression.pop(index)
             diff = set(copy_check_expression).difference(
                 set(FUNCTIONS),
@@ -243,7 +241,7 @@ def pycalc():
                 set(CONSTANTS),
                 set(string.digits),
                 {'{', '[', '(', ',', ')', ']', '}'},
-                {'True', 'False'}
+                {'True', 'False', 'rel_tol', 'abs_tol'}
             )
             if diff:
                 raise ValueError(f'unknown function or constant {diff}')
@@ -252,8 +250,7 @@ def pycalc():
 
         return Check_Function_And_Constants(ParseInformation(InputFromCommandLine()))
 
-    return Calc(Polish_Notation(Check_All()))
-    # return Check_All()
+    return Calc(Polish_Notation(ParseInformation(InputFromCommandLine())))
 
 
 def main():
