@@ -60,9 +60,7 @@ def check_expression(expression_line):
 
 def check_parsing_list(parsing_list):
     if parsing_list[0] in operator_dict.keys():
-        if parsing_list[0] is '+' or parsing_list[0] is '-':
-            pass
-        else:
+        if parsing_list[0] is not '+' and parsing_list[0] is not '-':
             raise SyntaxError('Expression cannot start with "{}"'.format(parsing_list[0]))
     if len(parsing_list) == 1:
         if type(parsing_list[0]) is int or type(parsing_list[0]) is float:
@@ -80,6 +78,12 @@ def number_parser(number):
         return int(number)
     except ValueError:
         return float(number)
+
+
+def operator_parser(operator_symbol):
+    if operator_symbol in operator_dict.keys():
+        return operator_symbol
+    raise SyntaxError('Typo in math operator!')
 
 
 def function_parser(function_name):
@@ -109,7 +113,7 @@ def split_operators(expression_line):
                     continue
                 blank_item = True
                 if last_symbol:
-                    parsing_list.append(last_symbol)
+                    parsing_list.append(operator_parser(last_symbol))
                     last_symbol = ""
                 elif last_number:
                     parsing_list.append(number_parser(last_number))
@@ -123,7 +127,7 @@ def split_operators(expression_line):
                 elif blank_item:
                     blank_item = False
                 if last_symbol:
-                    parsing_list.append(last_symbol)
+                    parsing_list.append(operator_parser(last_symbol))
                     last_symbol = ""
                 if last_letter:
                     last_letter += i
@@ -134,10 +138,12 @@ def split_operators(expression_line):
                         last_number += i
             elif i.isalpha():
                 if last_symbol:
-                    parsing_list.append(last_symbol)
+                    parsing_list.append(operator_parser(last_symbol))
                     last_symbol = ""
                 last_letter += i
             elif i in "!=<>/*":
+                if len(last_symbol) == 2:
+                    raise SyntaxError('Invalid operator "{}"'.format(last_symbol+i))
                 if blank_item and str(parsing_list[-1]) in '!=<>/*':
                     raise SyntaxError('Blank symbol between twice operator')
                 elif blank_item:
@@ -157,7 +163,7 @@ def split_operators(expression_line):
                     parsing_list.append(function_parser(last_letter))
                     last_letter = ""
                 if last_symbol:
-                    parsing_list.append(last_symbol)
+                    parsing_list.append(operator_parser(last_symbol))
                     last_symbol = ""
                 if i != ' ':
                     parsing_list.append(i)
@@ -166,7 +172,7 @@ def split_operators(expression_line):
         elif last_letter:
             parsing_list.append(function_parser(last_letter))
         elif last_symbol:
-            raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(last_symbol))
+            raise SyntaxError('Extra operator "{}" at the end of the expression!'.format(last_symbol))
     return parsing_list
 
 
@@ -196,7 +202,7 @@ def converter(parsing_list):
             if last_item == '+':
                 converted_list.append(operator_dict[last_item])
                 last_item = ''
-        if type(i) is float or type(i) is int:
+        if isinstance(i, float) or isinstance(i, int):
             if last_item == '-' and converted_list[-1] != '(' \
                     and converted_list[-1] not in operator_dict.values():
                 converted_list.append(operator_dict[last_item])
@@ -291,7 +297,7 @@ def calculate(converted_list):
     function = OperandStack()
     func_arguments = False
     for item in converted_list:
-        if type(item) is float or type(item) is int:
+        if isinstance(item, float) or isinstance(item, int):
             operands.put_on_stack(item)
         elif item in operator_dict.values() or item in function_dict.values():
             current_operator = item
@@ -352,7 +358,9 @@ def main():
     except ZeroDivisionError as err:
         print('ERROR: {}!'.format(err))
     except ValueError as err:
-        print('ERROR: math error!')
+        print('ERROR: {}!'.format(err))
+    except OverflowError as err:
+        print('ERROR: {}!'.format(err))
 
 
 if __name__ == '__main__':
