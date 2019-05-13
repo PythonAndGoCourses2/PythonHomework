@@ -14,6 +14,9 @@ def main():
         postfix_string = translator.get_postfix(tokens)
         res = calculator.calc(postfix_string)
         print(res)
+    except IndexError:
+        print('ERROR: invalid string input')
+        exit(1)
     except exeptions.GeneralError:
         print('ERROR: empty input')
         exit(1)
