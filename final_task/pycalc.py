@@ -267,24 +267,20 @@ def operate(operator, args):
                 exit(0)
         except TypeError:
             try:
-                ## print('TRY no args ()', operator, args)
+                # print('TRY no args ()', operator, args)
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
-                
             except TypeError:
                 #print('ERROR: invalid arguxxxment for ', operator)
                 try:
-                   # print('TRY no args', operator, args)
+                    # print('TRY no args', operator, args)
                     result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
-                   # print(result)
+                    # print(result)
                     if type(result) != float:
                         print('ERROR: invxxxalid argument for ', operator)
                         exit(0)
-
                 except TypeError:
                     print('ERROR: invalid argument for ', operator, '()')
                     exit(0)
-
-
         except ValueError:
             print('ERROR: invalid argument for ', operator)
             exit(0)
@@ -365,4 +361,3 @@ def main():
     return result
 
 print(main())
-
