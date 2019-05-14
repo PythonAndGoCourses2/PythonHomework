@@ -270,7 +270,7 @@ def operate(operator, args):
                 # print('TRY no args ()', operator, args)
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
             except TypeError:
-                #print('ERROR: invalid arguxxxment for ', operator)
+                # print('ERROR: invalid arguxxxment for ', operator)
                 try:
                     # print('TRY no args', operator, args)
                     result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
@@ -343,10 +343,6 @@ def main():
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
 
-
-    # print(xpr)
-    # print('EVAL', eval(xpr))
-
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
     # print('PARSE ', *xprlst, sep=' ')
@@ -359,5 +355,6 @@ def main():
     result = evalpostfix(xprlst)
 
     return result
+
 
 print(main())
