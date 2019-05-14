@@ -160,6 +160,15 @@ def parse(xprstr):
 
     # поииск операторов составных типа <= >= == != содержащихся в списке oper
     for i, data in enumerate(xprlst):
+
+        if i < len(xprlst):
+            if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
+                print('ERROR: digit & ( wihout operator')
+                exit(0)
+            if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
+                print('ERROR: ) & digit wihout operator')
+                exit(0)
+
         if i == len(xprlst) - 1:
             break
         # # print(i, data)
@@ -202,6 +211,11 @@ def postfix(xprlst):
     output = []
     stack = []
     for i in xprlst:
+
+
+
+
+
         if type(i) == float or type(i) == int:  # если цифра то положить на выход
             output.append(i)
 
@@ -246,15 +260,15 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
-        # # print('TRY *args', operator, *args)
+        print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         # # print('ok')
         stack.pop()
     except TypeError:
         try:
-            # # print('TRY args', operator, args)
+            print('TRY args', operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
             # # print('ok')
             try:
@@ -264,7 +278,7 @@ def operate(operator, args):
                 exit(0)
         except TypeError:
             try:
-                # # print('TRY no args', operator, args)
+                print('TRY no args', operator, args)
                 result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
                 if type(result) != float:
                     print('ERROR: invalid argument for ', operator)
@@ -283,7 +297,7 @@ def operate(operator, args):
     except ValueError:
         print('ERROR: invalid argument for ', operator)
         exit(0)
-    # print('RESULT', result)
+    print('RESULT', result)
     return result
 
 
