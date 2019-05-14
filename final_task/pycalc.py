@@ -208,14 +208,19 @@ def converter(parsing_list):
                 converted_list.append(operator_dict[last_item])
                 last_item = ''
         if isinstance(i, float) or isinstance(i, int):
-            if last_item == '-' and converted_list[-1] != '(' \
-                    and converted_list[-1] not in operator_dict.values():
-                converted_list.append(unary_dict[last_item])
-                converted_list.append(i)
-                last_item = ""
-            elif last_item == '-':
-                converted_list.append(-i)
-                last_item = ""
+            if last_item == '-':
+                if converted_list[-1] == 0:
+                    converted_list.append(unary_dict[last_item])
+                    converted_list.append(i)
+                    last_item = ""
+                elif last_item == '-' and converted_list[-1] != '(' \
+                        and converted_list[-1] not in operator_dict.values():
+                    converted_list.append(operator_dict[last_item])
+                    converted_list.append(i)
+                    last_item = ""
+                else:# last_item == '-':
+                    converted_list.append(-i)
+                    last_item = ""
             else:
                 converted_list.append(i)
         elif i in operator_dict.keys():
