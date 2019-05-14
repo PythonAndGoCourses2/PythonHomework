@@ -364,5 +364,5 @@ def main():
 
     return result
 
-# print(main())
+print(main())
 
