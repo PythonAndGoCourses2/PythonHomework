@@ -160,7 +160,6 @@ def parse(xprstr):
 
     # поииск операторов составных типа <= >= == != содержащихся в списке oper
     for i, data in enumerate(xprlst):
-
         if i < len(xprlst)-1:
             if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
                 print('ERROR: digit & ( wihout operator')
@@ -244,26 +243,21 @@ def postfix(xprlst):
     # # # print('stack=', *stack, sep=' ')
     stack.reverse()
     # # # print(output + stack)
-
-    # xprset = set(output + stack)
-    # if xprset.issubset(funcset):  # проверка если функция без аргументов
-    #     print('ERROR: function has no arguments')
-    #     exit(0)
     return output + stack
 
 
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
-        # print('TRY *args', operator, *args)
+        print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         # # # print('ok')
         stack.pop()
     except TypeError:
         try:
-            # print('TRY args', operator, args)
+            print('TRY args', operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
             # # # print('ok')
             try:
@@ -273,15 +267,27 @@ def operate(operator, args):
                 exit(0)
         except TypeError:
             try:
-                # print('TRY no args', operator, args)
-                result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
-                if type(result) != float:
-                    print('ERROR: invalid argument for ', operator)
-                    exit(0)
+                #print('TRY no args ()', operator, args)
+                result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
+                #print(result)
+                # if type(result) != float:
+                #     print('ERROR: invxxxalid argument for ', operator)
+                #     exit(0)
                 # # # print('ok')
             except TypeError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
+                print('ERROR: invalid arguxxxment for ', operator)
+                try:
+                   # print('TRY no args', operator, args)
+                    result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
+                   # print(result)
+                    if type(result) != float:
+                        print('ERROR: invxxxalid argument for ', operator)
+                        exit(0)
+
+                except TypeError:
+                    print('ERROR: invalid argument for ', operator, '()')
+                    exit(0)
+
 
         except ValueError:
             print('ERROR: invalid argument for ', operator)
@@ -292,7 +298,7 @@ def operate(operator, args):
     except ValueError:
         print('ERROR: invalid argument for ', operator)
         exit(0)
-    # print('RESULT', result)
+    print('RESULT', result)
     return result
 
 
@@ -323,7 +329,6 @@ def evalpostfix(xprpstfx):
 
         elif i in oper:  # если оператор типа a + b
             # # # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
-
             try:
                 tmp = funcdic[i](*stack[-2:])
             except TypeError:
@@ -346,6 +351,10 @@ def main():
     # попытка добавления внешней функции если указана -m module
     addfunc(module)
 
+
+    # print(xpr)
+    # print('EVAL', eval(xpr))
+
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
     # # print('PARSE ', *xprlst, sep=' ')
@@ -359,5 +368,5 @@ def main():
 
     return result
 
-
 print(main())
+
