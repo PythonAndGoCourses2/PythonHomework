@@ -102,7 +102,7 @@ def pycalc():
                 elif parse_information.index(element) == 0:
                     parse_information[index] += parse_information.pop(index + 1)
                 elif index == len(parse_information) - 2:
-                    if re.search(ALL_NUMBERS, parse_information[index + 1]):
+                    if re.search(NUMBERS, parse_information[index + 1]):
                         parse_information[index] += parse_information.pop(index + 1)
                         parse_information.insert(index, '+')
                 elif parse_information[index + 2] in '*/%//' and re.search(NUMBERS, parse_information[index + 1]):
