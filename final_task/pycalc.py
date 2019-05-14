@@ -64,7 +64,10 @@ def parse(expression):
             number = ''
 
         if symbol in OPERATORS:
-            op += symbol
+            if not op or symbol == '/':
+                op += symbol
+            else:
+                number += symbol
         elif op:
             parsed_formula.append(op)
             op = ''
@@ -72,7 +75,6 @@ def parse(expression):
         if symbol in "()":
             parsed_formula.append(symbol)
         i += 1
-
     if number:
         parsed_formula.append(float(number))
     elif func in MATH_CONST:
