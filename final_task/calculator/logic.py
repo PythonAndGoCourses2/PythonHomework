@@ -38,7 +38,7 @@ def get_func_arguments(eval_string, index):
         index = temp[1]
         index = skip_space(eval_string, index)
         if index < len(eval_string) and eval_string[index] not in (',', ')'):
-            raise ValueError("ERROR: no zapyataya")
+            raise ValueError("ERROR: no commma")
         elif index < len(eval_string) and eval_string[index] == ',':
             index += 1
         arguments.append(temp[0])
