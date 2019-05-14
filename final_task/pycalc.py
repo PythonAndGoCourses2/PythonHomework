@@ -10,7 +10,6 @@ import re
 def pycalc():
     FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
     FUNCTIONS['abs'], FUNCTIONS['round'], FUNCTIONS['lg'] = abs, round, math.log10
-    FUNCTIONS['log10'] = math.log10
     """Math functions + build-in python functions"""
 
     OPERATORS = {
@@ -23,7 +22,7 @@ def pycalc():
 
     LOGIC_OPERATORS = ['=', '!', '<', '>']
 
-    CONSTANTS = {'pi': math.pi, 'e': math.e}
+    CONSTANTS = {'pi': math.pi, '-pi': -math.pi, 'e': math.e, '-e': -math.e}
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
     def input_from_command_line():
@@ -33,6 +32,14 @@ def pycalc():
         parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
         args = parser.parse_args()
         return args.EXPRESSION
+
+    def split_token(tokensarray, token):
+        """Function split token. For example: '((' -> '(','('."""
+        if '+' in token or '-' in token or ')' in token or '(' in token:
+            for tokens in token:
+                tokensarray.append(tokens)
+        else:
+            tokensarray.append(token)
 
     def parse_information(the_input):
         """Pars information and write it to list """
@@ -54,20 +61,19 @@ def pycalc():
             raise ValueError(f'Empty field')
         elif the_input.count('(') != the_input.count(')'):
             raise ValueError(f'brackets are not balanced')
-        the_input = the_input.replace('--', '+')
-        the_input = the_input.replace('- -', '+')
-        the_input = the_input.replace('log10(', 'lg(')
         the_input = the_input.replace(' ', '')
+        the_input = the_input.replace('log10(', 'lg(')
+        while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
+            the_input = re.sub(r'\+\+', '+', the_input)
+            the_input = re.sub(r'\+-', '-', the_input)
+            the_input = re.sub(r'-\+', '-', the_input)
+            the_input = re.sub(r'--', '+', the_input)
         for char in the_input:
             if token:
                 if category and char in category:
                     token += char
                 else:
-                    if '+' in token or '-' in token or ')' in token or '(' in token:
-                        for c in token:
-                            tokensarray.append(c)
-                    else:
-                        tokensarray.append(token)
+                    split_token(tokensarray, token)
                     token = char
                     category = None
                     for cat in categories:
@@ -83,11 +89,7 @@ def pycalc():
                             break
                 token += char
         if token:
-            if '+' in token or '-' in token or ')' in token or '(' in token:
-                for c in token:
-                    tokensarray.append(c)
-            else:
-                tokensarray.append(token)
+            split_token(tokensarray, token)
         return tokensarray
 
     def negative_numbers(parse_information):
@@ -259,7 +261,7 @@ def pycalc():
                     raise ValueError(f'function arguments not entered')
                 elif re.fullmatch(NUMBERS, element):
                     copy_check_expression.pop(index)
-            diff = set(copy_check_expression).difference(
+            difference = set(copy_check_expression).difference(
                 set(FUNCTIONS),
                 set(OPERATORS),
                 set(CONSTANTS),
@@ -267,8 +269,8 @@ def pycalc():
                 {'{', '[', '(', ',', ')', ']', '}'},
                 {'True', 'False'}
             )
-            if diff:
-                raise ValueError(f'unknown function or constant {diff}')
+            if difference:
+                raise ValueError(f'unknown function or constant {difference}')
             else:
                 return parse_information
 
