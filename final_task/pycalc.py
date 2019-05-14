@@ -161,7 +161,7 @@ def parse(xprstr):
     # поииск операторов составных типа <= >= == != содержащихся в списке oper
     for i, data in enumerate(xprlst):
 
-        if i < len(xprlst):
+        if i < len(xprlst)-1:
             if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
                 print('ERROR: digit & ( wihout operator')
                 exit(0)
@@ -211,11 +211,6 @@ def postfix(xprlst):
     output = []
     stack = []
     for i in xprlst:
-
-
-
-
-
         if type(i) == float or type(i) == int:  # если цифра то положить на выход
             output.append(i)
 
