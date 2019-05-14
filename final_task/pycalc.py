@@ -32,20 +32,24 @@ for k, v in math.__dict__.items():
 
 
 operator_dict = {
-    '+': {'operator': operator.add, 'priority': 3},
-    '-': {'operator': operator.sub, 'priority': 3},
-    '/': {'operator': operator.truediv, 'priority': 2},
-    '*': {'operator': operator.mul, 'priority': 2},
-    '%': {'operator': operator.mod, 'priority': 2},
-    '//': {'operator': operator.floordiv, 'priority': 2},
+    '+': {'operator': operator.add, 'priority': 4},
+    '-': {'operator': operator.sub, 'priority': 4},
+    '/': {'operator': operator.truediv, 'priority': 3},
+    '*': {'operator': operator.mul, 'priority': 3},
+    '%': {'operator': operator.mod, 'priority': 3},
+    '//': {'operator': operator.floordiv, 'priority': 3},
     '^': {'operator': operator.pow, 'priority': 1},
     '**': {'operator': operator.pow, 'priority': 1},
-    '==': {'operator': operator.eq, 'priority': 4},
-    '!=': {'operator': operator.ne, 'priority': 4},
-    '>': {'operator': operator.gt, 'priority': 4},
-    '<': {'operator': operator.lt, 'priority': 4},
-    '>=': {'operator': operator.ge, 'priority': 4},
-    '<=': {'operator': operator.le, 'priority': 4},
+    '==': {'operator': operator.eq, 'priority': 5},
+    '!=': {'operator': operator.ne, 'priority': 5},
+    '>': {'operator': operator.gt, 'priority': 5},
+    '<': {'operator': operator.lt, 'priority': 5},
+    '>=': {'operator': operator.ge, 'priority': 5},
+    '<=': {'operator': operator.le, 'priority': 5},
+}
+
+unary_dict = {
+    '-': {'operator': operator.sub, 'priority': 2}
 }
 
 
@@ -206,7 +210,7 @@ def converter(parsing_list):
         if isinstance(i, float) or isinstance(i, int):
             if last_item == '-' and converted_list[-1] != '(' \
                     and converted_list[-1] not in operator_dict.values():
-                converted_list.append(operator_dict[last_item])
+                converted_list.append(unary_dict[last_item])
                 converted_list.append(i)
                 last_item = ""
             elif last_item == '-':
@@ -279,7 +283,7 @@ def calc_on_stack():
         else:
             first_operand = operands.take_from_stack()
             current_result = operator_on_stack['operator'](first_operand)
-    elif operator_on_stack in operator_dict.values():
+    elif operator_on_stack in operator_dict.values() or operator_on_stack in unary_dict.values():
         if len(operands.stack) == 1:
             second_operand = operands.take_from_stack()
             first_operand = 0
@@ -304,7 +308,7 @@ def calculate(converted_list):
     for item in converted_list:
         if isinstance(item, float) or isinstance(item, int):
             operands.put_on_stack(item)
-        elif item in operator_dict.values() or item in function_dict.values():
+        elif item in operator_dict.values() or item in function_dict.values() or item in unary_dict.values():
             current_operator = item
             if function.is_empty():
                 function.put_on_stack(current_operator)
