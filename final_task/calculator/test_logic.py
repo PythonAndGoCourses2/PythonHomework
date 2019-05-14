@@ -35,4 +35,3 @@ class TestFunctions(unittest.TestCase):
 
     def test_number_sign(self):
         self.assertEqual(c.number_sign("----++--+---++-+-+----+++++-cos(pi)", 0), (-1, 35))
-
