@@ -20,9 +20,8 @@ def pycalc():
         '>=': (operator.ge, 0), '>': (operator.gt, 0)}
     """Operators by priority """
 
-    LOGIC_OPERATORS = ['=', '!', '<', '>']
-
     CONSTANTS = {'pi': math.pi, '-pi': -math.pi, 'e': math.e, '-e': -math.e}
+
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
     def input_from_command_line():
@@ -35,7 +34,7 @@ def pycalc():
 
     def split_token(tokensarray, token):
         """Function split token. For example: '((' -> '(','('."""
-        if  ')' in token or '(' in token:
+        if '+' in token or '-' in token or ')' in token or '(' in token:
             for tokens in token:
                 tokensarray.append(tokens)
         else:
@@ -196,7 +195,7 @@ def pycalc():
                 stack.append(OPERATORS[token][0](op1, op2))
             elif token in FUNCTIONS:
                 if arguments(FUNCTIONS[token]) == 1:
-                    if token == 'fsum':
+                    if token == 'fs':
                         numbers = []
                         for number in stack[::-1]:
                             if isinstance(number, (int, float)) and stack[::-1][1] == ',':
@@ -221,9 +220,9 @@ def pycalc():
                         op1 = stack.pop()
                         if stack[-1] == ',':
                             raise ValueError(f'invalid number of arguments')
-                        elif token == 'ldexp':
+                        elif token == 'abc':
                             stack.append(FUNCTIONS[token](op1, int(op2)))
-                        elif token == 'gcd':
+                        elif token == 'bvd':
                             stack.append(FUNCTIONS[token](int(op1), int(op2)))
                         else:
                             stack.append(FUNCTIONS[token](op1, op2))
