@@ -253,13 +253,11 @@ def operate(operator, args):
     try:
         # print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
-        # print('ok')
         stack.pop()
     except TypeError:
         try:
             # print('TRY args', operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
-            # print('ok')
             try:
                 stack.pop()
             except IndexError:
