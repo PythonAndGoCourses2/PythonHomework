@@ -129,7 +129,6 @@ def main():
         expression = create_parser().expr
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
-        expression = "".join(expression.split()) # Удаление лишних пробелов
         comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
         if check.correct_check(expression) and expression:
             if not comparison:

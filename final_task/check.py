@@ -76,6 +76,6 @@ def correct_check(expr):
     for operation in pycalc.OPERATORS: # Если последний символ строки операция
         if expr.endswith(operation):
             return False
-
     return True
+
 
