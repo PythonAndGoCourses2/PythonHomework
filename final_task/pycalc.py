@@ -74,7 +74,7 @@ def parse(xprstr):
     xprset = set(xpr)
 
     operset.add(' ')
-    if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов
+    if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов или пробелов
         print('ERROR: no digits or funcs in expr')
         exit(0)
 
@@ -124,7 +124,7 @@ def parse(xprstr):
         tmp = xprstr[left:right]
         tmpset = set(tmp)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
-            # # # # # print('надо скобки')
+            # # # print('надо скобки')
             xprstr = xprstr[:left]+'('+xprstr[left:]
             left = right+2
             right = len(xprstr)
@@ -135,7 +135,7 @@ def parse(xprstr):
             tmp = xprstr[left:right]
             xprstr = xprstr[:right]+')'+xprstr[right:]
         else:
-            # # # # # print('НЕ надо скобки', left, right)
+            # # # print('НЕ надо скобки', left, right)
             right = left
 
     # разбор строки
@@ -158,17 +158,19 @@ def parse(xprstr):
             word = word + sym
     xprlst.pop()  # удаляется добавленный пробел
 
-    # если выражение содержит только функции без аргументов
-    # xprset = set(xprlst)
-    # if xprset.issubset(funcset):
-    #     print('ERROR: function has no arguments')
-    #     exit(0)
-
-    # # # # # print('поииск операторов составных')
+    # поииск операторов составных типа <= >= == != содержащихся в списке oper
     for i, data in enumerate(xprlst):
+        if i < len(xprlst)-1:
+            if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
+                print('ERROR: digit & ( wihout operator')
+                exit(0)
+            if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
+                print('ERROR: ) & digit wihout operator')
+                exit(0)
+
         if i == len(xprlst) - 1:
             break
-        # # # # # print(i, data)
+        # # # print(i, data)
         if str(xprlst[i]) + str(xprlst[i+1]) in oper:
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
             xprlst.pop(i)
@@ -183,7 +185,7 @@ def parse(xprstr):
         xprlst[0] = -1
         xprlst.insert(1, '*')
 
-    # # # # print (*xprlst, sep='|')
+    # # # print (*xprlst, sep='|')
     return xprlst
 
 
@@ -237,10 +239,10 @@ def postfix(xprlst):
                 output.append(stack.pop())
                 # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop()  # удаление из стека (
-    # # # # # print('output=', *output, sep=' ')
-    # # # # # print('stack=', *stack, sep=' ')
+    # # # print('output=', *output, sep=' ')
+    # # # print('stack=', *stack, sep=' ')
     stack.reverse()
-    # # # # print(output + stack)
+    # # # print(output + stack)
 
     # xprset = set(output + stack)
     # if xprset.issubset(funcset):  # проверка если функция без аргументов
@@ -256,13 +258,13 @@ def operate(operator, args):
     try:
         # print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
-        # print('ok')
+        # # # print('ok')
         stack.pop()
     except TypeError:
         try:
             # print('TRY args', operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
-            # print('ok')
+            # # # print('ok')
             try:
                 stack.pop()
             except IndexError:
@@ -275,7 +277,7 @@ def operate(operator, args):
                 if type(result) != float:
                     print('ERROR: invalid argument for ', operator)
                     exit(0)
-                # print('ok')
+                # # # print('ok')
             except TypeError:
                 print('ERROR: invalid argument for ', operator)
                 exit(0)
@@ -289,7 +291,7 @@ def operate(operator, args):
     except ValueError:
         print('ERROR: invalid argument for ', operator)
         exit(0)
-    # # print('RESULT', result)
+    # print('RESULT', result)
     return result
 
 
@@ -345,11 +347,11 @@ def main():
 
     # разбор строки вырыжения в список
     xprlst = parse(xpr)
-    # # # print('PARSE ', *xprlst, sep=' ')
+    # # print('PARSE ', *xprlst, sep=' ')
 
     # преобразование инфиксного списка в постфиксных список
     xprlst = postfix(xprlst)
-    # # # print('POSTFIX ', *xprlst, sep=' ')
+    # # print('POSTFIX ', *xprlst, sep=' ')
 
     # вычисление постфиксного списка
     result = evalpostfix(xprlst)
