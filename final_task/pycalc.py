@@ -35,7 +35,7 @@ def pycalc():
 
     def split_token(tokensarray, token):
         """Function split token. For example: '((' -> '(','('."""
-        if '+' in token or '-' in token or ')' in token or '(' in token:
+        if  ')' in token or '(' in token:
             for tokens in token:
                 tokensarray.append(tokens)
         else:
@@ -102,7 +102,7 @@ def pycalc():
                 elif parse_information.index(element) == 0:
                     parse_information[index] += parse_information.pop(index + 1)
                 elif index == len(parse_information) - 2:
-                    if re.search(NUMBERS, parse_information[index + 1]):
+                    if re.search(ALL_NUMBERS, parse_information[index + 1]):
                         parse_information[index] += parse_information.pop(index + 1)
                         parse_information.insert(index, '+')
                 elif parse_information[index + 2] in '*/%//' and re.search(NUMBERS, parse_information[index + 1]):
@@ -110,7 +110,7 @@ def pycalc():
                     parse_information.insert(index, '+')
             elif element == '-' and parse_information[index + 1] in FUNCTIONS and parse_information[index - 1] == '(':
                 parse_information[index] = '-1'
-                parse_information(index + 1, '*')
+                parse_information.insert(index + 1, '*')
         return parse_information
 
     def polish_notation(parsed_information):
@@ -277,6 +277,7 @@ def pycalc():
         return check_function_and_constants(negative_numbers(parse_information(input_from_command_line())))
 
     return calc(polish_notation(check_all()))
+    # return negative_numbers(parse_information(input_from_command_line()))
 
 
 def main():
