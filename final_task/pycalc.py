@@ -218,7 +218,7 @@ def converter(parsing_list):
                     converted_list.append(operator_dict[last_item])
                     converted_list.append(i)
                     last_item = ""
-                else:# last_item == '-':
+                else:
                     converted_list.append(-i)
                     last_item = ""
             else:
@@ -313,7 +313,9 @@ def calculate(converted_list):
     for item in converted_list:
         if isinstance(item, float) or isinstance(item, int):
             operands.put_on_stack(item)
-        elif item in operator_dict.values() or item in function_dict.values() or item in unary_dict.values():
+        elif item in operator_dict.values() \
+                or item in function_dict.values() \
+                or item in unary_dict.values():
             current_operator = item
             if function.is_empty():
                 function.put_on_stack(current_operator)
