@@ -271,7 +271,7 @@ def operate(operator, args):
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
                 
             except TypeError:
-                print('ERROR: invalid arguxxxment for ', operator)
+                #print('ERROR: invalid arguxxxment for ', operator)
                 try:
                    # print('TRY no args', operator, args)
                     result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
