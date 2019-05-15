@@ -8,7 +8,7 @@ class TestFunctions(unittest.TestCase):
     def test_error(self):
         self.assertRaisesRegex(Exception, "ERROR: no func with that name", c.add_math_objects, "12%5 * arcsin(1)", 0)
         self.assertRaises(ValueError, c.add_math_objects, "(((6)", 0)
-        self.assertRaises(Exception, c.add_math_objects, "I would enjoy working on something great", 0)
+        self.assertRaises(ValueError, c.add_math_objects, "I would enjoy working on something great", 0)
         self.assertRaises(ValueError, c.add_math_objects, "1 2 3 < = 4 f,2", 0)
 
     def test_solve_equality(self):
@@ -26,7 +26,6 @@ class TestFunctions(unittest.TestCase):
 
     def test_multiply(self):
         self.assertEqual(c.multiply("1/2 * 3/4", 0), (0.375, 9))
-        self.assertEqual(c.multiply("1/2 * 3/4", 0), (0.375, 9))
         self.assertAlmostEqual(c.multiply("5*abs(-2)/fsum(frexp(atan(5.3)))", 0)[0], 5.9096251221)
         self.assertAlmostEqual(c.multiply("12%5 * asin(1)^1", 0)[0], m.pi)
 
@@ -35,3 +34,20 @@ class TestFunctions(unittest.TestCase):
 
     def test_number_sign(self):
         self.assertEqual(c.number_sign("----++--+---++-+-+----+++++-cos(pi)", 0), (-1, 35))
+
+    def test_search_float(self):
+        self.assertEqual(c.search_float("2.5", 0), (2.5, 3))
+        self.assertEqual(c.search_float("2,5", 0), (2, 1))
+        self.assertEqual(c.search_float("25", 0), (25, 2))
+        self.assertRaises(ValueError, c.search_float, "25c", 0)
+
+    def test_skip_space(self):
+        self.assertEqual(c.skip_space("          pi", 0), 10)
+
+    def test_get_bracket(self):
+        self.assertEqual(c.get_bracket("(2+2)", 0), (4, 5))
+        self.assertEqual(c.get_bracket("(2*cos(pi))", 0), (-2, 11))
+
+    def test_get_func_arguments(self):
+        self.assertEqual(c.get_func_arguments("(2, 5)", 1), ([2, 5], 5))
+        self.assertEqual(c.get_func_arguments("(2*round(5.3), log(e))", 1), ([10, 1], 21))
