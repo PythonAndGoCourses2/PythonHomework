@@ -5,6 +5,7 @@ import string
 import math
 import operator
 import re
+import typing
 
 
 def pycalc():
@@ -34,21 +35,15 @@ def pycalc():
 
     def split_token(tokensarray, token):
         """Function split token. For example: '((' -> '(','('."""
-        if '+' in token or '-' in token or ')' in token or '(' in token:
-            for tokens in token:
-                tokensarray.append(tokens)
+        if '(' in token or ')' or '-' or '+' in token:
+            for brackets in token:
+                tokensarray.append(brackets)
+
         else:
             tokensarray.append(token)
 
-    def parse_information(the_input):
-        """Pars information and write it to list """
-
-        categories = [string.digits + '.', '(', ')' '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
-                      string.ascii_lowercase,
-                      string.whitespace]
-        token = ''
-        tokensarray = []
-        category = None
+    def make_input_mo_comfortable(the_input):
+        """Make input information more usable for futher processing """
         if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
                 or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
                 or re.compile(r'^[/*%^=<>!]').findall(the_input) \
@@ -59,7 +54,7 @@ def pycalc():
         elif not the_input:
             raise ValueError(f'Empty field')
         elif the_input.count('(') != the_input.count(')'):
-            raise ValueError(f'brackets are not balanced')
+            raise ValueError(f'Brackets are not balanced')
         the_input = the_input.replace(' ', '')
         the_input = the_input.replace('log10(', 'lg(')
         while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
@@ -67,12 +62,24 @@ def pycalc():
             the_input = re.sub(r'\+-', '-', the_input)
             the_input = re.sub(r'-\+', '-', the_input)
             the_input = re.sub(r'--', '+', the_input)
-        for char in the_input:
+        return the_input
+
+    def tokinazer(comfortable_input):
+        """Splitting information into tokens for the
+           explict form of expression,functions and
+           constants. """
+        categories = [string.digits + '.', '(', ')' '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
+                      string.ascii_lowercase,
+                      string.whitespace]
+        token = ''
+        tokens_array = []
+        category = None
+        for char in comfortable_input:
             if token:
                 if category and char in category:
                     token += char
                 else:
-                    split_token(tokensarray, token)
+                    split_token(tokens_array, token)
                     token = char
                     category = None
                     for cat in categories:
@@ -88,8 +95,8 @@ def pycalc():
                             break
                 token += char
         if token:
-            split_token(tokensarray, token)
-        return tokensarray
+            split_token(tokens_array, token)
+        return tokens_array
 
     def negative_numbers(parse_information):
         """Working with negative numbers in parse information from command line"""
@@ -113,6 +120,7 @@ def pycalc():
         return parse_information
 
     def polish_notation(parsed_information):
+        """Function translate parsed information to RPN"""
         stack = []
         reverse_polish_notation = ''
         separator = ' '
@@ -187,7 +195,7 @@ def pycalc():
         arg = spec[spec.find('(') + 1:spec.find(')')]
         return arg.count(',') + 1 if arg else 0
 
-    def calc(polish_information):
+    def calculate(polish_information):
         stack = [0]
         for token in polish_information.split(' '):
             if token in OPERATORS:
@@ -195,24 +203,10 @@ def pycalc():
                 stack.append(OPERATORS[token][0](op1, op2))
             elif token in FUNCTIONS:
                 if arguments(FUNCTIONS[token]) == 1:
-                    if token == 'fs':
-                        numbers = []
-                        for number in stack[::-1]:
-                            if isinstance(number, (int, float)) and stack[::-1][1] == ',':
-                                numbers.append(stack.pop())
-                                stack.pop()
-                            elif stack[::-1][0] == ',' and isinstance(number, (int, float)):
-                                raise ValueError(f'invalid invalid expression')
-                        numbers.append(stack.pop())
-                        stack.append(numbers)
-                        op = stack.pop()
-                        stack.append(FUNCTIONS[token](op))
-                        numbers.clear()
-                    else:
-                        op = stack.pop()
-                        if stack[-1] == ',':
-                            raise ValueError(f'invalid number of arguments')
-                        stack.append(FUNCTIONS[token](op))
+                    op = stack.pop()
+                    if stack[-1] == ',':
+                        raise ValueError(f'invalid number of arguments')
+                    stack.append(FUNCTIONS[token](op))
                 elif arguments(FUNCTIONS[token]) == 2:
                     if stack[-2] == ',':
                         op2 = stack.pop()
@@ -220,10 +214,6 @@ def pycalc():
                         op1 = stack.pop()
                         if stack[-1] == ',':
                             raise ValueError(f'invalid number of arguments')
-                        elif token == 'abc':
-                            stack.append(FUNCTIONS[token](op1, int(op2)))
-                        elif token == 'bvd':
-                            stack.append(FUNCTIONS[token](int(op1), int(op2)))
                         else:
                             stack.append(FUNCTIONS[token](op1, op2))
                     else:
@@ -273,10 +263,10 @@ def pycalc():
             else:
                 return parse_information
 
-        return check_function_and_constants(negative_numbers(parse_information(input_from_command_line())))
+        return check_function_and_constants(
+            negative_numbers(tokinazer(make_input_mo_comfortable(input_from_command_line()))))
 
-    return calc(polish_notation(check_all()))
-    # return negative_numbers(parse_information(input_from_command_line()))
+    return calculate(polish_notation(check_all()))
 
 
 def main():
