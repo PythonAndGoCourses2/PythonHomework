@@ -1,5 +1,5 @@
 import sys
-from . import operator_manager
+from .operator_manager import *
 
 
 def check_expression(expression_line):
@@ -43,7 +43,9 @@ class SplitOperators:
         elif function_name in function_dict.keys():
             return function_name
         else:
-            raise SyntaxError('There is no function with this name {}!'.format(function_name))
+            raise SyntaxError(
+                'There is no function with this name {}!'.format(function_name)
+            )
 
     def append_to_parsing_list(self):
         if self.last_symbol:
