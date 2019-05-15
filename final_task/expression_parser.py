@@ -94,10 +94,8 @@ class SplitOperators:
                     if i != ' ':
                         self.parsing_list.append(i)
             if self.last_symbol:
-                raise SyntaxError('Extra operator "{}" at the end of the expression!'.format(self.last_symbol))
+                raise SyntaxError(
+                    'Extra operator "{}" at the end of the expression!'.format(self.last_symbol)
+                )
             self.append_to_parsing_list()
         return self.parsing_list
-
-
-test_ex = Token()
-print(test_ex.split_operators('sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))'))

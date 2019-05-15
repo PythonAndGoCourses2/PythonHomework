@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pycalc_not_my',
+    name='pycalc',
     version='1.0',
     author='Mikhail Sauchuk',
     author_email='mishasavchuk@gmail.com',
