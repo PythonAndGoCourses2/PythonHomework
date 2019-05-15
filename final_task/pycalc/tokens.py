@@ -28,13 +28,20 @@ LEFT_ASSOCIATIVITY = {
 }
 OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 
+
+def make_math_functions(math_functions):
+    for func in MATH_FUNCTIONS:
+        FUNCTIONS[func.__name__] = func
+    return FUNCTIONS
+
+
 MATH_FUNCTIONS = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
-FUNCTIONS = dict()
-for func in MATH_FUNCTIONS:
-    FUNCTIONS[func.__name__] = func
-FUNCTIONS['abs'] = abs
-FUNCTIONS['round'] = round
-FUNCTIONS['lg'] = math.log10
+FUNCTIONS = {
+    'abs': abs,
+    'round': round,
+    'lg': math.log10
+}
+FUNCTIONS.update(make_math_functions(MATH_FUNCTIONS))
 FUNC_DELIMITER = ','
 
 O_BRACKET = '('

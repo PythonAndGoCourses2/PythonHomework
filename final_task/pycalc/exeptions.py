@@ -1,21 +1,17 @@
 """Module for custom exceptions"""
 
 
-class PycalcException(Exception):
+class GeneralError(Exception):
     pass
 
 
-class GeneralError(PycalcException):
+class BracketsError(Exception):
     pass
 
 
-class BracketsError(PycalcException):
+class UnknownFunctionError(Exception):
     pass
 
 
-class UnknownFunctionError(PycalcException):
-    pass
-
-
-class InvalidStringError(PycalcException):
+class InvalidStringError(Exception):
     pass

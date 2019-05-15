@@ -48,7 +48,6 @@ def prepare_string(expression):
     return expression.replace('log10(', 'lg(')
 
 
-
 def append_token(tokens, token):
     """append token to tokens"""
     if '+' in token or '-' in token or ')' in token or '(' in token:
