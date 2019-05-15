@@ -107,7 +107,7 @@ class SplitOperators:
                 elif i in "!=<>/*":
                     self.twice_operator_parser(i)
                 else:
-                    self.symple_operator_bracket_parser(i)
+                    self.simple_operator_bracket_parser(i)
             if self.last_symbol:
                 raise SyntaxError(
                     'Extra operator "{}" at the end of the expression!'.format(self.last_symbol)
