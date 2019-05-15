@@ -40,6 +40,7 @@ def choose_category(char):
     for cat in CATEGORIES:
         if char in cat:
             return cat
+    return None
 
 
 def prepare_string(expression):

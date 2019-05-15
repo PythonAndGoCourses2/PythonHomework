@@ -29,7 +29,7 @@ LEFT_ASSOCIATIVITY = {
 OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 
 
-def make_math_functions(math_functions):
+def make_math_functions():
     """Make dictionary name : func from math_functions"""
     for func in MATH_FUNCTIONS:
         FUNCTIONS[func.__name__] = func
@@ -42,7 +42,7 @@ FUNCTIONS = {
     'round': round,
     'lg': math.log10
 }
-FUNCTIONS.update(make_math_functions(MATH_FUNCTIONS))
+FUNCTIONS.update(make_math_functions())
 FUNC_DELIMITER = ','
 
 O_BRACKET = '('

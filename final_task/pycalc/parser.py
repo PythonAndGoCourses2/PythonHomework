@@ -9,5 +9,4 @@ def parse_arguments():
     parser.add_argument('EXPRESSION', help='expression string to evaluate')
     if parser.parse_args().EXPRESSION:
         return parser.parse_args().EXPRESSION
-    else:
-        raise exeptions.GeneralError('empty string')
+    raise exeptions.GeneralError('empty string')

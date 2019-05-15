@@ -85,7 +85,6 @@ def make_unarys(infix_string):
     into they analogs"""
     output_string = list()
     for index, token in enumerate(infix_string):
-        last_token = infix_string[index - 1]
         if token in t.OPERATORS and token in ('+', '-') and is_unary(infix_string, index):
             if token == '+':
                 output_string.append('#')
