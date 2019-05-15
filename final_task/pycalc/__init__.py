@@ -1,6 +1,6 @@
 """Module to group all other modules"""
-from pycalc import parser
-from . import tokenizer
+import parser
+from pycalc import tokenizer
 from . import translator
 from . import calculator
 from . import exeptions
