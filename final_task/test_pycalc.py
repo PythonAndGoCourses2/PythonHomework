@@ -48,6 +48,7 @@ class TestTranslator(unittest.TestCase):
         self.assertTrue(translator.is_number('10'))
         self.assertTrue(translator.is_number('10.0'))
         self.assertFalse(translator.is_number('p'))
+        self.assertFalse(translator.is_number('prev.next'))
 
     def test_make_valid(self):
         self.assertEqual(['#', '19', '/', '~', '2'],

@@ -67,9 +67,15 @@ def make_valid(expression):
 
 def is_number(token):
     """Check if token is number"""
-    if '.' in token:
+    return token.isdigit() or is_float(token)
+
+
+def is_float(token):
+    try:
+        float(token)
         return True
-    return token.isdigit()
+    except ValueError:
+        return False
 
 
 def make_unarys(infix_string):
