@@ -3,7 +3,7 @@ from pycalc import tokens
 from pycalc import exeptions
 
 
-def calc(expr):
+def calculate(expr):
     """Calculate postfix string on stack"""
     stack = []
     for token in expr:
@@ -31,7 +31,7 @@ def calc(expr):
             else:
                 stack.append(float(token))
         except IndexError:
-            raise exeptions.InvalidStringError()
+            raise exeptions.InvalidStringError('invalid string input')
     if not len(stack) == 1:
-        raise exeptions.InvalidStringError()
+        raise exeptions.InvalidStringError('invalid string input')
     return stack.pop()

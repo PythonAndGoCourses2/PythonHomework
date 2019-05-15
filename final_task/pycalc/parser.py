@@ -10,4 +10,4 @@ def parse_arguments():
     if parser.parse_args().EXPRESSION:
         return parser.parse_args().EXPRESSION
     else:
-        raise exeptions.GeneralError()
+        raise exeptions.GeneralError('empty string')

@@ -18,7 +18,7 @@ def tokenize(expression):
     token = ''
     tokens = []
     category = None
-    expression = expression.replace('log10(', 'lg(')
+    expression = prepare_string(expression)
     for char in expression:
         if token:
             if category and char in category:
@@ -42,6 +42,11 @@ def tokenize(expression):
     if token:
         tokens = append_token(tokens, token)
     return tokens
+
+
+def prepare_string(expression):
+    return expression.replace('log10(', 'lg(')
+
 
 
 def append_token(tokens, token):
