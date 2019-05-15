@@ -12,24 +12,8 @@ splitset = set(split)
 funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
 funcdic = math.__dict__  # dict of math functions
 funcset = set(funclist)
-operdic = {
-        '+': add,
-        '-': sub,
-        '*': mul,
-        '/': truediv,
-        '//': floordiv,
-        '%': mod,
-        '^': pow,
-        '==': eq,
-        '<=': le,
-        '>=': ge,
-        '<': lt,
-        '>': gt,
-        '!=': ne,
-        'abs': abs,
-        'round': round,
-        'sum': sum
-        }
+operdic = {'+': add, '-': sub, '*': mul, '/': truediv, '//': floordiv, '%': mod, '^': pow, '==': eq,
+'<=': le, '>=': ge, '<': lt, '>': gt, '!=': ne, 'abs': abs, 'round': round, 'sum': sum}
 funcdic.update(operdic)
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=']
 operset = set(oper)
@@ -47,23 +31,17 @@ def parsecmd():
     module = args.MODULE
     return
 
-
 def addfunc(module):
     """ добавление новой функцию из модуля (module)"""
-    if module is not None:  # если введено имя модуля
-        try:
-            spec = importlib.util.find_spec(module)
-        except ImportError:
-            print('ERROR: module ', module, 'not found, or unknown symbol')
-            exit(0)
-        if spec is None:  # проверка возможности импорта модуля
-            print('ERROR: unknown function or module ', module, 'not found')
-            exit(0)
-        else:
-            newfunc = importlib.import_module(module)  # импортирование нового модуля
-            funcdic[module] = newfunc.main
-            funclist.append(module)
-            funcset.add(module)
+    try:
+        newfunc = importlib.import_module(module)  # импортирование нового модуля
+        funcdic[module] = newfunc.main
+        funclist.append(module)
+        funcset.add(module)
+    except AttributeError:  # module is None
+        pass
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError('ERROR: module not found')
     return
 
 
@@ -71,17 +49,12 @@ def parse(xprstr):
     """ парсинг строки математического выражения. на выходе список в инфиксной нотации"""
     word = ''
     xprlst = []
-    xprset = set(xpr)
-
+    xprset = set(xprstr)
     operset.add(' ')
     if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов или пробелов
-        print('ERROR: no digits or funcs in expr')
-        exit(0)
-
-    if xpr.count('(') != xpr.count(')') or len(xpr) == 0:  # проверка скобок в строке
-        print('ERROR: brackets are not balanced')
-        exit(0)
-
+        raise ValueError('ERROR: no digits or functions in expression')
+    if xprstr.count('(') != xprstr.count(')') or len(xprstr) == 0:  # проверка скобок в строке
+        raise ValueError('ERROR: brackets are not balanced')
     # устранение пробелов с операторами и повторов операторов
     while xprstr.count('  ') > 0 or \
             xprstr.count('++') > 0 or \
@@ -109,13 +82,9 @@ def parse(xprstr):
         xprstr = xprstr.replace(', ', ',')
     if xprstr[0] == '+':
         xprstr = xprstr[1:]
-
     if xprstr.count(' ') > 0:  # проверка лишних пробелов
-        print('ERROR: useles spaces')
-        exit(0)
-
-    # добавление скобок для возведения в степень в степени типа 2^3^4
-    right = len(xprstr)
+        raise ValueError('ERROR: useles spaces')
+    right = len(xprstr)  # добавление скобок для возведения в степень в степени типа 2^3^4
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
         if xprstr[:right].count('^') == 0:
@@ -123,8 +92,7 @@ def parse(xprstr):
         left = xprstr.rindex('^', 0, right)+1
         tmp = xprstr[left:right]
         tmpset = set(tmp)
-        if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):
-            # print('надо скобки')
+        if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):  # надо скобки
             xprstr = xprstr[:left]+'('+xprstr[left:]
             left = right+2
             right = len(xprstr)
@@ -134,18 +102,12 @@ def parse(xprstr):
                     break
             tmp = xprstr[left:right]
             xprstr = xprstr[:right]+')'+xprstr[right:]
-        else:
-            # print('НЕ надо скобки', left, right)
+        else:  # НЕ надо скобки
             right = left
-
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
-            if word == 'pi':
-                xprlst.append('pi')
-            elif word == 'e':
-                xprlst.append(e)
-            elif word in funclist:  # если функция
+            if word in funclist:  # если функция
                 xprlst.append(word)
             elif word.replace('.', '').isdigit() and word.count('.') < 2:  # если цифра
                 xprlst.append(float(word))
@@ -158,19 +120,14 @@ def parse(xprstr):
             word = word + sym
     xprlst.pop()  # удаляется добавленный пробел
 
-    # поииск операторов составных типа <= >= == != содержащихся в списке oper
-    for i, data in enumerate(xprlst):
+    for i, data in enumerate(xprlst):  # поииск операторов составных типа <= >= == != содержащихся в списке oper
         if i < len(xprlst)-1:
             if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
-                print('ERROR: digit & ( wihout operator')
-                exit(0)
+                raise ValueError('ERROR: digit & ( wihout operator')
             if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
-                print('ERROR: ) & digit wihout operator')
-                exit(0)
-
+                raise ValueError('ERROR: ) & digit wihout operator')
         if i == len(xprlst) - 1:
             break
-        # print(i, data)
         if str(xprlst[i]) + str(xprlst[i+1]) in oper:
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
             xprlst.pop(i)
@@ -180,12 +137,9 @@ def parse(xprstr):
         if xprlst[i] == '-' and xprlst[i-1] == '(' and xprlst[i+1] in funclist:
             xprlst[i] = -1
             xprlst.insert(i+1, '*')
-
     if xprlst[0] == '-':
         xprlst[0] = -1
         xprlst.insert(1, '*')
-
-    # print (*xprlst, sep='|')
     return xprlst
 
 
@@ -212,14 +166,12 @@ def postfix(xprlst):
     for i in xprlst:
         if type(i) == float or type(i) == int:  # если цифра то положить на выход
             output.append(i)
-
         elif i == ',':  # если , то положить на выход
             if stack != []:
                 while stack != [] and stack[-1] in oper+funclist and prior(i, stack[-1]):
                     # пока наверху стека оператор с большим или равным приоритетом
                     output.append(stack.pop())  # переложить оператор из стека на выход
             output.append(i)
-
         elif i in oper:  # если оператор то положить в стек
             if stack == []:  # если стек пуст, оператор добавить в стек
                 stack.append(i)
@@ -230,19 +182,13 @@ def postfix(xprlst):
                     # пока наверху стека оператор с большим или равным приоритетом
                     output.append(stack.pop())  # переложить оператор из стека на выход
                 stack.append(i)  # иначе положить оператор в стек
-
         elif i in funclist or i == '(':  # если функция или ( то помещаем в стек
             stack.append(i)
-
         elif i == ')':
             while stack[-1] != '(':  # пока верх стека не равен (
-                output.append(stack.pop())
-                # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
+                output.append(stack.pop())  # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop()  # удаление из стека (
-    # print('output=', *output, sep=' ')
-    # print('stack=', *stack, sep=' ')
     stack.reverse()
-    # print(output + stack)
     return output + stack
 
 
@@ -251,44 +197,25 @@ def operate(operator, args):
     global stack
     # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
-        # print('TRY *args', operator, *args)
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
     except TypeError:
         try:
-            # print('TRY args', operator, args)
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
-            try:
-                stack.pop()
-            except IndexError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
+            stack.pop()
         except TypeError:
             try:
-                # print('TRY no args ()', operator, args)
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
             except TypeError:
-                # print('ERROR: invalid arguxxxment for ', operator)
                 try:
-                    # print('TRY no args', operator, args)
-                    result = funcdic[operator]  # если функция без аргументов типа pi, e, tau
-                    # print(result)
+                    result = funcdic[operator]  # если внешняя функция без аргументов типа pi, e, tau
+                    print('try noargs res=', result)
                     if type(result) != float:
-                        print('ERROR: invxxxalid argument for ', operator)
-                        exit(0)
+                        raise ValueError('ERROR: not float argument for ', operator)
                 except TypeError:
-                    print('ERROR: invalid argument for ', operator, '()')
-                    exit(0)
-        except ValueError:
-            print('ERROR: invalid argument for ', operator)
-            exit(0)
-    except ArithmeticError:
-        print('ERROR: invalid argument for ', operator)
-        exit(0)
+                    raise ValueError('ERROR: invalid argument for ', operator)
     except ValueError:
-        print('ERROR: invalid argument for ', operator)
-        exit(0)
-    # print('RESULT', result)
+        print('неправильный аргумент для sin')
     return result
 
 
@@ -298,7 +225,6 @@ def evalpostfix(xprpstfx):
     stack = []
     args = []
     for i in xprpstfx:
-        # print('evalpostfix i=',i)
         if i in funclist:  # если функция типа sin, pow, sum, tau
             if len(stack) == 0:
                 args = 0  # функция без аргументов типа pi, e, tau
@@ -313,7 +239,6 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-                # print('STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
@@ -322,37 +247,35 @@ def evalpostfix(xprpstfx):
             try:
                 tmp = funcdic[i](*stack[-2:])
             except TypeError:
-                print('ERROR: invalid argument for ', i)
-                exit(0)
+                raise ValueError('ERROR: invalid argument for operator', i)
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
-            # print('RESULT', tmp)
+            # # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        # print('STACK',stack)
+        # # print('STACK',stack)
     return stack[0]
 
 
-def main():
-    # парсинг аргументов командной строки xpr выражение и module модуль функции
-    parsecmd()
-
-    # попытка добавления внешней функции если указана -m module
-    addfunc(module)
-
-    # разбор строки вырыжения в список
-    xprlst = parse(xpr)
-    # print('PARSE ', *xprlst, sep=' ')
-
-    # преобразование инфиксного списка в постфиксных список
-    xprlst = postfix(xprlst)
-    # print('POSTFIX ', *xprlst, sep=' ')
-
-    # вычисление постфиксного списка
-    result = evalpostfix(xprlst)
-
+def calc(xpr):
+    xprlst = parse(xpr)  # разбор строки вырыжения в список
+    xprlst = postfix(xprlst)  # преобразование инфиксного списка в постфиксных список
+    result = evalpostfix(xprlst)  # вычисление постфиксного списка
+    print(result)
     return result
 
 
-print(main())
+def main():
+    global xpr, module
+    try:
+        parsecmd()  # парсинг аргументов командной строки xpr выражение и module модуль функции
+        addfunc(module)  # попытка добавления внешней функции если указана -m module
+        calc(xpr)  # калькулятор. вычисление выражения в строке xpr
+    except Exception as error:
+        print(error)
+    return
+
+
+if __name__ == '__main__':
+    main()
