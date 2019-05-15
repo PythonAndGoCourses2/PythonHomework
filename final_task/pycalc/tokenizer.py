@@ -4,17 +4,17 @@ import string
 NUMERIC = string.digits + '.'
 PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
 BRACKETS = '(){}[]'
+categories = [
+    string.ascii_lowercase,
+    NUMERIC,
+    string.whitespace,
+    PUNCTUATION,
+    BRACKETS
+]
 
 
 def tokenize(expression):
     """Returns list of tokens from input string"""
-    categories = [
-        string.ascii_lowercase,
-        NUMERIC,
-        string.whitespace,
-        PUNCTUATION,
-        BRACKETS
-    ]
     token = ''
     tokens = []
     category = None
@@ -26,22 +26,31 @@ def tokenize(expression):
             else:
                 tokens = append_token(tokens, token)
                 token = char
-                category = None
-                for cat in categories:
-                    if char in cat:
-                        category = cat
-                        break
+                category = choose_category(char)
+                # category = None
+                # for cat in categories:
+                #     if char in cat:
+                #         category = cat
+                #         break
         else:
-            category = None
-            if not category:
-                for cat in categories:
-                    if char in cat:
-                        category = cat
-                        break
+            category = choose_category(char)
+            # category = None
+            # if not category:
+            #     category = choose_category(char)
+            # for cat in categories:
+            #     if char in cat:
+            #         category = cat
+            #         break
             token += char
     if token:
         tokens = append_token(tokens, token)
     return tokens
+
+
+def choose_category(char):
+    for cat in categories:
+        if char in cat:
+            return cat
 
 
 def prepare_string(expression):

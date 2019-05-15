@@ -81,7 +81,7 @@ def is_float(token):
 def make_unarys(infix_string):
     """Translate unary operators in list
 
-    into '0 operator operand'"""
+    into they analogs"""
     output_string = list()
     for index, token in enumerate(infix_string):
         last_token = infix_string[index - 1]
