@@ -89,7 +89,8 @@ class SplitOperators:
                         raise SyntaxError('Blank symbol between twice operator')
                     elif self.blank_item:
                         self.blank_item = False
-                    self.append_to_parsing_list()
+                    if not self.last_symbol:
+                        self.append_to_parsing_list()
                     self.last_symbol += i
                 else:
                     self.append_to_parsing_list()
