@@ -1,19 +1,21 @@
 ﻿import math as m
 """
-   Этот калькулятор написан с помощью метода рекурсивного спуска.
-   Часто встречаемые переменные:
-   eval_string - строка, в которой содержится математическое выражение, которое надо посчитать
-   index - номер символа в строке, на котором функция завершила работу
+   This calculator is written using the recursive descent method.
+   Frequently encountered variables:
+   eval_string - a string that contains a mathematical expression needed to calculate
+   index - the number of the character in eval_string on which function finished working
 """
 
-# Словарь из функций библиотеки math плюс модуль и округление
+# Dictionary of math library functions plus abs and round
 func_dictionary = dict([(attr, getattr(m, attr)) for attr in dir(m) if callable(getattr(m, attr))])
 func_dictionary['abs'] = abs
 func_dictionary['round'] = round
 
 
 def skip_space(eval_string, index):
-    # Возвращает позицию первого встреченного непробела
+    """
+        Returns the position of first met non-space symbol
+    """
     while index < len(eval_string) and eval_string[index] == ' ':
         index += 1
     if index > len(eval_string):
@@ -23,15 +25,19 @@ def skip_space(eval_string, index):
 
 def call_func_with_args(Func, Args):
     """
-        Вызов функции с аргументами
-        Func - адрес вызываемой функции
-        Args - список аргументов функции
+        Calls function with arguments
+        Func - function to be called
+        Args - list of function arguments
     """
     return Func(*Args)
 
 
 def get_func_arguments(eval_string, index):
-    # Читает со строки аргументы функции
+    """
+        Reads function arguments from a string
+        Called only if function is found
+        Returns a tuple that contains a list of function arguments and a position where function finished working
+    """
     arguments = []
     while index < len(eval_string) and eval_string[index] != ')':
         temp = solve_equality(eval_string, index)
@@ -50,14 +56,17 @@ def get_func_arguments(eval_string, index):
 
 def error(args):
     """
-       Используется в 152 строке кода, когда происходит поиск функции по ее имени в словаре функций
-       Если функция с заданным именем не найдена, произойдет вызов данной функции
+       Used only once in line 171 when a function is searched by its name in the function dictionary.
+       If function with specified name is not found, this function will be called.
     """
-    raise Exception("ERROR: invalid argument")
+    raise Exception("ERROR: no func with that name")
 
 
 def search_float(eval_string, index):
-    # Читает со строки число
+    """
+       Reads number from a string
+       Returns a turple that contains integer or float number and a position where function finished working
+    """
     num = ""
     index = skip_space(eval_string, index)
     if index < len(eval_string) and eval_string[index] == '-':
@@ -87,7 +96,11 @@ def search_float(eval_string, index):
 
 
 def get_bracket(eval_string, index):
-    # Считает математическое выражение в скобках
+    """
+       Calculates mathematical expression in brackets
+       Called only if brackets are found
+       Returns a turple that contains expression result and a position where function finished working
+    """
     result, num1 = 0, 0
     index += 1
     result, index = solve_equality(eval_string, index)
@@ -101,8 +114,9 @@ def get_bracket(eval_string, index):
 
 def number_sign(eval_string, index):
     """
-       Читает со строки знак числа (+ и -)
-       Умеет считать выражения вида +-+---+математическое_выражение
+       Reads the number sign (+ and -) from the string
+       It's purpose is to calculate expressions of the form +-+---+mathematical_expression
+       Returns a turple that contains expression result and a position where function finished working
     """
     if eval_string[index] == '+':
         index += 1
@@ -120,8 +134,10 @@ def number_sign(eval_string, index):
 
 def get_variable(eval_string, index):
     """
-       Считывает со строки математический объект
-       И в зависимости от его типа передает управление другой функции
+       Reads a mathematical object from a string
+       And depending on its type, it transfers control to another function
+       And takes the result of the work of that function
+       Returns a turple that contains expression result and a position where function finished working
     """
     index = skip_space(eval_string, index)
     variable = ""
@@ -167,7 +183,12 @@ def get_variable(eval_string, index):
 
 
 def get_degree(eval_string, index):
-    # Производит операцию возведения числа в степень
+    """
+       Performs an exponentiation.
+       Each expression is treated as "expression1 mathematical_operator expression2"
+       It calculates expression1 and if mathematical_operator is ^ it calculates expression2
+       And performs expression1 ^ expression2, or returns result of expression1 if operator is not ^
+    """
     result, num1, index = 0, 0, skip_space(eval_string, index)
     result, index = get_variable(eval_string, index)
     index = skip_space(eval_string, index)
@@ -182,7 +203,12 @@ def get_degree(eval_string, index):
 
 
 def multiply(eval_string, index):
-    # Производит операцию умножения двух чисел
+    """
+       Performs ("*", "/", "%", "//") operations
+       Each expression is treated as "expression1 mathematical_operator expression2"
+       It calculates expression1 and if mathematical_operator is in ("*", "/", "%", "//") it calculates expression2
+       And performs "expression1 ("*", "/", "%", "//") expression2", or returns result of expression1
+    """
     mult, num1, index = 1, 0, skip_space(eval_string, index)
     mult, index = get_degree(eval_string, index)
     index = skip_space(eval_string, index)
@@ -207,7 +233,12 @@ def multiply(eval_string, index):
 
 
 def add_math_objects(eval_string, index):
-    # Производит операцию сложения двух чисел
+    """
+       Performs ("+", "-") operations
+       Each expression is treated as "expression1 mathematical_operator expression2"
+       It calculates expression1 and if mathematical_operator is in ("+", "-") it calculates expression2
+       And performs "expression1 ("+", "-") expression2", or returns result of expression1
+    """
     total, num1 = 0, 0
     total, index = multiply(eval_string, index)
     index = skip_space(eval_string, index)
@@ -224,7 +255,13 @@ def add_math_objects(eval_string, index):
 
 
 def solve_equality(eval_string, index):
-    # Производит операцию сравнения двух чисел
+    """
+       Performs (">", "==", "<", "!=", ">=", "<=") operations
+       Each expression is treated as "expression1 mathematical_operator expression2"
+       It calculates expression1 and if mathematical_operator is in (">", "==", "<", "!=", ">=", "<=")
+       It calculates expression2 and performs "expression1 ">", "==", "<", "!=", ">=", "<=") expression2"
+       Or returns result of expression1
+    """
     num1, num2, number_sign = 0, 0, ""
     num1, index = add_math_objects(eval_string, index)
     index = skip_space(eval_string, index)
@@ -255,8 +292,8 @@ def solve_equality(eval_string, index):
 
 def solve(eval_string, index=0):
     """
-        Считает математическое выражение в строке
-        Вызывается один раз в самом начале работы калькулятора
+        Calculates a mathematical expression.
+        Called once at the very beginning of program
     """
     index = skip_space(eval_string, index)
     if index >= len(eval_string):
