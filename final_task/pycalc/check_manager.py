@@ -8,4 +8,4 @@ def check_expression(expression_line):
         raise SyntaxError('Opening bracket required!')
     elif expression_line.count('(') > expression_line.count(')'):
         raise SyntaxError('Closing bracket required!')
-    return True
+    return expression_line

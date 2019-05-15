@@ -11,7 +11,3 @@ setup(
     platforms='any',
     py_modules=['pycalc']
 )
-
-
-
-
