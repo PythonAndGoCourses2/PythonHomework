@@ -3,7 +3,7 @@ from pycalc import tokens
 from pycalc import exeptions
 
 
-def calc(expr):
+def calculate(expr):
     """Calculate postfix string on stack"""
     stack = []
     for token in expr:
