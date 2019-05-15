@@ -8,11 +8,11 @@ setup(
     version='1.0',
     author='Mad',
     long_description=long_description,
-    packages='pycalc',
+    packages=find_packages(),
     entry_points={
         'console_scripts': [
             'pycalc = pycalc:main'
         ]
     },
-    py_modules=['main'],
+    py_modules=['pycalc'],
 )
