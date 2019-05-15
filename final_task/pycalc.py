@@ -221,7 +221,7 @@ def main():
         expression_line = arg_parser()
         operands = OperandStack()
         function = OperandStack()
-        parser = SplitOperators().split_operators
+        parser = SplitOperators().split_operators(expression_line)
         clear_parser = check_expression(parser)
         converted_list = converter(parser)
         result = calculate(converted_list)
