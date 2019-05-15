@@ -40,8 +40,8 @@ class TestTranslator(unittest.TestCase):
         self.assertTrue(translator.is_unary(['2', '+', '-', '1'], 2))
 
     def test_make_unarys(self):
-        self.assertEqual(['3', '+', '0', '-', '1'], translator.make_unarys(['3', '+', '-', '1']))
-        self.assertEqual(['3', '/', '(', '0', '-', '1', ')'], translator.make_unarys(['3', '/', '-', '1']))
+        self.assertEqual(['3', '+', '~', '1'], translator.make_unarys(['3', '+', '-', '1']))
+        self.assertEqual(['3', '/', '~', '1'], translator.make_unarys(['3', '/', '-', '1']))
         self.assertEqual(['(', '19', '+', '40', ')', '-', '100'],
                          translator.make_unarys(['(', '19', '+', '40', ')', '-', '100']))
 
@@ -51,9 +51,9 @@ class TestTranslator(unittest.TestCase):
         self.assertFalse(translator.is_number('p'))
 
     def test_make_valid(self):
-        self.assertEqual(['0', '+', '19', '/', '(', '0', '-', '2', ')'],
+        self.assertEqual(['#', '19', '/', '~', '2'],
                          translator.make_valid(['+', ' ', '19', ' ', '/', '-', '2']))
-        self.assertEqual(['0', '-', 'sin', '(', '15', ')', '==', '0', '-', '15'],
+        self.assertEqual(['~', 'sin', '(', '15', ')', '==', '~', '15'],
                          translator.make_valid(['-', 'sin', '(', '15', ')', '==', '-', '15']))
         self.assertRaises(exeptions.InvalidStringError, translator.make_valid, ['cos', '15'])
 

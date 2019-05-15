@@ -9,6 +9,10 @@ def calc(expr):
     for token in expr:
         try:
             if token in tokens.OPERATORS:
+                if token in ('#', '~'):
+                    operator = stack.pop()
+                    stack.append(tokens.OPERATORS[token].function(operator))
+                    continue
                 op2, op1 = stack.pop(), stack.pop()
                 stack.append(tokens.OPERATORS[token].function(op1, op2))
             elif token in tokens.FUNCTIONS:

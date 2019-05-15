@@ -1,22 +1,23 @@
 """Module for custom exceptions"""
 
 
-class GeneralError(Exception):
-    def __init__(self):
-        Exception.__init__(self)
+class PycalcException(Exception):
+    pass
 
 
-class BracketsError(Exception):
-    def __init__(self):
-        Exception.__init__(self)
+class GeneralError(PycalcException):
+    pass
 
 
-class UnknownFunctionError(Exception):
+class BracketsError(PycalcException):
+    pass
+
+
+class UnknownFunctionError(PycalcException):
     def __init__(self, token):
-        Exception.__init__(self)
+        super().__init__()
         self.token = token
 
 
-class InvalidStringError(Exception):
-    def __init__(self):
-        Exception.__init__(self)
+class InvalidStringError(PycalcException):
+    pass
