@@ -4,7 +4,7 @@ import string
 NUMERIC = string.digits + '.'
 PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
 BRACKETS = '(){}[]'
-categories = [
+CATEGORIES = [
     string.ascii_lowercase,
     NUMERIC,
     string.whitespace,
@@ -27,20 +27,8 @@ def tokenize(expression):
                 tokens = append_token(tokens, token)
                 token = char
                 category = choose_category(char)
-                # category = None
-                # for cat in categories:
-                #     if char in cat:
-                #         category = cat
-                #         break
         else:
             category = choose_category(char)
-            # category = None
-            # if not category:
-            #     category = choose_category(char)
-            # for cat in categories:
-            #     if char in cat:
-            #         category = cat
-            #         break
             token += char
     if token:
         tokens = append_token(tokens, token)
@@ -48,7 +36,7 @@ def tokenize(expression):
 
 
 def choose_category(char):
-    for cat in categories:
+    for cat in CATEGORIES:
         if char in cat:
             return cat
 
