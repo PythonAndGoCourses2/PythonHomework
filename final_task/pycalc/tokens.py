@@ -30,6 +30,7 @@ OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 
 
 def make_math_functions(math_functions):
+    """Make dictionary name : func from math_functions"""
     for func in MATH_FUNCTIONS:
         FUNCTIONS[func.__name__] = func
     return FUNCTIONS

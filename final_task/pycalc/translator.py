@@ -71,6 +71,7 @@ def is_number(token):
 
 
 def is_float(token):
+    """Check if token is float"""
     try:
         float(token)
         return True

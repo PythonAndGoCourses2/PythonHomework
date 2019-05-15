@@ -36,12 +36,14 @@ def tokenize(expression):
 
 
 def choose_category(char):
+    """Just choose category from CATEGORIES for char"""
     for cat in CATEGORIES:
         if char in cat:
             return cat
 
 
 def prepare_string(expression):
+    """Prepare expression to tokenize"""
     return expression.replace('log10(', 'lg(')
 
 
