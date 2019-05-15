@@ -1,6 +1,6 @@
 """Module to calculate result"""
-from . import tokens
-from . import exeptions
+from pycalc import tokens
+from pycalc import exeptions
 
 
 def calc(expr):

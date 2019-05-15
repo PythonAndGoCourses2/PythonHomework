@@ -1,6 +1,6 @@
 """Module contains functions to translate infix notation into postfix"""
-from . import tokens as t
-from . import exeptions
+from pycalc import tokens as t
+from pycalc import exeptions
 
 
 def get_postfix(input_string):

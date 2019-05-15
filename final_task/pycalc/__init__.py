@@ -1,15 +1,15 @@
 """Module to group all other modules"""
-import parser
+from pycalc import parser
 from pycalc import tokenizer
-from . import translator
-from . import calculator
-from . import exeptions
+from pycalc import translator
+from pycalc import calculator
+from pycalc import exeptions
 
 
 def main():
     """Call of all needed methods and return result"""
     try:
-        infix_string = parser.parse_console()
+        infix_string = parser.parse_arguments()
         tokens = tokenizer.tokenize(infix_string)
         postfix_string = translator.get_postfix(tokens)
         res = calculator.calc(postfix_string)

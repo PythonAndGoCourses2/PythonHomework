@@ -1,16 +1,20 @@
 """Contains categories for tokens and tokenize function"""
 import string
 
-LOWER = string.ascii_lowercase
-DIGITS = string.digits + '.'
-SPACE = string.whitespace
+NUMERIC = string.digits + '.'
 PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
 BRACKETS = '(){}[]'
 
 
 def tokenize(expression):
     """Returns list of tokens from input string"""
-    categories = [LOWER, DIGITS, SPACE, PUNCTUATION, BRACKETS]
+    categories = [
+        string.ascii_lowercase,
+        NUMERIC,
+        string.whitespace,
+        PUNCTUATION,
+        BRACKETS
+    ]
     token = ''
     tokens = []
     category = None
