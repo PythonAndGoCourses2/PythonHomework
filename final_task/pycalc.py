@@ -209,13 +209,12 @@ def operate(operator, args):
             except TypeError:
                 try:
                     result = funcdic[operator]  # если внешняя функция без аргументов типа pi, e, tau
-                    print('try noargs res=', result)
                     if type(result) != float:
                         raise ValueError('ERROR: not float argument for ', operator)
                 except TypeError:
                     raise ValueError('ERROR: invalid argument for ', operator)
     except ValueError:
-        print('неправильный аргумент для sin')
+        raise ValueError('ERROR: invalid argument for ', operator)
     return result
 
 

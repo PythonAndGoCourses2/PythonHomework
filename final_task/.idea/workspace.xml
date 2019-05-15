@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9566462-b710-411f-b787-a8adb7e9c203" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/func.py" beforeDir="false" afterPath="$PROJECT_DIR$/func.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pycalc.py" beforeDir="false" afterPath="$PROJECT_DIR$/pycalc.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,20 +18,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pycalc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="700">
-              <caret line="267" lean-forward="true" selection-start-line="267" selection-end-line="267" />
+            <state relative-caret-position="275">
+              <caret line="210" column="101" selection-start-line="210" selection-start-column="101" selection-end-line="210" selection-end-column="101" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2464">
-              <caret line="178" column="19" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -63,6 +50,7 @@
       <find>invalid</find>
       <find>invalid ar</find>
       <find />
+      <find>print</find>
     </findStrings>
     <replaceStrings>
       <replace>pycalc.main</replace>
@@ -170,7 +158,7 @@
     <frame x="0" y="24" width="960" height="515" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15154749" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.15154749" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -210,8 +198,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pycalc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="700">
-          <caret line="267" lean-forward="true" selection-start-line="267" selection-end-line="267" />
+        <state relative-caret-position="275">
+          <caret line="210" column="101" selection-start-line="210" selection-start-column="101" selection-end-line="210" selection-end-column="101" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
