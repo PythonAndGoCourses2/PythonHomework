@@ -4,7 +4,9 @@ import operator
 import math
 import sys
 import argparse
-from . import expression_parser, operator_manager, check_manager
+from expression_parser import *
+from operator_manager import *
+from check_manager import *
 
 
 def arg_parser():
