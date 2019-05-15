@@ -12,7 +12,7 @@ def main():
         infix_string = parser.parse_arguments()
         tokens = tokenizer.tokenize(infix_string)
         postfix_string = translator.get_postfix(tokens)
-        res = calculator.calc(postfix_string)
+        res = calculator.calculate(postfix_string)
         print(res)
     except Exception as ex:
         print(f'ERROR: {ex}')

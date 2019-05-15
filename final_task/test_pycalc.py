@@ -64,11 +64,11 @@ class TestTranslator(unittest.TestCase):
 
 class TestCalculator(unittest.TestCase):
     def test_calc(self):
-        self.assertEqual(2.0, calculator.calc(['1', '1', '+']))
-        self.assertRaises(ZeroDivisionError, calculator.calc, ['15', '0', '/'])
-        self.assertRaises(OverflowError, calculator.calc, ['100', '100', '^', '100', '^', '100', '^', '100', '^'])
-        self.assertRaises(exeptions.InvalidStringError, calculator.calc, ['+'])
-        self.assertRaises(exeptions.InvalidStringError, calculator.calc, ['15', '+', '15'])
+        self.assertEqual(2.0, calculator.calculate(['1', '1', '+']))
+        self.assertRaises(ZeroDivisionError, calculator.calculate, ['15', '0', '/'])
+        self.assertRaises(OverflowError, calculator.calculate, ['100', '100', '^', '100', '^', '100', '^', '100', '^'])
+        self.assertRaises(exeptions.InvalidStringError, calculator.calculate, ['+'])
+        self.assertRaises(exeptions.InvalidStringError, calculator.calculate, ['15', '+', '15'])
 
 
 if __name__ == '__main__':
