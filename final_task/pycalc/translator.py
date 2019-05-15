@@ -24,7 +24,7 @@ def get_postfix(input_string):
             while stack[-1] != t.O_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
-                    raise exeptions.BracketsError()
+                    raise exeptions.BracketsError('brackets are not balanced')
             continue
         if token in t.OPERATORS:
             while stack[-1] in t.OPERATORS and \
@@ -43,15 +43,15 @@ def get_postfix(input_string):
             while stack[-1] != t.O_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
-                    raise exeptions.BracketsError()
+                    raise exeptions.BracketsError('brackets are not balanced')
             stack.pop()
             if stack[-1] in t.FUNCTIONS:
                 output_string += [stack.pop()]
             continue
-        raise exeptions.UnknownFunctionError(token)
+        raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
     while stack[-1]:
         if stack[-1] == t.O_BRACKET:
-            raise exeptions.BracketsError()
+            raise exeptions.BracketsError('brackets are not balanced')
         if stack[-1] in t.OPERATORS:
             output_string += [stack.pop()]
     return output_string
@@ -87,26 +87,6 @@ def make_unarys(infix_string):
         else:
             output_string.append(token)
     return output_string
-    # prev_unary = False
-    # bracket_counter = 0
-    # for index, token in enumerate(infix_string):
-    #     last_token = infix_string[index - 1]
-    #     if token in t.OPERATORS and token in ('+', '-') and is_unary(infix_string, index):
-    #         if last_token in t.OPERATORS and \
-    #                 t.OPERATORS[last_token].priority > t.OPERATORS[token].priority:
-    #             output_string.append(t.O_BRACKET)
-    #             prev_unary = True
-    #             bracket_counter += 1
-    #         output_string.append('0')
-    #         output_string.append(token)
-    #         continue
-    #     output_string.append(token)
-    #     if prev_unary:
-    #         while bracket_counter:
-    #             output_string.append(t.C_BRACKET)
-    #             bracket_counter -= 1
-    #         prev_unary = False
-    # return output_string
 
 
 def is_unary(tokens, index):
@@ -126,9 +106,9 @@ def chek_invalid_func(tokens):
     for index, token in enumerate(tokens):
         if token in t.FUNCTIONS:
             if len(tokens) <= 1:
-                raise exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError('invalid string')
             if is_number(tokens[index + 1]):
-                raise exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError('invalid string')
 
 
 def dell_spaces(tokens):
@@ -137,7 +117,7 @@ def dell_spaces(tokens):
     for index, token in enumerate(tokens):
         if token == ' ':
             if is_number(tokens[index - 1]) and is_number(tokens[index + 1]):
-                raise exeptions.InvalidStringError()
+                raise exeptions.InvalidStringError('invalid string')
         else:
             no_spaces_tokens.append(token)
     return no_spaces_tokens

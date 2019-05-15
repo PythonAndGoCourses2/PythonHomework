@@ -14,9 +14,7 @@ class BracketsError(PycalcException):
 
 
 class UnknownFunctionError(PycalcException):
-    def __init__(self, token):
-        super().__init__()
-        self.token = token
+    pass
 
 
 class InvalidStringError(PycalcException):

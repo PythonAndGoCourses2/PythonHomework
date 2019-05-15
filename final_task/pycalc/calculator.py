@@ -31,7 +31,7 @@ def calc(expr):
             else:
                 stack.append(float(token))
         except IndexError:
-            raise exeptions.InvalidStringError()
+            raise exeptions.InvalidStringError('invalid string')
     if not len(stack) == 1:
-        raise exeptions.InvalidStringError()
+        raise exeptions.InvalidStringError('invalid string')
     return stack.pop()
