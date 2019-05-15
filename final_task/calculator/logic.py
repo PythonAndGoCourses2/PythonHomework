@@ -6,7 +6,7 @@
    index - the number of the character in eval_string on which function finished working
 """
 
-# Dictionary of math library functions plus abs and round
+# Dictionary that contains functions' name as a key and math library functions plus abs and round as a value
 func_dictionary = dict([(attr, getattr(m, attr)) for attr in dir(m) if callable(getattr(m, attr))])
 func_dictionary['abs'] = abs
 func_dictionary['round'] = round
