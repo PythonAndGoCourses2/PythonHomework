@@ -12,7 +12,6 @@ class TestParser(unittest.TestCase):
 class TestTokenizer(unittest.TestCase):
     def test_tokenize(self):
         self.assertEqual(['lg', '(', '10', ')'], tokenizer.tokenize('log10(10)'))
-        self.assertEqual(['+', ' ', '17'], tokenizer.tokenize('- - 17'))
         self.assertEqual(['sin', '(', '15', '/', 'e', ')', '*', '100', '^', '3'], tokenizer.tokenize('sin(15/e)*100^3'))
 
     def test_append_token(self):
