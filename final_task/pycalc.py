@@ -33,16 +33,16 @@ def pycalc():
         args = parser.parse_args()
         return args.EXPRESSION
 
-    def split_token(tokensarray, token):
-        """Function split token. For example: '((' -> '(','('."""
-        if '(' in token or ')' or '-' or '+' in token:
+    def split_brackets(tokensarray, token):
+        """Function split brackets. For example: '((' -> '(','('."""
+        if '(' in token or ')' in token:
             for brackets in token:
                 tokensarray.append(brackets)
 
         else:
             tokensarray.append(token)
 
-    def make_input_mo_comfortable(the_input):
+    def make_input_more_comfortable(the_input):
         """Make input information more usable for futher processing """
         if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
                 or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
@@ -68,7 +68,7 @@ def pycalc():
         """Splitting information into tokens for the
            explict form of expression,functions and
            constants. """
-        categories = [string.digits + '.', '(', ')' '//', '+-*/%^', '==', '<=', '>=', '!=', '>', '<',
+        categories = [string.digits + '.', '(', ')' '//', '^', '+-*/%', '==', '<=', '>=', '!=', '>', '<',
                       string.ascii_lowercase,
                       string.whitespace]
         token = ''
@@ -79,7 +79,7 @@ def pycalc():
                 if category and char in category:
                     token += char
                 else:
-                    split_token(tokens_array, token)
+                    split_brackets(tokens_array, token)
                     token = char
                     category = None
                     for cat in categories:
@@ -95,7 +95,7 @@ def pycalc():
                             break
                 token += char
         if token:
-            split_token(tokens_array, token)
+            split_brackets(tokens_array, token)
         return tokens_array
 
     def negative_numbers(parse_information):
@@ -264,7 +264,7 @@ def pycalc():
                 return parse_information
 
         return check_function_and_constants(
-            negative_numbers(tokinazer(make_input_mo_comfortable(input_from_command_line()))))
+            negative_numbers(tokinazer(make_input_more_comfortable(input_from_command_line()))))
 
     return calculate(polish_notation(check_all()))
 
