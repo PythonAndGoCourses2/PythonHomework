@@ -274,10 +274,7 @@ def evalpostfix(xprpstfx):
 
         elif i in oper:  # если оператор типа a + b
             # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
-            try:
-                tmp = funcdic[i](*stack[-2:])
-            except TypeError:
-                raise ValueError('ERROR: invalid argument for operator', i)
+            tmp = funcdic[i](*stack[-2:])
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
@@ -306,7 +303,8 @@ def main():
         addfunc(module)  # попытка добавления внешней функции если указана -m module
         calc(xpr)  # калькулятор. вычисление выражения в строке xpr
     except Exception as error:
-        print(error)
+    #except OSError:
+        print('ERROR:', error)
     return
 
 
