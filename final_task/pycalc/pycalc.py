@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
-import operator
-import math
-import sys
 import argparse
-from .expression_parser import *
-from .operator_manager import *
-from .check_manager import *
+from .expression_parser import SplitOperators
+from .operator_manager import operator_dict, function_dict, unary_dict
+from .check_manager import check_expression
+from .stack_manager import OperandStack
+from .converter import Converter
 
 
 def arg_parser():
@@ -22,116 +21,6 @@ def arg_parser():
     )
     expression_line = parser.parse_args().EXPRESSION
     return expression_line
-
-
-def check_parsing_list(parsing_list):
-    if parsing_list[0] in operator_dict.keys():
-        if parsing_list[0] is not '+' and parsing_list[0] is not '-':
-            raise SyntaxError('Expression cannot start with "{}"'.format(parsing_list[0]))
-    if len(parsing_list) == 1:
-        if type(parsing_list[0]) is int or type(parsing_list[0]) is float:
-            return True
-        raise SyntaxError('Expression must include at list one operand!')
-    if parsing_list[-1] in operator_dict.keys():
-        raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(parsing_list[-1]))
-    if parsing_list[-1] in function_dict.keys():
-        raise SyntaxError('Function "{}" without argument'.format(parsing_list[-1]))
-    return True
-
-
-def clean_add_sub_operators(last_item, converted_list):
-    if last_item.count('-') % 2 == 0:
-        if converted_list[-1] == '(':
-            last_item = ""
-        else:
-            last_item = '+'
-    else:
-        last_item = '-'
-    return last_item
-
-
-def converter(parsing_list):
-    check_parsing_list(parsing_list)
-    if parsing_list[0] == "-" or parsing_list[0] == "+":
-        converted_list = [0]
-    else:
-        converted_list = []
-    last_item = ""
-    for i in parsing_list:
-        if i == " ":
-            continue
-        if i != '-' and i != '+' and last_item:
-            last_item = clean_add_sub_operators(last_item, converted_list)
-            if last_item == '+':
-                converted_list.append(operator_dict[last_item])
-                last_item = ''
-        if isinstance(i, float) or isinstance(i, int):
-            if last_item == '-':
-                if converted_list[-1] == 0:
-                    converted_list.append(unary_dict[last_item])
-                    converted_list.append(i)
-                    last_item = ""
-                elif last_item == '-' and converted_list[-1] != '(' \
-                        and converted_list[-1] not in operator_dict.values():
-                    converted_list.append(operator_dict[last_item])
-                    converted_list.append(i)
-                    last_item = ""
-                else:
-                    converted_list.append(-i)
-                    last_item = ""
-            else:
-                converted_list.append(i)
-        elif i in operator_dict.keys():
-            if i == '-' or i == '+':
-                last_item += i
-            else:
-                try:
-                    if converted_list[-1]['operator']:
-                        raise SyntaxError('Missing operand between two math operators!')
-                except TypeError:
-                    converted_list.append(operator_dict[i])
-        elif i in function_dict.keys():
-            if last_item:
-                if last_item == '-' and converted_list[-1] != '(':
-                    converted_list.append(operator_dict['+'])
-                    converted_list.append(-1)
-                    converted_list.append(operator_dict['*'])
-                    converted_list.append(function_dict[i])
-                    last_item = ""
-                elif last_item == '-' and converted_list[-1] == '(':
-                    converted_list.append(-1)
-                    converted_list.append(operator_dict['*'])
-                    converted_list.append(function_dict[i])
-                    last_item = ""
-            else:
-                converted_list.append(function_dict[i])
-        else:
-            if last_item:
-                converted_list.append(operator_dict['-'])
-                last_item = ""
-            converted_list.append(i)
-    return converted_list
-
-
-class OperandStack:
-
-    def __init__(self):
-        self.stack = list()
-
-    def put_on_stack(self, item):
-        self.stack.append(item)
-
-    def top(self):
-        return self.stack[-1]
-
-    def take_from_stack(self):
-        return self.stack.pop()
-
-    def is_empty(self):
-        if len(self.stack) == 0:
-            return True
-        else:
-            return False
 
 
 def calc_on_stack():
@@ -221,12 +110,10 @@ def calculate(converted_list):
 def main():
     try:
         expression_line = arg_parser()
-        operands = OperandStack()
-        function = OperandStack()
         parser = SplitOperators().split_operators(expression_line)
         clear_parser = check_expression(parser)
-        converted_list = converter(clear_parser)
-        result = calculate(converted_list)
+        converted_list = Converter(clear_parser)
+        result = calculate(converted_list.converter())
         print(result)
     except SyntaxError as err:
         print('ERROR: {}'.format(err))
