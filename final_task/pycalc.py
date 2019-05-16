@@ -5,7 +5,6 @@ import string
 import math
 import operator
 import re
-import typing
 
 
 def pycalc():
@@ -21,7 +20,8 @@ def pycalc():
         '>=': (operator.ge, 0), '>': (operator.gt, 0)}
     """Operators by priority """
 
-    CONSTANTS = {'pi': math.pi, '-pi': -math.pi, 'e': math.e, '-e': -math.e}
+    CONSTANTS = {'pi': math.pi, '-pi': -math.pi, 'e': math.e, '-e': -math.e,
+                 'tau': math.tau, '-tau': -math.tau}
 
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
@@ -65,12 +65,11 @@ def pycalc():
         return the_input
 
     def tokinazer(comfortable_input):
-        """Splitting information into tokens for the
+        """Splitting information into tokens for the0
            explict form of expression,functions and
            constants. """
         categories = [string.digits + '.', '(', ')' '//', '^', '+-*/%', '==', '<=', '>=', '!=', '>', '<',
-                      string.ascii_lowercase,
-                      string.whitespace]
+                      string.ascii_lowercase]
         token = ''
         tokens_array = []
         category = None
@@ -82,16 +81,16 @@ def pycalc():
                     split_brackets(tokens_array, token)
                     token = char
                     category = None
-                    for cat in categories:
-                        if char in cat:
-                            category = cat
+                    for subcategory in categories:
+                        if char in subcategory:
+                            category = subcategory
                             break
             else:
                 category = None
                 if not category:
-                    for cat in categories:
-                        if char in cat:
-                            category = cat
+                    for subcategory in categories:
+                        if char in subcategory:
+                            category = subcategory
                             break
                 token += char
         if token:
@@ -238,35 +237,31 @@ def pycalc():
         else:
             return stack.pop()
 
-    def check_all():
+    def check_function_and_constants(parse_information):
+        """Checks functions or constants."""
+        copy_check_expression = parse_information.copy()
+        for index, element in enumerate(copy_check_expression):
+            if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
+                raise ValueError(f'function arguments not entered')
+            elif (element in FUNCTIONS) and copy_check_expression[index + 1] != '(':
+                raise ValueError(f'function arguments not entered')
+            elif re.fullmatch(NUMBERS, element):
+                copy_check_expression.pop(index)
+        difference = set(copy_check_expression).difference(
+            set(FUNCTIONS),
+            set(OPERATORS),
+            set(CONSTANTS),
+            set(string.digits),
+            {'{', '[', '(', ',', ')', ']', '}'},
+            {'True', 'False'}
+        )
+        if difference:
+            raise ValueError(f'unknown function or constant {difference}')
+        else:
+            return parse_information
 
-        def check_function_and_constants(parse_information):
-            """Checks functions or constants."""
-            copy_check_expression = parse_information.copy()
-            for index, element in enumerate(copy_check_expression):
-                if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
-                    raise ValueError(f'function arguments not entered')
-                elif (element in FUNCTIONS) and copy_check_expression[index + 1] != '(':
-                    raise ValueError(f'function arguments not entered')
-                elif re.fullmatch(NUMBERS, element):
-                    copy_check_expression.pop(index)
-            difference = set(copy_check_expression).difference(
-                set(FUNCTIONS),
-                set(OPERATORS),
-                set(CONSTANTS),
-                set(string.digits),
-                {'{', '[', '(', ',', ')', ']', '}'},
-                {'True', 'False'}
-            )
-            if difference:
-                raise ValueError(f'unknown function or constant {difference}')
-            else:
-                return parse_information
-
-        return check_function_and_constants(
-            negative_numbers(tokinazer(make_input_more_comfortable(input_from_command_line()))))
-
-    return calculate(polish_notation(check_all()))
+    return calculate(polish_notation(check_function_and_constants(
+        negative_numbers(tokinazer(make_input_more_comfortable(input_from_command_line()))))))
 
 
 def main():
