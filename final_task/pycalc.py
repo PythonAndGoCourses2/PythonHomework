@@ -12,8 +12,7 @@ splitset = set(split)
 funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
 funcdic = math.__dict__  # dict of math functions
 funcset = set(funclist)
-operdic = {'+': add, '-': sub, '*': mul, '/': truediv, '//': floordiv, '%': mod, '^': pow, '==': eq,
-'<=': le, '>=': ge, '<': lt, '>': gt, '!=': ne, 'abs': abs, 'round': round, 'sum': sum}
+operdic = {'+': add, '-': sub, '*': mul, '/': truediv, '//': floordiv, '%': mod, '^': pow, '==': eq, '<=': le, '>=': ge, '<': lt, '>': gt, '!=': ne, 'abs': abs, 'round': round, 'sum': sum}
 funcdic.update(operdic)
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=']
 operset = set(oper)
@@ -30,6 +29,7 @@ def parsecmd():
     xpr = args.EXPRESSION
     module = args.MODULE
     return
+
 
 def addfunc(module):
     """ добавление новой функцию из модуля (module)"""
@@ -85,12 +85,9 @@ def parse(xprstr):
     if xprstr.count(' ') > 0:  # проверка лишних пробелов
         raise ValueError('ERROR: useles spaces')
 
-
-
     right = len(xprstr)  # добавление скобок для возведения в степень в степени типа 2^3^4
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
-
         # print('right', right)
         if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
             xprstr = xprstr[:right+1]+'('+xprstr[right+1:]
@@ -107,8 +104,7 @@ def parse(xprstr):
             xprstr = xprstr[:j]+')'+xprstr[j:]
             # print('IF ^- )', xprstr)
 
-
-        if xprstr[:right].count('^') == 0:
+        if xprstr[:right].count('^') == 0:  # добавление скобок для возведения в степень в степени типа 2^3^4
             break
         left = xprstr.rindex('^', 0, right)+1
         tmp = xprstr[left:right]
@@ -125,8 +121,6 @@ def parse(xprstr):
             xprstr = xprstr[:right]+')'+xprstr[right:]
         else:  # НЕ надо скобки
             right = left
-
-
 
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
@@ -146,11 +140,6 @@ def parse(xprstr):
 
     for i, data in enumerate(xprlst):  # поииск операторов составных типа <= >= == != содержащихся в списке oper
         if i < len(xprlst)-1:
-
-            #if xprlst[i] == '^' and xprlst[i+1] == '-'
-
-
-
             if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
                 raise ValueError('ERROR: digit & ( wihout operator')
             if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
@@ -303,7 +292,7 @@ def main():
         addfunc(module)  # попытка добавления внешней функции если указана -m module
         calc(xpr)  # калькулятор. вычисление выражения в строке xpr
     except Exception as error:
-    #except OSError:
+        #except OSError:
         print('ERROR:', error)
     return
 
