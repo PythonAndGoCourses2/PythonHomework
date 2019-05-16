@@ -54,8 +54,6 @@ def parse(expression):
             if not second_argument:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument)))
             else:
-                print("f ", first_argument)
-                print("s ", second_argument)
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument), calculating(second_argument)))
             func, first_argument, second_argument = '', '', ''
             continue
