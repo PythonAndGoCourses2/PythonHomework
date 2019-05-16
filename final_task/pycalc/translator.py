@@ -1,5 +1,5 @@
 """Module contains functions to translate infix notation into postfix"""
-from pycalc import tokens as t
+from pycalc import library
 from pycalc import exeptions
 
 
@@ -14,45 +14,45 @@ def get_postfix(input_string):
         if is_number(token):
             output_string.append(float(token))
             continue
-        if token in t.CONSTANTS:
-            output_string.append(t.CONSTANTS[token])
+        if token in library.CONSTANTS:
+            output_string.append(library.CONSTANTS[token])
             continue
-        if token in t.FUNCTIONS:
+        if token in library.FUNCTIONS:
             stack.append(token)
             continue
-        if token == t.FUNC_DELIMITER:
-            while stack[-1] != t.O_BRACKET:
+        if token == library.FUNC_DELIMITER:
+            while stack[-1] != library.OPEN_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError('brackets are not balanced')
             continue
-        if token in t.OPERATORS:
-            while stack[-1] in t.OPERATORS and \
-                    ((token in t.LEFT_ASSOCIATIVITY and t.OPERATORS[token].priority <= t.OPERATORS[
+        if token in library.OPERATORS:
+            while stack[-1] in library.OPERATORS and \
+                    ((token in library.LEFT_ASSOCIATIVITY and library.OPERATORS[token].priority <= library.OPERATORS[
                         stack[-1]].priority) or
-                     (token in t.RIGHT_ASSOCIATIVITY and t.OPERATORS[token].priority < t.OPERATORS[
+                     (token in library.RIGHT_ASSOCIATIVITY and library.OPERATORS[token].priority < library.OPERATORS[
                          stack[-1]].priority)):
                 output_string += [stack.pop()]
                 continue
             stack.append(token)
             continue
-        if token == t.O_BRACKET:
+        if token == library.OPEN_BRACKET:
             stack.append(token)
             continue
-        if token == t.C_BRACKET:
-            while stack[-1] != t.O_BRACKET:
+        if token == library.CLOSE_BRACKET:
+            while stack[-1] != library.OPEN_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError('brackets are not balanced')
             stack.pop()
-            if stack[-1] in t.FUNCTIONS:
+            if stack[-1] in library.FUNCTIONS:
                 output_string += [stack.pop()]
             continue
         raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
     while stack[-1]:
-        if stack[-1] == t.O_BRACKET:
+        if stack[-1] == library.OPEN_BRACKET:
             raise exeptions.BracketsError('brackets are not balanced')
-        if stack[-1] in t.OPERATORS:
+        if stack[-1] in library.OPERATORS:
             output_string += [stack.pop()]
     return output_string
 
@@ -78,18 +78,17 @@ def is_float(token):
     except ValueError:
         return False
 
-
 def make_unarys(infix_string):
     """Translate unary operators in list
 
     into they analogs"""
     output_string = list()
     for index, token in enumerate(infix_string):
-        if token in t.OPERATORS and token in ('+', '-') and is_unary(infix_string, index):
+        if token in library.OPERATORS and token in ('+', '-') and is_unary(infix_string, index):
             if token == '+':
-                output_string.append('#')
+                output_string.append(library.UNARY_PLUS)
             elif token == '-':
-                output_string.append('~')
+                output_string.append(library.UNARY_MINUS)
         else:
             output_string.append(token)
     return output_string
@@ -97,20 +96,22 @@ def make_unarys(infix_string):
 
 def is_unary(tokens, index):
     """Check if operator in tokens with index is unary"""
+    if not (abs(index) in range(len(tokens))):
+        raise exeptions.GeneralError(f'Invalid token index in translator.py/is_unary \'{index}\'')
     token = tokens[index - 1]
     if token == ' ':
         token = tokens[index - 2]
-    return (token in t.OPERATORS or
-            token in t.FUNCTIONS or
-            token == t.FUNC_DELIMITER or
+    return (token in library.OPERATORS or
+            token in library.FUNCTIONS or
+            token == library.FUNC_DELIMITER or
             not index or
-            token == t.O_BRACKET)
+            token == library.OPEN_BRACKET)
 
 
 def chek_invalid_func(tokens):
     """Check for all func tokens valid"""
     for index, token in enumerate(tokens):
-        if token in t.FUNCTIONS:
+        if token in library.FUNCTIONS:
             if len(tokens) <= 1:
                 raise exeptions.InvalidStringError('invalid string')
             if is_number(tokens[index + 1]):

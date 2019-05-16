@@ -37,6 +37,9 @@ class TestTranslator(unittest.TestCase):
         self.assertTrue(translator.is_unary(['15.3', '/', '-', '3'], 2))
         self.assertTrue(translator.is_unary(['sin', '(', '-', '15', ')'], 2))
         self.assertTrue(translator.is_unary(['2', '+', '-', '1'], 2))
+        self.assertTrue(translator.is_unary(['2', '+', '-', '1'], -2))
+        self.assertTrue(translator.is_unary(['2', '+', '-', '1'], 0))
+        self.assertRaises(exeptions.GeneralError, translator.is_unary, ['-', '2'], 15)
 
     def test_make_unarys(self):
         self.assertEqual(['3', '+', '~', '1'], translator.make_unarys(['3', '+', '-', '1']))

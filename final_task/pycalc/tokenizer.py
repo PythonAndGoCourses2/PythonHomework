@@ -37,15 +37,17 @@ def tokenize(expression):
 
 def choose_category(char):
     """Just choose category from CATEGORIES for char"""
-    for cat in CATEGORIES:
-        if char in cat:
-            return cat
+    for category in CATEGORIES:
+        if char in category:
+            return category
     return None
 
 
 def prepare_string(expression):
     """Prepare expression to tokenize"""
-    return expression.replace('log10(', 'lg(')
+    expression = expression.replace('log10(', 'lg(')
+    expression = expression.replace('log2(', 'lgTwo(')
+    return expression
 
 
 def append_token(tokens, token):

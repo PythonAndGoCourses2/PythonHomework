@@ -3,14 +3,19 @@ import math
 from collections import namedtuple
 import operator
 
-
-CONSTANTS = {'pi': math.pi, 'e': math.e}
+CONSTANTS = {
+    'pi': math.pi,
+    'e': math.e,
+    'tau': math.tau
+}
 
 Operator = namedtuple("Operator", ("priority", "function"))
+UNARY_MINUS = '~'
+UNARY_PLUS = '#'
 RIGHT_ASSOCIATIVITY = {
     '^': Operator(4, operator.pow),
-    '~': Operator(5, operator.neg),
-    '#': Operator(5, operator.pos)
+    UNARY_MINUS: Operator(5, operator.neg),
+    UNARY_PLUS: Operator(5, operator.pos)
 }
 LEFT_ASSOCIATIVITY = {
     '>': Operator(1, operator.gt),
@@ -31,19 +36,21 @@ OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 
 def make_math_functions():
     """Make dictionary name : func from math_functions"""
+    functions = dict()
     for func in MATH_FUNCTIONS:
-        FUNCTIONS[func.__name__] = func
-    return FUNCTIONS
+        functions[func.__name__] = func
+    return functions
 
 
 MATH_FUNCTIONS = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
-FUNCTIONS = {
+other_functions = {
     'abs': abs,
     'round': round,
-    'lg': math.log10
+    'lg': math.log10,
+    'lgTwo': math.log2
 }
-FUNCTIONS.update(make_math_functions())
+FUNCTIONS = {**make_math_functions(), **other_functions}
 FUNC_DELIMITER = ','
 
-O_BRACKET = '('
-C_BRACKET = ')'
+OPEN_BRACKET = '('
+CLOSE_BRACKET = ')'
