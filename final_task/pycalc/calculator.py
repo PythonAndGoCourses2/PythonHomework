@@ -20,14 +20,6 @@ def calculate(expr):
                 if count_args(token) == 2 and len(stack) >= 2:
                     op2, op1 = stack.pop(), stack.pop()
                     stack.append(library.FUNCTIONS[token](op1, op2))
-                    # stack_copy = stack[:]
-                    # try:
-                    #     op2, op1 = stack_copy.pop(), stack_copy.pop()
-                    #     stack_copy.append(library.FUNCTIONS[token](op1, op2))
-                    #     stack = stack_copy[:]
-                    # except IndexError:
-                    #     operator = stack.pop()
-                    #     stack.append(library.FUNCTIONS[token](operator))
                 else:
                     operator = stack.pop()
                     stack.append(library.FUNCTIONS[token](operator))

@@ -14,11 +14,6 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(['lg', '(', '10', ')'], tokenizer.tokenize('log10(10)'))
         self.assertEqual(['sin', '(', '15', '/', 'e', ')', '*', '100', '^', '3'], tokenizer.tokenize('sin(15/e)*100^3'))
 
-    def test_append_token(self):
-        self.assertEqual(['(', '(', '('], tokenizer.append_token([], '((('))
-        self.assertEqual(['15', 'sin'], tokenizer.append_token(['15'], 'sin'))
-        self.assertEqual(['sin', '(', '('], tokenizer.append_token(['sin'], '(('))
-
 
 class TestTranslator(unittest.TestCase):
     def test_dell_spaces(self):

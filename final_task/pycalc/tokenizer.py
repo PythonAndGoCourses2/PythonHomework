@@ -24,14 +24,14 @@ def tokenize(expression):
             if category and char in category:
                 token += char
             else:
-                tokens = append_token(tokens, token)
+                append_token(token, tokens)
                 token = char
                 category = choose_category(char)
         else:
             category = choose_category(char)
             token += char
     if token:
-        tokens = append_token(tokens, token)
+        append_token(token, tokens)
     return tokens
 
 
@@ -50,11 +50,10 @@ def prepare_string(expression):
     return expression
 
 
-def append_token(tokens, token):
+def append_token(token: str, tokens: list):
     """append token to tokens"""
     if '+' in token or '-' in token or ')' in token or '(' in token:
         for char in token:  # if token contains multy +, - or () characters, split it
             tokens.append(char)
     else:
         tokens.append(token)
-    return tokens
