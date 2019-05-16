@@ -49,12 +49,13 @@ def comparison_calc(expr, item):
 
 def fix_unary(expr):
     """Replace unary operations"""
-    if expr[0] == '-':
+    if expr.startswith("-"):
         expr = "0" + expr
-    elif expr[0] == '+':
+    elif expr.startswith("+"):
         expr = "0" + expr
     expr = re.sub(r'\(\-', '(0-', expr)
     expr = re.sub(r'\(\+', '(0+', expr)
+
     return expr
 
 
@@ -63,7 +64,7 @@ def replace_plus_minus(expr):
         if expr.find('++') != -1:
             expr = expr.replace("++", "+")
         elif expr.find('--') != -1:
-            expr = expr.replace("--", "-")
+            expr = expr.replace("--", "+")
         elif expr.find('+-') != -1 or expr.find('-+') != -1:
             expr = expr.replace("+-", "-")
             expr = expr.replace("-+", "-")
@@ -76,6 +77,12 @@ def correct_check(expr):
     for operation in pycalc.OPERATORS: # Если последний символ строки операция
         if expr.endswith(operation):
             return False
+
+
+
     return True
+
+
+
 
 

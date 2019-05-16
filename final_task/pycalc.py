@@ -54,6 +54,8 @@ def parse(expression):
             if not second_argument:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument)))
             else:
+                print("f ", first_argument)
+                print("s ", second_argument)
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument), calculating(second_argument)))
             func, first_argument, second_argument = '', '', ''
             continue
@@ -127,9 +129,10 @@ def calculating(expression):
 def main():
     try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
+        comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
+        expression = expression.replace(" ","")
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
-        comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
         if check.correct_check(expression) and expression:
             if not comparison:
                 if check.brackets_check(expression):
