@@ -84,9 +84,30 @@ def parse(xprstr):
         xprstr = xprstr[1:]
     if xprstr.count(' ') > 0:  # проверка лишних пробелов
         raise ValueError('ERROR: useles spaces')
+
+
+
     right = len(xprstr)  # добавление скобок для возведения в степень в степени типа 2^3^4
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
+
+        # print('right', right)
+        if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
+            xprstr = xprstr[:right+1]+'('+xprstr[right+1:]
+            # print('IF ^- (', 'right=',right,'len=',len(xprstr), xprstr)
+            j = right+3
+            while j < len(xprstr):
+                # print('j=',j,xprstr[j])
+                if xprstr[j] in oper+[')']:
+                    # print('break',j)
+                    break
+                # print('j+1',j)
+                j = j + 1
+            # print(j)
+            xprstr = xprstr[:j]+')'+xprstr[j:]
+            # print('IF ^- )', xprstr)
+
+
         if xprstr[:right].count('^') == 0:
             break
         left = xprstr.rindex('^', 0, right)+1
@@ -104,6 +125,9 @@ def parse(xprstr):
             xprstr = xprstr[:right]+')'+xprstr[right:]
         else:  # НЕ надо скобки
             right = left
+
+
+
     # разбор строки
     for i, sym in enumerate(xprstr + ' '):  # добавлен дополнительный пробел
         if sym in split or i == len(xprstr):
@@ -122,21 +146,26 @@ def parse(xprstr):
 
     for i, data in enumerate(xprlst):  # поииск операторов составных типа <= >= == != содержащихся в списке oper
         if i < len(xprlst)-1:
+
+            #if xprlst[i] == '^' and xprlst[i+1] == '-'
+
+
+
             if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
                 raise ValueError('ERROR: digit & ( wihout operator')
             if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
                 raise ValueError('ERROR: ) & digit wihout operator')
         if i == len(xprlst) - 1:
             break
-        if str(xprlst[i]) + str(xprlst[i+1]) in oper:
-            xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])
+        if str(xprlst[i]) + str(xprlst[i+1]) in oper:  # '>' + '='
+            xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])  # '>='
             xprlst.pop(i)
-        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and type(xprlst[i+1]) == float:
-            xprlst[i+1] = xprlst[i+1] * -1
+        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and type(xprlst[i+1]) == float:  # (-digit
+            xprlst[i+1] = xprlst[i+1] * -1  # (digit*(-1)
             xprlst.pop(i)
-        if xprlst[i] == '-' and xprlst[i-1] == '(' and xprlst[i+1] in funclist:
+        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and xprlst[i+1] in funclist:  # (-func
             xprlst[i] = -1
-            xprlst.insert(i+1, '*')
+            xprlst.insert(i+1, '*')  # (-1*func
     if xprlst[0] == '-':
         xprlst[0] = -1
         xprlst.insert(1, '*')
@@ -195,7 +224,7 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    # # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
@@ -215,6 +244,7 @@ def operate(operator, args):
                     raise ValueError('ERROR: invalid argument for ', operator)
     except ValueError:
         raise ValueError('ERROR: invalid argument for ', operator)
+    # print('RESULT', result)
     return result
 
 
@@ -238,6 +268,7 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
+            # print('OPERATE', i, 'ARGS', args, 'STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
@@ -250,16 +281,19 @@ def evalpostfix(xprpstfx):
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
-            # # print('RESULT', tmp)
+            # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        # # print('STACK',stack)
+
+        # print('STACK',stack)
     return stack[0]
 
 
 def calc(xpr):
     xprlst = parse(xpr)  # разбор строки вырыжения в список
+    # print(*xprlst, sep=' ')
     xprlst = postfix(xprlst)  # преобразование инфиксного списка в постфиксных список
+    # print(*xprlst, sep=' ')
     result = evalpostfix(xprlst)  # вычисление постфиксного списка
     print(result)
     return result
