@@ -1,4 +1,4 @@
-# 16 may stable. exep, e^-e
+# 16 may stable e^-e
 import argparse
 import math
 import operator
