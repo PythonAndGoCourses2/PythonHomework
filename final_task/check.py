@@ -80,7 +80,7 @@ def correct_check(expr):
     expr_list=expr.split()
     i = 0
     while i<len(expr_list)-1:
-        if expr_list[i] == expr_list[i+1]:
+        if expr_list[i].isdigit() and expr_list[i+1].isdigit():
             return False
         if expr_list[i] in "/*^%" and expr_list[i+1] in "/*^%":
             return False
