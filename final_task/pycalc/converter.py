@@ -1,4 +1,5 @@
 from .operator_manager import operator_dict, function_dict, unary_dict
+from .check_manager import check_parsing_list
 
 
 class Converter:
@@ -45,14 +46,24 @@ class Converter:
 
     def _function_converter(self, function):
         if self.last_item:
-            if self.last_item == '-' and self.converted_list[-1] != '(':
-                self._append_to_converted_list('+', -1, '*', function)
+            if self.last_item == '-' and self.converted_list[-1] not in '()':
+                self._append_to_converted_list(
+                                                operator_dict['+'],
+                                                -1,
+                                                operator_dict['*'],
+                                                function_dict[function]
+                                                )
             elif self.last_item == '-' and self.converted_list[-1] == '(':
-                self._append_to_converted_list(-1, '*', function)
+                self._append_to_converted_list(
+                                                -1,
+                                                operator_dict['*'],
+                                                function_dict[function]
+                                                )
         else:
             self._append_to_converted_list(function_dict[function])
 
     def converter(self):
+        check_parsing_list(self.parsing_list)
         if self.parsing_list[0] in operator_dict.keys():
             self.converted_list.append(0)
         for i in self.parsing_list:

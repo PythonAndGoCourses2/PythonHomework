@@ -1,13 +1,17 @@
 from .operator_manager import operator_dict, function_dict, unary_dict
 
 
-def check_expression(parsing_list):
-    if not parsing_list:
+def check_expression(expression_list):
+    if not expression_list:
         raise SyntaxError('Expression cannot be empty')
-    if parsing_list.count('(') < parsing_list.count(')'):
+    if expression_list.count('(') < expression_list.count(')'):
         raise SyntaxError('Opening bracket required!')
-    elif parsing_list.count('(') > parsing_list.count(')'):
+    elif expression_list.count('(') > expression_list.count(')'):
         raise SyntaxError('Closing bracket required!')
+    return expression_list
+
+
+def check_parsing_list(parsing_list):
     if parsing_list[0] in operator_dict.keys():
         if parsing_list[0] is not '+' and parsing_list[0] is not '-':
             raise SyntaxError('Expression cannot start with "{}"'.format(parsing_list[0]))
