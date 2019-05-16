@@ -1,4 +1,4 @@
-# 16 may stable e^-e
+# 16 may stable e^-e 2^-2^-2
 import argparse
 import math
 import operator
@@ -51,15 +51,18 @@ def parsecmd():
 
 def addfunc(module):
     """ добавление новой функцию из модуля (module)"""
-    try:
-        newfunc = importlib.import_module(module)  # импортирование нового модуля
-        funcdic[module] = newfunc.main
-        funclist.append(module)
-        funcset.add(module)
-    except AttributeError:  # module is None
-        pass
-    except ModuleNotFoundError:
-        raise ModuleNotFoundError('ERROR: module not found')
+    if module is not None:  # если введено имя модуля
+        try:
+            spec = importlib.util.find_spec(module)
+        except ImportError:
+            raise ValueError('ERROR: module ', module, 'not found, or unknown symbol')
+        if spec is None:  # проверка возможности импорта модуля
+            raise ValueError('ERROR: unknown function or module ', module, 'not found')
+        else:
+            newfunc = importlib.import_module(module)  # импортирование нового модуля
+            funcdic[module] = newfunc.main
+            funclist.append(module)
+            funcset.add(module)
     return
 
 
@@ -103,40 +106,45 @@ def parse(xprstr):
     if xprstr.count(' ') > 0:  # проверка лишних пробелов
         raise ValueError('ERROR: useles spaces')
 
-    right = len(xprstr)  # добавление скобок для возведения в степень в степени типа 2^3^4
+    # добавление скобок для pi^-pi  -->  pi^(-pi)
+    right = len(xprstr)
+    for i in range(xprstr.count('^')):  # столько раз в выражении содержится ^
+        right = xprstr.rindex('^', 0, right)  # поиск справа первого ^
+        if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
+            xprstr = xprstr[:right+1]+'('+xprstr[right+1:]  # добавляем левую (
+            j = right+3
+            while j < len(xprstr):  # ищем ^(выражение)
+                if xprstr[j] in oper+[')']:
+                    break
+                j = j + 1
+            xprstr = xprstr[:j]+')'+xprstr[j:]  # добавляем правую )
+            
+    # добавление скобок для возведение в степень типа 2^3^4
+    right = len(xprstr)
     for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)
-        # print('right', right)
-        if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
-            xprstr = xprstr[:right+1]+'('+xprstr[right+1:]
-            # print('IF ^- (', 'right=',right,'len=',len(xprstr), xprstr)
-            j = right+3
-            while j < len(xprstr):
-                # print('j=',j,xprstr[j])
-                if xprstr[j] in oper+[')']:
-                    # print('break',j)
-                    break
-                # print('j+1',j)
-                j = j + 1
-            # print(j)
-            xprstr = xprstr[:j]+')'+xprstr[j:]
-            # print('IF ^- )', xprstr)
-
-        if xprstr[:right].count('^') == 0:  # добавление скобок для возведения в степень в степени типа 2^3^4
+        if xprstr[:right].count('^') == 0:
             break
         left = xprstr.rindex('^', 0, right)+1
         tmp = xprstr[left:right]
+        # print('tmp=', tmp)
         tmpset = set(tmp)
         if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):  # надо скобки
             xprstr = xprstr[:left]+'('+xprstr[left:]
-            left = right+2
-            right = len(xprstr)
-            for j, data in enumerate(xprstr[left:]):
-                if data in split and data != '(':
-                    right = left+j
+            lt = right+2
+            # поиск от ^ вправо если () или до знака
+            brkt = 0
+            # print('поиск ^ вправо', xprstr[ss:])
+            for j, data in enumerate(xprstr[ss:]):
+                if data  == '(':
+                    brkt = brkt + 1
+                if data == ')':
+                    brkt = brkt - 1
+                if data in split and data != '(' and brkt == 0:
                     break
-            tmp = xprstr[left:right]
-            xprstr = xprstr[:right]+')'+xprstr[right:]
+                # print(j, data, brkt)
+            xprstr = xprstr[:lt + 1 + j]+')'+xprstr[lt + 1 + j:]
+            # print(xprstr, '!!!!!!!',ss, right)
         else:  # НЕ надо скобки
             right = left
 
@@ -231,7 +239,7 @@ def postfix(xprlst):
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack
-    # # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    # # # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
@@ -251,7 +259,7 @@ def operate(operator, args):
                     raise ValueError('ERROR: invalid argument for ', operator)
     except ValueError:
         raise ValueError('ERROR: invalid argument for ', operator)
-    # print('RESULT', result)
+    # # print('RESULT', result)
     return result
 
 
@@ -275,12 +283,14 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-            # print('OPERATE', i, 'ARGS', args, 'STACK', stack)
+            # print('OPERATEf', i, 'ARGS', args, 'STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
         elif i in oper:  # если оператор типа a + b
-            # print('OPERATE', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            # print('OPERATEo', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            # print(*stack[-2:])
+            # print(funcdic[i])
             tmp = funcdic[i](*stack[-2:])
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
@@ -309,6 +319,7 @@ def main():
         parsecmd()  # парсинг аргументов командной строки xpr выражение и module модуль функции
         addfunc(module)  # попытка добавления внешней функции если указана -m module
         calc(xpr)  # калькулятор. вычисление выражения в строке xpr
+    #except OEError:
     except Exception as error:
         print('ERROR:', error)
     return
