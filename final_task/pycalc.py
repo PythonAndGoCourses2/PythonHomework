@@ -8,7 +8,7 @@ import re
 import typing
 
 
-def pycalc():
+def pycalc(info_string):
     FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
     FUNCTIONS['abs'], FUNCTIONS['round'], FUNCTIONS['lg'] = abs, round, math.log10
     """Math functions + build-in python functions"""
@@ -26,13 +26,13 @@ def pycalc():
 
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
-    def input_from_command_line():
-        """Get information about input from command line """
-
-        parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
-        parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
-        args = parser.parse_args()
-        return args.EXPRESSION
+    # def input_from_command_line():
+    #     """Get information about input from command line """
+    #
+    #     parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
+    #     parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
+    #     args = parser.parse_args()
+    #     return args.EXPRESSION
 
     def split_brackets(tokensarray, token):
         """Function split brackets. For example: '((' -> '(','('."""
@@ -262,12 +262,16 @@ def pycalc():
             return stack.pop()
 
     return calculate(polish_notation(check_function_and_constants(
-        negative_numbers(tokinazer(make_input_more_comfortable(input_from_command_line()))))))
+        negative_numbers(tokinazer(make_input_more_comfortable(info_string))))))
 
 
 def main():
     try:
-        print(pycalc())
+        parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
+        parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
+        args = parser.parse_args()
+        # print(pycalc())
+        print(pycalc(args.EXPRESSION))
     except Exception as exeption:
         print(f'ERROR: {exeption}')
 
