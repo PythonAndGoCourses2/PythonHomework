@@ -1,4 +1,3 @@
-# 16 may stable. exep, e^-e
 import argparse
 import math
 import operator
@@ -238,15 +237,7 @@ def operate(operator, args):
     except TypeError:
         try:
             result = funcdic[operator](args)  # если функция с аргументом типа список sum(x,y,z,...)
-<<<<<<< HEAD
-            try:
-                stack.pop()
-            except IndexError:
-                print('ERROR: invalid argument for ', operator)
-                exit(0)
-=======
             stack.pop()
->>>>>>> test
         except TypeError:
             try:
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
