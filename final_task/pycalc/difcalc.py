@@ -61,6 +61,9 @@ class ComplexCalc():
 
                 a = self.__find_replacement(func[0], expr[afterExpr + 1:end])
                 expr = expr[:k] + a + expr[end + 1:]
+                if float(a) < 0:
+                    end = k + len(a) - 1
+                    expr = self.calc._calc_if_power(expr, k, end)
 
     def __find_replacement(self, func, expr):
 
@@ -110,7 +113,7 @@ class ComplexCalc():
     }
 
     def calculate(self, expr):
-
+        # заменить на разбор операторов с двумя знаками и более
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
         if place:
             a = self.expression_search(expr[:place.start()])

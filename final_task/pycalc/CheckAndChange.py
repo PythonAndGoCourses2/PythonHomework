@@ -13,15 +13,15 @@ class CheckAndChange():
         if re.search(
                 r'[0-9]+', expr) is None and re.search(r'[A-ZAa-z]+', expr) is None:
             raise Exception("No Numbers in expression")
-
+# вставить проверку на & и на целую часть от деления, если будет новый оператор
         expr = expr.replace("//", "&")
         self.correct_brackets(expr)
         self.correct_spaces(expr)
         expr = expr.replace(" ", "")
-        self.addargs(module)
+        self.add_args(module)
         return expr
 
-    def addargs(self, modul):
+    def add_args(self, modul):
         if modul is not None:
             base = path.basename(modul)
 

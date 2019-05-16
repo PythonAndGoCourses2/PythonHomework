@@ -8,15 +8,23 @@ class Calculator():
         place = expr.rfind("^")
 
         while place != -1:
+            findBefore = self.search_simple_number(expr[:place])
+            begin = place - findBefore.end()
+            findAfter = self.search_number_from_begin(expr[place:])
+            end = place + findAfter.end()
+            expr = self.__binary_operation(expr, begin, place, end)
 
-            expr = self.__binary_operation(place, expr)
             place = expr.rfind("^")
 
         place = re.search(r'/|\*|%|&', expr)
 
         while place is not None:
-
-            expr = self.__binary_operation(place.start(), expr)
+            point = place.start()
+            findBefore = self.search_number_from_end(expr[:point])
+            begin = point - findBefore.end() + 1
+            findAfter = self.search_number_from_begin(expr[point:])
+            end = point + findAfter.end()
+            expr = self.__binary_operation(expr, begin, point, end)
             place = re.search(r'/|\*|%|&', expr)
 
         return self.__sum(expr)
@@ -29,19 +37,26 @@ class Calculator():
         summing = 0
         number = 0
         while expr != "":
-            find = re.search(r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr)
-            number = expr[:find.end()]
-            minus = number.count("-")
-            plus = number.count("+")
-            if minus + plus != find.start():
+            find = re.search(r'([+-]+)?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr)
+            if find.start() != 0:
                 raise Exception("Undefine operator")
-            if minus % 2 == 1:
-                a = float("-" + find[0])
-            else:
-                a = float(find[0])
+            number = find[0]
+
             expr = expr[find.end():]
+            a = self.unary_rezult(number)
             summing += a
-        return '{:.15f}'.format(summing)
+        return summing
+        # '{:.15f}'.format(summing)
+
+    def unary_rezult(self, number):
+        minus = number.count("-")
+        plus = number.count("+")
+        a = number[plus + minus:]
+        if minus % 2 == 1:
+            a = float("-" + a)
+        else:
+            a = float(a)
+        return a
 
     def calculate(self, expr):
         expr = expr.replace(" ", "")
@@ -61,26 +76,59 @@ class Calculator():
                     and expr[begin - 1] != '-' and expr[begin - 1] != '+':
                 raise Exception("no operators before brackets")
 
-            rezult = self.__calculation(expr[begin + 1:end])
+            rezult = self.__calculation("+" + expr[begin + 1:end])
             expr = expr[:begin] + str(rezult) + expr[end + 1:]
 
-        rezult = self.__calculation(expr)
+            if rezult < 0:
+                end = begin + len(str(rezult)) - 1
+                expr = self._calc_if_power(expr, begin, end)
+
+        rezult = self.__calculation("+" + expr)
 
         return rezult
 
-    def __binary_operation(self, place, expr):
-        findBefore = re.search(
-            r'[0-9]+([.][0-9]*)?|[.][0-9]+', expr[place::-1])
-        findAfter = re.search(
-            r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[place:])
+    def _calc_if_power(self, expr, begin, braket):
+        place = braket + 1
+        if braket is not len(expr) - 1 and expr[place] is "^":
+            findAfter = self.search_number_from_begin(expr[place:])
+            end = place + findAfter.end()
+            expr = self.__binary_operation(expr, begin, place, end)
+        return expr
 
-        if findAfter is None or findAfter.start(
-        ) != 1 or findBefore is None or findBefore.start() != 1:
+    def __binary_operation(self, expr, begin, place, end):
+       # вынести ту проверку которая есть в сумме в отдельный файл и добавть в
+       # сюда вместо изменения флот на вот это вот все
+        rezult = '{:.15f}'.format(operators.operators[expr[place]](
+            self.unary_rezult(expr[begin:place]), self.unary_rezult(expr[place + 1:end])))
+
+        before = expr[:begin]
+        after = expr[end:]
+        expr = before + rezult + after
+        return expr
+
+    def search_number_from_begin(self, expr):
+
+        number = re.search(
+            r'([+-]+)?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr)
+
+        if number is None or number.start(
+        ) != 1:
             raise Exception(
                 "the expression should be written in the following form 'number operator number'")
 
-        rezult = '{:.15f}'.format(operators.operators[expr[place]](
-            float(findBefore[0][::-1]), float(findAfter[0])))
-        begin = expr[:place - len(findBefore[0])]
-        expr = begin + rezult + expr[findAfter.end() + place:]
-        return expr
+        return number
+
+    def search_number_from_end(self, expr):
+        number = re.search(
+            r'(([0-9]*[.])?[0-9]+|[0-9]+[.])([+-]+)?', expr[::-1])
+
+        if number is None or number.start(
+        ) != 0:
+            raise Exception(
+                "the expression should be written in the following form 'number operator number'")
+
+        return number
+
+    def search_simple_number(self, expr):
+        number = re.search(r'(([0-9]*[.])?[0-9]+|[0-9]+[.])', expr[::-1])
+        return number

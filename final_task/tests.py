@@ -34,7 +34,7 @@ class TestFunctions(unittest.TestCase):
     def test_module(self):
 
         with self.assertRaises(Exception):
-            self.cheker.addargs("module.py")
+            self.cheker.add_args("module.py")
 
     def test_comparison(self):
         self.assertEqual(self.calculator.calculate(
@@ -70,4 +70,23 @@ class TestFunctions(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    calculator = difcalc.ComplexCalc()
+    cheker = CheckAndChange. CheckAndChange()
     unittest.main()
+"""
+    a="13+2"
+    try:
+
+        if a != "--help":
+
+            a = cheker.do_all_changes(a, None)
+            a = calculator.calculate(a)
+
+        else:
+            print("help yourself")
+
+    except Exception as e:
+        print("ERROR:  " + str(e))
+    else:
+        print(a)
+    """
