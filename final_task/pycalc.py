@@ -5,6 +5,7 @@ import string
 import math
 import operator
 import re
+import typing
 
 
 def pycalc():
@@ -117,6 +118,29 @@ def pycalc():
                 parse_information[index] = '-1'
                 parse_information.insert(index + 1, '*')
         return parse_information
+
+    def check_function_and_constants(parse_information):
+        """Checks functions or constants."""
+        copy_check_expression = parse_information.copy()
+        for index, element in enumerate(copy_check_expression):
+            if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
+                raise ValueError(f'function arguments not entered')
+            elif (element in FUNCTIONS) and copy_check_expression[index + 1] != '(':
+                raise ValueError(f'function arguments not entered')
+            elif re.fullmatch(NUMBERS, element):
+                copy_check_expression.pop(index)
+        difference = set(copy_check_expression).difference(
+            set(FUNCTIONS),
+            set(OPERATORS),
+            set(CONSTANTS),
+            set(string.digits),
+            {'{', '[', '(', ',', ')', ']', '}'},
+            {'True', 'False'}
+        )
+        if difference:
+            raise ValueError(f'unknown function or constant {difference}')
+        else:
+            return parse_information
 
     def polish_notation(parsed_information):
         """Function translate parsed information to RPN"""
@@ -236,29 +260,6 @@ def pycalc():
             return int(stack.pop())
         else:
             return stack.pop()
-
-    def check_function_and_constants(parse_information):
-        """Checks functions or constants."""
-        copy_check_expression = parse_information.copy()
-        for index, element in enumerate(copy_check_expression):
-            if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
-                raise ValueError(f'function arguments not entered')
-            elif (element in FUNCTIONS) and copy_check_expression[index + 1] != '(':
-                raise ValueError(f'function arguments not entered')
-            elif re.fullmatch(NUMBERS, element):
-                copy_check_expression.pop(index)
-        difference = set(copy_check_expression).difference(
-            set(FUNCTIONS),
-            set(OPERATORS),
-            set(CONSTANTS),
-            set(string.digits),
-            {'{', '[', '(', ',', ')', ']', '}'},
-            {'True', 'False'}
-        )
-        if difference:
-            raise ValueError(f'unknown function or constant {difference}')
-        else:
-            return parse_information
 
     return calculate(polish_notation(check_function_and_constants(
         negative_numbers(tokinazer(make_input_more_comfortable(input_from_command_line()))))))
