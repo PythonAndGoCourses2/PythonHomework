@@ -1,4 +1,3 @@
-# 16 may stable. exep, e^-e
 import argparse
 import math
 import operator
