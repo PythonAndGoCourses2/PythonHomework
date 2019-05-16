@@ -78,6 +78,7 @@ def is_float(token):
     except ValueError:
         return False
 
+
 def make_unarys(infix_string):
     """Translate unary operators in list
 
