@@ -1,6 +1,7 @@
 """Module to calculate result"""
 from pycalc import library
 from pycalc import exeptions
+from pycalc import translator
 
 
 def calculate(expr):

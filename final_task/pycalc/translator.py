@@ -13,20 +13,16 @@ def get_postfix(input_string):
     for token in input_string:
         if is_number(token):
             output_string.append(float(token))
-            continue
-        if token in library.CONSTANTS:
+        elif token in library.CONSTANTS:
             output_string.append(library.CONSTANTS[token])
-            continue
-        if token in library.FUNCTIONS:
+        elif token in library.FUNCTIONS:
             stack.append(token)
-            continue
-        if token == library.FUNC_DELIMITER:
+        elif token == library.FUNC_DELIMITER:
             while stack[-1] != library.OPEN_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError('brackets are not balanced')
-            continue
-        if token in library.OPERATORS:
+        elif token in library.OPERATORS:
             while stack[-1] in library.OPERATORS and \
                     ((token in library.LEFT_ASSOCIATIVITY and library.OPERATORS[token].priority <= library.OPERATORS[
                         stack[-1]].priority) or
@@ -35,11 +31,9 @@ def get_postfix(input_string):
                 output_string += [stack.pop()]
                 continue
             stack.append(token)
-            continue
-        if token == library.OPEN_BRACKET:
+        elif token == library.OPEN_BRACKET:
             stack.append(token)
-            continue
-        if token == library.CLOSE_BRACKET:
+        elif token == library.CLOSE_BRACKET:
             while stack[-1] != library.OPEN_BRACKET:
                 output_string += [stack.pop()]
                 if not stack:
@@ -47,8 +41,8 @@ def get_postfix(input_string):
             stack.pop()
             if stack[-1] in library.FUNCTIONS:
                 output_string += [stack.pop()]
-            continue
-        raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
+        else:
+            raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
     while stack[-1]:
         if stack[-1] == library.OPEN_BRACKET:
             raise exeptions.BracketsError('brackets are not balanced')
