@@ -128,10 +128,11 @@ def main():
     try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
         comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
+        expression = check.correct_check(expression) # Если всё нормально - возвращает строку
         expression = expression.replace(" ","")
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
-        if check.correct_check(expression) and expression:
+        if expression:
             if not comparison:
                 if check.brackets_check(expression):
                     print(calculating(expression))
