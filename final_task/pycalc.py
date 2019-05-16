@@ -118,7 +118,7 @@ def parse(xprstr):
                     break
                 j = j + 1
             xprstr = xprstr[:j]+')'+xprstr[j:]  # добавляем правую )
-            
+
     # добавление скобок для возведение в степень типа 2^3^4
     right = len(xprstr)
     for i in range(xprstr.count('^')):
@@ -134,9 +134,9 @@ def parse(xprstr):
             lt = right+2
             # поиск от ^ вправо если () или до знака
             brkt = 0
-            # print('поиск ^ вправо', xprstr[ss:])
-            for j, data in enumerate(xprstr[ss:]):
-                if data  == '(':
+            # print('поиск ^ вправо', xprstr[lt:])
+            for j, data in enumerate(xprstr[lt:]):
+                if data == '(':
                     brkt = brkt + 1
                 if data == ')':
                     brkt = brkt - 1
@@ -144,7 +144,7 @@ def parse(xprstr):
                     break
                 # print(j, data, brkt)
             xprstr = xprstr[:lt + 1 + j]+')'+xprstr[lt + 1 + j:]
-            # print(xprstr, '!!!!!!!',ss, right)
+            # print(xprstr, '!!!!!!!',lt, right)
         else:  # НЕ надо скобки
             right = left
 
@@ -319,7 +319,7 @@ def main():
         parsecmd()  # парсинг аргументов командной строки xpr выражение и module модуль функции
         addfunc(module)  # попытка добавления внешней функции если указана -m module
         calc(xpr)  # калькулятор. вычисление выражения в строке xpr
-    #except OEError:
+    # except OEError:
     except Exception as error:
         print('ERROR:', error)
     return
