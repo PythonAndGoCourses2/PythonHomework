@@ -40,6 +40,7 @@ class Calculator:
         if len(self.function.stack) and self.function.top() is not '(':
             if self.current_operator['priority'] >= self.function.top()['priority']:
                 self.current_result = self._calc_on_stack()
+        return self.current_result
 
     def calculate(self):
         for item in self.converted_list:
