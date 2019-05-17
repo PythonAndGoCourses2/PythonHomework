@@ -5,7 +5,6 @@ import string
 import math
 import operator
 import re
-import typing
 
 
 def pycalc(info_string):
