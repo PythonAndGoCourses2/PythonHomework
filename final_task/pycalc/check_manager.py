@@ -1,4 +1,5 @@
-from .operator_manager import operator_dict, function_dict, unary_dict
+import sys
+from .operator_manager import operator_dict, function_dict
 
 
 def check_expression(expression_list):

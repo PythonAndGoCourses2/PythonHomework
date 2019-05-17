@@ -1,11 +1,10 @@
-import sys
-from .operator_manager import operator_dict, function_dict, unary_dict
 from .check_manager import check_expression, number_check, operator_check, function_check
 
 
 class SplitOperators:
 
-    def __init__(self):
+    def __init__(self, expression_line):
+        self.expression_line = expression_line
         self.parsing_list = []
         self.last_number = ""
         self.last_letter = ""
@@ -59,9 +58,9 @@ class SplitOperators:
         if symbol != ' ':
             self.parsing_list.append(symbol)
 
-    def split_operators(self, expression_line):
-        if check_expression(expression_line):
-            for i in expression_line:
+    def split_operators(self):
+        if check_expression(self.expression_line):
+            for i in self.expression_line:
                 if i == " ":
                     self.blank_item = True
                     self._append_to_parsing_list()
