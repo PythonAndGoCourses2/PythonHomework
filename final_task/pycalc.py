@@ -19,6 +19,8 @@ for attr in dir(math):
             MATH_FUNC[attr] = getattr(math, attr)
     else:
         MATH_CONST[attr] = getattr(math, attr)
+
+
 def parse(expression):
     number, func, op, first_argument, second_argument = '', '', '', '', ''
     parsed_formula = []
