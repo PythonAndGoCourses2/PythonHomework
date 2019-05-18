@@ -18,29 +18,13 @@ def get_postfix(input_string):
         elif token in l.FUNCTIONS:
             stack.append(token)
         elif token == l.FUNC_DELIMITER:
-            while stack[-1] != l.OPEN_BRACKET:
-                output_string += [stack.pop()]
-                if not stack:
-                    raise exeptions.BracketsError('brackets are not balanced')
-        elif token in l.OPERATORS:  # check function
-            while stack[-1] in l.OPERATORS and \
-                    ((token in l.LEFT_ASSOCIATIVITY and l.OPERATORS[token].priority <= l.OPERATORS[
-                        stack[-1]].priority) or
-                     (token in l.RIGHT_ASSOCIATIVITY and l.OPERATORS[token].priority < l.OPERATORS[
-                         stack[-1]].priority)):
-                output_string += [stack.pop()]
-                continue
-            stack.append(token)
+            stack, output_string = process_func_delimiter(stack, output_string)
+        elif token in l.OPERATORS:
+            stack, output_string = process_operator(token, stack, output_string)
         elif token == l.OPEN_BRACKET:
             stack.append(token)
         elif token == l.CLOSE_BRACKET:
-            while stack[-1] != l.OPEN_BRACKET:
-                output_string += [stack.pop()]
-                if not stack:
-                    raise exeptions.BracketsError('brackets are not balanced')
-            stack.pop()
-            if stack[-1] in l.FUNCTIONS:
-                output_string += [stack.pop()]
+            stack, output_string = process_close_bracket(stack, output_string)
         else:
             raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
     while stack[-1]:
@@ -49,6 +33,40 @@ def get_postfix(input_string):
         if stack[-1] in l.OPERATORS:
             output_string += [stack.pop()]
     return output_string
+
+
+def process_func_delimiter(stack: list, output_string: str):
+    """function to make func delimiter branch"""
+    while stack[-1] != l.OPEN_BRACKET:
+        output_string += [stack.pop()]
+        if not stack:
+            raise exeptions.BracketsError('brackets are not balanced')
+    return stack, output_string
+
+
+def process_operator(token: str, stack: list, output_string: str):
+    """function to make operator branch"""
+    while stack[-1] in l.OPERATORS and \
+            ((token in l.LEFT_ASSOCIATIVITY and l.OPERATORS[token].priority <= l.OPERATORS[
+                stack[-1]].priority) or
+             (token in l.RIGHT_ASSOCIATIVITY and l.OPERATORS[token].priority < l.OPERATORS[
+                 stack[-1]].priority)):
+        output_string += [stack.pop()]
+        continue
+    stack.append(token)
+    return stack, output_string
+
+
+def process_close_bracket(stack: list, output_string: str):
+    """function to make close bracket branch"""
+    while stack[-1] != l.OPEN_BRACKET:
+        output_string += [stack.pop()]
+        if not stack:
+            raise exeptions.BracketsError('brackets are not balanced')
+    stack.pop()
+    if stack[-1] in l.FUNCTIONS:
+        output_string += [stack.pop()]
+    return stack, output_string
 
 
 def make_valid(expression):
