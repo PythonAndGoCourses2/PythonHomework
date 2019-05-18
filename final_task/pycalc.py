@@ -2,6 +2,7 @@ import math
 import argparse
 import operator
 import check
+from pprint import pprint
 
 OPERATORS = {'+': (1, operator.add),  # Первый элемент кортежа - приоритет
              '-': (1, operator.sub),  # Второй элемент - операция
@@ -10,12 +11,14 @@ OPERATORS = {'+': (1, operator.add),  # Первый элемент кортеж
              '//': (2, operator.floordiv),
              '%': (2, operator.mod),
              '^': (3, operator.pow)}
-MATH_CONST = {'e': math.e,
-              'pi': math.pi}
-MATH_FUNC = dict([(attr, getattr(math, attr)) for attr in dir(math) if getattr(math, attr)])
+MATH_FUNC, MATH_CONST = {}, {}
 MATH_FUNC["abs"], MATH_FUNC["round"] = abs, round  # Добавляем 2 built-in функции
-
-
+for attr in dir(math):
+    if type(getattr(math, attr)) != float:
+        if callable(getattr(math, attr)):
+            MATH_FUNC[attr] = getattr(math, attr)
+    else:
+        MATH_CONST[attr] = getattr(math, attr)
 def parse(expression):
     number, func, op, first_argument, second_argument = '', '', '', '', ''
     parsed_formula = []
@@ -25,9 +28,6 @@ def parse(expression):
         symbol = expression[i]
         if symbol.isalpha():
             func += symbol
-        elif func in MATH_CONST:  # Если является мат. const
-            parsed_formula.append(MATH_CONST[func])
-            func = ''
         elif func in MATH_FUNC:  # Если является мат. функцией
             while expression[i] != '(':  # Для таких функций как log10,log2 и т.д.
                 func += expression[i]
@@ -45,12 +45,31 @@ def parse(expression):
             j = 1
             if temp_string.count(",") > 1:  # Если много параметров
                 break
+            temp_func = ''
             while j < len(temp_string) - 1:
                 first_argument += temp_string[j]
                 j += 1
+                if temp_string[j].isalpha():
+                    temp_func += temp_string[j]
+                elif temp_func in MATH_FUNC:
+                    while temp_string[j] != '(':  # Для таких функций как log10,log2 и т.д.
+                        temp_func += temp_string[j]
+                        first_argument += temp_string[j]
+                        j += 1
+                    temp_brackets = 1
+                    first_argument += temp_string[j]
+                    j += 1
+                    while temp_brackets != 0:
+                        first_argument += temp_string[j]
+                        if temp_string[j] == '(':
+                            temp_brackets += 1
+                        elif temp_string[j] == ')':
+                            temp_brackets -= 1
+                        j += 1
                 if temp_string[j] == ',':
                     second_argument += temp_string[j + 1:-1]
                     break
+
             if not second_argument:
                 parsed_formula.append(MATH_FUNC[func](calculating(first_argument)))
             else:
@@ -68,6 +87,7 @@ def parse(expression):
                 op += symbol
             else:
                 number += symbol
+                func += symbol
         elif op:
             parsed_formula.append(op)
             op = ''
@@ -128,8 +148,8 @@ def main():
     try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
         comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
-        expression = check.correct_check(expression) # Если всё нормально - возвращает строку
-        expression = expression.replace(" ","")
+        expression = check.correct_check(expression)  # Если всё нормально - возвращает строку
+        expression = check.replace_whitespace_and_const(expression)
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
         if expression:

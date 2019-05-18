@@ -1,7 +1,7 @@
 import re
 import operator
 import pycalc
-
+import math
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
                         '!=': operator.ne,
@@ -88,6 +88,11 @@ def correct_check(expr):
     return expr
 
 
+def replace_whitespace_and_const(expr):
+    expr = expr.replace(" ", "")
+    for constant in pycalc.MATH_CONST.keys():
+        expr = expr.replace(constant, str(pycalc.MATH_CONST[constant]))
+    return expr
 
 
 
