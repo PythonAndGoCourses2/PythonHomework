@@ -31,12 +31,10 @@ class TestFunctions(unittest.TestCase):
             self.cheker.do_all_changes("", None)
             self.cheker.do_all_changes(" ", None)
 
-    """
-        def test_module(self):
+    def test_module(self):
 
         with self.assertRaises(Exception):
             self.cheker.add_args("module.py")
-            """
 
     def test_comparison(self):
         self.assertEqual(self.calculator.calculate(

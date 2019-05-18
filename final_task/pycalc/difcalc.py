@@ -5,20 +5,17 @@ from numbers import Number
 
 
 class ComplexCalc():
-    def __init__(self):
-        self.const = {
-            attr: getattr(
-                math,
-                attr) for attr in dir(math) if isinstance(
-                getattr(
-                    math,
-                    attr),
-                Number)}
-        self.const["True"] = 1
-        self.const["False"] = 0
 
     calc = easyCalculation.Calculator()
-
+    const = {**{
+        attr: getattr(
+            math,
+            attr) for attr in dir(math) if isinstance(
+            getattr(
+                math,
+                attr),
+            Number)}**{"True": True,
+                       "False": False}}
     math_functions = {**{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
                       **{"abs": lambda a: abs(a),
                          "round": lambda a: round(a),

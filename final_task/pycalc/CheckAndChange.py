@@ -1,7 +1,7 @@
 import re
 import pycalc.operators as operators
 import pycalc.difcalc as difcalc
-#from numbers import Number
+from numbers import Number
 import importlib.util
 from os import path
 
@@ -21,7 +21,7 @@ class CheckAndChange():
         # self.add_args(module)
         return expr
 
-    """def add_args(self, modul):
+    def add_args(self, modul):
         if modul is not None:
             base = path.basename(modul)
 
@@ -47,7 +47,6 @@ class CheckAndChange():
                         attr),
                     Number)}
             difcalc.ComplexCalc.const.update(new_const)
-"""
 
     def correct_spaces(self, expr):
         searcher = expr.find(" ")
