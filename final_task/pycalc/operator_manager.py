@@ -1,7 +1,6 @@
 import math
 import operator
 
-
 function_dict = {
     'abs': {'operator': abs, 'priority': 0},
     'round': {'operator': round, 'priority': 0}
