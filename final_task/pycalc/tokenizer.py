@@ -17,7 +17,7 @@ def tokenize(expression):
     """Returns list of tokens from input string"""
     token = ''
     tokens = []
-    category = None
+    category = []
     expression = prepare_string(expression)
     for char in expression:
         if token:
