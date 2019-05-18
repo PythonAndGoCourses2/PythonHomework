@@ -73,21 +73,3 @@ class TestFunctions(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    """    cheker = CheckAndChange.CheckAndChange()
-    calculator = difcalc.ComplexCalc()
-    a="2==2>=2"
-    try:
-
-        if a != "--help":
-
-            a = cheker.do_all_changes(a, None)
-            a = calculator.calculate(a)
-
-        else:
-            print("help yourself")
-
-    except Exception as e:
-        print("ERROR:  " + str(e))
-    else:
-        print(a)
-    """
