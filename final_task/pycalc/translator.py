@@ -22,7 +22,7 @@ def get_postfix(input_string):
                 output_string += [stack.pop()]
                 if not stack:
                     raise exeptions.BracketsError('brackets are not balanced')
-        elif token in l.OPERATORS:
+        elif token in l.OPERATORS:  # check function
             while stack[-1] in l.OPERATORS and \
                     ((token in l.LEFT_ASSOCIATIVITY and l.OPERATORS[token].priority <= l.OPERATORS[
                         stack[-1]].priority) or

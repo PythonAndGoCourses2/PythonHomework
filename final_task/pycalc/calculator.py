@@ -1,7 +1,6 @@
 """Module to calculate result"""
 from pycalc import library
 from pycalc import exeptions
-from pycalc import translator
 
 
 def calculate(expr):
@@ -28,7 +27,7 @@ def calculate(expr):
                 stack.append(float(token))
         except IndexError:
             raise exeptions.InvalidStringError('not balanced operators and operands')
-    if not len(stack) == 1:
+    if len(stack) != 1:
         raise exeptions.InvalidStringError('not balanced operators and operands')
     return stack.pop()
 
