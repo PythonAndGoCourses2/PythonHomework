@@ -31,10 +31,12 @@ class TestFunctions(unittest.TestCase):
             self.cheker.do_all_changes("", None)
             self.cheker.do_all_changes(" ", None)
 
-    def test_module(self):
+    """
+        def test_module(self):
 
         with self.assertRaises(Exception):
             self.cheker.add_args("module.py")
+            """
 
     def test_comparison(self):
         self.assertEqual(self.calculator.calculate(
@@ -70,11 +72,10 @@ class TestFunctions(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    calculator = difcalc.ComplexCalc()
-    cheker = CheckAndChange. CheckAndChange()
     unittest.main()
-"""
-    a="13+2"
+    """    cheker = CheckAndChange.CheckAndChange()
+    calculator = difcalc.ComplexCalc()
+    a="2==2>=2"
     try:
 
         if a != "--help":

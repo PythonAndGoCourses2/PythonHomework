@@ -27,9 +27,9 @@ class Calculator():
             expr = self.__binary_operation(expr, begin, point, end)
             place = re.search(r'/|\*|%|&', expr)
 
-        return self.__sum(expr)
+        return self.sum(expr)
 
-    def __sum(self, expr):
+    def sum(self, expr):
 
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")

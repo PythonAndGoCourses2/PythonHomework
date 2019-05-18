@@ -5,6 +5,17 @@ from numbers import Number
 
 
 class ComplexCalc():
+    def __init__(self):
+        self.const = {
+            attr: getattr(
+                math,
+                attr) for attr in dir(math) if isinstance(
+                getattr(
+                    math,
+                    attr),
+                Number)}
+        self.const["True"] = 1
+        self.const["False"] = 0
 
     calc = easyCalculation.Calculator()
 
@@ -12,15 +23,6 @@ class ComplexCalc():
                       **{"abs": lambda a: abs(a),
                          "round": lambda a: round(a),
                          "pow": lambda a, b: pow(a, b)}}
-
-    const = {
-        attr: getattr(
-            math,
-            attr) for attr in dir(math) if isinstance(
-            getattr(
-                math,
-                attr),
-            Number)}
 
     def expression_search(self, expr):
 
@@ -33,9 +35,9 @@ class ComplexCalc():
 
             afterExpr = func.end()
             k = func.start()
-            if func[0] in ComplexCalc.const:
+            if func[0] in self.const:
 
-                s = ComplexCalc.const[func[0]]
+                s = self.const[func[0]]
                 expr = expr[:k] + str(s) + expr[afterExpr:]
                 continue
 
@@ -113,17 +115,29 @@ class ComplexCalc():
     }
 
     def calculate(self, expr):
-        # заменить на разбор операторов с двумя знаками и более
+
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
-        if place:
+
+        while place is not None:
+            after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',
+                              expr[place.end():])
             a = self.expression_search(expr[:place.start()])
-            b = self.expression_search(expr[place.end():])
+            if after is None:
+                b = self.expression_search(expr[place.end():])
+            else:
+                b = self.expression_search(
+                    expr[place.end():after.start() + place.end()])
             if a and b:
 
-                return ComplexCalc.compare[place[0]](a, b)
+                rezult = ComplexCalc.compare[place[0]](a, b)
+                end = ""
+                if after is not None:
+                    end = expr[after.end() + place.end():]
+                expr = str(rezult) + end
             else:
                 raise Exception(
                     "uncorrect expression must be 'expr' operator 'expr'")
-
-        else:
-            return self.expression_search(expr)
+            place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
+            if place is None:
+                return bool(self.expression_search(expr))
+        return self.expression_search(expr)
