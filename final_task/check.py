@@ -1,7 +1,7 @@
 import re
 import operator
 import pycalc
-import math
+
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
                         '!=': operator.ne,
@@ -55,7 +55,6 @@ def fix_unary(expr):
         expr = "0" + expr
     expr = re.sub(r'\(\-', '(0-', expr)
     expr = re.sub(r'\(\+', '(0+', expr)
-
     return expr
 
 
@@ -74,15 +73,15 @@ def replace_plus_minus(expr):
 
 
 def correct_check(expr):
-    for operation in pycalc.OPERATORS: # Если последний символ строки операция
+    for operation in pycalc.OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
             return False
-    expr_list=expr.split()
+    expr_list = expr.split()
     i = 0
-    while i<len(expr_list)-1:
-        if expr_list[i].isdigit() and expr_list[i+1].isdigit():
+    while i < len(expr_list) - 1:
+        if expr_list[i].isdigit() and expr_list[i + 1].isdigit():
             return False
-        if expr_list[i] in "/*^%" and expr_list[i+1] in "/*^%":
+        if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
             return False
         i += 1
     return expr
@@ -93,6 +92,3 @@ def replace_whitespace_and_const(expr):
     for constant in pycalc.MATH_CONST.keys():
         expr = expr.replace(constant, str(pycalc.MATH_CONST[constant]))
     return expr
-
-
-
