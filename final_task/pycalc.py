@@ -25,7 +25,6 @@ def pycalc(info_string):
 
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
-
     def split_brackets(tokensarray, token):
         """Function split brackets. For example: '((' -> '(','('."""
         if '(' in token or ')' in token:
