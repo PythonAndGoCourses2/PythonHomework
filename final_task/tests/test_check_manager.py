@@ -100,7 +100,7 @@ class TestCheckManager(unittest.TestCase):
     def test_function_check_function_dict(self):
         function_lst = ['abs', 'round']
         for key in math.__dict__.keys():
-            if key.startswith('_') or key == 'e' or key == 'pi':
+            if key.startswith('_') or key == 'e' or key == 'pi' or key == 'tau':
                 continue
             function_lst.append(key)
         for i in range(len(function_lst)):
