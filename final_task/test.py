@@ -1,12 +1,11 @@
 import unittest
-import pycalc
-import check
+import core
 from math import *
 
 
 class PycalcTest(unittest.TestCase):
     def test_check(self):
-        self.assertEqual(pycalc.calculating("2+2"), 2+2)
+        self.assertEqual(core.calculating("2+2"), 2+2)
 
 
 if __name__ == '__main__':

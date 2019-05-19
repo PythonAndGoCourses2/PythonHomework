@@ -1,6 +1,8 @@
+"""This module checks the correctness of the entered expression."""
+
 import re
 import operator
-import pycalc
+import core
 
 COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<=': operator.le,
@@ -43,7 +45,7 @@ def comparison_calc(expr, item):
     if '=' in second_argument:
         print("ERROR: incorrect expression.")
         exit(-1)
-    x, y = pycalc.calculating(first_argument), pycalc.calculating(second_argument)
+    x, y = core.calculating(first_argument), core.calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
 
@@ -73,7 +75,7 @@ def replace_plus_minus(expr):
 
 
 def correct_check(expr):
-    for operation in pycalc.OPERATORS:  # Если последний символ строки операция
+    for operation in core.OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
             return False
     expr_list = expr.split()
@@ -89,6 +91,6 @@ def correct_check(expr):
 
 def replace_whitespace_and_const(expr):
     expr = expr.replace(" ", "")
-    for constant in pycalc.MATH_CONST.keys():
-        expr = expr.replace(constant, str(pycalc.MATH_CONST[constant]))
+    for constant in core.MATH_CONST.keys():
+        expr = expr.replace(constant, str(core.MATH_CONST[constant]))
     return expr
