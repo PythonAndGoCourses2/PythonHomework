@@ -112,7 +112,8 @@ def pycalc(info_string):
         return parse_information
 
     def check_function_and_constants(parse_information):
-        """Checks functions or constants."""
+        """Checks functions or constants. Do the entered functions
+         and constants coincide with those used in the process"""
         copy_check_expression = parse_information.copy()
         for index, element in enumerate(copy_check_expression):
             if index == len(copy_check_expression) - 1 and (element in FUNCTIONS):
