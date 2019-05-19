@@ -2,14 +2,14 @@ import sys
 from .operator_manager import operator_dict, function_dict
 
 
-def check_expression(expression_list):
-    if not expression_list:
+def check_expression(expression_line):
+    if not expression_line:
         raise SyntaxError('Expression cannot be empty')
-    if expression_list.count('(') < expression_list.count(')'):
+    if expression_line.count('(') < expression_line.count(')'):
         raise SyntaxError('Opening bracket required!')
-    elif expression_list.count('(') > expression_list.count(')'):
+    elif expression_line.count('(') > expression_line.count(')'):
         raise SyntaxError('Closing bracket required!')
-    return expression_list
+    return expression_line
 
 
 def check_parsing_list(parsing_list):
@@ -17,8 +17,8 @@ def check_parsing_list(parsing_list):
         if parsing_list[0] is not '+' and parsing_list[0] is not '-':
             raise SyntaxError('Expression cannot start with "{}"'.format(parsing_list[0]))
     if len(parsing_list) == 1:
-        if type(parsing_list[0]) is int or type(parsing_list[0]) is float:
-            return True
+        if isinstance(parsing_list[0], int) or isinstance(parsing_list[0], float):
+            return parsing_list
         raise SyntaxError('Expression must include at list one operand!')
     if parsing_list[-1] in operator_dict.keys():
         raise SyntaxError('Extra operator "{}" at the end of an expression!'.format(parsing_list[-1]))
@@ -47,7 +47,7 @@ def function_check(function_name):
         if sys.version_info >= (3, 6):
             return function_dict[function_name]['operator']
         else:
-            return 2 * function_dict['e']['operator']
+            return 2 * function_dict['pi']['operator']
     elif function_name in function_dict.keys():
         return function_name
     else:
