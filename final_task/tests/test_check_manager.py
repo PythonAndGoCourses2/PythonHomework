@@ -1,7 +1,9 @@
 import unittest
 import operator
 import math
-from pycalc.check_manager import check_expression, number_check, operator_check, function_check
+from pycalc.check_manager import check_expression, number_check, operator_check, \
+    function_check, check_parsing_list
+from pycalc.operator_manager import operator_dict, function_dict
 
 
 class TestCheckManager(unittest.TestCase):
@@ -100,7 +102,7 @@ class TestCheckManager(unittest.TestCase):
         for key in math.__dict__.keys():
             if key.startswith('_') or key == 'e' or key == 'pi':
                 continue
-            function_lst.append(k)
+            function_lst.append(key)
         for i in range(len(function_lst)):
             self.assertEqual(function_lst[i], function_check(function_lst[i]))
 
