@@ -1,6 +1,6 @@
 import argparse
 import check
-from core import calculating
+import core
 
 
 def create_parser():
@@ -22,7 +22,7 @@ def main():
         if expression:
             if not comparison:
                 if check.brackets_check(expression):
-                    print(calculating(expression))
+                    print(core.calculating(expression))
             else:
                 print(check.comparison_calc(expression, comparison))
         else:
