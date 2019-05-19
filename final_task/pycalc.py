@@ -25,13 +25,6 @@ def pycalc(info_string):
 
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
-    # def input_from_command_line():
-    #     """Get information about input from command line """
-    #
-    #     parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
-    #     parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
-    #     args = parser.parse_args()
-    #     return args.EXPRESSION
 
     def split_brackets(tokensarray, token):
         """Function split brackets. For example: '((' -> '(','('."""
@@ -42,7 +35,7 @@ def pycalc(info_string):
         else:
             tokensarray.append(token)
 
-    def make_input_more_comfortable(the_input):
+    def make_input_comfortable(the_input):
         """Make input information more usable for futher processing """
         if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
                 or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
@@ -50,11 +43,11 @@ def pycalc(info_string):
                 or re.compile(r'[+-/*%^=<>]\)').findall(the_input) \
                 or re.compile(r'[<>/*=!]\s+[=/*]').findall(the_input) \
                 or re.compile(r'\(\)').findall(the_input):
-            raise ValueError(f'Invalid expression')
+            raise ValueError("Invalid expression")
         elif not the_input:
-            raise ValueError(f'Empty field')
+            raise ValueError("Empty field")
         elif the_input.count('(') != the_input.count(')'):
-            raise ValueError(f'Brackets are not balanced')
+            raise ValueError("Brackets are not balanced")
         the_input = the_input.replace(' ', '')
         the_input = the_input.replace('log10(', 'lg(')
         while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
@@ -227,7 +220,7 @@ def pycalc(info_string):
                 if arguments(FUNCTIONS[token]) == 1:
                     op = stack.pop()
                     if stack[-1] == ',':
-                        raise ValueError(f'invalid number of arguments')
+                        raise ValueError("Invalid number of arguments")
                     stack.append(FUNCTIONS[token](op))
                 elif arguments(FUNCTIONS[token]) == 2:
                     if stack[-2] == ',':
@@ -235,7 +228,7 @@ def pycalc(info_string):
                         stack.pop()
                         op1 = stack.pop()
                         if stack[-1] == ',':
-                            raise ValueError(f'invalid number of arguments')
+                            raise ValueError("Invalid number of arguments")
                         else:
                             stack.append(FUNCTIONS[token](op1, op2))
                     else:
@@ -261,7 +254,7 @@ def pycalc(info_string):
             return stack.pop()
 
     return calculate(polish_notation(check_function_and_constants(
-        negative_numbers(tokinazer(make_input_more_comfortable(info_string))))))
+        negative_numbers(tokinazer(make_input_comfortable(info_string))))))
 
 
 def main():
@@ -269,7 +262,6 @@ def main():
         parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
         parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
         args = parser.parse_args()
-        # print(pycalc())
         print(pycalc(args.EXPRESSION))
     except Exception as exeption:
         print(f'ERROR: {exeption}')
