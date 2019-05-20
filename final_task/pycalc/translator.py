@@ -18,16 +18,17 @@ def get_postfix(input_string):
         elif token in lib.FUNCTIONS:
             stack.append(token)
         elif token == lib.FUNC_DELIMITER:
-            stack, output_string = process_func_delimiter(stack, output_string)
+            process_func_delimiter(stack, output_string)
         elif token in lib.OPERATORS:
-            stack, output_string = process_operator(token, stack, output_string)
+            process_operator(token, stack, output_string)
         elif token == lib.OPEN_BRACKET:
             stack.append(token)
         elif token == lib.CLOSE_BRACKET:
-            stack, output_string = process_close_bracket(stack, output_string)
+            process_close_bracket(stack, output_string)
         else:
             raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
-    return process_all_left(stack, output_string)
+    process_all_left(stack, output_string)
+    return output_string
 
 
 def process_func_delimiter(stack: list, output_string: list):
@@ -36,7 +37,6 @@ def process_func_delimiter(stack: list, output_string: list):
         output_string += [stack.pop()]
         if not stack:
             raise exeptions.BracketsError('brackets are not balanced')
-    return stack, output_string
 
 
 def process_operator(token: str, stack: list, output_string: list):
@@ -49,7 +49,6 @@ def process_operator(token: str, stack: list, output_string: list):
         output_string += [stack.pop()]
         continue
     stack.append(token)
-    return stack, output_string
 
 
 def process_close_bracket(stack: list, output_string: list):
@@ -61,7 +60,6 @@ def process_close_bracket(stack: list, output_string: list):
     stack.pop()
     if stack[-1] in lib.FUNCTIONS:
         output_string += [stack.pop()]
-    return stack, output_string
 
 
 def process_all_left(stack, output_string):
@@ -71,7 +69,6 @@ def process_all_left(stack, output_string):
             raise exeptions.BracketsError('brackets are not balanced')
         if stack[-1] in lib.OPERATORS:
             output_string += [stack.pop()]
-    return output_string
 
 
 def make_valid(expression):
