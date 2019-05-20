@@ -204,10 +204,10 @@ def pycalc(info_string):
             reverse_polish_notation += stack.pop() + separator
         return reverse_polish_notation
 
-    def arguments(function):
+    def arguments(math_function):
         """Determines how many arguments function includes."""
 
-        spec = function.__doc__.split('\n')[0]
+        spec = math_function.__doc__.split('\n')[0]
         arg = spec[spec.find('(') + 1:spec.find(')')]
         return arg.count(',') + 1 if arg else 0
 
