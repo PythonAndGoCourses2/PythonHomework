@@ -1,6 +1,6 @@
 import unittest
 import math
-import calc
+import final_task.calc as calc
 
 class TestCalc(unittest.TestCase):
     """"""
