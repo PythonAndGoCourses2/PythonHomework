@@ -7,7 +7,7 @@ setup(
     author_email="stashchen@gmail.com",
     description="Pure-python command line calculator",
     entry_points={
-        "console_scripts": ["pycalc=final_task.calc:main"]},
+        "console_scripts": ["pycalc=calc:main"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
