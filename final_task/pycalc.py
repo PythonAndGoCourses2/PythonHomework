@@ -50,11 +50,7 @@ CONSTANTS = {
     'e': math.e,
     'pi': math.pi,
     'tau': math.tau,
-    '-e': -math.e,
-    '-pi': -math.pi,
-    '-tau': -math.tau,
     'inf': math.inf,
-    '-inf': -math.inf,
     'nan': math.inf
 }
 ALL_NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
@@ -122,11 +118,8 @@ def py_calculator(math_expression: str) -> Union[int, float, bool, tuple]:
             """
 
             for index, element in enumerate(parse_list):
-                if element == '-' and (re.fullmatch(ALL_NUMBERS, parse_list[index + 1])
-                                       or parse_list[index + 1] in CONSTANTS):
+                if element == '-' and re.fullmatch(ALL_NUMBERS, parse_list[index + 1]):
                     if parse_list[index - 1] in '(*/%//^,':
-                        parse_list[index] += parse_list.pop(index + 1)
-                    elif parse_list.index(element) == 0:
                         parse_list[index] += parse_list.pop(index + 1)
                     elif index == len(parse_list) - 2:
                         if re.search(ALL_NUMBERS, parse_list[index + 1]):
@@ -182,7 +175,7 @@ def py_calculator(math_expression: str) -> Union[int, float, bool, tuple]:
                                                     set(CONSTANTS),
                                                     set(BUILT_IN_FUNCTION),
                                                     {'{', '[', '(', ',', ':', ')', ']', '}'},
-                                                    {'True', 'False', 'abs_tol', 'rel_tol'}
+                                                    {'True', 'False', 'abs_tol', 'rel_tol'},
                                                     )
             if diff:
                 raise ValueError(f'unknown function or constant {diff}')
