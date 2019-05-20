@@ -91,9 +91,9 @@ def pycalc(info_string):
 
     def negative_numbers(parse_information):
         """Working with negative numbers in parse information from command line"""
+
         for index, element in enumerate(parse_information):
-            if element == '-' and (re.fullmatch(NUMBERS, parse_information[index + 1])
-                                   or parse_information[index + 1] in CONSTANTS):
+            if element == '-' and (re.fullmatch(NUMBERS, parse_information[index + 1])):
                 if parse_information[index - 1] in '(*/%//^,':
                     parse_information[index] += parse_information.pop(index + 1)
                 elif parse_information.index(element) == 0:
@@ -105,7 +105,9 @@ def pycalc(info_string):
                 elif parse_information[index + 2] in '*/%//' and re.search(NUMBERS, parse_information[index + 1]):
                     parse_information[index] += parse_information.pop(index + 1)
                     parse_information.insert(index, '+')
-            elif element == '-' and parse_information[index + 1] in FUNCTIONS and parse_information[index - 1] == '(':
+            elif element == '-' and (
+                    parse_information[index + 1] in FUNCTIONS or parse_information[index + 1] in CONSTANTS) and \
+                    parse_information[index - 1] == '(':
                 parse_information[index] = '-1'
                 parse_information.insert(index + 1, '*')
         return parse_information
