@@ -14,17 +14,10 @@ COMPARISON_OPERATORS = {'>=': operator.ge,
 
 def brackets_check(expr):
     """Check brackets balance"""
-    brackets = 0
-    for symbol in expr:
-        if symbol == '(':
-            brackets += 1
-        elif symbol == ')':
-            brackets -= 1
-    if brackets != 0:
+    if expr.count('(') != expr.count(')'):
         print("ERROR: brackets are not balanced")
         return False
-    else:
-        return True
+    return True
 
 
 def comparison_check(expr):
@@ -74,6 +67,13 @@ def replace_plus_minus(expr):
     return expr
 
 
+def replace_whitespace_and_const(expr):
+    expr = expr.replace(" ", "")
+    for constant in core.MATH_CONST.keys():
+        expr = expr.replace(constant, str(core.MATH_CONST[constant]))
+    return expr
+
+
 def correct_check(expr):
     for operation in core.OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
@@ -86,11 +86,4 @@ def correct_check(expr):
         if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
             return False
         i += 1
-    return expr
-
-
-def replace_whitespace_and_const(expr):
-    expr = expr.replace(" ", "")
-    for constant in core.MATH_CONST.keys():
-        expr = expr.replace(constant, str(core.MATH_CONST[constant]))
     return expr
