@@ -238,7 +238,7 @@ def postfix(xprlst):
 
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
-    global stack
+    global stack  # используется в функции evalpostfix
     # # # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
@@ -252,7 +252,7 @@ def operate(operator, args):
                 result = funcdic[operator]()  # если функция без аргументов типа pi, e, tau
             except TypeError:
                 try:
-                    result = funcdic[operator]  # если внешняя функция без аргументов типа pi, e, tau
+                    result = funcdic[operator]  # если внешняя функция без аргументов типа myfunc()
                     if type(result) != float:
                         raise ValueError('ERROR: not float argument for ', operator)
                 except TypeError:
@@ -264,8 +264,8 @@ def operate(operator, args):
 
 
 def evalpostfix(xprpstfx):
-    """ вычисление выражения в постфиксной нотации """
-    global stack
+    """ вычисление выражения в постфиксной нотации (список)"""
+    global stack  # используется в функции operate для удаления аргументов из стека
     stack = []
     args = []
     for i in xprpstfx:
@@ -298,12 +298,12 @@ def evalpostfix(xprpstfx):
             # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-
         # print('STACK',stack)
     return stack[0]
 
 
 def calc(xpr):
+    """ вычисление строки (xpr) математического выражения"""
     xprlst = parse(xpr)  # разбор строки вырыжения в список
     # print(*xprlst, sep=' ')
     xprlst = postfix(xprlst)  # преобразование инфиксного списка в постфиксных список
