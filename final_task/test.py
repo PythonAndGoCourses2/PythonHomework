@@ -45,18 +45,18 @@ class TestPycalc(unittest.TestCase):
         self.assertEqual(pycalc.calc("e^34"), eval("e**34"))
         self.assertEqual(pycalc.calc("(2.0^(pi/pi+e/e+2.0^0.0))"), eval("(2.0**(pi/pi+e/e+2.0**0.0))"))
         self.assertEqual(pycalc.calc("(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)"),
-                        eval("(2.0**(pi/pi+e/e+2.0**0.0))**(1.0/3.0)"))
+                         eval("(2.0**(pi/pi+e/e+2.0**0.0))**(1.0/3.0)"))
         self.assertEqual(pycalc.calc("sin(pi/2^1) + log(1*4+2^2+1, 3^2)"),
-                        eval("sin(pi/2**1) + log(1*4+2**2+1, 3**2)"))
+                         eval("sin(pi/2**1) + log(1*4+2**2+1, 3**2)"))
         self.assertEqual(pycalc.calc("10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"),
-                        eval("10*e**0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"))
+                         eval("10*e**0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"))
         self.assertEqual(pycalc.calc("sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))"
-                        "+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"),
-                        eval("sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))"
-                        +cos(sin(sin(34.0-2.0**2.0))))--cos(1.0)--cos(0.0)**3.0)"))
+                         "+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"),
+                         eval("sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))"
+                         "+cos(sin(sin(34.0-2.0**2.0))))--cos(1.0)--cos(0.0)**3.0)"))
         self.assertEqual(pycalc.calc("2.0^(2.0^2.0*2.0^2.0)"), eval("2.0**(2.0**2.0*2.0**2.0)"))
         self.assertEqual(pycalc.calc("sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"),
-                        eval("sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e)))"))
+                         eval("sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e)))"))
 
 
     def testerrorscases(self):
