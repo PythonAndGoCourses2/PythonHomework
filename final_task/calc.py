@@ -218,7 +218,7 @@ def count_result(formula):
                     sec_elem = lst_for_result[-1]
     return lst_for_result[-1]
 
-if __name__ == '__main__':
+def main():
     parser = create_parser()
     args = parser.parse_args()
     formula = args.EXPRESSION
@@ -226,3 +226,6 @@ if __name__ == '__main__':
     final_result = choosing_the_solution(formula)
 
     print(final_result)
+
+if __name__ == '__main__':
+    main()
