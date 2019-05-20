@@ -366,8 +366,10 @@ def calculate(math_expression: str) -> Union[int, float, bool, tuple]:
                     op1 = stack.pop()
                     if stack[-1] == ',':
                         raise ValueError(f'invalid number of arguments')
+                    # ldexp is a function from the math module
                     elif token == 'ldexp':
                         stack.append(FUNCTIONS[token](op1, int(op2)))
+                    # gcd is a function from the math module
                     elif token == 'gcd':
                         stack.append(FUNCTIONS[token](int(op1), int(op2)))
                     else:
