@@ -5,12 +5,8 @@ setup(
     version="0.0.1",
     author="Pavel Stashchenko",
     author_email="stashchen@gmail.com",
-    description="Pure-python command line calculator",
-    entry_points={
-        "console_scripts": ["pycalc=calc:main"]},
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
+    packages=find_packages(),
+    description='Pure-python command-line calculator.',
+    py_modules=["calc", "test_calc"],
+    entry_points={'console_scripts': ['pycalc=calc:main']}
 )
