@@ -1,7 +1,7 @@
 import math
 import operator
 import unittest
-from .pycalc.converter import Converter
+from pycalc.converter import Converter
 
 
 class TestConverter(unittest.TestCase):

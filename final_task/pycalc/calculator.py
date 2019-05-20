@@ -1,7 +1,6 @@
 from .stack_manager import Stack
 from .operator_manager import operator_dict, function_dict, unary_dict
 from .split_operators import SplitOperators
-from .check_manager import check_expression
 from .converter import Converter
 
 
