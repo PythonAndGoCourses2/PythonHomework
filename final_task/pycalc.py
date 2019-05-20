@@ -55,8 +55,8 @@ def pycalc(info_string):
             the_input = re.sub(r'--', '+', the_input)
         return the_input
 
-    def tokinazer(comfortable_input):
-        """Splitting information into tokens for the0
+    def tokenize(comfortable_input):
+        """Splitting information into tokens for the
            explict form of expression,functions and
            constants. """
         categories = [string.digits + '.', '(', ')' '//', '^', '+-*/%', '==', '<=', '>=', '!=', '>', '<',
@@ -255,7 +255,7 @@ def pycalc(info_string):
             return stack.pop()
 
     return calculate(polish_notation(check_function_and_constants(
-        negative_numbers(tokinazer(make_input_comfortable(info_string))))))
+        negative_numbers(tokenize(make_input_comfortable(info_string))))))
 
 
 def main():
