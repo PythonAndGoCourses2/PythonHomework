@@ -35,8 +35,8 @@ class TestCalc(unittest.TestCase):
 
     def test_polish_check(self):
         self.assertEqual(calc.polish_check(["(", 2.2, "+", "abs", "(", -3.8, ")", ")"]), [2.2, -3.8, "abs", "+"])
-        self.assertEqual(calc.polish_check(["(", 3.2, "*", 3, "^", 2, ")", "/", "(", 7, "*", 2, ")"]),
-                                           [3.2, 3, 2, "^", "*", 7, 2, "*", "/"])
+        self.assertEqual(calc.polish_check(["(", 3.2, "*", 3, "^", 2, ")", "/", "(", 7, "*", 2, ")"]), 
+                         [3.2, 3, 2, "^", "*", 7, 2, "*", "/"])
 
     def test_count_result(self):
         self.assertEqual(calc.count_result([3.2, 3, 2, "^", "*", 7, 2, "*", "/"]), 2.0571428571428574)
