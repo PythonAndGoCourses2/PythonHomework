@@ -47,7 +47,6 @@ class Converter:
     def _function_converter(self, function):
         if self.last_item:
             if self.last_item == '-' and self.converted_list[-1] != '(':
-
                 self._append_to_converted_list(
                                                 operator_dict['+'],
                                                 -1,

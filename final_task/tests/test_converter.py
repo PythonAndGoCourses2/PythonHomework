@@ -146,6 +146,7 @@ class TestConverter(unittest.TestCase):
         function_str = 'sin'
         converter._function_converter(function_str)
         self.assertEqual([')',
+                          {'operator': operator.add, 'priority': 4},
                           -1,
                           {'operator': operator.mul, 'priority': 3},
                           {'operator': math.sin, 'priority': 0}],
