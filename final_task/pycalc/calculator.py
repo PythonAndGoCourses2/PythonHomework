@@ -34,6 +34,6 @@ def calculate(expr):
 
 def count_args(func):
     """Returns number of function arguments"""
-    spec = library.FUNCTIONS[func].__doc__.split('\n')[0]
-    arg = spec[spec.find('(') + 1:spec.find(')')]
-    return arg.count(',') + 1 if arg else 0
+    specification = library.FUNCTIONS[func].__doc__.split('\n')[0]
+    arguments = specification[specification.find('(') + 1:specification.find(')')]
+    return arguments.count(',') + 1 if arguments else 0
