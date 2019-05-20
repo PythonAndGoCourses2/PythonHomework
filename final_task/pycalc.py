@@ -20,8 +20,7 @@ def pycalc(info_string):
         '>=': (operator.ge, 0), '>': (operator.gt, 0)}
     """Operators by priority """
 
-    CONSTANTS = {'pi': math.pi, '-pi': -math.pi, 'e': math.e, '-e': -math.e,
-                 'tau': math.tau, '-tau': -math.tau}
+    CONSTANTS = {'pi': math.pi, 'e': math.e, 'tau': math.tau}
 
     NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
