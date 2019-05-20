@@ -8,5 +8,5 @@ setup(
     packages=find_packages(),
     description='Pure-python command-line calculator.',
     py_modules=["calc", "test_calc"],
-    entry_points={'console_scripts': ['calc=calc:main']}
+    entry_points={'console_scripts': ['pycalc=calc:main']}
 )
