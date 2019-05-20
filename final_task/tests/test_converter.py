@@ -1,7 +1,7 @@
 import math
 import operator
 import unittest
-from .pycalc.operator_manager import operator_dict, function_dict, unary_dict
+from .pycalc.converter import Converter
 
 
 class TestConverter(unittest.TestCase):
