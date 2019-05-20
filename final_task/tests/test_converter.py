@@ -164,7 +164,7 @@ class TestConverter(unittest.TestCase):
                          converter.converted_list)
 
     def test_converter_remove_space(self):
-        converter = Converter([42,' '])
+        converter = Converter([42, ' '])
         converter.converter()
         self.assertEqual([42], converter.converted_list)
 
