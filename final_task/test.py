@@ -58,7 +58,6 @@ class TestPycalc(unittest.TestCase):
         self.assertEqual(pycalc.calc("sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"),
                          eval("sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e)))"))
 
-
     def testerrorscases(self):
         self.assertRaises(ValueError, pycalc.calc, "+")
         self.assertRaises(TypeError, pycalc.calc, "1-")
