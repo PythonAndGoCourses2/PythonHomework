@@ -212,7 +212,7 @@ def pycalc(expression, modules=list()):
         for name in dir(workspace):
             functions[name] = getattr(workspace, name)
     # print(functions)
-    expression = "0+" + expression + "+0"
+    expression = expression + "+0"
     expression = separate(expression)
     if check_mistakes(expression):
         for index, element in enumerate(expression):
