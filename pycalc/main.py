@@ -2,8 +2,9 @@ import pycalc.stack as Stack
 import importlib
 import operator
 import math
+import re
 
-signs = ['+', '-', '*', '/', '^', '%', '>', '<', '=', '//']
+signs = ['+', '-', '*', '/', '^', '%', '>', '<', '=', '//', '!']
 
 logical_signs = {
     '>': operator.gt,
@@ -60,6 +61,11 @@ def separate(expression):       # separates expression to logical parts
                 current += char
             else:                           # if previously symbols weren't number
                 if current != '':
+                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall("/+", current)) > 1:
+                        if (-1) ** len(re.findall('-', current)) < 0:
+                            current = '-'
+                        else:
+                            current = '+'
                     expression_list.append(current)
                     current = ''
                 flag = 'number'
@@ -69,6 +75,11 @@ def separate(expression):       # separates expression to logical parts
                 current += char
             else:                           # if previously symbols weren't numbers
                 if current != '':
+                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('+', current)) > 1:
+                        if (-1) ** len(re.findall('-', current)) < 0:
+                            current = '-'
+                        else:
+                            current = '+'
                     expression_list.append(current)
                     current = ''
                 flag = 'function'
@@ -84,6 +95,11 @@ def separate(expression):       # separates expression to logical parts
                 current += char
         elif char in ['(', ')']:
             if current != '':
+                if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('+', current)) > 1:
+                    if (-1) ** len(re.findall('-', current)) < 0:
+                        current = '-'
+                    else:
+                        current = '+'
                 expression_list.append(current)
                 current = ''
             flag = 'bracket'
@@ -167,7 +183,6 @@ def calc(expression):
                                 result -= float(main_number)
                         main_number = ''
                         main_sign = element
-
                     elif element in ['*', '/', '//', '%']:
                         sign = element
 
@@ -191,7 +206,6 @@ def calc(expression):
                             sign = ''
                     else:
                         main_number = element
-    # print(expression)
     if main_number != '':
         if main_sign == '+':
             result += float(main_number)
@@ -211,8 +225,7 @@ def pycalc(expression, modules=list()):
         workspace = importlib.import_module(module)
         for name in dir(workspace):
             functions[name] = getattr(workspace, name)
-    # print(functions)
-    expression = expression + "+0"
+    expression += "+0"
     expression = separate(expression)
     if check_mistakes(expression):
         for index, element in enumerate(expression):
@@ -222,3 +235,10 @@ def pycalc(expression, modules=list()):
                 return logical_signs[element](left, right)
         result = float(calc(expression))
         return result
+
+# 1 --- 1
+# -+---+-1
+# 10^(2+1)
+# log10(100)
+# abs(-5)
+
