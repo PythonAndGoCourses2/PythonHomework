@@ -1,4 +1,4 @@
-import pycalc.stack as Stack
+import stack as Stack
 import importlib
 import operator
 import math
