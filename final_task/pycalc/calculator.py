@@ -20,8 +20,11 @@ class Calculator:
             if self.func_argument:
                 second_operand = self.operands.take_from_stack()
                 first_operand = self.operands.take_from_stack()
-                self.current_result = operator_on_stack['operator'](first_operand, second_operand)
-                self.func_argument = False
+                try:
+                    self.current_result = operator_on_stack['operator'](first_operand, second_operand)
+                    self.func_argument = False
+                except TypeError as err:
+                    raise SyntaxError(err)
             else:
                 first_operand = self.operands.take_from_stack()
                 self.current_result = operator_on_stack['operator'](first_operand)
@@ -73,8 +76,6 @@ class Calculator:
                         break
                     elif self.func_argument:
                         self._calc_on_stack()
-                    else:
-                        self.func_argument = False
                     if len(self.function.stack):
                         self._calc_on_stack()
                         if item is ')' and len(self.function.stack):
