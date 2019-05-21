@@ -13,7 +13,7 @@ logical_signs = {
     '!=': operator.ne,
     "<=": operator.le,
     "<": operator.le
-}
+}   
 
 operators_type1 = {
     '*': operator.mul,
@@ -77,7 +77,6 @@ def separate(expression):       # separates expression to logical parts
             if flag == 'number':            # if previously symbols were numbers
                 current += char
             else:                           # if previously symbols weren't number
-                check_log10()
                 if current != '':
                     if flag == 'sign' and len(re.findall('-', current)) + len(re.findall("\+", current)) > 1:
                         if (-1) ** len(re.findall('-', current)) < 0:
@@ -92,7 +91,6 @@ def separate(expression):       # separates expression to logical parts
             if flag == 'function':          # if previously symbols were function
                 current += char
             else:                           # if previously symbols weren't numbers
-                check_log10()
                 if current != '':
                     if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('\+', current)) > 1:
                         if (-1) ** len(re.findall('-', current)) < 0:
@@ -107,7 +105,6 @@ def separate(expression):       # separates expression to logical parts
             if flag == 'sign':
                 current += char
             else:                           # if previously symbols weren't numbers
-                check_log10()
                 if current != '':
                     expression_list.append(current)
                     current = ''
@@ -133,7 +130,6 @@ def separate(expression):       # separates expression to logical parts
             expression_list.append(char)
     if current != '':
         expression_list.append(current)
-    check_log10()
     return expression_list
 
 
