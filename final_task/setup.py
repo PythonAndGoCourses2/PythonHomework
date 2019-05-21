@@ -10,7 +10,7 @@ setup(name='pycalc',
       zip_safe=False,
       entry_points={
         "console_scripts": [
-            "pycalc=pycalc.start:main",
+            "pycalc=start:main",
         ]
 },
       )
