@@ -1,18 +1,15 @@
-# 16 may stable e^-e 2^-2^-2
+# 21 may stable
 import argparse
 import math
+from math import *
 import operator
 from operator import *
-import string
 import importlib
 import importlib.util
-from math import *
 
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
-splitset = set(split)
-funclist = dir(math)+['abs', 'round', 'sum']  # list of math functions names
-funcdic = math.__dict__  # dict of math functions
-funcset = set(funclist)
+funclist = dir(math)+['abs', 'round', 'sum']
+funcdic = math.__dict__
 operdic = {
         '+': add,
         '-': sub,
@@ -33,7 +30,6 @@ operdic = {
         }
 funcdic.update(operdic)
 oper = ['^', '//', '/', '*', '%', '-', '+', '==', '<=', '>=', '<', '>', '!=']
-operset = set(oper)
 xpr = ''
 
 
@@ -62,34 +58,30 @@ def addfunc(module):
             newfunc = importlib.import_module(module)  # импортирование нового модуля
             funcdic[module] = newfunc.main
             funclist.append(module)
-            funcset.add(module)
     return
 
 
-def brackets4minexp(xprstr):
+def unaryexp(xprstr):
     """ добавление в строку выражения скобок для возведение в степень типа pi^-pi >>> pi^(-pi) """
     right = len(xprstr)
-    for i in range(xprstr.count('^')):  # столько раз в выражении содержится ^
+    for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)  # поиск справа первого ^
         if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
             xprstr = xprstr[:right+1]+'('+xprstr[right+1:]  # добавляем левую (
             right = right + 3
             # поиск строки справа от ^
             brkt = 0
-            # print('xprstr[right:]', xprstr[right:])
             for j, data in enumerate(xprstr[right:]):
-                # print('===',right, j, data, brkt)
                 if data == '(':
                     brkt = brkt + 1
                 if data == ')':
                     brkt = brkt - 1
-                if brkt == 0 and data in ['+', '-', '*', '/']:
+                if brkt == 0 and data in oper:
                     j = j - 1
                     break
                 if brkt == 0 and data == ')':
                     break
-
-            xprstr = xprstr[:right+1+j]+')'+xprstr[right + 1 + j:]
+            xprstr = xprstr[:right + 1 + j] + ')' + xprstr[right + 1 + j:]
     # print('EXP ^- ', xprstr)
     return(xprstr)
 
@@ -97,14 +89,14 @@ def brackets4minexp(xprstr):
 def brackets4exp(xprstr):
     """ добавление в строку выражения скобок для возведение в степень типа 2^3^4 >>> 2^(3^4) """
     right = len(xprstr)
-    for i in range(xprstr.count('^')):  # столько знаков ^ в выражениии
+    for i in range(xprstr.count('^')):
         right = xprstr.rindex('^', 0, right)  # находим позицию самого правого знака ^
         if xprstr[:right].count('^') == 0:
             break
         left = xprstr.rindex('^', 0, right)+1  # находим позицию следущего правого знака ^
         tmp = xprstr[left:right]  # строка между ^ ... ^
         tmpset = set(tmp)
-        if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(splitset)):  # надо скобки
+        if (tmp[0] == '(' and tmp[-1] == ')') or (tmpset.isdisjoint(set(split))):  # надо скобки
             xprstr = xprstr[:left]+'('+xprstr[left:]  # вставляем левую скобку
             right = right + 1
             # поиск строки справа от ^
@@ -120,7 +112,6 @@ def brackets4exp(xprstr):
                 if brkt == 0 and data == ')':
                     break
             xprstr = xprstr[:right+1+j]+')'+xprstr[right + 1 + j:]
-
         else:  # НЕ надо скобки
             right = left
     return(xprstr)
@@ -128,6 +119,7 @@ def brackets4exp(xprstr):
 
 def preparse(xprstr):
     xprset = set(xprstr)
+    operset = set(oper)
     operset.add(' ')
     if xprset.issubset(operset):  # проверка если выражение сосотоит только из операторов или пробелов
         raise ValueError('ERROR: no digits or functions in expression')
@@ -198,7 +190,7 @@ def parse(xprstr):
     word = ''
     xprlst = []
     xprstr = preparse(xprstr)  # подготовка к парсингу
-    xprstr = brackets4minexp(xprstr)  # добавление скобок для e^-e >>> e^(-e)
+    xprstr = unaryexp(xprstr)  # добавление скобок для e^-e >>> e^(-e)
     xprstr = brackets4exp(xprstr)  # добавление скобок для 2^3^4 >>> 2^(3^4)
     # print(xprstr)
     # разбор строки
