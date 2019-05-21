@@ -13,13 +13,18 @@ logical_signs = {
     '!=': operator.ne,
     "<=": operator.le,
     "<": operator.le
-}   
+}
 
 operators_type1 = {
     '*': operator.mul,
     '/': operator.truediv,
     '//': operator.floordiv,
     '%': operator.mod
+}
+
+operators_main = {
+    '+': operator.add,
+    '-': operator.sub
 }
 
 math_consts = {
@@ -168,7 +173,9 @@ def calc(expression):
                         element = float(calc(expression[begin + 1:end]))
                     if main_number != '':
                         if sign != '':
-                            if sign == '*':
+                            if sign == '^':  # Not realised!
+                                power_stack.push(element)
+                            elif sign == '*':
                                 main_number = str(float(main_number) * element)
                             elif sign == '/':
                                 main_number = str(float(main_number) / element)
@@ -176,8 +183,7 @@ def calc(expression):
                                 main_number = str(float(main_number) // element)
                             elif sign == '%':
                                 main_number = str(float(main_number) % element)
-                            elif sign == '^':  # Not realised!
-                                power_stack.push(element)
+
                             sign = ''
                     else:
                         main_number = str(element)
@@ -211,12 +217,14 @@ def calc(expression):
                                 main_number = str(float(main_number) ** last)
                     if element in ['+', '-']:
                         if main_number != '':
-                            if main_sign == '+':
-                                result += float(main_number)
-                            elif main_sign == '-':
-                                result -= float(main_number)
+                            if number != '':
+                                main_number = operators_type1[previous_sign](float(main_number), float(number))
+                                number = ''
+                                previous_sign = ''
+                            result = operators_main[main_sign](result, float(main_number))
                         main_number = ''
                         main_sign = element
+
                     elif element in ['*', '/', '//', '%']:
                         sign = element
 
