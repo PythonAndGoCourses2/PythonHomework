@@ -73,10 +73,12 @@ def brackets4minexp(xprstr):
         right = xprstr.rindex('^', 0, right)  # поиск справа первого ^
         if xprstr[right] == '^' and xprstr[right+1] == '-':  # если возведение в степень типа ^-pi добавить скобки
             xprstr = xprstr[:right+1]+'('+xprstr[right+1:]  # добавляем левую (
-            right = right + 1
+            right = right + 3
             # поиск строки справа от ^
             brkt = 0
+            # print('xprstr[right:]', xprstr[right:])
             for j, data in enumerate(xprstr[right:]):
+                # print('===',right, j, data, brkt)
                 if data == '(':
                     brkt = brkt + 1
                 if data == ')':
@@ -86,7 +88,9 @@ def brackets4minexp(xprstr):
                     break
                 if brkt == 0 and data == ')':
                     break
+
             xprstr = xprstr[:right+1+j]+')'+xprstr[right + 1 + j:]
+    # print('EXP ^- ', xprstr)
     return(xprstr)
 
 
@@ -132,9 +136,7 @@ def preparse(xprstr):
     # устранение пробелов с операторами и повторов операторов
     while xprstr.count('  ') > 0 or \
             xprstr.count('++') > 0 or \
-            xprstr.count('--') > 0 or \
             xprstr.count('-+') > 0 or \
-            xprstr.count('+-') > 0 or \
             xprstr.count(' *') > 0 or \
             xprstr.count('* ') > 0 or \
             xprstr.count(' +') > 0 or \
@@ -143,9 +145,7 @@ def preparse(xprstr):
             xprstr.count('- ') > 0 or \
             xprstr.count(', ') > 0:
         xprstr = xprstr.replace('  ', ' ')
-        xprstr = xprstr.replace('--', '+')
         xprstr = xprstr.replace('++', '+')
-        xprstr = xprstr.replace('+-', '-')
         xprstr = xprstr.replace('-+', '-')
         xprstr = xprstr.replace(' *', '*')
         xprstr = xprstr.replace('* ', '*')
@@ -158,30 +158,38 @@ def preparse(xprstr):
         xprstr = xprstr[1:]
     if xprstr.count(' ') > 0:  # проверка лишних пробелов
         raise ValueError('ERROR: useles spaces')
+    # print('PREPARSE', xprstr)
     return(xprstr)
 
 
 def afterparse(xprlst):
-    for i, data in enumerate(xprlst):  # поииск операторов составных типа <= >= == != содержащихся в списке oper
+    # for i, data in enumerate(xprlst):  # поииск операторов составных типа <= >= == != содержащихся в списке oper
+    i = 0
+    while i < len(xprlst):
         if i < len(xprlst)-1:
-            if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора
+            if type(xprlst[i]) == float and xprlst[i+1] == '(':  # елсли перед скобкой цифра без оператора 5(
                 raise ValueError('ERROR: digit & ( wihout operator')
-            if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора
+            if xprlst[i] == ')' and type(xprlst[i+1]) == float:  # елсли после скобки цифра без оператора (5
                 raise ValueError('ERROR: ) & digit wihout operator')
         if i == len(xprlst) - 1:
             break
         if str(xprlst[i]) + str(xprlst[i+1]) in oper:  # '>' + '='
             xprlst[i+1] = str(xprlst[i]) + str(xprlst[i+1])  # '>='
             xprlst.pop(i)
-        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and type(xprlst[i+1]) == float:  # (-digit
-            xprlst[i+1] = xprlst[i+1] * -1  # (digit*(-1)
-            xprlst.pop(i)
-        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and xprlst[i+1] in funclist:  # (-func
+
+        # унарный минус (-( +-( +-5 +-sin
+        # print('i=', i, '[i]=', xprlst[i])
+        if xprlst[i] == '-' and xprlst[i-1] in oper+['('] and (type(xprlst[i + 1]) == float
+                                                               or xprlst[i + 1] in funclist
+                                                               or xprlst[i + 1] == '-'
+                                                               or xprlst[i + 1] == '('):
             xprlst[i] = -1
-            xprlst.insert(i+1, '*')  # (-1*func
+            xprlst = xprlst[:i + 1] + ['*'] + xprlst[i + 1:]
+        i = i + 1
     if xprlst[0] == '-':
         xprlst[0] = -1
         xprlst.insert(1, '*')
+    # print('AFTERPARSE', *xprlst, sep=' ')
     return(xprlst)
 
 
@@ -208,17 +216,19 @@ def parse(xprstr):
         else:
             word = word + sym
     xprlst.pop()  # удаляется добавленный пробел
-    xprlst = afterparse(xprlst)
+
+    # print('PARSE', *xprlst, sep=' ')
     return xprlst
 
 
 def prior(op1, op2):
     """ сравнивает приоритеты математических опрераторов и функций op1 <= op2, возвращает bool """
-    operhi = ['^'] + funclist                                           # 3
-    opermid = ['*', '/', '%', '//']                                     # 2
+    operhiest = ['^'] + funclist                                        # 4
+    operhi = ['*']                                                      # 3
+    opermid = ['/', '%', '//']                                          # 2
     operlow = ['+', '-']                                                # 1
     operlowest = ['(', ')', '==', '<=', '>=', '<', '>', '!=', ',']      # 0
-    priorset = [operlowest, operlow, opermid, operhi]
+    priorset = [operlowest, operlow, opermid, operhi, operhiest]
     for i, data in enumerate(priorset):
         if op1 in data:
             pr1 = i
@@ -258,13 +268,14 @@ def postfix(xprlst):
                 output.append(stack.pop())  # выталкиваем элемент из стека на выход. удаляя последний элемент в стеке
             stack.pop()  # удаление из стека (
     stack.reverse()
+    # print('POSTFIX', output, stack )
     return output + stack
 
 
 def operate(operator, args):
     """ выполняет математическое действие или функцию (operator) со списком аргументов (args) """
     global stack  # используется в функции evalpostfix
-    # # # # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
+    # print('OPERATE', operator, 'ARGS', args, 'STACK', stack)
     try:
         result = funcdic[operator](*args)  # если функция с одним или двумя аргументами типа sin(x), pow(x,y)
         stack.pop()
@@ -284,7 +295,7 @@ def operate(operator, args):
                     raise ValueError('ERROR: invalid argument for ', operator)
     except ValueError:
         raise ValueError('ERROR: invalid argument for ', operator)
-    # # # print('RESULT', result)
+    # print('RESULT', result)
     return result
 
 
@@ -308,31 +319,30 @@ def evalpostfix(xprpstfx):
                     stack.pop()  # удалить из стэка аргумент
                     j = j - 2
                 args.reverse()
-            # # print('OPERATEf', i, 'ARGS', args, 'STACK', stack)
+            # print('OPERATEf', i, 'ARGS', args, 'STACK', stack)
             stack.append(operate(i, args))  # удаление аргумента из стэка произойдет в функции operate
             args = []
 
         elif i in oper:  # если оператор типа a + b
-            # # print('OPERATEo', i, 'ARGS', *stack[-2:], 'STACK', stack)
-            # # print(*stack[-2:])
-            # # print(funcdic[i])
+            # print('OPERATEo', i, 'ARGS', *stack[-2:], 'STACK', stack)
+            # print(*stack[-2:])
+            # print(funcdic[i])
             tmp = funcdic[i](*stack[-2:])
             stack.pop()  # удалить из стэка аргумент a
             stack.pop()  # удалить из стэка аргумент b
             stack.append(tmp)
-            # # print('RESULT', tmp)
+            # print('RESULT', tmp)
         else:
             stack.append(i)  # если число то добавить его в стэк
-        # # print('STACK',stack)
+        # print('STACK',stack)
     return stack[0]
 
 
 def calc(xpr):
     """ вычисление строки (xpr) математического выражения"""
     xprlst = parse(xpr)  # разбор строки вырыжения в список
-    # print(*xprlst, sep=' ')
+    xprlst = afterparse(xprlst)
     xprlst = postfix(xprlst)  # преобразование инфиксного списка в постфиксных список
-    # print(*xprlst, sep=' ')
     result = evalpostfix(xprlst)  # вычисление постфиксного списка
     print(result)
     return result
