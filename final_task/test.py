@@ -4,6 +4,22 @@ from math import *
 import pycalc
 
 
+print("2+2^3^4", ">>>>", pycalc.brackets4exp("2+2^3^4"))
+print("2+2^1-3^4", ">>>>", pycalc.brackets4exp("2+2^1-3^4"))
+print("2+2^3^4/2", ">>>>", pycalc.brackets4exp("2+2^3^4/2"))
+print("2+2^3^4/2+1", ">>>>", pycalc.brackets4exp("2+2^3^4/2+1"))
+print("(2+2)^(3-1)^4+2", ">>>>", pycalc.brackets4exp("(2+2)^(3-1)^4+2"))
+
+
+class TestParse(unittest.TestCase):
+
+    def testcases(self):
+        self.assertEqual(pycalc.brackets4exp("2^3^4"), "2^(3^4)")
+        self.assertEqual(pycalc.brackets4exp("2^3^(4+1)"), "2^(3^(4+1))")
+        self.assertEqual(pycalc.brackets4exp("(2+2)^(3-1)^4"), "(2+2)^((3-1)^4)")
+        self.assertEqual(pycalc.brackets4exp("(2+2)^(3-1)^4+2"), "(2+2)^((3-1)^4)+2")
+
+
 class TestPycalc(unittest.TestCase):
 
     def testcases(self):
