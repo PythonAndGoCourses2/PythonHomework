@@ -127,8 +127,8 @@ class TestCalculator(unittest.TestCase):
         calc = Calculator('1+(1-4/2)*3')
         calc.converted_list = [
                                 1, {'operator': operator.add, 'priority': 4}, '(', 1,
-                                 {'operator': operator.sub, 'priority': 4}, 4,
-                                 {'operator': operator.truediv, 'priority': 3}, 2, ')',
-                                 {'operator': operator.mul, 'priority': 3}, 3
+                                {'operator': operator.sub, 'priority': 4}, 4,
+                                {'operator': operator.truediv, 'priority': 3}, 2, ')',
+                                {'operator': operator.mul, 'priority': 3}, 3
                                ]
         self.assertEqual(-2, calc.calculate())
