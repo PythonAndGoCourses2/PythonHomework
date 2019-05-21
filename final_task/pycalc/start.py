@@ -17,4 +17,3 @@ def main():
             print(answer)
     elif type(answer) == bool:
         print(answer)
-

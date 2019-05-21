@@ -158,6 +158,8 @@ def calc(expression):
                     brackets = False
 
         else:               # if no in stack
+            if element in math_consts:
+                element = str(math_consts[element])
             if element == '(':
                 brackets = True
                 begin = index
@@ -172,9 +174,12 @@ def calc(expression):
                 else:
                     if not power_stack.is_empty():
                         last = float(power_stack.pop())
-                        while not power_stack.is_empty():
-                            last = float(power_stack.pop()) ** last
+                        if power_stack.is_empty():
                             main_number = str(float(main_number) ** last)
+                        else:
+                            while not power_stack.is_empty():
+                                last = float(power_stack.pop()) ** last
+                                main_number = str(float(main_number) ** last)
                     if element in ['+', '-']:
                         if main_number != '':
                             if main_sign == '+':
