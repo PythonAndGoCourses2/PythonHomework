@@ -75,7 +75,7 @@ def separate(expression):       # separates expression to logical parts
                 current += char
             else:                           # if previously symbols weren't numbers
                 if current != '':
-                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('+', current)) > 1:
+                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('\+', current)) > 1:
                         if (-1) ** len(re.findall('-', current)) < 0:
                             current = '-'
                         else:
@@ -95,7 +95,7 @@ def separate(expression):       # separates expression to logical parts
                 current += char
         elif char in ['(', ')']:
             if current != '':
-                if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('+', current)) > 1:
+                if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('\+', current)) > 1:
                     if (-1) ** len(re.findall('-', current)) < 0:
                         current = '-'
                     else:
@@ -190,8 +190,6 @@ def calc(expression):
                         main_sign = element
                     elif element in ['*', '/', '//', '%']:
                         sign = element
-
-
 
             else:
                 if sign == '^':
