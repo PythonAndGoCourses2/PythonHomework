@@ -1,5 +1,5 @@
 import argparse
-import pycalc.main as Main
+import main as Main
 
 
 def main():
