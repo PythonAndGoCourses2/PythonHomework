@@ -70,7 +70,7 @@ def separate(expression):       # separates expression to logical parts
                     current = ''
                 flag = 'number'
                 current += char
-        elif 'a' < char.lower() < 'z':
+        elif 'a' <= char.lower() <= 'z':
             if flag == 'function':          # if previously symbols were function
                 current += char
             else:                           # if previously symbols weren't numbers
@@ -116,6 +116,8 @@ def separate(expression):       # separates expression to logical parts
 
 
 def calc(expression):
+    expression.append("+")
+    expression.append("0")
     global functions
     brackets = False
     stack = Stack.Stack()
@@ -152,6 +154,8 @@ def calc(expression):
                                 main_number = str(float(main_number) // element)
                             elif sign == '%':
                                 main_number = str(float(main_number) % element)
+                            elif sign == '^':  # Not realised!
+                                power_stack.push(element)
                             sign = ''
                     else:
                         main_number = str(element)
@@ -228,7 +232,7 @@ def pycalc(expression, modules=list()):
         workspace = importlib.import_module(module)
         for name in dir(workspace):
             functions[name] = getattr(workspace, name)
-    expression += "+0"
+    # expression += "+0"
     expression = separate(expression)
     if check_mistakes(expression):
         for index, element in enumerate(expression):
