@@ -12,6 +12,7 @@ setup(name='pycalc',
         "console_scripts": [
             "pycalc=pycalc.start:main",
         ]
-},
+      },
       )
+
 

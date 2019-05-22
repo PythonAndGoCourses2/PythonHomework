@@ -57,7 +57,7 @@ def get_args(expression):
 
 def check_mistakes(expression):
     if len(expression) == 0:
-        print("Error: empty expression!")
+        print("ERROR: empty expression")
         return False
     brackets_stack = Stack.Stack()
     for element in expression:
@@ -65,11 +65,11 @@ def check_mistakes(expression):
             brackets_stack.push('(')
         elif element == ')':
             if brackets_stack.is_empty():
-                print("Error: brackets are not paired")
+                print("ERROR: brackets are not paired")
                 return False
             brackets_stack.pop()
     if not brackets_stack.is_empty():
-        print("Error: brackets are not paired")
+        print("ERROR: brackets are not paired")
         return False
     return True
 
@@ -86,7 +86,7 @@ def separate(expression):       # separates expression to logical parts
     def check_log10():
         nonlocal current
         nonlocal expression_list
-        if current == '10' and expression_list[len(expression_list)-1] == 'log':
+        if current == '10' and expression_list[len(expression_list) - 1] == 'log':
             expression_list.pop()
             expression_list.append('log10')
             current = ''
@@ -173,11 +173,11 @@ def separate(expression):       # separates expression to logical parts
         expression_list.append(current)
 
     index = 1
-    while index <= len(expression_list)-1:
+    while index <= len(expression_list) - 1:
         if expression_list[index] in operators_main and\
-                (expression_list[index-1] in operators_type1 or expression_list[index-1] == '^') and\
-                (is_number(expression_list[index+1]) or expression_list[index+1] in math_consts):
-            expression_list[index+1] = expression_list[index] + expression_list[index + 1]
+                (expression_list[index - 1] in operators_type1 or expression_list[index - 1] == '^') and\
+                (is_number(expression_list[index + 1]) or expression_list[index + 1] in math_consts):
+            expression_list[index + 1] = expression_list[index] + expression_list[index + 1]
             expression_list.pop(index)
         else:
             index += 1
@@ -325,7 +325,7 @@ def pycalc(expression, modules=list()):
         for index, element in enumerate(expression):       # looking for logical signs
             if element in logical_signs:
                 left = float(calc(expression[:index]))
-                right = float(calc(expression[index+1:]))
+                right = float(calc(expression[index + 1:]))
                 return logical_signs[element](left, right)
         result = float(calc(expression))                    # start counting
         return result
