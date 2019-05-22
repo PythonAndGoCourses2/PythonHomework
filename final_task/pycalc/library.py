@@ -43,13 +43,14 @@ def make_math_functions():
 
 
 MATH_FUNCTIONS = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
-other_functions = {
+OTHER_FUNCTIONS = {
     'abs': abs,
     'round': round,
     'lg': math.log10,
-    'lgTwo': math.log2
+    'lgTwo': math.log2,
+    'logOneP': math.log1p
 }
-FUNCTIONS = {**make_math_functions(), **other_functions}
+FUNCTIONS = {**make_math_functions(), **OTHER_FUNCTIONS}
 FUNC_DELIMITER = ','
 
 OPEN_BRACKET = '('

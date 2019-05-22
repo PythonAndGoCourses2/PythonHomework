@@ -47,6 +47,7 @@ def prepare_string(expression):
     """Prepare expression to tokenize"""
     expression = expression.replace('log10(', 'lg(')
     expression = expression.replace('log2(', 'lgTwo(')
+    expression = expression.replace('log1p(', 'logOneP(')
     return expression
 
 
