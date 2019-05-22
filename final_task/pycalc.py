@@ -271,7 +271,6 @@ def main():
                             help="additional modules to use")
         args = parser.parse_args()
         print(calculate(args.EXPRESSION))
-        # print(make_input_comfortable(args.EXPRESSION))
     except Exception as exeption:
         print(f'ERROR: {exeption}')
 
