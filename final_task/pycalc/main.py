@@ -56,16 +56,21 @@ def get_args(expression):
 
 
 def check_mistakes(expression):
-    brackets_statck = Stack.Stack()
+    if len(expression) == 0:
+        print("Error: empty expression!")
+        return False
+    brackets_stack = Stack.Stack()
     for element in expression:
         if element == '(':
-            brackets_statck.push('(')
+            brackets_stack.push('(')
         elif element == ')':
-            if brackets_statck.is_empty():
-                return ""       # not-pared brackets
-            brackets_statck.pop()
-    if not brackets_statck.is_empty():
-        return ""       # not-pared brackets
+            if brackets_stack.is_empty():
+                print("Error: brackets are not paired")
+                return False
+            brackets_stack.pop()
+    if not brackets_stack.is_empty():
+        print("Error: brackets are not paired")
+        return False
     return True
 
 
@@ -180,21 +185,23 @@ def separate(expression):       # separates expression to logical parts
 
 
 def calc(expression):
-    expression.append("/")
+    expression.append("/")          # creating airbag
     expression.append("1")
     expression.append("+")
     expression.append("0")
-    global functions
-    brackets = False
-    result = 0
-    main_number = ''
-    number = ''
-    main_sign = '+'
-    func = ''
-    sign = ''
-    previous_sign = ''
-    stack = Stack.Stack()
-    power_stack = Stack.Stack()
+
+    global functions                # list of functions
+    brackets = False                # flag, if we are looking for brackets
+    result = 0                      # result variable
+    main_number = ''                # variable for number after + or -
+    number = ''                     # variable for other numbers
+    main_sign = '+'                 # sign before main number (default +)
+    func = ''                       # variable for function
+    sign = ''                       # sign before number
+    previous_sign = ''              # additionaly variable for sign
+    stack = Stack.Stack()           # stack for brackets
+    power_stack = Stack.Stack()     # stack for powered numbers
+
     for index, element in enumerate(expression):
         if brackets:        # if in we find expression in brackets, we start searching of end bracket with stack
             if element == '(':
@@ -203,17 +210,17 @@ def calc(expression):
                 stack.pop()
                 if stack.is_empty():
                     end = index
-                    if func != '':
-                        temp = get_args(expression[begin + 1:end])
+                    if func != '':                                      # if we find function
+                        temp = get_args(expression[begin + 1:end])      # getting arguments for func
                         if temp != ['']:
-                            element = functions[func](*temp)       # getting arguments fo func
+                            element = functions[func](*temp)            # processing function with 1 or more args
                         else:
-                            element = functions[func]()
+                            element = functions[func]()                 # processing function with no args
                         func = ''
                     else:
-                        element = float(calc(expression[begin + 1:end]))
+                        element = float(calc(expression[begin + 1:end]))    # if no function, just a brackets
 
-                    if sign == '^':
+                    if sign == '^':                                     # processing power operator section
                         power_stack.push(element)
                         sign = ''
                     else:
@@ -230,7 +237,7 @@ def calc(expression):
                     brackets = False
 
         else:               # if no in stack
-            if element in math_consts:
+            if element in math_consts:                  # if element is const
                 element = str(math_consts[element])
             elif element == '-e':
                 element = str(-1 * math.e)
@@ -241,16 +248,16 @@ def calc(expression):
             elif element == '+pi':
                 element = str(math.pi)
 
-            if element == '(':
+            if element == '(':                          # start extracting expression in brackets
                 brackets = True
                 begin = index
                 stack.push('(')
 
-            elif element in functions:
-                func = element          # 10*(2+1)/1+0
+            elif element in functions:                  # if element is function
+                func = element
 
-            elif element in signs:
-                if element == '^':  # 1+9/3^2
+            elif element in signs:                      # if element is sign
+                if element == '^':                      # processing power operator
                     sign = '^'
                 else:
                     if not power_stack.is_empty():
@@ -264,7 +271,8 @@ def calc(expression):
                             while not power_stack.is_empty():
                                 last = float(power_stack.pop()) ** last
                                 main_number = str(float(main_number) ** last)
-                    if element in ['+', '-']:
+
+                    if element in ['+', '-']:                   # processing + or -
                         if main_number != '':
                             if number != '':
                                 main_number = operators_type1[previous_sign](float(main_number), float(number))
@@ -274,14 +282,14 @@ def calc(expression):
                         main_number = ''
                         main_sign = element
 
-                    elif element in ['*', '/', '//', '%']:
+                    elif element in ['*', '/', '//', '%']:          # processing other operators
                         sign = element
-            else:
-                if sign == '^':
+            else:                                        # element is number
+                if sign == '^':                       # if power operator stays before this element
                     power_stack.push(element)
                     sign = ''
                 else:
-                    if main_number != '':
+                    if main_number != '':                  # if main_number was found
                         if sign != '':
                             if sign in ['*', '/', '//', '%']:
                                 if number != '':
@@ -292,7 +300,7 @@ def calc(expression):
                     else:
                         main_number = element
 
-    if main_number != '':
+    if main_number != '':                                       # adding last number to result
         if main_sign == '+':
             result += float(main_number)
         elif main_sign == '-':
@@ -305,25 +313,19 @@ def calc(expression):
 
 def pycalc(expression, modules=list()):
     global functions
-    if 'math' not in modules:
+    if 'math' not in modules:                       # including module math
         modules.append('math')
-    for module in modules:
+    for module in modules:                          # adding all functions to dictionary
         workspace = importlib.import_module(module)
         for name in dir(workspace):
             functions[name] = getattr(workspace, name)
-    # expression += "+0"
-    expression = separate(expression)
-    if check_mistakes(expression):
-        for index, element in enumerate(expression):
+
+    expression = separate(expression)               # separating expression (look separate function)
+    if check_mistakes(expression):                  # handling some mistakes
+        for index, element in enumerate(expression):       # looking for logical signs
             if element in logical_signs:
                 left = float(calc(expression[:index]))
                 right = float(calc(expression[index+1:]))
                 return logical_signs[element](left, right)
-        result = float(calc(expression))
+        result = float(calc(expression))                    # start counting
         return result
-
-# 1 --- 1
-# -+---+-1
-# 10^(2+1)
-# log10(100)
-# abs(-5)
