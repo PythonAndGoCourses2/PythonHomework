@@ -56,6 +56,12 @@ def get_args(expression):
 
 
 def check_mistakes(expression):
+
+    def is_number(expression):
+        for element in expression:
+            if '0' >= element >= '9' and element != '.':
+                return False
+        return True
     if len(expression) == 0:
         print("ERROR: empty expression!")
         return False
@@ -100,7 +106,7 @@ def check_mistakes(expression):
                 print("ERROR: more than one logical operator")
                 return False
 
-        elif expression[index].isnumeric():
+        elif is_number(expression[index]):
             number_count += 1
 
         elif expression[index].isalpha():
