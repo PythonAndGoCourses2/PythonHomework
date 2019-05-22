@@ -44,8 +44,8 @@ def get_args(expression):
     expression.append(',')
     result = []
     prev = -1
+    stack = Stack.Stack()
     for index, part in enumerate(expression):
-        stack = Stack.Stack()
         if part == ',' and stack.is_empty():
             result.append(float(calc(expression[prev + 1: index])))
             prev = index
@@ -188,7 +188,6 @@ def calc(expression):
     expression.append("0")
     global functions
     brackets = False
-    stack = Stack.Stack()
     result = 0
     main_number = ''
     number = ''
@@ -196,6 +195,7 @@ def calc(expression):
     func = ''
     sign = ''
     previous_sign = ''
+    stack = Stack.Stack()
     power_stack = Stack.Stack()
     for index, element in enumerate(expression):
         if brackets:        # if in we find expression in brackets, we start searching of end bracket with stack
