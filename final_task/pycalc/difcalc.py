@@ -6,10 +6,7 @@ from numbers import Number
 
 class ComplexCalc(easyCalculation.Calculator):
 
-    const = {**{
-        attr: getattr(
-            math,
-            attr) for attr in dir(math) if isinstance(
+    const = {**{attr: getattr(math,attr) for attr in dir(math) if isinstance(
             getattr(
                 math,
                 attr),
