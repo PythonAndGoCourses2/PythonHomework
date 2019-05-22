@@ -284,7 +284,10 @@ def get_function(str_function):
     else:
         try:
             return getattr(str_function, math)
-        except:
+        except AttributeError:
+            print("ERROR: Please, check your expression")
+            sys.exit(1)
+        except TypeError:
             print("ERROR: Please, check your expression")
             sys.exit(1)
 
