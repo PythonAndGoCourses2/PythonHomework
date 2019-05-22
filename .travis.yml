@@ -7,6 +7,6 @@ script:
   - cd final_task
   - pip install .
   - nosetests --cover-branches --with-coverage .
-  - pycodestyle --max-line-length=120 .
+  - pycodestyle --ignore=W605 --max-line-length=120 .
   - python ./../pycalc_checker.py
   - cd -
