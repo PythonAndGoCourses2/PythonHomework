@@ -74,6 +74,10 @@ def check_mistakes(expression):
         print("ERROR: brackets are not paired")
         return False
 
+    if expression[len(expression)-1] in signs:
+        print("ERROR: no number after operator")
+        return False
+
     main_sign_count = 0
     l_sign_count = 0
     number_count = 0
@@ -98,6 +102,18 @@ def check_mistakes(expression):
 
         elif expression[index].isnumeric():
             number_count += 1
+
+        elif expression[index].isalpha():
+            if expression[index] in math_consts:
+                number_count += 1
+            elif expression[index] in functions:
+                if expression[index + 1] != '(':
+                    print("ERROR: no brackets after function")
+                    return False
+            else:
+                print("ERROR: function does not exist")
+                return False
+
     return True
 
 
