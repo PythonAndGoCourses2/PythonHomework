@@ -59,6 +59,7 @@ def check_mistakes(expression):
     if len(expression) == 0:
         print("ERROR: empty expression")
         return False
+
     brackets_stack = Stack.Stack()
     for element in expression:
         if element == '(':
@@ -71,6 +72,14 @@ def check_mistakes(expression):
     if not brackets_stack.is_empty():
         print("ERROR: brackets are not paired")
         return False
+
+    for element in expression:
+        number = ''
+        if element in ['*', '/', '^', '%', '>', '<', '=', '//', '!'] and number == '':
+            print("ERROR: no numbers before " + element)
+        elif element not in signs and element != ' ':
+            break
+
     return True
 
 
@@ -201,7 +210,6 @@ def calc(expression):
     previous_sign = ''              # additionaly variable for sign
     stack = Stack.Stack()           # stack for brackets
     power_stack = Stack.Stack()     # stack for powered numbers
-    no_numbers_flag = False
 
     for index, element in enumerate(expression):
         if brackets:        # if in we find expression in brackets, we start searching of end bracket with stack
@@ -235,7 +243,6 @@ def calc(expression):
                                 sign = ''
                         else:
                             main_number = element
-                        no_numbers_flag = True
                     brackets = False
 
         else:               # if no in stack
@@ -265,8 +272,6 @@ def calc(expression):
             elif element in signs:                      # if element is sign
                 if element == '^':                      # processing power operator
                     sign = '^'
-                    if not no_numbers_flag:
-                        print("ERROR: no numbers before " + sign)
                 else:
                     if not power_stack.is_empty():
                         last = float(power_stack.pop())
@@ -279,7 +284,6 @@ def calc(expression):
                             while not power_stack.is_empty():
                                 last = float(power_stack.pop()) ** last
                                 main_number = str(float(main_number) ** last)
-                        no_numbers_flag = True
 
                     if element in ['+', '-']:                   # processing + or -
                         if main_number != '':
@@ -287,15 +291,12 @@ def calc(expression):
                                 main_number = operators_type1[previous_sign](float(main_number), float(number))
                                 number = ''
                                 previous_sign = ''
-                            no_numbers_flag = True
                             result = operators_main[main_sign](result, float(main_number))
                         main_number = ''
                         main_sign = element
 
                     elif element in ['*', '/', '//', '%']:          # processing other operators
                         sign = element
-                        if not no_numbers_flag:
-                            print("ERROR: no numbers before " + sign)
             else:                                        # element is number
                 if sign == '^':                       # if power operator stays before this element
                     power_stack.push(element)
@@ -311,11 +312,8 @@ def calc(expression):
                             sign = ''
                     else:
                         main_number = element
-                        no_numbers_flag = True
 
-    if not no_numbers_flag:
-        print("ERROR: No numbers in exrpession")
-        exit()
+
     if main_number != '':                                       # adding last number to result
         if main_sign == '+':
             result += float(main_number)
