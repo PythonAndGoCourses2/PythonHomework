@@ -235,7 +235,7 @@ def calc(expression):
                                 sign = ''
                         else:
                             main_number = element
-                            no_numbers_flag = True
+                        no_numbers_flag = True
                     brackets = False
 
         else:               # if no in stack
@@ -265,7 +265,8 @@ def calc(expression):
             elif element in signs:                      # if element is sign
                 if element == '^':                      # processing power operator
                     sign = '^'
-                    print("ERROR: no numbers before " + sign)
+                    if not no_numbers_flag:
+                        print("ERROR: no numbers before " + sign)
                 else:
                     if not power_stack.is_empty():
                         last = float(power_stack.pop())
@@ -278,6 +279,7 @@ def calc(expression):
                             while not power_stack.is_empty():
                                 last = float(power_stack.pop()) ** last
                                 main_number = str(float(main_number) ** last)
+                        no_numbers_flag = True
 
                     if element in ['+', '-']:                   # processing + or -
                         if main_number != '':
@@ -285,6 +287,7 @@ def calc(expression):
                                 main_number = operators_type1[previous_sign](float(main_number), float(number))
                                 number = ''
                                 previous_sign = ''
+                            no_numbers_flag = True
                             result = operators_main[main_sign](result, float(main_number))
                         main_number = ''
                         main_sign = element
