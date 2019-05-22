@@ -4,9 +4,8 @@ import math
 from numbers import Number
 
 
-class ComplexCalc():
+class ComplexCalc(easyCalculation.Calculator):
 
-    calc = easyCalculation.Calculator()
     const = {**{
         attr: getattr(
             math,
@@ -14,8 +13,8 @@ class ComplexCalc():
             getattr(
                 math,
                 attr),
-            Number)}**{"True": True,
-                       "False": False}}
+            Number)}, **{"True": 1,
+                         "False": 0}}
     math_functions = {**{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
                       **{"abs": lambda a: abs(a),
                          "round": lambda a: round(a),
@@ -28,7 +27,7 @@ class ComplexCalc():
             func = re.search(r'[A-ZAa-z]+1?0?', expr)
 
             if func is None:
-                return self.calc.calculate(expr)
+                return self.search_brakets(expr)
 
             afterExpr = func.end()
             k = func.start()
@@ -58,16 +57,16 @@ class ComplexCalc():
 
             else:
 
-                a = self.__find_replacement(func[0], expr[afterExpr + 1:end])
+                a = self._find_replacement(func[0], expr[afterExpr + 1:end])
                 expr = expr[:k] + a + expr[end + 1:]
                 if float(a) < 0:
                     end = k + len(a) - 1
-                    expr = self.calc._calc_if_power(expr, k, end)
+                    expr = self._calc_if_power(expr, k, end)
 
-    def __find_replacement(self, func, expr):
+    def _find_replacement(self, func, expr):
 
         if func in ComplexCalc.math_functions:
-            allargs = self.__commasplit(expr)
+            allargs = self._commasplit(expr)
 
             k = []
             for each in allargs:
@@ -80,7 +79,7 @@ class ComplexCalc():
             raise Exception("Indefined function")
         return str(a)
 
-    def __commasplit(self, expr):
+    def _commasplit(self, expr):
         breketscounter = 0
         preve = 0
         count = 1
@@ -118,19 +117,26 @@ class ComplexCalc():
         while place is not None:
             after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',
                               expr[place.end():])
+
             a = self.expression_search(expr[:place.start()])
             if after is None:
                 b = self.expression_search(expr[place.end():])
             else:
                 b = self.expression_search(
                     expr[place.end():after.start() + place.end()])
-            if a and b:
+            if a is not None and b is not None:
 
                 rezult = ComplexCalc.compare[place[0]](a, b)
                 end = ""
+
                 if after is not None:
+                    if after.start() == 0:
+                        raise Exception("no symbols between compare")
                     end = expr[after.end() + place.end():]
-                expr = str(rezult) + end
+                    expr = str(rezult) + after[0] + end
+                else:
+                    return bool(rezult)
+
             else:
                 raise Exception(
                     "uncorrect expression must be 'expr' operator 'expr'")

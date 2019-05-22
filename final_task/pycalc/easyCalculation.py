@@ -46,7 +46,6 @@ class Calculator():
             a = self.unary_rezult(number)
             summing += a
         return summing
-        # '{:.15f}'.format(summing)
 
     def unary_rezult(self, number):
         minus = number.count("-")
@@ -58,7 +57,7 @@ class Calculator():
             a = float(a)
         return a
 
-    def calculate(self, expr):
+    def search_brakets(self, expr):
         expr = expr.replace(" ", "")
 
         while "(" in expr:
