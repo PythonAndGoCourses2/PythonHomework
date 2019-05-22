@@ -169,6 +169,7 @@ def separate(expression):       # separates expression to logical parts
             expression_list.pop(index)
         else:
             index += 1
+    print(expression_list)
     return expression_list
 
 
@@ -205,29 +206,29 @@ def calc(expression):
                         func = ''
                     else:
                         element = float(calc(expression[begin + 1:end]))
-                    if main_number != '':
-                        if previous_sign != '':
-                            if previous_sign == '^':
-                                power_stack.push(element)
-                            main_number = str(operators_type1[previous_sign](float(main_number), element))
-                            sign = ''
+
+                    if sign == '^':
+                        power_stack.push(element)
+                        sign = ''
                     else:
-                        main_number = str(element)
+                        if main_number != '':
+                            if sign != '':
+                                if sign in ['*', '/', '//', '%']:
+                                    if number != '':
+                                        main_number = operators_type1[previous_sign](float(main_number), float(number))
+                                    number = element
+                                previous_sign = sign
+                                sign = ''
+                        else:
+                            main_number = element
                     brackets = False
 
         else:               # if no in stack
             if element in math_consts:
                 element = str(math_consts[element])
-            if element == '(':  
-                brackets = True
-                begin = index
-                stack.push('(')
-
-            elif element in functions:
-                func = element
 
             elif element in signs:
-                if element == '^':            # 1+9/3^2
+                if element == '^':  # 1+9/3^2
                     sign = '^'
                 else:
                     if not power_stack.is_empty():
@@ -253,6 +254,14 @@ def calc(expression):
 
                     elif element in ['*', '/', '//', '%']:
                         sign = element
+            elif element == '(':
+                brackets = True
+                begin = index
+                stack.push('(')
+
+            elif element in functions:
+                func = element          # 10*(2+1)/1+0
+
             else:
                 if sign == '^':
                     power_stack.push(element)
