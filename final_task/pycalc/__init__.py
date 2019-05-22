@@ -3,7 +3,6 @@ from pycalc import parser
 from pycalc import tokenizer
 from pycalc import translator
 from pycalc import calculator
-from pycalc import exeptions
 
 
 def main():

@@ -3,7 +3,7 @@ import argparse
 from pycalc import exeptions
 
 
-def parse_arguments():
+def parse_arguments() -> str:
     """Parse args from console and returns it"""
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
     parser.add_argument('EXPRESSION', help='expression string to evaluate')

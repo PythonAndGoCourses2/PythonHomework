@@ -3,14 +3,14 @@ from pycalc import library as lib
 from pycalc import exeptions
 
 
-def get_postfix(input_string):
+def get_postfix(infix_notation: list) -> list:
     """Translate infix notation into postfix
 
     Returns list of tokens"""
-    input_string = make_valid(input_string)
+    infix_notation = make_valid(infix_notation)
     output_string = []
     stack = [0]
-    for token in input_string:
+    for token in infix_notation:
         if is_number(token):
             output_string.append(float(token))
         elif token in lib.CONSTANTS:
@@ -63,7 +63,7 @@ def process_close_bracket(stack: list, output_string: list):
 
 
 def process_all_left(stack, output_string):
-    """Pop all operators to the output string and returns it"""
+    """Pop all operators to the output string"""
     while stack[-1]:
         if stack[-1] == lib.OPEN_BRACKET:
             raise exeptions.BracketsError('brackets are not balanced')
@@ -80,12 +80,10 @@ def make_valid(expression):
 
 
 def is_number(token):
-    """Check if token is number"""
     return token.isdigit() or is_float(token)
 
 
 def is_float(token):
-    """Check if token is float"""
     try:
         float(token)
         return True
