@@ -64,6 +64,14 @@ def check_mistakes(expression):
 
 
 def separate(expression):       # separates expression to logical parts
+    new = ''
+
+    for char in expression:
+        if char != ' ':
+            new += char
+
+    expression = new
+
     def check_log10():
         nonlocal current
         nonlocal expression_list
@@ -71,6 +79,22 @@ def separate(expression):       # separates expression to logical parts
             expression_list.pop()
             expression_list.append('log10')
             current = ''
+
+    def fix_signs():
+        nonlocal flag
+        nonlocal current
+        if flag == 'sign_main' and len(re.findall('-', current)) + len(re.findall("\+", current)) > 1:
+            if (-1) ** len(re.findall('-', current)) < 0:
+                current = '-'
+            else:
+                current = '+'
+
+    def is_number(string):
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
 
     expression_list = []
     flag = "number"
@@ -83,11 +107,7 @@ def separate(expression):       # separates expression to logical parts
                 current += char
             else:                           # if previously symbols weren't number
                 if current != '':
-                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall("\+", current)) > 1:
-                        if (-1) ** len(re.findall('-', current)) < 0:
-                            current = '-'
-                        else:
-                            current = '+'
+                    fix_signs()
                     expression_list.append(current)
                     current = ''
                 flag = 'number'
@@ -97,32 +117,36 @@ def separate(expression):       # separates expression to logical parts
                 current += char
             else:                           # if previously symbols weren't numbers
                 if current != '':
-                    if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('\+', current)) > 1:
-                        if (-1) ** len(re.findall('-', current)) < 0:
-                            current = '-'
-                        else:
-                            current = '+'
+                    fix_signs()
                     expression_list.append(current)
                     current = ''
                 flag = 'function'
                 current += char
-        elif char in signs:                 # if previously symbols were sign
-            if flag == 'sign':
+
+        elif char in operators_type1:                 # if previously symbols were sign
+            if flag == 'sign_type1':
                 current += char
             else:                           # if previously symbols weren't numbers
                 if current != '':
                     expression_list.append(current)
                     current = ''
-                flag = 'sign'
+                flag = 'sign_type1'
                 current += char
+
+        elif char in signs:                 # if previously symbols were sign
+            if flag == 'sign_main':
+                current += char
+            else:                           # if previously symbols weren't numbers
+                if current != '':
+                    expression_list.append(current)
+                    current = ''
+                flag = 'sign_main'
+                current += char
+
         elif char in ['(', ')']:
             if current != '':
                 check_log10()
-                if flag == 'sign' and len(re.findall('-', current)) + len(re.findall('\+', current)) > 1:
-                    if (-1) ** len(re.findall('-', current)) < 0:
-                        current = '-'
-                    else:
-                        current = '+'
+                fix_signs()
                 expression_list.append(current)
                 current = ''
             flag = 'bracket'
@@ -135,6 +159,17 @@ def separate(expression):       # separates expression to logical parts
             expression_list.append(char)
     if current != '':
         expression_list.append(current)
+
+    index = 1
+    while index <= len(expression_list)-1:
+        if expression_list[index] in operators_main and\
+            expression_list[index-1] in operators_type1 and\
+                is_number(expression_list[index+1]):
+            expression_list[index+1] = expression_list[index] + expression_list[index + 1]
+            expression_list.pop(index)
+        else:
+            index += 1
+    print(expression_list)
     return expression_list
 
 
@@ -172,18 +207,10 @@ def calc(expression):
                     else:
                         element = float(calc(expression[begin + 1:end]))
                     if main_number != '':
-                        if sign != '':
-                            if sign == '^':  # Not realised!
+                        if previous_sign != '':
+                            if previous_sign == '^':
                                 power_stack.push(element)
-                            elif sign == '*':
-                                main_number = str(float(main_number) * element)
-                            elif sign == '/':
-                                main_number = str(float(main_number) / element)
-                            elif sign == '//':
-                                main_number = str(float(main_number) // element)
-                            elif sign == '%':
-                                main_number = str(float(main_number) % element)
-
+                            main_number = str(operators_type1[previous_sign](float(main_number), element))
                             sign = ''
                     else:
                         main_number = str(element)
@@ -192,7 +219,7 @@ def calc(expression):
         else:               # if no in stack
             if element in math_consts:
                 element = str(math_consts[element])
-            if element == '(':
+            if element == '(':  
                 brackets = True
                 begin = index
                 stack.push('(')
@@ -227,7 +254,6 @@ def calc(expression):
 
                     elif element in ['*', '/', '//', '%']:
                         sign = element
-
             else:
                 if sign == '^':
                     power_stack.push(element)
@@ -243,6 +269,7 @@ def calc(expression):
                             sign = ''
                     else:
                         main_number = element
+
     if main_number != '':
         if main_sign == '+':
             result += float(main_number)
@@ -278,4 +305,3 @@ def pycalc(expression, modules=list()):
 # 10^(2+1)
 # log10(100)
 # abs(-5)
-
