@@ -169,7 +169,6 @@ def separate(expression):       # separates expression to logical parts
             expression_list.pop(index)
         else:
             index += 1
-    print(expression_list)
     return expression_list
 
 
