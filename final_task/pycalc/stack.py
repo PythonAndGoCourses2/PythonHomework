@@ -1,21 +1,15 @@
 class Stack:
-    __stack = []
-
-    def push(self, element):
-        try:
-            self.__stack.append(element)
-            return True
-        except:
-            return False
-
-    def pop(self):
-        try:
-            return self.__stack.pop()
-        except:
-            return False
+    def __init__(self):
+        self.__items = []
 
     def is_empty(self):
-        if len(self.__stack) == 0:
-            return True
-        else:
-            return False
+        return self.__items == []
+
+    def push(self, item):
+        self.__items.append(item)
+
+    def pop(self):
+        return self.__items.pop()
+
+    def size(self):
+        return len(self.__items)
