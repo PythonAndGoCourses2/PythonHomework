@@ -1,16 +1,23 @@
+"""Operators manager module"""
+
 import math
 import operator
 
 
 def create_func_dict():
+    """
+    Returns dictionary where keys are the name of functions and constants from module math,
+    and values are a dictionary {'operator': <built-in-function>, 'priority': number}
+
+    """
     func_dict = {
                 'abs': {'operator': abs, 'priority': 0},
                 'round': {'operator': round, 'priority': 0}
                 }
-    for k, v in math.__dict__.items():
-        if k.startswith('_'):
+    for key, value in math.__dict__.items():
+        if key.startswith('_'):
             continue
-        func_dict[k] = {'operator': v, 'priority': 0}
+        func_dict[key] = {'operator': value, 'priority': 0}
     return func_dict
 
 

@@ -1,3 +1,5 @@
+"""Calculator module"""
+
 from .stack_manager import Stack
 from .operator_manager import operator_dict, function_dict, unary_dict
 from .split_operators import SplitOperators
@@ -5,7 +7,16 @@ from .converter import Converter
 
 
 class Calculator:
+    """Calculator class"""
     def __init__(self, expression_line):
+        """
+        Generates an instance of the Calculator class,
+        take an expression_line from user,
+        create an instance of the SplitOperators,
+        create an instance of the Converter,
+        create a Stack to put all operands,
+        create a Stack to put all operations
+        """
         self.parser = SplitOperators(expression_line).split_operators()
         self.converted_list = Converter(self.parser).converter()
         self.current_result = ""
@@ -15,6 +26,14 @@ class Calculator:
         self.current_operator = ""
 
     def _calc_on_stack(self):
+        """
+        Encapsulate function
+        Takes an item from function_stack and operands from the operands_stack
+        and performs calculation.
+        If it possible to make next calculation - make recursion
+        Returns result of calculation to the current_result.
+        Raise an exception if there is two many arguments for current function
+        """
         operator_on_stack = self.function.take_from_stack()
         if operator_on_stack in function_dict.values():
             if self.func_argument:
@@ -45,6 +64,12 @@ class Calculator:
         return self.current_result
 
     def calculate(self):
+        """
+        For each item in converted_list using Reverse Polish notation, method
+        check a type and put it on either operands or function stack,
+        and invokes calc_on_stack method to perform calculation itself. Returns result
+        of calculation received from calc_on_stack method
+        """
         for item in self.converted_list:
             if isinstance(item, float) or isinstance(item, int):
                 self.operands.put_on_stack(item)

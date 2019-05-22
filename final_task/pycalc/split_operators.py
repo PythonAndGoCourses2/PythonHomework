@@ -1,9 +1,16 @@
+"""Split operators module"""
+
 from .check_manager import check_expression, number_check, operator_check, function_check
 
 
 class SplitOperators:
-
+    """SplitOperators class"""
     def __init__(self, expression_line):
+        """
+        Generates an instance of the SplitManager class,
+        take an expression line as string,
+        create an empty list to put the result of parsing line
+        """
         self.expression_line = expression_line
         self.parsing_list = []
         self.last_number = ""
@@ -12,6 +19,12 @@ class SplitOperators:
         self.blank_item = False
 
     def _append_to_parsing_list(self):
+        """
+        Encapsulate function
+        Check if there is a number, symbol of the math operator
+        or the name of the math function; call the check method of each element
+        and if the element is clear append it to the self.parsing_list
+        """
         if self.last_symbol:
             self.parsing_list.append(operator_check(self.last_symbol))
             self.last_symbol = ""
@@ -23,6 +36,14 @@ class SplitOperators:
             self.last_letter = ""
 
     def _number_parser(self, number):
+        """
+        Encapsulate function
+        Create a number from successive digits in expression line,
+        raise Exception when there is a space between two digits,
+        or when there is more than two comma. If there is symbol of math operator
+        or the name of math function call function to put this item into self.parsing_list
+        :param number: is one digit from expression_line
+        """
         if self.blank_item and not isinstance(self.parsing_list[-1], str):
             raise SyntaxError('Blank symbol between two operands!')
         elif self.blank_item:
@@ -38,11 +59,27 @@ class SplitOperators:
                 self.last_number += number
 
     def _function_parser(self, letter):
+        """
+        Encapsulate function
+        Create a name of function from the successive letters.
+        If there is symbol of math operator call function
+        to put this item into self.parsing_list
+        :param letter: is one letter from expression_line
+        """
         if self.last_symbol:
             self._append_to_parsing_list()
         self.last_letter += letter
 
     def _twice_operator_parser(self, symbol):
+        """
+        Encapsulate function
+        Create a twice operator symbol from successive math symbols.
+        Raise an Exception when there is space between two symbols,
+        or if it try to create math operator with more than two elements
+        If there is symbol of math operator call function
+        to put this item into self.parsing_list
+        :param symbol: is one math symbol from expression_line
+        """
         if len(self.last_symbol) == 2:
             raise SyntaxError('Invalid operator "{}"'.format(self.last_symbol + symbol))
         if self.blank_item and str(self.parsing_list[-1]) in "!=<>/*":
@@ -54,11 +91,25 @@ class SplitOperators:
         self.last_symbol += symbol
 
     def _simple_operator_bracket_parser(self, symbol):
+        """
+        Encapsulate function
+        At fist call function to put data into self.parsing_list if it necessary.
+        After put current symbol to the self.parsing_list
+        :param symbol: is one math symbol from expression_line or bracket or comma
+        """
         self._append_to_parsing_list()
         if symbol != ' ':
             self.parsing_list.append(symbol)
 
     def split_operators(self):
+        """
+        The main function of class SplitOperators
+        Go thought the expression_line and call necessary encapsulate function
+        for every digit, letter or symbol.
+        Raise an Exception when there is a twice operator in the end of line
+        :return: parsing_list as a list where each element is operand, math symbol
+        or name of math function
+        """
         if check_expression(self.expression_line):
             for i in self.expression_line:
                 if i == " ":
