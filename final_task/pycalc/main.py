@@ -82,7 +82,7 @@ def check_mistakes(expression):
         if expression[index] in ['+', '-']:
             main_sign_count += 1
 
-        if expression[index] in ['*', '/', '^', '%', '//']:
+        elif expression[index] in ['*', '/', '^', '%', '//']:
             if number_count == 0:
                 print("ERROR: no numbers before sign")
                 return False
@@ -90,11 +90,14 @@ def check_mistakes(expression):
                 print("ERROR: wrong signs position")
                 return False
 
-        if expression[index] in logical_signs:
+        elif expression[index] in logical_signs:
             l_sign_count +=1
             if l_sign_count > 1:
                 print("ERROR: more than one logical operator")
                 return False
+
+        elif expression[index].isnumeric():
+            number_count += 1
     return True
 
 
