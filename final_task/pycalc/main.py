@@ -15,6 +15,8 @@ logical_signs = {
     "<": operator.le
 }
 
+
+
 operators_type1 = {
     '*': operator.mul,
     '/': operator.truediv,
@@ -43,9 +45,14 @@ def get_args(expression):
     result = []
     prev = -1
     for index, part in enumerate(expression):
-        if part == ',':
+        stack = Stack.Stack()
+        if part == ',' and stack.is_empty():
             result.append(float(calc(expression[prev + 1: index])))
             prev = index
+        elif part == '(':
+            stack.push(part)
+        elif part == ')':
+            stack.pop()
     return result
 
 
@@ -123,7 +130,7 @@ def separate(expression):       # separates expression to logical parts
                 flag = 'function'
                 current += char
 
-        elif char in operators_type1:                 # if previously symbols were sign
+        elif char in operators_type1 or char == '^':                 # if previously symbols were sign
             if flag == 'sign_type1':
                 current += char
             else:                           # if previously symbols weren't numbers
@@ -164,13 +171,13 @@ def separate(expression):       # separates expression to logical parts
     index = 1
     while index <= len(expression_list)-1:
         if expression_list[index] in operators_main and\
-            expression_list[index-1] in operators_type1 and\
-                is_number(expression_list[index+1]):
+                (expression_list[index-1] in operators_type1 or expression_list[index-1] == '^') and\
+                (is_number(expression_list[index+1]) or expression_list[index+1] in math_consts):
             expression_list[index+1] = expression_list[index] + expression_list[index + 1]
             expression_list.pop(index)
         else:
             index += 1
-    # print(expression_list)
+    print(expression_list)
     return expression_list
 
 
@@ -227,6 +234,14 @@ def calc(expression):
         else:               # if no in stack
             if element in math_consts:
                 element = str(math_consts[element])
+            elif element == '-e':
+                element = str(-1 * math.e)
+            elif element == '-pi':
+                element = str(-1 * math.pi)
+            elif element == '+e':
+                element = str(math.e)
+            elif element == '+pi':
+                element = str(math.pi)
 
             if element == '(':
                 brackets = True
