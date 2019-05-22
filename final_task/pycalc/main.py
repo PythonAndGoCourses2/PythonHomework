@@ -313,7 +313,6 @@ def calc(expression):
                     else:
                         main_number = element
 
-
     if main_number != '':                                       # adding last number to result
         if main_sign == '+':
             result += float(main_number)
