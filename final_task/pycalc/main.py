@@ -57,31 +57,47 @@ def get_args(expression):
 
 def check_mistakes(expression):
     if len(expression) == 0:
-        print("Error: empty expression!")
+        print("ERROR: empty expression!")
         return False
+
     brackets_stack = Stack.Stack()
     for element in expression:
         if element == '(':
             brackets_stack.push('(')
         elif element == ')':
             if brackets_stack.is_empty():
-                print("Error: brackets are not paired")
+                print("ERROR: brackets are not paired")
                 return False
             brackets_stack.pop()
     if not brackets_stack.is_empty():
-        print("Error: brackets are not paired")
+        print("ERROR: brackets are not paired")
         return False
+
+    main_sign_count = 0
+    l_sign_count = 0
+    number_count = 0
+
+    for index in range(len(expression)):
+        if expression[index] in ['+', '-']:
+            main_sign_count += 1
+            if number_count == 0:
+                print("ERROR: no numbers before sign")
+                return False
+
+        if expression[index] in ['*', '/', '^', '%', '//']:
+            if expression[index + 1] in ['*', '/', '^', '%', '//']:
+                print("ERROR: wrong signs position")
+                return False
+
+        if expression[index] in logical_signs:
+            l_sign_count +=1
+            if l_sign_count > 1:
+                print("ERROR: more than one logical operator")
+                return False
     return True
 
 
 def separate(expression):       # separates expression to logical parts
-    new = ''
-
-    for char in expression:
-        if char != ' ':
-            new += char
-
-    expression = new
 
     def check_log10():
         nonlocal current
@@ -320,8 +336,13 @@ def pycalc(expression, modules=list()):
         for name in dir(workspace):
             functions[name] = getattr(workspace, name)
 
-    expression = separate(expression)               # separating expression (look separate function)
-    if check_mistakes(expression):                  # handling some mistakes
+    new = ''
+
+    for char in expression:
+        if char != ' ':
+            new += char
+    if check_mistakes(separate(expression)):                  # handling some mistakes
+        expression = separate(new)                          # separating expression (look separate function)
         for index, element in enumerate(expression):       # looking for logical signs
             if element in logical_signs:
                 left = float(calc(expression[:index]))
