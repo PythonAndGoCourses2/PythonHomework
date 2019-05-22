@@ -76,7 +76,7 @@ def check_mistakes(expression):
     for element in expression:
         number = ''
         if element in ['*', '/', '^', '%', '>', '<', '=', '//', '!'] and number == '':
-            print("ERROR: no numbers before " + element)
+            print("ERROR: no numbers before sign")
         elif element not in signs and element != ' ':
             break
 
