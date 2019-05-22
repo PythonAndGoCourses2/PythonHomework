@@ -254,7 +254,8 @@ def pycalc(info_string):
         else:
             return stack.pop()
 
-    return make_input_comfortable(info_string)
+    return calculate(polish_notation(check_function_and_constants(
+        negative_numbers(tokenize(make_input_comfortable(info_string))))))
 
 
 def main():
