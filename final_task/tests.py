@@ -72,10 +72,10 @@ class TestCalculator(unittest.TestCase):
             self.assertRaises(Exception, pycalc.calculate, '53^e+16+0/0')
 
         def test_common(self):
-            self.assertEqual(pycalc.calculate('90*3/20+---5'), 90 * 3 / 20 + ---5)
+            self.assertEqual(pycalc.calculate('90*3/20+--5'), 90 * 3 / 20 + --5)
             self.assertRaises(Exception, pycalc.calculate, '10^10^10^10^10')
-            self.assertEqual(pycalc.calculate('90*3/20+---5*sin(10//5)-e'), 90 * 3 / 20 + ---5 * m.sin(10 // 5) - m.e)
-            self.assertEqual(pycalc.calculate('+-+-++1'), +-+-++1)
+            self.assertEqual(pycalc.calculate('90*3/20+--5*sin(10//5)-e'), 90 * 3 / 20 + --5 * m.sin(10 // 5) - m.e)
+            self.assertEqual(pycalc.calculate('+-+-+1'), +-+-+1)
             self.assertRaises(Exception, pycalc.calculate, 'The end.')
 
         if __name__ == '__main__':
