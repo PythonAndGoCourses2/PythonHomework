@@ -254,14 +254,15 @@ def pycalc(info_string):
         else:
             return stack.pop()
 
-    return calculate(polish_notation(check_function_and_constants(
-        negative_numbers(tokenize(make_input_comfortable(info_string))))))
+    return make_input_comfortable(info_string)
 
 
 def main():
     try:
         parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
         parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
+        parser.add_argument("-m", "--use-modules MODULE [MODULE ...]", metavar='MODULE [MODULE ...]',
+                            help="additional modules to use")
         args = parser.parse_args()
         print(pycalc(args.EXPRESSION))
     except Exception as exeption:
