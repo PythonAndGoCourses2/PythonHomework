@@ -8,7 +8,7 @@ import importlib.util
 
 split = ('^', '/', '*', '%', '-', '+', '=', '<', '>', '!',  '(', ')', ',')
 # Good style
-#funclst = [attr in dir(math) if callable(getattr(math, attr))]
+# funclst = [attr in dir(math) if callable(getattr(math, attr))]
 # fundic = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 # callable false pi, e, tau
 funclst = dir(math) + ['abs', 'round', 'sum']
