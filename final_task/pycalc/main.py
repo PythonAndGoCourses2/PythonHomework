@@ -226,6 +226,14 @@ def calc(expression):
             if element in math_consts:
                 element = str(math_consts[element])
 
+            if element == '(':
+                brackets = True
+                begin = index
+                stack.push('(')
+
+            elif element in functions:
+                func = element          # 10*(2+1)/1+0
+
             elif element in signs:
                 if element == '^':  # 1+9/3^2
                     sign = '^'
@@ -253,14 +261,6 @@ def calc(expression):
 
                     elif element in ['*', '/', '//', '%']:
                         sign = element
-            elif element == '(':
-                brackets = True
-                begin = index
-                stack.push('(')
-
-            elif element in functions:
-                func = element          # 10*(2+1)/1+0
-
             else:
                 if sign == '^':
                     power_stack.push(element)
