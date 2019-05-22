@@ -1,15 +1,20 @@
 import math
 import operator
 
-function_dict = {
-    'abs': {'operator': abs, 'priority': 0},
-    'round': {'operator': round, 'priority': 0}
-}
-for k, v in math.__dict__.items():
-    if k.startswith('_'):
-        continue
-    function_dict[k] = {'operator': v, 'priority': 0}
 
+def create_func_dict():
+    func_dict = {
+                'abs': {'operator': abs, 'priority': 0},
+                'round': {'operator': round, 'priority': 0}
+                }
+    for k, v in math.__dict__.items():
+        if k.startswith('_'):
+            continue
+        func_dict[k] = {'operator': v, 'priority': 0}
+    return func_dict
+
+
+function_dict = create_func_dict()
 
 operator_dict = {
     '+': {'operator': operator.add, 'priority': 4},
