@@ -1,0 +1,10 @@
+setup.py
+pycalc/main.py
+pycalc/stack.py
+pycalc/start.py
+pycalc.egg-info/PKG-INFO
+pycalc.egg-info/SOURCES.txt
+pycalc.egg-info/dependency_links.txt
+pycalc.egg-info/entry_points.txt
+pycalc.egg-info/not-zip-safe
+pycalc.egg-info/top_level.txt
