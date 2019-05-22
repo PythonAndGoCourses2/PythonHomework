@@ -1,6 +1,6 @@
 import math
 from calculator.validation import check_exception
-
+import operator
 
 OPERATION_PRIORITIES = {
     '>': 0, '<': 0, '<=': 0, '==': 0, '!=': 0, '>=': 0,
@@ -11,20 +11,21 @@ OPERATION_PRIORITIES = {
 
 
 CALCULATE = {
-        '+': lambda x, y: x + y,
-        '-': lambda x, y: x - y,
-        '*': lambda x, y: x * y,
-        '/': lambda x, y: x / y,
-        '^': lambda x, y: x ** y,
-        '//': lambda x, y: x // y,
-        '%': lambda x, y: x % y,
-        '<': lambda x, y: x < y,
-        '>': lambda x, y: x > y,
-        '!=': lambda x, y: x != y,
-        '==': lambda x, y: x == y,
-        '>=': lambda x, y: x >= y,
-        '<=': lambda x, y: x <= y
-    }
+    '+': operator.add,
+    '-': operator.sub,
+    '*': operator.mul,
+    '/': operator.truediv,
+    '//': operator.floordiv,
+    '%': operator.mod,
+    '^': operator.pow,
+    '=': operator.eq,
+    '==': operator.eq,
+    '<': operator.lt,
+    '<=': operator.le,
+    '!=': operator.ne,
+    '>=': operator.ge,
+    '>': operator.gt,
+}
 
 
 DICT_MATH = math.__dict__
@@ -34,7 +35,6 @@ DICT_MATH['abs'] = abs
 
 class CALCULATOR:
     error = None
-    result = None
     res_expression = []
     operations = []
 
@@ -90,11 +90,10 @@ class CALCULATOR:
                 break
             i += 1
         else:
-            if type(self.res_expression[0]) is not float and type(self.res_expression[0]) is not bool and \
-                    type(self.res_expression[0]) is not int:
+            if not isinstance(self.res_expression[0], (float, bool, int)):
                 self.error = 'ERROR: incomplete expression'
             else:
-                return self.res_expression[0]
+                return self.res_expression.pop()
 
     def allocate_operations(self, item, i):
         if item == '-' and (not i or (self.expression[i - 1] in OPERATION_PRIORITIES and
@@ -211,12 +210,12 @@ class CALCULATOR:
 
 
 def main():
-    if check_exception() is None:
-        return
-    else:
+    try:
         expression, dicts_modules = check_exception()
-        calculator = CALCULATOR(expression, dicts_modules)
-        print(calculator.get_result())
+    except Exception as error:
+        print(error)
+    else:
+        print(CALCULATOR(expression, dicts_modules).get_result())
 
 
 if __name__ == '__main__':

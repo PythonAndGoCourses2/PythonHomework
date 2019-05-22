@@ -75,7 +75,7 @@ def is_error_operators(expression):
             is_only_operators = False
         if is_operator_check(expression[i], ')'):
             if is_operator_check(expression[i + 1], '('):
-                if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES:
+                if expression[i]+expression[i+1] in calc.OPERATION_PRIORITIES or expression[i]+expression[i+1] == '()':
                     i += 2
                     continue
                 else:
@@ -94,17 +94,17 @@ def check_exception():
     try:
         dicts_modules = parse_added_modules()
     except ModuleNotFoundError:
-        print('ERROR: Module Not Found')
+        raise Exception('ERROR: Module Not Found')
     else:
         if expression is None or not expression.rstrip():
-            print('ERROR: expression argument is required')
+            raise Exception('ERROR: expression argument is required')
         elif is_error_spaces(expression):
-            print('ERROR: spaces')
+            raise Exception('ERROR: spaces')
         else:
             expression = ''.join(expression.split())
             if is_error_brackets(expression):
-                print('ERROR: brackets')
+                raise Exception('ERROR: brackets')
             elif is_error_operators(expression):
-                print('ERROR: operator')
+                raise Exception('ERROR: operator')
             else:
                 return expression, dicts_modules
