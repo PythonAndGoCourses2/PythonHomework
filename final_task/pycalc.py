@@ -239,6 +239,62 @@ def transform_to_polish_notation(parse_expression: List[elements_of_expression])
     stack = []
     reverse_polish_notation = ''
     separator = ' '
+
+    def check_stack(element):
+        """check what is on top and add operators to stack depending on operator priority
+
+        :param element: operators
+        """
+        nonlocal reverse_polish_notation
+        if stack:
+            if stack[-1] == '(':
+                stack.append(element)
+            elif OPERATORS[element][-1] <= OPERATORS[stack[-1]][-1]:
+                reverse_polish_notation += stack.pop() + separator
+                stack.append(element)
+            elif OPERATORS[element][-1] > OPERATORS[stack[-1]][-1]:
+                stack.append(element)
+        elif not stack:
+            stack.append(element)
+
+    def add_operators(element):
+        nonlocal reverse_polish_notation
+        if not stack:
+            stack.append(element)
+        elif element == stack[-1] and element == '^':
+            stack.append(element)
+        elif stack[-1] == '(':
+            stack.append(element)
+        elif stack[-1] in FUNCTIONS or stack[-1] in BUILT_IN_FUNCTION:
+            reverse_polish_notation += stack.pop() + separator
+            check_stack(token)
+        elif element == '-' and parse_expression[parse_expression.index(element) - 1] in '/*^%//':
+            if OPERATORS[element][-1] <= OPERATORS[stack[-1]][-1]:
+                stack.append(element)
+                reverse_polish_notation += '0' + separator
+        elif OPERATORS[element][-1] <= OPERATORS[stack[-1]][-1]:
+            reverse_polish_notation += stack.pop() + separator
+            check_stack(token)
+        else:
+            stack.append(element)
+
+    def add_token_between_brackets():
+        nonlocal reverse_polish_notation
+        for element in stack[::-1]:
+            if element == '(':
+                break
+            reverse_polish_notation += stack.pop() + separator
+        stack.pop()
+
+    def add_token_between_brackets_and_comma():
+        nonlocal reverse_polish_notation
+        for element in stack[::-1]:
+            if element == '(':
+                break
+            reverse_polish_notation += stack.pop() + separator
+        reverse_polish_notation += token + separator
+        pass
+
     for token in parse_expression:
         if re.fullmatch(ALL_NUMBERS, token) and float(token) >= 0:
             reverse_polish_notation += token + separator
@@ -246,56 +302,15 @@ def transform_to_polish_notation(parse_expression: List[elements_of_expression])
             # writes a negative number of -5 in the form of 0 5 -, according to the rules of the reverse notation
             reverse_polish_notation += '0' + separator + token[1:] + separator + token[0] + separator
         elif token == ')':
-            for element in stack[::-1]:
-                if element == '(':
-                    break
-                reverse_polish_notation += stack.pop() + separator
-            stack.pop()
+            add_token_between_brackets()
         elif token == ',':
-            for element in stack[::-1]:
-                if element == '(':
-                    break
-                reverse_polish_notation += stack.pop() + separator
-            reverse_polish_notation += token + separator
+            add_token_between_brackets_and_comma()
         elif token in ['(', ':']:
             stack.append(token)
         elif token in FUNCTIONS or token in BUILT_IN_FUNCTION:
             stack.append(token)
         elif token in OPERATORS:
-            if not stack:
-                stack.append(token)
-            elif token == stack[-1] and token == '^':
-                stack.append(token)
-            elif stack[-1] == '(':
-                stack.append(token)
-            elif stack[-1] in FUNCTIONS or stack[-1] in BUILT_IN_FUNCTION:
-                reverse_polish_notation += stack.pop() + separator
-                if not stack:
-                    stack.append(token)
-                elif stack[-1] in OPERATORS:
-                    if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                        reverse_polish_notation += stack.pop() + separator
-                        stack.append(token)
-                    elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                        stack.append(token)
-            elif token == '-' and parse_expression[parse_expression.index(token) - 1] in '/*^%//':
-                if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                    stack.append(token)
-                    reverse_polish_notation += '0' + separator
-            elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                reverse_polish_notation += stack.pop() + separator
-                if stack:
-                    if stack[-1] == '(':
-                        stack.append(token)
-                    elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                        reverse_polish_notation += stack.pop() + separator
-                        stack.append(token)
-                    elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                        stack.append(token)
-                elif not stack:
-                    stack.append(token)
-            else:
-                stack.append(token)
+            add_operators(token)
         elif token in CONSTANTS:
             reverse_polish_notation += token + separator
         elif token in ('True', 'False'):
@@ -320,63 +335,73 @@ def quantity_of_arguments(function: str) -> int:
 def calculate(math_expression: str) -> Union[int, float, bool, tuple]:
     reverse_polish_notation = transform_to_polish_notation(exec_isclose(check_expression(parse(math_expression))))
     stack = [0]
+
+    def calculate_built_in_function(element: str):
+        if stack[-2] == ',':
+            op2 = stack.pop()
+            stack.pop()
+            op1 = stack.pop()
+            if stack[-1] == ',':
+                raise ValueError(f'invalid number of arguments')
+            else:
+                stack.append(BUILT_IN_FUNCTION[element](op1, int(op2)))
+        else:
+            op = stack.pop()
+            stack.append(BUILT_IN_FUNCTION[element](op))
+
+    def calculate_function_with_two_arg(element: str):
+        if stack[-2] == ',':
+            op2 = stack.pop()
+            stack.pop()
+            op1 = stack.pop()
+            if stack[-1] == ',':
+                raise ValueError(f'invalid number of arguments')
+            # ldexp is a function from the math module
+            elif element == 'ldexp':
+                stack.append(FUNCTIONS[element](op1, int(op2)))
+            # gcd is a function from the math module
+            elif element == 'gcd':
+                stack.append(FUNCTIONS[element](int(op1), int(op2)))
+            else:
+                stack.append(FUNCTIONS[element](op1, op2))
+        else:
+            op = stack.pop()
+            stack.append(FUNCTIONS[element](op))
+
+    def calculate_single_arg_function(element: str):
+        if element == 'fsum':
+            numbers = []
+            for index, number in enumerate(stack[::-1]):
+                if isinstance(number, (int, float)) and stack[::-1][1] == ',':
+                    numbers.append(stack.pop()), stack.pop()
+                elif len(stack) > index + 2:
+                    if isinstance(stack[::-1][index + 2], (int, float)) and stack[::-1][3] == ',':
+                        numbers.append(stack.pop(-3)), stack.pop(), stack.pop(), stack.pop()
+            if stack[-1] == ':':
+                numbers.append(stack.pop(-3)), stack.pop(), stack.pop()
+            else:
+                numbers.append(stack.pop())
+            stack.extend([numbers])
+            op = stack.pop()
+            stack.append(FUNCTIONS[element](op))
+            numbers.clear()
+        else:
+            op = stack.pop()
+            if stack[-1] == ',':
+                raise ValueError(f'invalid number of arguments')
+            stack.append(FUNCTIONS[element](op))
+
     for token in reverse_polish_notation.split(' '):
         if token in OPERATORS:
-            op2, op1 = stack.pop(), stack.pop()
-            stack.append(OPERATORS[token][0](op1, op2))
+            oper2, oper1 = stack.pop(), stack.pop()
+            stack.append(OPERATORS[token][0](oper1, oper2))
         elif token in BUILT_IN_FUNCTION:
-            if stack[-2] == ',':
-                op2 = stack.pop()
-                stack.pop()
-                op1 = stack.pop()
-                if stack[-1] == ',':
-                    raise ValueError(f'invalid number of arguments')
-                else:
-                    stack.append(BUILT_IN_FUNCTION[token](op1, int(op2)))
-            else:
-                op = stack.pop()
-                stack.append(BUILT_IN_FUNCTION[token](op))
+            calculate_built_in_function(token)
         elif token in FUNCTIONS:
             if quantity_of_arguments(FUNCTIONS[token]) == 1:
-                if token == 'fsum':
-                    numbers = []
-                    for index, number in enumerate(stack[::-1]):
-                        if isinstance(number, (int, float)) and stack[::-1][1] == ',':
-                            numbers.append(stack.pop()), stack.pop()
-                        elif len(stack) > index + 2:
-                            if isinstance(stack[::-1][index + 2], (int, float)) and stack[::-1][3] == ',':
-                                numbers.append(stack.pop(-3)), stack.pop(), stack.pop(), stack.pop()
-                    if stack[-1] == ':':
-                        numbers.append(stack.pop(-3)), stack.pop(), stack.pop()
-                    else:
-                        numbers.append(stack.pop())
-                    stack.extend([numbers])
-                    op = stack.pop()
-                    stack.append(FUNCTIONS[token](op))
-                    numbers.clear()
-                else:
-                    op = stack.pop()
-                    if stack[-1] == ',':
-                        raise ValueError(f'invalid number of arguments')
-                    stack.append(FUNCTIONS[token](op))
+                calculate_single_arg_function(token)
             elif quantity_of_arguments(FUNCTIONS[token]) == 2:
-                if stack[-2] == ',':
-                    op2 = stack.pop()
-                    stack.pop()
-                    op1 = stack.pop()
-                    if stack[-1] == ',':
-                        raise ValueError(f'invalid number of arguments')
-                    # ldexp is a function from the math module
-                    elif token == 'ldexp':
-                        stack.append(FUNCTIONS[token](op1, int(op2)))
-                    # gcd is a function from the math module
-                    elif token == 'gcd':
-                        stack.append(FUNCTIONS[token](int(op1), int(op2)))
-                    else:
-                        stack.append(FUNCTIONS[token](op1, op2))
-                else:
-                    op = stack.pop()
-                    stack.append(FUNCTIONS[token](op))
+                calculate_function_with_two_arg(token)
         elif token in [',', ':']:
             stack.append(token)
         elif token in CONSTANTS:
