@@ -69,6 +69,7 @@ def check_mistakes(expression):
                 print("ERROR: brackets are not paired")
                 return False
             brackets_stack.pop()
+        elif element == " ": expression.remove(element)
     if not brackets_stack.is_empty():
         print("ERROR: brackets are not paired")
         return False
@@ -80,11 +81,11 @@ def check_mistakes(expression):
     for index in range(len(expression)):
         if expression[index] in ['+', '-']:
             main_sign_count += 1
+
+        if expression[index] in ['*', '/', '^', '%', '//']:
             if number_count == 0:
                 print("ERROR: no numbers before sign")
                 return False
-
-        if expression[index] in ['*', '/', '^', '%', '//']:
             if expression[index + 1] in ['*', '/', '^', '%', '//']:
                 print("ERROR: wrong signs position")
                 return False
