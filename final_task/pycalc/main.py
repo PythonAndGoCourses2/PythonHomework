@@ -147,7 +147,8 @@ def separate(expression):       # separates expression to logical parts
             if current != '':
                 check_log10()
                 fix_signs()
-                expression_list.append(current)
+                if current != '':
+                    expression_list.append(current)
                 current = ''
             flag = 'bracket'
             expression_list.append(char)
@@ -169,6 +170,7 @@ def separate(expression):       # separates expression to logical parts
             expression_list.pop(index)
         else:
             index += 1
+    # print(expression_list)
     return expression_list
 
 
