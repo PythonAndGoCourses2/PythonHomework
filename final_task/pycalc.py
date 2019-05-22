@@ -217,8 +217,10 @@ def arguments(math_function):
     return arg.count(',') + 1 if arg else 0
 
 
-def calculate(polish_information):
+def calculate(info_string):
     stack = [0]
+    polish_information = polish_notation(
+        check_function_and_constants(negative_numbers(tokenize(make_input_comfortable(info_string)))))
     for token in polish_information.split(' '):
         if token in OPERATORS:
             op2, op1 = stack.pop(), stack.pop()
@@ -268,8 +270,8 @@ def main():
         parser.add_argument("-m", "--use-modules MODULE [MODULE ...]", metavar='MODULE [MODULE ...]',
                             help="additional modules to use")
         args = parser.parse_args()
-        print(calculate(polish_notation(check_function_and_constants(
-            negative_numbers(tokenize(make_input_comfortable(args.EXPRESSION)))))))
+        print(calculate(args.EXPRESSION))
+        # print(make_input_comfortable(args.EXPRESSION))
     except Exception as exeption:
         print(f'ERROR: {exeption}')
 
