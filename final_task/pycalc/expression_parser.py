@@ -213,32 +213,69 @@ def _bracket_unary_plusminus_wrapper(expression: str):
     Example: "1^-1" -> "1^(-1)".
     """
     expression_chars = list(expression)
+
     shift = 0
+    delayed_shift_indexes = set()
+    delayed_shift_indexes_to_remove = set()
+
     if expression[0] in "-+":
         expression_chars.insert(0, "(")
+        shift += 1
         expression_chars.append(")")
-        shift += 2
 
     operator_then_plusminus_matches = __C_REGEXP_OPERATOR_THEN_PLUSMINUS.finditer(expression)
-    for match in operator_then_plusminus_matches:
-        end_index = match.end()
-        expression_chars.insert(end_index-1+shift, "(")
+    for plus_minus_match in operator_then_plusminus_matches:
+        plus_minus_index = plus_minus_match.end() - 1
+
+        for delayed_shift_index in delayed_shift_indexes:
+            if plus_minus_index >= delayed_shift_index:
+                shift += 1
+                delayed_shift_indexes_to_remove.add(delayed_shift_index)
+        delayed_shift_indexes.difference_update(delayed_shift_indexes_to_remove)
+        delayed_shift_indexes_to_remove.clear()
+
+        expression_chars.insert(plus_minus_index+shift, "(")
         shift += 1
 
-        next_token = __C_REGEXP_TOKENS.match(expression, end_index)
-        if next_token.group() in math_funcs:
-            opened_brackets = 0
+        next_token = __C_REGEXP_TOKENS.match(expression, plus_minus_index+1)
+        next_token_string = next_token.group()
+
+        if _is_number(next_token_string) or next_token_string in math_consts:
+            token_index = next_token.end()
+
+        elif next_token_string == "(":
+            opened_brackets = 1
             following_tokens = __C_REGEXP_TOKENS.finditer(expression, next_token.end())
             for following_token in following_tokens:
-                if following_token.group() == "(":
+                token_index = following_token.start()
+                token_string = following_token.group()
+
+                if token_string == "(":
                     opened_brackets += 1
-                elif following_token.group() == ")":
+                elif token_string == ")":
                     opened_brackets -= 1
                 if not opened_brackets:
-                    expression_chars.insert(following_token.end()+shift+1, ")")
                     break
-        else:
-            expression_chars.insert(next_token.end()+shift, ")")
+
+        elif next_token_string in math_funcs:
+            opened_brackets = 0
+
+            following_tokens = __C_REGEXP_TOKENS.finditer(expression, next_token.end())
+            for following_token in following_tokens:
+                token_index = following_token.start()
+                token_string = following_token.group()
+
+                if token_string == "(":
+                    opened_brackets += 1
+                elif token_string == ")":
+                    opened_brackets -= 1
+                if not opened_brackets:
+                    break
+            else:
+                token_index = following_token.end()
+
+        expression_chars.insert(token_index+shift, ")")
+        delayed_shift_indexes.add(token_index)
 
     return "".join(expression_chars)
 
@@ -458,7 +495,8 @@ def calculate(expression: str):
     if not _are_brackets_balanced(expression):
         raise ExpressionParserError("brackets are not balanced")
     if not _are_operators_and_operands_correct(expression):
-        raise ExpressionParserError("expression includes denied whitespaces or invalid combined operators")
+        raise ExpressionParserError(
+            "expression includes denied whitespaces or invalid combined operators or invalid operands")
     expression = _remove_whitespaces(expression)
     if not _are_no_missing_operators_next_to_brackets(expression):
         raise ExpressionParserError(

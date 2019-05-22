@@ -4,6 +4,7 @@
 
 
 import sys
+
 from .argument_parser import parse, ArgumentParserError
 from .import_calc_modules import import_modules, ImportCalculatorModulesError
 from .expression_parser import calculate, ExpressionParserError, math_consts, math_funcs
