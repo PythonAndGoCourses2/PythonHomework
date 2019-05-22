@@ -1,5 +1,5 @@
 import unittest
-# from pycalc.pycalc import main
+from pycalc.pycalc import main
 
 
 class TestPycalc(unittest.TestCase):
