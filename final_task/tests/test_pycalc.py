@@ -1,13 +1,14 @@
 import unittest
 from pycalc.pycalc import main
+from pycalc.calculator import Calculator
 
 
 class TestPycalc(unittest.TestCase):
 
     def test_calc(self):
-         test_expression = 'round(-2+(tau^2-sin(pi/2)*2+6.5))'
-         calc = Calculator(test_expression)
-         self.assertEqual(42, calc.calculate())
+        test_expression = 'round(-2+(tau^2-sin(pi/2)*2+6.5))'
+        calc = Calculator(test_expression)
+        self.assertEqual(42, calc.calculate())
 
     def test_syntax_error_in_init_class(self):
         test_expression = '15*'
