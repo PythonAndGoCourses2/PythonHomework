@@ -110,8 +110,7 @@ class Calculator():
         number = re.search(
             r'([+-]+)?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr)
 
-        if number is None or number.start(
-        ) != 1:
+        if not number or number.start() != 1:
             raise Exception(
                 "the expression should be written in the following form 'number operator number'")
 
@@ -121,8 +120,7 @@ class Calculator():
         number = re.search(
             r'(([0-9]*[.])?[0-9]+|[0-9]+[.])([+-]+)?', expr[::-1])
 
-        if number is None or number.start(
-        ) != 0:
+        if not number or number.start() != 0:
             raise Exception(
                 "the expression should be written in the following form 'number operator number'")
 
