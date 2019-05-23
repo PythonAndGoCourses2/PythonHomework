@@ -2,7 +2,7 @@ from pycalc.main import Stack
 from pycalc.consts import *
 
 
-def check_mistakes(expression, functions, mode=0):
+def check_mistakes(expression, functions={}, mode=0):
 
     def is_number(part):
         for char in part:
@@ -31,7 +31,7 @@ def check_mistakes(expression, functions, mode=0):
                 return "ERROR: brackets are not paired"
             brackets_stack.pop()
             if brackets_stack.is_empty():
-                if expression[begin-1].isalpha() and not expression[begin-1] in math_consts:
+                if expression[begin - 1].isalpha() and not expression[begin - 1] in math_consts:
                     error = check_mistakes(expression[begin + 1: index], functions, 2)
                 else:
                     error = check_mistakes(expression[begin + 1: index], functions, 1)
@@ -39,7 +39,7 @@ def check_mistakes(expression, functions, mode=0):
 
                 if error != '':
                     return error
-                
+
         elif element == " ":
             expression.remove(element)
     if not brackets_stack.is_empty():

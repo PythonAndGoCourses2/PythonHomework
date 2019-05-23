@@ -7,6 +7,16 @@ from pycalc.check_mistakes import check_mistakes
 functions = {'round': round, 'abs': abs}
 
 
+def get_all_func(modules):
+    global functions
+    if 'math' not in modules:                       # including module math
+        modules.append('math')
+    for module in modules:                          # adding all functions to dictionary
+        workspace = importlib.import_module(module)
+        for name in dir(workspace):
+            functions[name] = getattr(workspace, name)
+
+
 def get_args(expression):
     if len(expression) == 0:
         return ''
@@ -261,13 +271,7 @@ def calc(expression):
 
 def pycalc(expression, modules=list()):
     global functions
-    if 'math' not in modules:                       # including module math
-        modules.append('math')
-    for module in modules:                          # adding all functions to dictionary
-        workspace = importlib.import_module(module)
-        for name in dir(workspace):
-            functions[name] = getattr(workspace, name)
-
+    get_all_func(modules)
     new = ''
 
     for char in expression:
