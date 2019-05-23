@@ -16,4 +16,3 @@ def main():
             print(answer)
     else:
         print(answer)
-
