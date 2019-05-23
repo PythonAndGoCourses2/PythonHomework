@@ -2,7 +2,7 @@ import unittest
 import math
 import pycalc.CheckAndChange as CheckAndChange
 import pycalc.difcalc as difcalc
-from unittest.mock import patch
+#from unittest.mock import patch
 
 
 class TestFunctions(unittest.TestCase):
