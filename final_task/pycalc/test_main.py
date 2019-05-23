@@ -3,8 +3,8 @@ import unittest
 from pycalc.check_mistakes import check_mistakes
 import math as m
 
-class TestFunctions(unittest.TestCase):
 
+class TestFunctions(unittest.TestCase):
 
     def test_check_mistakes(self):
         self.assertEqual(check_mistakes([]), "ERROR: empty expression")
