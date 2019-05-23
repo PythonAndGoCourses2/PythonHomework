@@ -1,6 +1,6 @@
-import pycalc.main as mn
+import final_task.pycalc.main as mn
 import unittest
-from pycalc.check_mistakes import check_mistakes
+from final_task.pycalc.check_mistakes import check_mistakes
 import math as m
 
 
