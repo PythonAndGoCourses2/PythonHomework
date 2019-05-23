@@ -2,7 +2,6 @@ import re
 import pycalc.easyCalculation as easyCalculation
 import math
 from numbers import Number
-ёё
 
 class ComplexCalc(easyCalculation.Calculator):
 

@@ -138,15 +138,3 @@ class TestFunctions(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    """cheker = CheckAndChange.CheckAndChange()
-    calculator = difcalc.ComplexCalc()
-    numb="12>1333>2000"
-    try:
-
-        a = cheker.do_all_changes(numb, None)
-        a = calculator.calculate(numb)
-
-    except Exception as e:
-        print("ERROR:  " + str(e))
-    else:
-        print(a)"""
