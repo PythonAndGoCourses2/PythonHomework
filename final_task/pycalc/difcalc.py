@@ -2,20 +2,20 @@ import re
 import pycalc.easyCalculation as easyCalculation
 import math
 from numbers import Number
-
+ёё
 
 class ComplexCalc(easyCalculation.Calculator):
 
-    const = {**{attr: getattr(math,attr) for attr in dir(math) if isinstance(
-            getattr(
-                math,
-                attr),
-            Number)}, **{"True": 1,
-                         "False": 0}}
-    math_functions = {**{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
-                      **{"abs": lambda a: abs(a),
-                         "round": lambda a: round(a),
-                         "pow": lambda a, b: pow(a, b)}}
+    const = {
+        **{attr: getattr(math,attr) for attr in dir(math) if isinstance(getattr(math,attr),Number)},
+        **{"True": 1,"False": 0}
+        }
+    math_functions = {
+        **{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
+        **{"abs": lambda a: abs(a),
+           "round": lambda a: round(a),
+           "pow": lambda a, b: pow(a, b)}
+           }
 
     def expression_search(self, expr):
 

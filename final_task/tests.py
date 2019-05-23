@@ -3,7 +3,6 @@ import math
 import pycalc.CheckAndChange as CheckAndChange
 import pycalc.difcalc as difcalc
 from unittest.mock import patch
-import numexpr as ne
 
 
 class TestFunctions(unittest.TestCase):
@@ -26,7 +25,8 @@ class TestFunctions(unittest.TestCase):
             self.cheker.correct_spaces("12 * * 2")
 
     def test_numbers(self):
-        with patch('pycalc.CheckAndChange.CheckAndChange.correct_spaces'), patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'), patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
+        with patch('pycalc.CheckAndChange.CheckAndChange.correct_spaces'),\
+             patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'), patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
             self.assertEqual(
                 self.cheker.do_all_changes(
                     "1122113", None), "1122113")
@@ -79,7 +79,8 @@ class TestFunctions(unittest.TestCase):
                     math.e)
 
     def test_function_calculator(self):
-        with patch('pycalc.difcalc.ComplexCalc._commasplit') as splitted, patch('pycalc.difcalc.ComplexCalc.expression_search') as expresssearch:
+        with patch('pycalc.difcalc.ComplexCalc._commasplit') as splitted,\
+             patch('pycalc.difcalc.ComplexCalc.expression_search') as expresssearch:
 
             splitted.return_value = ["1"]
             expresssearch.return_value = "3"
