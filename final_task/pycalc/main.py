@@ -1,38 +1,8 @@
 import pycalc.stack as Stack
 import importlib
-import operator
-import math
 import re
-
-signs = ['+', '-', '*', '/', '^', '%', '>', '<', '=', '//', '!']
-
-logical_signs = {
-    '>': operator.gt,
-    '>=': operator.ge,
-    '==': operator.eq,
-    '!=': operator.ne,
-    "<=": operator.le,
-    "<": operator.le
-}
-
-
-operators_type1 = {
-    '*': operator.mul,
-    '/': operator.truediv,
-    '//': operator.floordiv,
-    '%': operator.mod
-}
-
-operators_main = {
-    '+': operator.add,
-    '-': operator.sub
-}
-
-math_consts = {
-    "pi": math.pi,
-    "e": math.e
-
-}
+from pycalc.consts import *
+from pycalc.check_mistakes import check_mistakes
 
 functions = {'round': round, 'abs': abs}
 
@@ -53,92 +23,6 @@ def get_args(expression):
         elif part == ')':
             stack.pop()
     return result
-
-
-def check_mistakes(expression):
-
-    def is_number(part):
-        for char in part:
-            if not char.isnumeric() and char != '.':
-                return False
-        return True
-
-    if len(expression) == 0:
-        print("ERROR: empty expression!")
-        return False
-
-    brackets_stack = Stack.Stack()
-    for element in expression:
-        if element == '(':
-            brackets_stack.push('(')
-        elif element == ')':
-            if brackets_stack.is_empty():
-                print("ERROR: brackets are not paired")
-                return False
-            brackets_stack.pop()
-        elif element == " ":
-            expression.remove(element)
-    if not brackets_stack.is_empty():
-        print("ERROR: brackets are not paired")
-        return False
-
-    if expression[len(expression) - 1] in signs:
-        print("ERROR: no number after operator")
-        return False
-
-    main_sign_count = 0
-    l_sign_count = 0
-    number_count = 0
-    logical_sign_pos = 0
-
-    for index in range(len(expression)):
-
-        if expression[index] in ['+', '-']:
-            main_sign_count += 1
-
-        elif expression[index] in ['*', '/', '^', '%', '//']:
-            if number_count == 0:
-                print("ERROR: no numbers before sign")
-                return False
-            if index != len(expression) - 1 and expression[index + 1] in ['*', '/', '^', '%', '//']:
-                print("ERROR: duplicate multiply or div sign")
-                return False
-
-        elif expression[index] in logical_signs:
-            l_sign_count += 1
-            logical_sign_pos = index
-            if l_sign_count > 1:
-                print("ERROR: more than one logical operator")
-                return False
-        elif expression[index] == '=':
-            print("ERROR: illegal usage '='")
-            return False
-
-        elif is_number(expression[index]):
-            number_count += 1
-            if index != len(expression) - 1 and is_number(expression[index + 1]):
-                print("ERROR: no sign between expression")
-
-        elif expression[index].isalpha():
-            if expression[index] in math_consts:
-                number_count += 1
-            elif expression[index] in functions:
-                if index == len(expression) - 1 or expression[index + 1] != '(':
-                    print("ERROR: no brackets after function")
-                    return False
-            else:
-                print("ERROR: function does not exist")
-                return False
-
-    if l_sign_count == 1:
-        if (len(expression[:logical_sign_pos])) == 0 or (len(expression[logical_sign_pos:])) == 0:
-            print("ERROR: one of expressions around logical operator is empty")
-            return False
-    if number_count == 0:
-        print("ERROR: no numbers in expression")
-        return False
-
-    return True
 
 
 def separate(expression):       # separates expression to logical parts
@@ -277,10 +161,9 @@ def calc(expression):
                                 element = functions[func](*temp)            # processing function with 1 or more args
                             else:
                                 element = functions[func]()                 # processing function with no args
-
                             func = ''
                         except TypeError:
-                            print("ERROR: wrong amount of arguments for " + func + "(..)")
+                            return "ERROR: wrong amount of arguments for " + func + "(..)"
                             exit()
                     else:
                         element = float(calc(expression[begin + 1:end]))    # if no function, just a brackets
@@ -390,7 +273,8 @@ def pycalc(expression, modules=list()):
     for char in expression:
         if char != ' ':
             new += char
-    if check_mistakes(separate(expression)):                  # handling some mistakes
+    error = check_mistakes(separate(expression), functions)
+    if error == "":                  # handling some mistakes
         expression = separate(new)                          # separating expression (look separate function)
         for index, element in enumerate(expression):       # looking for logical signs
             if element in logical_signs:
@@ -399,3 +283,5 @@ def pycalc(expression, modules=list()):
                 return logical_signs[element](left, right)
         result = float(calc(expression))                    # start counting
         return result
+    else:
+        return error
