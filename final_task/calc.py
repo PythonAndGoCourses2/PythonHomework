@@ -378,7 +378,7 @@ def errors_check(formula):
     elif open_bracks != closed_bracks:
         raise SyntaxError("ERROR: Brackets are not balanced")
 
-def main()
+def main():
     parser = create_parser()
     args = parser.parse_args()
     formula = args.EXPRESSION
