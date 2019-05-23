@@ -5,6 +5,7 @@ import math as m
 
 class TestFunctions(unittest.TestCase):
 
+    
     def test_check_mistakes(self):
         self.assertEqual(check_mistakes([]), "ERROR: empty expression")
         self.assertEqual(check_mistakes(['123', '-']), "ERROR: no number after operator")
