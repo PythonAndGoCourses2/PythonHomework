@@ -6,7 +6,14 @@ import math as m
 class TestFunctions(unittest.TestCase):
 
     def test_error(self):
-        pass
+        self.assertEqual(mn.pycalc(''), "ERROR: empty expression")
+        self.assertEqual(mn.pycalc('123-'), "ERROR: no number after operator")
+        self.assertEqual(mn.pycalc('123-()'), "ERROR: empty brackets")
+        self.assertEqual(mn.pycalc('123-(-)'), "ERROR: no number after operator")
+        self.assertEqual(mn.pycalc('func()'), "ERROR: function does not exist")
+        self.assertEqual(mn.pycalc('pow(12, 12, 3)'), "ERROR: wrong amount of arguments for pow(..)")
+        self.assertEqual(mn.pycalc('123+23*(12 - 23 + 12))'), "ERROR: brackets are not paired")
+        self.assertEqual(mn.pycalc('123+23*(12 - 23(12))'), "ERROR: no sign or function before brackets")
 
     def test_solve_equality(self):
         pass

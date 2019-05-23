@@ -2,7 +2,7 @@ from pycalc.main import Stack
 from pycalc.consts import *
 
 
-def check_mistakes(expression, functions):
+def check_mistakes(expression, functions, mode=0):
 
     def is_number(part):
         for char in part:
@@ -11,17 +11,35 @@ def check_mistakes(expression, functions):
         return True
 
     if len(expression) == 0:
-        return "ERROR: empty expression!"
+        if mode == 0:
+            return "ERROR: empty expression"
+        elif mode == 1:
+            return "ERROR: empty brackets"
+        elif mode == 2:
+            return ''
 
+    begin = -1
     brackets_stack = Stack.Stack()
-    for element in expression:
+
+    for index, element in enumerate(expression):
         if element == '(':
             brackets_stack.push('(')
+            if begin == -1:
+                begin = index
         elif element == ')':
             if brackets_stack.is_empty():
                 return "ERROR: brackets are not paired"
-
             brackets_stack.pop()
+            if brackets_stack.is_empty():
+                if expression[begin-1].isalpha() and not expression[begin-1] in math_consts:
+                    error = check_mistakes(expression[begin + 1: index], functions, 2)
+                else:
+                    error = check_mistakes(expression[begin + 1: index], functions, 1)
+                begin = -1
+
+                if error != '':
+                    return error
+                
         elif element == " ":
             expression.remove(element)
     if not brackets_stack.is_empty():
@@ -70,6 +88,11 @@ def check_mistakes(expression, functions):
 
             else:
                 return "ERROR: function does not exist"
+
+        elif expression[index] == '(':
+            if expression[index - 1] not in functions and expression[index - 1] not in signs \
+                    and index != 0:
+                return "ERROR: no sign or function before brackets"
 
     if l_sign_count == 1:
         if (len(expression[:logical_sign_pos])) == 0 or (len(expression[logical_sign_pos:])) == 0 \
