@@ -1,7 +1,6 @@
 import argparse
 import final_task.config as c
 
-
 def create_parser():
     """Created with argparse lib. Has 'help' parameter for --help"""
     parser = argparse.ArgumentParser(description="Pure-python command-line calculator")
