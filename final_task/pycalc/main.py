@@ -88,6 +88,7 @@ def check_mistakes(expression):
     main_sign_count = 0
     l_sign_count = 0
     number_count = 0
+    logical_sign_pos = 0
 
     for index in range(len(expression)):
 
@@ -97,7 +98,9 @@ def check_mistakes(expression):
         elif expression[index] in ['*', '/', '^', '%', '//']:
             if number_count == 0:
                 print("ERROR: no numbers before sign")
-                print("ERROR: wrong signs position")
+                return False
+            if index != len(expression) - 1 and expression[index + 1] in ['*', '/', '^', '%', '//']:
+                print("ERROR: duplicate multiply or div sign")
                 return False
 
         elif expression[index] in logical_signs:
@@ -118,13 +121,17 @@ def check_mistakes(expression):
             if expression[index] in math_consts:
                 number_count += 1
             elif expression[index] in functions:
-                if expression[index + 1] != '(' or index == len(expression) - 1:
+                if index == len(expression) - 1 or expression[index + 1] != '(':
                     print("ERROR: no brackets after function")
                     return False
             else:
                 print("ERROR: function does not exist")
                 return False
 
+    if l_sign_count == 1:
+        if (len(expression[:logical_sign_pos])) == 0 or (len(expression[logical_sign_pos:])) == 0:
+            print("ERROR: one of expressions around logical operator is empty")
+            return False
     if number_count == 0:
         print("ERROR: no numbers in expression")
         return False
@@ -263,11 +270,16 @@ def calc(expression):
                     end = index
                     if func != '':                                      # if we find function
                         temp = get_args(expression[begin + 1:end])      # getting arguments for func
-                        if temp != ['']:
-                            element = functions[func](*temp)            # processing function with 1 or more args
-                        else:
-                            element = functions[func]()                 # processing function with no args
-                        func = ''
+                        try:
+                            if temp != ['']:
+                                element = functions[func](*temp)            # processing function with 1 or more args
+                            else:
+                                element = functions[func]()                 # processing function with no args
+
+                            func = ''
+                        except TypeError:
+                            print("ERROR: wrong amount of arguments for " + func + "(..)")
+                            exit()
                     else:
                         element = float(calc(expression[begin + 1:end]))    # if no function, just a brackets
 
