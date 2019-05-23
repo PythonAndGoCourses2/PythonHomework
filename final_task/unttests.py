@@ -2,7 +2,7 @@ import unittest
 import math
 import pycalc.CheckAndChange as CheckAndChange
 import pycalc.difcalc as difcalc
-from unittest.mock import patch
+#from unittest.mock import patch
 
 
 class TestFunctions(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestFunctions(unittest.TestCase):
     cheker = CheckAndChange.CheckAndChange()
     calculator = difcalc.ComplexCalc()
 
-    def test_brackets(self):
+    """def test_brackets(self):
         self.assertEqual(self.cheker.correct_brackets("(()())"), None)
         with self.assertRaises(Exception):
             self.cheker.correct_brackets("(()()")
@@ -89,17 +89,17 @@ class TestFunctions(unittest.TestCase):
                     self.calculator._find_replacement(
                         "sin",
                         "1")),
-                math.sin(3))
+                math.sin(3))"""
 
-    """def test_operators(self):
+    def test_operators(self):
         self.assertAlmostEqual(float(self.calculator.calculate("12^2")), 144.0)
         self.assertAlmostEqual(float(self.calculator.calculate("12/2")), 6.0)
         with self.assertRaises(Exception):
             self.calculator.calculate("12^`2")
             self.calculator.calculate("`12*2")
-            self.calculator.calculate("12/*2")"""
+            self.calculator.calculate("12/*2")
 
-    def test_unary_operators(self):
+    """def test_unary_operators(self):
         self.assertEqual(float(self.calculator. unary_rezult("12")), 12.0)
         self.assertEqual(float(self.calculator.unary_rezult("-12")), -12.0)
         self.assertEqual(float(self.calculator.unary_rezult("+-12")), -12.0)
@@ -134,6 +134,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_brekets_parsers(self):
         pass
+    """
 
 if __name__ == '__main__':
     unittest.main()
