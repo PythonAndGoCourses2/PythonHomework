@@ -59,7 +59,7 @@ def check_mistakes(expression):
 
     def is_number(expression):
         for element in expression:
-            if '0' >= element >= '9' and element != '.':
+            if not element.isnumeric() and element != '.':
                 return False
         return True
 
@@ -89,7 +89,7 @@ def check_mistakes(expression):
     l_sign_count = 0
     number_count = 0
 
-    for index in range(len(expression) - 1):
+    for index in range(len(expression)):
 
         if expression[index] in ['+', '-']:
             main_sign_count += 1
@@ -101,10 +101,13 @@ def check_mistakes(expression):
                 return False
 
         elif expression[index] in logical_signs:
-            l_sign_count +=1
+            l_sign_count += 1
             if l_sign_count > 1:
                 print("ERROR: more than one logical operator")
                 return False
+        elif expression[index] == '=':
+            print("ERROR: illegal usage '='")
+            return False
 
         elif is_number(expression[index]):
             number_count += 1
