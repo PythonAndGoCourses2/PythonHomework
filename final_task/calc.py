@@ -1,5 +1,5 @@
 import argparse
-import Calc.config as c
+import final_task.config as c
 
 
 def create_parser():
