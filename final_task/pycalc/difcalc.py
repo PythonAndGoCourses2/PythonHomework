@@ -16,7 +16,7 @@ class ComplexCalc(easyCalculation.Calculator):
            "pow": lambda a, b: pow(a, b)}
            }
 
-    def expression_search(self, expr):
+    def expression_search(self, expr:str):
 
         while True:
 
@@ -59,7 +59,7 @@ class ComplexCalc(easyCalculation.Calculator):
                     end = place + len(rezult) - 1
                     expr = self._calc_if_power(expr, place, end)
 
-    def _find_replacement(self, func, expr):
+    def _find_replacement(self, func:str, expr:str):
 
         if func in ComplexCalc.math_functions:
             allargs = self._commasplit(expr)
@@ -75,7 +75,7 @@ class ComplexCalc(easyCalculation.Calculator):
             raise Exception("Indefined function")
         return str(rezult)
 
-    def _commasplit(self, expr):
+    def _commasplit(self, expr:str):
         breketscounter = 0
         preve = 0
         count = 1
@@ -106,26 +106,24 @@ class ComplexCalc(easyCalculation.Calculator):
 
     }
 
-    def calculate(self, expr):
-
+    def calculate(self, expr:str):
+        #передалать с меньшим числом иф
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
-
-        while place is not None:
-            after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',
-                              expr[place.end():])
-
+        
+        while place:
+            after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',expr[place.end():])
             number_one = self.expression_search(expr[:place.start()])
-            if after is None:
+
+            if not after :
                 number_two = self.expression_search(expr[place.end():])
             else:
-                number_two = self.expression_search(
-                    expr[place.end():after.start() + place.end()])
-            if number_one is not None and number_two is not None:
+                number_two = self.expression_search(expr[place.end():after.start() + place.end()])
 
+            if number_one is not None and number_two is not None:
                 rezult = ComplexCalc.compare[place[0]](number_one, number_two)
                 end = ""
 
-                if after is not None:
+                if after:
                     if after.start() == 0:
                         raise Exception("no symbols between compare")
                     end = expr[after.end() + place.end():]
@@ -137,6 +135,5 @@ class ComplexCalc(easyCalculation.Calculator):
                 raise Exception(
                     "uncorrect expression must be 'expr' operator 'expr'")
             place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
-            if place is None:
-                return bool(self.expression_search(expr))
+            
         return self.expression_search(expr)
