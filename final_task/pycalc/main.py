@@ -102,10 +102,8 @@ def check_mistakes(expression):
         elif expression[index] in logical_signs:
             l_sign_count +=1
             if l_sign_count > 1:
-                print("ERROR: more than one lo"
-                      "gical operator")
-                return \
-                    False
+                print("ERROR: more than one logical operator")
+                return False
 
         elif is_number(expression[index]):
             number_count += 1
