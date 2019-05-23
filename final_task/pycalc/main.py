@@ -62,6 +62,7 @@ def check_mistakes(expression):
             if '0' >= element >= '9' and element != '.':
                 return False
         return True
+
     if len(expression) == 0:
         print("ERROR: empty expression!")
         return False
@@ -80,7 +81,7 @@ def check_mistakes(expression):
         print("ERROR: brackets are not paired")
         return False
 
-    if expression[len(expression)] in signs:
+    if expression[len(expression)-1] in signs:
         print("ERROR: no number after operator")
         return False
 
