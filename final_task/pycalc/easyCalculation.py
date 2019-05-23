@@ -18,7 +18,7 @@ class Calculator():
 
         place = re.search(r'/|\*|%|&', expr)
 
-        while place is not None:
+        while place:
             point = place.start()
             findBefore = self.search_number_from_end(expr[:point])
             begin = point - findBefore.end() + 1

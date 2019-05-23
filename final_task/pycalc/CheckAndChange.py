@@ -10,8 +10,8 @@ class CheckAndChange():
 
     def do_all_changes(self, expr, module):
 
-        if re.search(
-                r'[0-9]+', expr) is None and re.search(r'[A-ZAa-z]+', expr) is None:
+        if not re.search(
+                r'[0-9]+', expr) and not re.search(r'[A-ZAa-z]+', expr):
             raise Exception("No Numbers in expression")
 
         expr = expr.replace("//", "&")
@@ -22,7 +22,7 @@ class CheckAndChange():
         return expr
 
     def add_args(self, modul):
-        if modul is not None:
+        if modul:
             base = path.basename(modul)
 
             module_name = path.splitext(base)[0]
@@ -31,21 +31,13 @@ class CheckAndChange():
             spec.loader.exec_module(module)
 
             new_functions = {
-                attr: getattr(
-                    module,
-                    attr) for attr in dir(module) if callable(
-                    getattr(
-                        module,
-                        attr))}
+                attr: getattr(module,attr) for attr in dir(module) if callable(getattr(module,attr))
+                }
             difcalc.ComplexCalc.math_functions.update(new_functions)
+
             new_const = {
-                attr: getattr(
-                    module,
-                    attr) for attr in dir(module) if isinstance(
-                    getattr(
-                        module,
-                        attr),
-                    Number)}
+                attr: getattr(module,attr) for attr in dir(module)if isinstance(getattr(module,attr), Number)
+                }             
             difcalc.ComplexCalc.const.update(new_const)
 
     def correct_spaces(self, expr):
