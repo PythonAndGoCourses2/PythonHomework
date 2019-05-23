@@ -57,9 +57,9 @@ def get_args(expression):
 
 def check_mistakes(expression):
 
-    def is_number(expression):
-        for element in expression:
-            if not element.isnumeric() and element != '.':
+    def is_number(part):
+        for char in part:
+            if not char.isnumeric() and char != '.':
                 return False
         return True
 
@@ -76,7 +76,8 @@ def check_mistakes(expression):
                 print("ERROR: brackets are not paired")
                 return False
             brackets_stack.pop()
-        elif element == " ": expression.remove(element)
+        elif element == " ":
+            expression.remove(element)
     if not brackets_stack.is_empty():
         print("ERROR: brackets are not paired")
         return False
@@ -105,6 +106,7 @@ def check_mistakes(expression):
 
         elif expression[index] in logical_signs:
             l_sign_count += 1
+            logical_sign_pos = index
             if l_sign_count > 1:
                 print("ERROR: more than one logical operator")
                 return False
