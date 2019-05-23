@@ -88,6 +88,7 @@ def write_in_not(list_of_elements):
         elif temp.replace('.', '', 1).isdigit():
             output.append(element)
         elif not comparison_operations.isdisjoint(temp):
+            '#if element is comparison'
             for operation in stack:
                 output.append(operation)
             result = calculate(output)
@@ -97,6 +98,21 @@ def write_in_not(list_of_elements):
             new_list = list(list_of_elements[index+1:])
             notation2 = write_in_not(new_list)
             result2 = calculate(notation2)
+            '#if we have more than one comparison'
+            if result2 is True:
+                index2 = 0
+                temp = str(new_list[index2])
+                while comparison_operations.isdisjoint(temp):
+                    index2 += 1
+                    temp = str(new_list[index2])
+                index2 -= 1
+                new_list = list(new_list[: index2 + 1])
+                notation2 = write_in_not(new_list)
+                result2 = calculate(notation2)
+            elif result2 is False:
+                output.clear()
+                output.append(result2)
+                return output
             output.append(result2)
             output.append(element)
             index = len(list_of_elements)
