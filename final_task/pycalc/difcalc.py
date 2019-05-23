@@ -29,8 +29,8 @@ class ComplexCalc(easyCalculation.Calculator):
             place = func.start()
             if func[0] in self.const:
 
-                s = self.const[func[0]]
-                expr = expr[:place] + str(s) + expr[afterExpr:]
+                rezult = self.const[func[0]]
+                expr = expr[:place] + str(rezult) + expr[afterExpr:]
                 continue
 
             searcher = 0
@@ -53,10 +53,10 @@ class ComplexCalc(easyCalculation.Calculator):
 
             else:
 
-                a = self._find_replacement(func[0], expr[afterExpr + 1:end])
-                expr = expr[:place] + a + expr[end + 1:]
-                if float(a) < 0:
-                    end = place + len(a) - 1
+                rezult = self._find_replacement(func[0], expr[afterExpr + 1:end])
+                expr = expr[:place] + rezult + expr[end + 1:]
+                if float(rezult) < 0:
+                    end = place + len(rezult) - 1
                     expr = self._calc_if_power(expr, place, end)
 
     def _find_replacement(self, func, expr):
@@ -64,16 +64,16 @@ class ComplexCalc(easyCalculation.Calculator):
         if func in ComplexCalc.math_functions:
             allargs = self._commasplit(expr)
 
-            k = []
+            float_args = []
             for each in allargs:
-                k.append(float(self.expression_search(each)))
+                float_args.append(float(self.expression_search(each)))
 
-            a = '{:.15f}'.format(ComplexCalc.math_functions[func](*k))
+            rezult = '{:.15f}'.format(ComplexCalc.math_functions[func](*float_args))
 
         else:
 
             raise Exception("Indefined function")
-        return str(a)
+        return str(rezult)
 
     def _commasplit(self, expr):
         breketscounter = 0
@@ -114,15 +114,15 @@ class ComplexCalc(easyCalculation.Calculator):
             after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',
                               expr[place.end():])
 
-            a = self.expression_search(expr[:place.start()])
+            number_one = self.expression_search(expr[:place.start()])
             if after is None:
-                b = self.expression_search(expr[place.end():])
+                number_two = self.expression_search(expr[place.end():])
             else:
-                b = self.expression_search(
+                number_two = self.expression_search(
                     expr[place.end():after.start() + place.end()])
-            if a is not None and b is not None:
+            if number_one is not None and number_two is not None:
 
-                rezult = ComplexCalc.compare[place[0]](a, b)
+                rezult = ComplexCalc.compare[place[0]](number_one, number_two)
                 end = ""
 
                 if after is not None:

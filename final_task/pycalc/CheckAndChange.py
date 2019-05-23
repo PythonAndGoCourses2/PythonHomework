@@ -76,15 +76,15 @@ class CheckAndChange():
                     expression = expression[1:]
 
     def correct_brackets(self, expr):
-        i = 0
+        counter = 0
         for one in expr:
 
             if one == "(":
-                i += 1
+                counter += 1
             elif one == ")":
-                i -= 1
-            if i < 0:
+                counter -= 1
+            if counter < 0:
                 raise Exception("check brackets! ")
         else:
-            if i != 0:
+            if counter != 0:
                 raise Exception("check brackets! ")

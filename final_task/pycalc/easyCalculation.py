@@ -50,12 +50,12 @@ class Calculator():
     def unary_rezult(self, number):
         minus = number.count("-")
         plus = number.count("+")
-        a = number[plus + minus:]
+        real_number = number[plus + minus:]
         if minus % 2 == 1:
-            a = float("-" + a)
+            real_number = float("-" + real_number)
         else:
-            a = float(a)
-        return a
+            real_number = float(real_number)
+        return real_number
 
     def search_brakets(self, expr):
         expr = expr.replace(" ", "")
