@@ -49,4 +49,5 @@ class TestFunctions(unittest.TestCase):
 
     def test_pycalc(self):
         self.assertAlmostEqual(float(mn.pycalc('15+23*cos(17-23)')), 37.08391659295842)
-        self.assertEqual(mn.pycalc('round(3.6675)'), '4.0')
+        self.assertEqual(float(mn.pycalc('round(3.6675)')), 4.0)
+        self.assertEqual(mn.pycalc('2^4^2'), 65536)
