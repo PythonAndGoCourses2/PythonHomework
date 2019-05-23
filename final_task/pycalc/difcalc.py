@@ -26,11 +26,11 @@ class ComplexCalc(easyCalculation.Calculator):
                 return self.search_brakets(expr)
 
             afterExpr = func.end()
-            k = func.start()
+            place = func.start()
             if func[0] in self.const:
 
                 s = self.const[func[0]]
-                expr = expr[:k] + str(s) + expr[afterExpr:]
+                expr = expr[:place] + str(s) + expr[afterExpr:]
                 continue
 
             searcher = 0
@@ -54,10 +54,10 @@ class ComplexCalc(easyCalculation.Calculator):
             else:
 
                 a = self._find_replacement(func[0], expr[afterExpr + 1:end])
-                expr = expr[:k] + a + expr[end + 1:]
+                expr = expr[:place] + a + expr[end + 1:]
                 if float(a) < 0:
-                    end = k + len(a) - 1
-                    expr = self._calc_if_power(expr, k, end)
+                    end = place + len(a) - 1
+                    expr = self._calc_if_power(expr, place, end)
 
     def _find_replacement(self, func, expr):
 
