@@ -4,6 +4,7 @@ import re
 from pycalc.consts import *
 from pycalc.check_mistakes import check_mistakes
 
+
 functions = {'round': round, 'abs': abs}
 
 
