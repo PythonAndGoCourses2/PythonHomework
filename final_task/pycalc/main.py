@@ -80,7 +80,7 @@ def check_mistakes(expression):
         print("ERROR: brackets are not paired")
         return False
 
-    if expression[len(expression)-1] in signs:
+    if expression[len(expression)] in signs:
         print("ERROR: no number after operator")
         return False
 
@@ -88,37 +88,44 @@ def check_mistakes(expression):
     l_sign_count = 0
     number_count = 0
 
-    for index in range(len(expression)):
+    for index in range(len(expression) - 1):
+
         if expression[index] in ['+', '-']:
             main_sign_count += 1
 
         elif expression[index] in ['*', '/', '^', '%', '//']:
             if number_count == 0:
                 print("ERROR: no numbers before sign")
-                return False
-            if expression[index + 1] in ['*', '/', '^', '%', '//']:
                 print("ERROR: wrong signs position")
                 return False
 
         elif expression[index] in logical_signs:
             l_sign_count +=1
             if l_sign_count > 1:
-                print("ERROR: more than one logical operator")
-                return False
+                print("ERROR: more than one lo"
+                      "gical operator")
+                return \
+                    False
 
         elif is_number(expression[index]):
             number_count += 1
+            if index != len(expression) - 1 and is_number(expression[index + 1]):
+                print("ERROR: no sign between expression")
 
         elif expression[index].isalpha():
             if expression[index] in math_consts:
                 number_count += 1
             elif expression[index] in functions:
-                if expression[index + 1] != '(':
+                if expression[index + 1] != '(' or index == len(expression) - 1:
                     print("ERROR: no brackets after function")
                     return False
             else:
                 print("ERROR: function does not exist")
                 return False
+
+    if number_count == 0:
+        print("ERROR: no numbers in expression")
+        return False
 
     return True
 
