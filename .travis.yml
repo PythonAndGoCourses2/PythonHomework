@@ -9,4 +9,5 @@ script:
   - nosetests --cover-branches --with-coverage .
   - pycodestyle --ignore=W605 --max-line-length=120 .
   - python ./../pycalc_checker.py
+  - python ./../test_main.py
   - cd -
