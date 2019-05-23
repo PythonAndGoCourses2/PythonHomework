@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-import validation
-import calc
+from calculator import validation
+from calculator import calc
 from time import time
 
 from argparse import Namespace
