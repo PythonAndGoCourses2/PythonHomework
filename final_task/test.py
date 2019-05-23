@@ -32,6 +32,7 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.fix_unary("0+3/3"), "0+3/3")
         self.assertEqual(check.fix_unary("2+3*(-1+2)"), "2+3*(0-1+2)")
         self.assertEqual(check.fix_unary("2+30*(+1+2)"), "2+30*(0+1+2)")
+        self.assertEqual(check.fix_unary("2+3*(4+5)"), "2+3*(4+5)")
 
     def test_replace_plus_minus(self):
         self.assertEqual(check.replace_plus_minus("2+++3"), "2+3")
@@ -42,6 +43,7 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.replace_plus_minus("2+--+-8"), "2-8")
         self.assertEqual(check.replace_plus_minus("2-+++--+9"), "2-9")
         self.assertEqual(check.replace_plus_minus("--+-2.0-+--10"), "-2.0-10")
+        self.assertEqual(check.replace_plus_minus("2*2/3"), "2*2/3")
 
     def test_replace_whitespace_and_const(self):
         self.assertEqual(check.replace_whitespace_and_const("3 +  4"), "3+4")
@@ -61,6 +63,10 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.correct_check("1 * * 6"), False)
         self.assertEqual(check.correct_check("1 / / 7"), False)
         self.assertEqual(check.correct_check("1 % % 8"), False)
+
+
+class TestCoreFunctions(unittest.TestCase):
+    pass
 
 
 if __name__ == '__main__':
