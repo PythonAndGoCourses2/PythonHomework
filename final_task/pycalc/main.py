@@ -164,7 +164,7 @@ def calc(expression):
                             func = ''
                         except TypeError:
                             return "ERROR: wrong amount of arguments for " + func + "(..)"
-                            exit()
+
                     else:
                         element = float(calc(expression[begin + 1:end]))    # if no function, just a brackets
 
@@ -278,10 +278,23 @@ def pycalc(expression, modules=list()):
         expression = separate(new)                          # separating expression (look separate function)
         for index, element in enumerate(expression):       # looking for logical signs
             if element in logical_signs:
-                left = float(calc(expression[:index]))
-                right = float(calc(expression[index + 1:]))
+                left = calc(expression[:index])
+                right = calc(expression[index + 1:])
+                try:
+                    left = float(left)
+                except ValueError:
+                    return left
+
+                try:
+                    right = float(right)
+                except ValueError:
+                    return left
                 return logical_signs[element](left, right)
-        result = float(calc(expression))                    # start counting
+        result = calc(expression)
+        try:
+            result = float(result)                    # start counting
+        except ValueError:
+            pass
         return result
     else:
         return error
