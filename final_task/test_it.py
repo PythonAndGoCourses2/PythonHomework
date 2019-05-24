@@ -137,11 +137,11 @@ class TestFunctions(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # unittest.main()
-    cheker = CheckAndChange.CheckAndChange()
+    unittest.main()
+    """cheker = CheckAndChange.CheckAndChange()
     calculator = difcalc.ComplexCalc()
 
-    a = "2^3^4"
+    a = "pow(3,2)"
     try:
 
         if a != "--help":
@@ -155,4 +155,4 @@ if __name__ == '__main__':
     except Exception as e:
         print("ERROR:  " + str(e))
     else:
-        print(a)
+        print(a)"""
