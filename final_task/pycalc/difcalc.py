@@ -119,7 +119,7 @@ class ComplexCalc(easyCalculation.Calculator):
             else:
                 number_two = self.expression_search(expr[place.end():after.start() + place.end()])
 
-            if number_one  and number_two:
+            if number_one is not None and number_two is not None:
                 rezult = ComplexCalc.compare[place[0]](number_one, number_two)
                 end = ""
 
