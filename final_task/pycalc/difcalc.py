@@ -16,7 +16,7 @@ class ComplexCalc(easyCalculation.Calculator):
            "pow": lambda a, b: pow(a, b)}
            }
 
-    def expression_search(self, expr:str) -> str:
+    def expression_search(self, expr):
 
         while True:
 
@@ -106,7 +106,7 @@ class ComplexCalc(easyCalculation.Calculator):
 
     }
 
-    def calculate(self, expr:str):
+    def calculate(self, expr):
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
         
         while place:
