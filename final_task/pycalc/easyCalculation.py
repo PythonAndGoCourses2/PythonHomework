@@ -4,7 +4,7 @@ import pycalc.operators as operators
 
 class Calculator():
 
-    def __calculation(self, expr:str):
+    def __calculation(self, expr):
         place = expr.rfind("^")
 
         while place != -1:
@@ -29,7 +29,7 @@ class Calculator():
 
         return self.sum(expr)
 
-    def sum(self, expr:str):
+    def sum(self, expr):
 
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
@@ -47,7 +47,7 @@ class Calculator():
             summing += a
         return summing
 
-    def unary_rezult(self, number:str):
+    def unary_rezult(self, number):
         minus = number.count("-")
         plus = number.count("+")
         real_number = number[plus + minus:]
@@ -57,7 +57,7 @@ class Calculator():
             real_number = float(real_number)
         return real_number
 
-    def search_brakets(self, expr:str) :
+    def search_brakets(self, expr) :
         expr = expr.replace(" ", "")
 
         while "(" in expr:
@@ -86,7 +86,7 @@ class Calculator():
 
         return rezult
 
-    def _calc_if_power(self, expr, begin:int, braket:int) :
+    def _calc_if_power(self, expr, begin, braket) :
         place = braket + 1
         if braket is not len(expr) - 1 and expr[place] is "^":
             findAfter = self.search_number_from_begin(expr[place:])
@@ -94,7 +94,7 @@ class Calculator():
             expr = self.__binary_operation(expr, begin, place, end)
         return expr
 
-    def __binary_operation(self, expr:int, begin:int, place:int, end:int) -> str:
+    def __binary_operation(self, expr, begin, place, end):
        # вынести ту проверку которая есть в сумме в отдельный файл и добавть в
        # сюда вместо изменения флот на вот это вот все
         rezult = '{:.15f}'.format(operators.operators[expr[place]](
@@ -126,6 +126,6 @@ class Calculator():
 
         return number
 
-    def search_simple_number(self, expr:str):
+    def search_simple_number(self, expr):
         number = re.search(r'(([0-9]*[.])?[0-9]+|[0-9]+[.])', expr[::-1])
         return number
