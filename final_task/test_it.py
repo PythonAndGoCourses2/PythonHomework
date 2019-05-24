@@ -141,7 +141,7 @@ if __name__ == '__main__':
     cheker = CheckAndChange.CheckAndChange()
     calculator = difcalc.ComplexCalc()
 
-    a = "1+2*4/3+1!=1+2*4/3+2 "
+    a = "asfdasf "
     try:
 
         if a != "--help":

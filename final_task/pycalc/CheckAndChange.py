@@ -10,9 +10,13 @@ class CheckAndChange():
 
     def do_all_changes(self, expr:str, module:str) -> str:
 
-        if not re.search(
-                r'[0-9]+', expr) and not re.search(r'[A-ZAa-z]+', expr):
-            raise Exception("No Numbers in expression")
+        if not re.search(r'[0-9]+', expr) :
+            const=re.search(r'[A-ZAa-z]+', expr)
+            if not const:
+                raise Exception("No Numbers in expression")
+            else:
+                if const not in difcalc.ComplexCalc.const:
+                    raise Exception("Check your const or function") 
 
         expr = expr.replace("//", "&")
         self.correct_brackets(expr)
