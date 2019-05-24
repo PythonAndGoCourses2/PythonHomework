@@ -16,7 +16,7 @@ class ComplexCalc(easyCalculation.Calculator):
            "pow": lambda a, b: pow(a, b)}
            }
 
-    def expression_search(self, expr:str):
+    def expression_search(self, expr):
 
         while True:
 
