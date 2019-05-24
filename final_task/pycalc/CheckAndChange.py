@@ -8,7 +8,7 @@ from os import path
 
 class CheckAndChange():
 
-    def do_all_changes(self, expr:str, module:str) -> str:
+    def do_all_changes(self, expr, module) :
 
         if not re.search(
                 r'[0-9]+', expr) and not re.search(r'[A-ZAa-z]+', expr):
@@ -21,7 +21,7 @@ class CheckAndChange():
         self.add_args(module)
         return expr
 
-    def add_args(self, modul:str) -> None:
+    def add_args(self, modul):
         if modul:
             base = path.basename(modul)
 
@@ -40,7 +40,7 @@ class CheckAndChange():
                 }             
             difcalc.ComplexCalc.const.update(new_const)
 
-    def correct_spaces(self, expr:str) -> None:
+    def correct_spaces(self, expr):
         searcher = expr.find(" ")
         expression = expr
 
@@ -67,7 +67,7 @@ class CheckAndChange():
                 if searcher == 0:
                     expression = expression[1:]
 
-    def correct_brackets(self, expr:str) -> None:
+    def correct_brackets(self, expr) -> None:
         counter = 0
         for one in expr:
 
