@@ -59,7 +59,7 @@ class ComplexCalc(easyCalculation.Calculator):
                     end = place + len(rezult) - 1
                     expr = self._calc_if_power(expr, place, end)
 
-    def _find_replacement(self, func, expr):
+    def _find_replacement(self, func:str, expr:str) -> str:
 
         if func in ComplexCalc.math_functions:
             allargs = self._commasplit(expr)
