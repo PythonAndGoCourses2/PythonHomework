@@ -8,7 +8,7 @@ from os import path
 
 class CheckAndChange():
 
-    def do_all_changes(self, expr, module:str):
+    def do_all_changes(self, expr, module):
         self.add_args(module)
 
         if not re.search(r'[0-9]+', expr) :
@@ -26,7 +26,7 @@ class CheckAndChange():
         
         return expr
 
-    def add_args(self, modul:str):
+    def add_args(self, modul):
         if modul:
             base = path.basename(modul)
 
