@@ -26,7 +26,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_numbers(self):
         with patch('pycalc.CheckAndChange.CheckAndChange.correct_spaces'),\
-             patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'), patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
+                patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'), patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
             self.assertEqual(
                 self.cheker.do_all_changes(
                     "1122113", None), "1122113")
@@ -80,7 +80,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_function_calculator(self):
         with patch('pycalc.difcalc.ComplexCalc._commasplit') as splitted,\
-             patch('pycalc.difcalc.ComplexCalc.expression_search') as expresssearch:
+                patch('pycalc.difcalc.ComplexCalc.expression_search') as expresssearch:
 
             splitted.return_value = ["1"]
             expresssearch.return_value = "3"
@@ -134,14 +134,14 @@ class TestFunctions(unittest.TestCase):
 
     def test_brekets_parsers(self):
         pass
-        
+
 
 if __name__ == '__main__':
-    unittest.main()
-    """cheker = CheckAndChange.CheckAndChange()
+    # unittest.main()
+    cheker = CheckAndChange.CheckAndChange()
     calculator = difcalc.ComplexCalc()
 
-    a= "((((("
+    a = "2^3^4"
     try:
 
         if a != "--help":
@@ -155,4 +155,4 @@ if __name__ == '__main__':
     except Exception as e:
         print("ERROR:  " + str(e))
     else:
-        print(a)"""
+        print(a)
