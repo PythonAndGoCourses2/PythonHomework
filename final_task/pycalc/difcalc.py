@@ -129,7 +129,7 @@ class ComplexCalc(easyCalculation.Calculator):
                     end = expr[after.end() + place.end():]
                     expr = str(rezult) + after[0] + end
                 else:
-                    return bool(rezult)
+                    return str(rezult)
 
             else:
                 raise Exception(
