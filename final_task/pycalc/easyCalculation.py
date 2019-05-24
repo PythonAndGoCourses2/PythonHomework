@@ -5,6 +5,7 @@ import pycalc.operators as operators
 class Calculator():
 
     def __calculation(self, expr):
+        
         place = expr.rfind("^")
 
         while place != -1:
@@ -32,7 +33,7 @@ class Calculator():
     def sum(self, expr):
 
         if expr[-1] == "+" or expr[-1] == "-":
-            raise Exception("'+' or '-'mustn' be the last even in brackets")
+            raise Exception("'+' or '-' and bla-bla-blah mustn' be the last even in brackets")
 
         summing = 0
         number = 0

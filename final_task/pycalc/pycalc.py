@@ -21,7 +21,7 @@ def start():
             a = calculator.calculate(args.a)
 
         else:
-            print("help yourself")
+            print("!)!))@))@)@)@))@)@)@)@)))))))")
 
     except Exception as e:
         print("ERROR:  " + str(e))
