@@ -16,7 +16,7 @@ class ComplexCalc(easyCalculation.Calculator):
            "pow": lambda a, b: pow(a, b)}
            }
 
-    def expression_search(self, expr):
+    def expression_search(self, expr:str):
 
         while True:
 
@@ -59,7 +59,7 @@ class ComplexCalc(easyCalculation.Calculator):
                     end = place + len(rezult) - 1
                     expr = self._calc_if_power(expr, place, end)
 
-    def _find_replacement(self, func, expr):
+    def _find_replacement(self, func:str, expr:str):
 
         if func in ComplexCalc.math_functions:
             allargs = self._commasplit(expr)
@@ -106,7 +106,8 @@ class ComplexCalc(easyCalculation.Calculator):
 
     }
 
-    def calculate(self, expr):
+    def calculate(self, expr:str):
+        #передалать с меньшим числом иф
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
         
         while place:
@@ -118,15 +119,17 @@ class ComplexCalc(easyCalculation.Calculator):
             else:
                 number_two = self.expression_search(expr[place.end():after.start() + place.end()])
 
-            if number_one  and number_two:
+            if number_one is not None and number_two is not None:
                 rezult = ComplexCalc.compare[place[0]](number_one, number_two)
+                end = ""
+
                 if after:
                     if after.start() == 0:
                         raise Exception("no symbols between compare")
                     end = expr[after.end() + place.end():]
                     expr = str(rezult) + after[0] + end
                 else:
-                    return rezult
+                    return bool(rezult)
 
             else:
                 raise Exception(
