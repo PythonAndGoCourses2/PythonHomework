@@ -1,139 +1,82 @@
 import re
-import pycalc.easyCalculation as easyCalculation
-import math
+import pycalc.operators as operators
+import pycalc.difcalc as difcalc
 from numbers import Number
+import importlib.util
+from os import path
 
-class ComplexCalc(easyCalculation.Calculator):
 
-    const = {
-        **{attr: getattr(math,attr) for attr in dir(math) if isinstance(getattr(math,attr),Number)},
-        **{"True": 1,"False": 0}
-        }
-    math_functions = {
-        **{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
-        **{"abs": lambda a: abs(a),
-           "round": lambda a: round(a),
-           "pow": lambda a, b: pow(a, b)}
-           }
+class CheckAndChange():
 
-    def expression_search(self, expr:str):
+    def do_all_changes(self, expr, module) :
 
-        while True:
+        if not re.search(
+                r'[0-9]+', expr) and not re.search(r'[A-ZAa-z]+', expr):
+            raise Exception("No Numbers in expression")
 
-            func = re.search(r'[A-ZAa-z]+1?0?', expr)
+        expr = expr.replace("//", "&")
+        self.correct_brackets(expr)
+        self.correct_spaces(expr)
+        expr = expr.replace(" ", "")
+        self.add_args(module)
+        return expr
 
-            if func is None:
-                return self.search_brakets(expr)
+    def add_args(self, modul):
+        if modul:
+            base = path.basename(modul)
 
-            afterExpr = func.end()
-            place = func.start()
-            if func[0] in self.const:
+            module_name = path.splitext(base)[0]
+            spec = importlib.util.spec_from_file_location(module_name, modul)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
 
-                rezult = self.const[func[0]]
-                expr = expr[:place] + str(rezult) + expr[afterExpr:]
-                continue
+            new_functions = {
+                attr: getattr(module,attr) for attr in dir(module) if callable(getattr(module,attr))
+                }
+            difcalc.ComplexCalc.math_functions.update(new_functions)
 
-            searcher = 0
-            count = 1
-            for one in expr[afterExpr + 1:]:
+            new_const = {
+                attr: getattr(module,attr) for attr in dir(module)if isinstance(getattr(module,attr), Number)
+                }             
+            difcalc.ComplexCalc.const.update(new_const)
 
-                searcher += 1
-                if one == ")":
-                    count -= 1
-                if one == "(":
-                    count += 1
-                if count == 0:
+    def correct_spaces(self, expr):
+        searcher = expr.find(" ")
+        expression = expr
+
+        while searcher != -1 and expression != "":
+            if searcher != len(expression) - 1 and searcher != 0:
+                if expression[searcher -
+                              1].isdigit() and expression[searcher + 1].isdigit():
+                    raise Exception("must not be 'digit' 'space' 'digit'")
+
+                if expression[searcher - 1] in operators.operators \
+                        and expression[searcher + 1] in operators.operators:
+                    raise Exception(
+                        "must not be 'operator' 'space' 'operator'")
+
+                if expression[searcher - 1] in difcalc.ComplexCalc.compare \
+                        and expression[searcher + 1] in difcalc.ComplexCalc.compare:
+                    raise Exception("Check your spaces betwin")
+
+                expression = expression[searcher + 1:]
+                searcher = expression.find(" ")
+            else:
+                if searcher == len(expression) - 1:
                     break
-            end = searcher + afterExpr
-        # выкинуть если конец строки
-            if expr[afterExpr] != '(':
+                if searcher == 0:
+                    expression = expression[1:]
 
-                raise Exception(
-                    "the expression must be written in the following way 'function(expression)'")
+    def correct_brackets(self, expr) -> None:
+        counter = 0
+        for one in expr:
 
-            else:
-
-                rezult = self._find_replacement(func[0], expr[afterExpr + 1:end])
-                expr = expr[:place] + rezult + expr[end + 1:]
-                if float(rezult) < 0:
-                    end = place + len(rezult) - 1
-                    expr = self._calc_if_power(expr, place, end)
-
-    def _find_replacement(self, func:str, expr:str):
-
-        if func in ComplexCalc.math_functions:
-            allargs = self._commasplit(expr)
-
-            float_args = []
-            for each in allargs:
-                float_args.append(float(self.expression_search(each)))
-
-            rezult = '{:.15f}'.format(ComplexCalc.math_functions[func](*float_args))
-
+            if one == "(":
+                counter += 1
+            elif one == ")":
+                counter -= 1
+            if counter < 0:
+                raise Exception("check brackets! ")
         else:
-
-            raise Exception("Indefined function")
-        return str(rezult)
-
-    def _commasplit(self, expr:str):
-        breketscounter = 0
-        preve = 0
-        count = 1
-        split = []
-        for each in expr:
-            if breketscounter == 0 and each == ",":
-                split.append(expr[preve:count - 1])
-                preve = count
-
-            elif each == "(":
-                breketscounter += 1
-            elif each == ")":
-                breketscounter -= 1
-            count += 1
-
-        split.append(expr[preve:count])
-
-        return split
-    compare = {
-
-        ">": lambda a, b: a > b,
-        ">=": lambda a, b: a >= b,
-        "<=": lambda a, b: a <= b,
-        "==": lambda a, b: a == b,
-        "<": lambda a, b: a < b,
-        "!=": lambda a, b: a != b
-
-
-    }
-
-    def calculate(self, expr:str):
-        #передалать с меньшим числом иф
-        place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
-        
-        while place:
-            after = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)',expr[place.end():])
-            number_one = self.expression_search(expr[:place.start()])
-
-            if not after :
-                number_two = self.expression_search(expr[place.end():])
-            else:
-                number_two = self.expression_search(expr[place.end():after.start() + place.end()])
-
-            if number_one  and number_two:
-                rezult = ComplexCalc.compare[place[0]](number_one, number_two)
-                end = ""
-
-                if after:
-                    if after.start() == 0:
-                        raise Exception("no symbols between compare")
-                    end = expr[after.end() + place.end():]
-                    expr = str(rezult) + after[0] + end
-                else:
-                    return bool(rezult)
-
-            else:
-                raise Exception(
-                    "uncorrect expression must be 'expr' operator 'expr'")
-            place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
-            
-        return self.expression_search(expr)
+            if counter != 0:
+                raise Exception("check brackets! ")
