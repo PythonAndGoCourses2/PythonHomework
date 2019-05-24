@@ -4,7 +4,7 @@ import pycalc.operators as operators
 
 class Calculator():
 
-    def __calculation(self, expr:str) -> float:
+    def __calculation(self, expr:str):
         place = expr.rfind("^")
 
         while place != -1:
@@ -29,7 +29,7 @@ class Calculator():
 
         return self.sum(expr)
 
-    def sum(self, expr:str) -> float:
+    def sum(self, expr:str):
 
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception("'+' or '-'mustn' be the last even in brackets")
@@ -47,7 +47,7 @@ class Calculator():
             summing += a
         return summing
 
-    def unary_rezult(self, number:str) -> float:
+    def unary_rezult(self, number:str):
         minus = number.count("-")
         plus = number.count("+")
         real_number = number[plus + minus:]
@@ -57,7 +57,7 @@ class Calculator():
             real_number = float(real_number)
         return real_number
 
-    def search_brakets(self, expr:str) -> float:
+    def search_brakets(self, expr:str) :
         expr = expr.replace(" ", "")
 
         while "(" in expr:
@@ -86,7 +86,7 @@ class Calculator():
 
         return rezult
 
-    def _calc_if_power(self, expr:str, begin:int, braket:int) -> str:
+    def _calc_if_power(self, expr, begin:int, braket:int) :
         place = braket + 1
         if braket is not len(expr) - 1 and expr[place] is "^":
             findAfter = self.search_number_from_begin(expr[place:])
@@ -105,7 +105,7 @@ class Calculator():
         expr = before + rezult + after
         return expr
 
-    def search_number_from_begin(self, expr:str):
+    def search_number_from_begin(self, expr):
 
         number = re.search(
             r'([+-]+)?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr)
@@ -116,7 +116,7 @@ class Calculator():
 
         return number
 
-    def search_number_from_end(self, expr:str):
+    def search_number_from_end(self, expr):
         number = re.search(
             r'(([0-9]*[.])?[0-9]+|[0-9]+[.])([+-]+)?', expr[::-1])
 

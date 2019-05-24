@@ -75,7 +75,7 @@ class ComplexCalc(easyCalculation.Calculator):
             raise Exception("Indefined function")
         return str(rezult)
 
-    def _commasplit(self, expr:str) -> list:
+    def _commasplit(self, expr:str):
         breketscounter = 0
         preve = 0
         count = 1
