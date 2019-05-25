@@ -7,7 +7,7 @@ class Calculator():
     def __calculation(self, expr):
         
         place = expr.rfind("^")
-
+ 
         while place != -1:
             findBefore = self.search_simple_number(expr[:place])
             begin = place - findBefore.end()
