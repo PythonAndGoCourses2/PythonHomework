@@ -17,7 +17,6 @@ OPERATORS = {
 }
 OPERATORS_MATH_FUNСTIONS = dict(
     list(OPERATORS.items()) + list(MATH_FUNCTIONS.items()) + list(MATH_FUNCTIONS_NEG.items()))
-arg_count = 0
 
 
 def checklog(expression):
@@ -152,37 +151,34 @@ def parse(expression_string):
 
 def shunting_yard(parsed_expression):
     stack = []
-    for token in parsed_expression:
-        if token in MATH_FUNCTIONS:
-            stack.append(token)
-            global arg_count
-            arg_count = 1
-        elif token is ',':
-            # out.append(stack.pop())
-            arg_count += 1
+    out = []
+    for item in parsed_expression:
+        if item in MATH_FUNCTIONS:
+            stack.append(item)
+        elif item is ',':
             while stack[-1] != '(':
-                y = stack.pop()
-                yield y
-        elif token in OPERATORS_MATH_FUNСTIONS:
-            while stack and stack[-1] != "(" and (
-                    (OPERATORS_MATH_FUNСTIONS[token][1] is "left" and OPERATORS_MATH_FUNСTIONS[token][
+                out.append(stack.pop())
+        elif item in OPERATORS_MATH_FUNСTIONS:
+            while stack and stack[-1] != '(' and (
+                    (OPERATORS_MATH_FUNСTIONS[item][1] is "left" and OPERATORS_MATH_FUNСTIONS[item][
                         0] <= OPERATORS_MATH_FUNСTIONS[stack[-1]][0]) or (
-                            OPERATORS_MATH_FUNСTIONS[token][1] is "right" and
-                            OPERATORS_MATH_FUNСTIONS[token][0] < OPERATORS_MATH_FUNСTIONS[stack[-1]][0])):
-                yield stack.pop()
-            stack.append(token)
-        elif token == ")":
+                            OPERATORS_MATH_FUNСTIONS[item][1] is "right" and
+                            OPERATORS_MATH_FUNСTIONS[item][0] < OPERATORS_MATH_FUNСTIONS[stack[-1]][0])):
+                out.append(stack.pop())
+            stack.append(item)
+        elif item == '(':
+            stack.append(item)
+        elif item == ')':
             while stack:
                 x = stack.pop()
                 if x == "(":
                     break
-                yield x
-        elif token == "(":
-            stack.append(token)
+                out.append(x)
         else:
-            yield token
+            out.append(item)
     while stack:
-        yield stack.pop()
+        out.append(stack.pop())
+    return out
 
 
 def calc(polish):
@@ -197,7 +193,7 @@ def calc(polish):
                     else:
                         stack.append(OPERATORS_MATH_FUNСTIONS[token][2])
                 elif token == "log" or token == "-log":
-                    if arg_count == 2:
+                    if len(stack) >= 2:
                         y, x = stack.pop(), stack.pop()
                         if token[0] == "-":
                             stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x, y))
