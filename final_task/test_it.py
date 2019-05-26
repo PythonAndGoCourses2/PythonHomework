@@ -26,7 +26,8 @@ class TestFunctions(unittest.TestCase):
 
     def test_numbers(self):
         with patch('pycalc.CheckAndChange.CheckAndChange.correct_spaces'),\
-                patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'), patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
+                patch('pycalc.CheckAndChange.CheckAndChange.correct_brackets'),\
+                     patch('pycalc.CheckAndChange.CheckAndChange.add_args'):
             self.assertEqual(
                 self.cheker.do_all_changes(
                     "1122113", None), "1122113")
@@ -56,7 +57,8 @@ class TestFunctions(unittest.TestCase):
         return str(eval("math." + func + "(" + expr + ")"))
 
     def test_funtions_search(self):
-        with patch('pycalc.difcalc.ComplexCalc._find_replacement', new=self.calculate_functions), patch('pycalc.difcalc.ComplexCalc.search_brakets', new=self.calculate_simple_expression):
+        with patch('pycalc.difcalc.ComplexCalc._find_replacement', new=self.calculate_functions),\
+             patch('pycalc.difcalc.ComplexCalc.search_brakets', new=self.calculate_simple_expression):
             self.assertAlmostEqual(
                 float(
                     self.calculator.expression_search("sin(4)")),
