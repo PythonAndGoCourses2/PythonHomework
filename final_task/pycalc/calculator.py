@@ -1,14 +1,14 @@
 """Calculator module"""
 
 from .stack_manager import Stack
-from .operator_manager import operator_dict, function_dict, unary_dict
+from .operator_manager import operator_dict, unary_dict
 from .split_operators import SplitOperators
 from .converter import Converter
 
 
 class Calculator:
     """Calculator class"""
-    def __init__(self, expression_line):
+    def __init__(self, expression, functions):
         """
         Generates an instance of the Calculator class,
         take an expression_line from user,
@@ -17,8 +17,10 @@ class Calculator:
         create a Stack to put all operands,
         create a Stack to put all operations
         """
-        self.parser = SplitOperators(expression_line).split_operators()
-        self.converted_list = Converter(self.parser).converter()
+        self.expression_line = expression
+        self.function_dict = functions
+        self.parser = SplitOperators(self.expression_line, self.function_dict).split_operators()
+        self.converted_list = Converter(self.parser, self.function_dict).converter()
         self.current_result = ""
         self.operands = Stack()
         self.function = Stack()
@@ -35,7 +37,7 @@ class Calculator:
         Raise an exception if there is two many arguments for current function
         """
         operator_on_stack = self.function.take_from_stack()
-        if operator_on_stack in function_dict.values():
+        if operator_on_stack in self.function_dict.values():
             if self.func_argument:
                 second_operand = self.operands.take_from_stack()
                 first_operand = self.operands.take_from_stack()
@@ -74,7 +76,7 @@ class Calculator:
             if isinstance(item, float) or isinstance(item, int):
                 self.operands.put_on_stack(item)
             elif item in operator_dict.values() \
-                    or item in function_dict.values() \
+                    or item in self.function_dict.values() \
                     or item in unary_dict.values():
                 self.current_operator = item
                 if self.function.is_empty():

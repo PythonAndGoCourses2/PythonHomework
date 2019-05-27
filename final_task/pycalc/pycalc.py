@@ -13,7 +13,7 @@ def main():
     """
     try:
         expression_line = arg_parser()
-        calc = Calculator(expression_line)
+        calc = Calculator(expression_line.expression, expression_line.functions)
         result = calc.calculate()
         print(result)
     except SyntaxError as err:

@@ -5,13 +5,14 @@ from .check_manager import check_expression, number_check, operator_check, funct
 
 class SplitOperators:
     """SplitOperators class"""
-    def __init__(self, expression_line):
+    def __init__(self, expression, functions):
         """
         Generates an instance of the SplitManager class,
         take an expression line as string,
         create an empty list to put the result of parsing line
         """
-        self.expression_line = expression_line
+        self.expression_line = expression
+        self.function_dict = functions
         self.parsing_list = []
         self.last_number = ""
         self.last_letter = ""
@@ -32,7 +33,7 @@ class SplitOperators:
             self.parsing_list.append(number_check(self.last_number))
             self.last_number = ""
         elif self.last_letter:
-            self.parsing_list.append(function_check(self.last_letter))
+            self.parsing_list.append(function_check(self.last_letter, self.function_dict))
             self.last_letter = ""
 
     def _number_parser(self, number):

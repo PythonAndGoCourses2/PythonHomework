@@ -1,7 +1,7 @@
 """Check manager module"""
 
 import sys
-from .operator_manager import operator_dict, function_dict
+from .operator_manager import operator_dict
 
 
 def check_expression(expression_line):
@@ -20,13 +20,14 @@ def check_expression(expression_line):
     return expression_line
 
 
-def check_parsing_list(parsing_list):
+def check_parsing_list(parsing_list, function_dict):
     """
     Check if the parsing list is valid otherwise raise an Exception for next reasons:
     - expression starts with math operators (except "+" and "-")
     - there is no operand in the expression line
     - expression line ends with math operator or math function
     :param parsing_list: list from instance of SplitOperators class
+    :param function_dict: dict with all functions {'operator': function, 'priority': 0}
     :return: clear parsing_list as str
     """
     if parsing_list[0] in operator_dict.keys():
@@ -66,12 +67,13 @@ def number_check(number):
         return float(number)
 
 
-def function_check(function_name):
+def function_check(function_name, function_dict):
     """
     Check if function_name is a key in function_dict.
     Check the python version to add constant "tau".
     If function_name is "pi", "e" or "tau" convert it into float
     :param function_name: str from instance of SplitOperators class
+    :param function_dict: dict with all functions {'operator': function, 'priority': 0}
     :return: float or clear function_name as str
     """
     if function_name == 'e' or function_name == 'pi':
@@ -80,8 +82,11 @@ def function_check(function_name):
         if sys.version_info >= (3, 6):
             return function_dict[function_name]['operator']
         else:
-            return 2 * function_dict['pi']['operator']
+            return 2 * function_dict['e']['operator']
     elif function_name in function_dict.keys():
+        if isinstance(function_dict[function_name]['operator'], int) \
+                or isinstance(function_dict[function_name]['operator'], float):
+             return function_dict[function_name]['operator']
         return function_name
     else:
         raise SyntaxError(

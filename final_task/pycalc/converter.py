@@ -1,18 +1,19 @@
 """Converter module"""
 
-from .operator_manager import operator_dict, function_dict, unary_dict
+from .operator_manager import operator_dict, unary_dict
 from .check_manager import check_parsing_list
 
 
 class Converter:
     """Converter class"""
-    def __init__(self, parsing_list):
+    def __init__(self, parsing_list, functions):
         """
         Generates an instance of the Converter class,
         take an parsing_list as list from instance of SplitOperators class
         create an empty list to put the result of converting
         """
         self.parsing_list = parsing_list
+        self.function_dict = functions
         self.last_item = ""
         self.converted_list = []
 
@@ -84,16 +85,16 @@ class Converter:
                                                 operator_dict['+'],
                                                 -1,
                                                 operator_dict['*'],
-                                                function_dict[function]
+                                                self.function_dict[function]
                                                 )
             else:
                 self._append_to_converted_list(
                                                 -1,
                                                 operator_dict['*'],
-                                                function_dict[function]
+                                                self.function_dict[function]
                                                 )
         else:
-            self._append_to_converted_list(function_dict[function])
+            self._append_to_converted_list(self.function_dict[function])
 
     def converter(self):
         """
@@ -103,7 +104,7 @@ class Converter:
         for every number, operator or function
         :return: converted_list
         """
-        check_parsing_list(self.parsing_list)
+        check_parsing_list(self.parsing_list, self.function_dict)
         if self.parsing_list[0] in operator_dict.keys():
             self.converted_list.append(0)
         for i in self.parsing_list:
@@ -117,7 +118,7 @@ class Converter:
                 self._number_converter(i)
             elif i in operator_dict.keys():
                 self._operator_converter(i)
-            elif i in function_dict.keys():
+            elif i in self.function_dict.keys():
                 self._function_converter(i)
             else:
                 if self.last_item:
