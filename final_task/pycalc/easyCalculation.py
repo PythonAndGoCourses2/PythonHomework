@@ -128,5 +128,5 @@ class Calculator():
         return number
 
     def search_simple_number(self, expr):
-        number = re.search(r'(([0-9]*[.])?[0-9]+|[0-9]+[.])', expr[::-1])
+        number = re.search(r'([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[::-1])
         return number
