@@ -18,6 +18,7 @@ class SplitOperators:
         self.last_letter = ""
         self.last_symbol = ""
         self.blank_item = False
+        self.brackets = ""
 
     def _append_to_parsing_list(self):
         """
@@ -99,7 +100,11 @@ class SplitOperators:
         :param symbol: is one math symbol from expression_line or bracket or comma
         """
         self._append_to_parsing_list()
-        if symbol != ' ':
+        if symbol in '()':
+            self.brackets += symbol
+            if self.brackets.count(')') > self.brackets.count('('):
+                raise SyntaxError('Position of brackets is wrong')
+        elif symbol != ' ':
             self.parsing_list.append(symbol)
 
     def split_operators(self):

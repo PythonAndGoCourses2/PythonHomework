@@ -18,6 +18,7 @@ class TestSplitOperators(unittest.TestCase):
         self.assertEqual("", expression.last_letter)
         self.assertEqual("", expression.last_symbol)
         self.assertEqual(False, expression.blank_item)
+        self.assertEqual("", expression.brackets)
 
     def test_symbol_append_to_parsing_list(self):
         expression = SplitOperators('', function_dict)
@@ -136,10 +137,20 @@ class TestSplitOperators(unittest.TestCase):
         expression._simple_operator_bracket_parser('/')
         self.assertEqual(['/'], expression.parsing_list)
 
-    def test_simple_operator_add_bracket(self):
+    def test_simple_operator_add_open_bracket(self):
         expression = SplitOperators('42', function_dict)
         expression._simple_operator_bracket_parser('(')
         self.assertEqual(['('], expression.parsing_list)
+
+    def test_simple_operator_add_closed_bracket(self):
+        expression = SplitOperators('42', function_dict)
+        expression._simple_operator_bracket_parser(')')
+        self.assertEqual([')'], expression.parsing_list)
+
+    def test_simple_operator_add_wrong_bracket(self):
+        expression = SplitOperators('42', function_dict)
+        with self.assertRaises(SyntaxError):
+            expression._simple_operator_bracket_parser(')')
 
     def test_simple_operator_blank_symbol(self):
         expression = SplitOperators('42', function_dict)
