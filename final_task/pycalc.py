@@ -152,10 +152,22 @@ def parse(expression_string):
 def shunting_yard(parsed_expression):
     stack = []
     out = []
+    arg_count = {}
+    arg = 0
+    index = 0
     for item in parsed_expression:
-        if item in MATH_FUNCTIONS:
+        if item == "pi" or item == "e" or item == "tau":
+            out.append(OPERATORS_MATH_FUNСTIONS[item][2])
+        elif item == "-pi" or item == "-e" or item == "-tau":
+            out.append(- + OPERATORS_MATH_FUNСTIONS[item][2])
+        elif item in MATH_FUNCTIONS:
+            index += 1
+            arg = 1
+            arg_count[index] = arg
             stack.append(item)
         elif item is ',':
+            arg += 1
+            arg_count[index] = arg
             while stack[-1] != '(':
                 out.append(stack.pop())
         elif item in OPERATORS_MATH_FUNСTIONS:
@@ -172,6 +184,10 @@ def shunting_yard(parsed_expression):
             while stack:
                 x = stack.pop()
                 if x == "(":
+                    if stack:
+                        if stack[-1] in MATH_FUNCTIONS:
+                            out.append(str(arg_count.pop(index)) + " - number_args")
+                            index -= 1
                     break
                 out.append(x)
         else:
@@ -182,18 +198,14 @@ def shunting_yard(parsed_expression):
 
 
 def calc(polish):
+    number_args = []
     try:
         stack = []
         for token in polish:
             if token in OPERATORS_MATH_FUNСTIONS:
-                result = re.match(r'-?(pi|e|tau)', token)
-                if result is not None:
-                    if result.group(0)[0] == "-":
-                        stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2])
-                    else:
-                        stack.append(OPERATORS_MATH_FUNСTIONS[token][2])
-                elif token == "log" or token == "-log":
-                    if len(stack) >= 2:
+                if token == "log" or token == "-log":
+                    args = number_args.pop()
+                    if args == 2:
                         y, x = stack.pop(), stack.pop()
                         if token[0] == "-":
                             stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x, y))
@@ -222,6 +234,8 @@ def calc(polish):
                             stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x, y))
                         else:
                             stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x, y))
+            elif type(token) is str and "number_args" in token:
+                number_args.append(int(token.replace(" - number_args", "")))
             else:
                 stack.append(token)
         if len(stack) > 1:
