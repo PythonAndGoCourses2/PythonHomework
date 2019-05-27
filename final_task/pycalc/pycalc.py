@@ -26,4 +26,4 @@ def start():
     except Exception as e:
         print("ERROR:  " + str(e))
     else:
-        print(a)
+        print("12")
