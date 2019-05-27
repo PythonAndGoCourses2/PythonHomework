@@ -5,6 +5,8 @@ The module contains functions for importing args from the modules which received
 Use import_calc_modules.import_modules(list_of_modules_names: list).
 """
 
+import os
+import sys
 
 import importlib.util
 
@@ -61,6 +63,8 @@ def import_modules(list_of_modules_names: list):
     Take: list_of_modules_names: list  ( ["random", "cmath",...] )
     Return:  tuple: ({math_func_name: math_func_obj,...}, {math_const_name: math_const_obj,...}
     """
+    sys.path.append(os.getcwd())
+
     importing_modules = list(BUILTIN_CALC_MODULES)
     importing_modules.extend(list_of_modules_names)
 
