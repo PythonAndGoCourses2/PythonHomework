@@ -144,6 +144,7 @@ class TestSplitOperators(unittest.TestCase):
 
     def test_simple_operator_add_closed_bracket(self):
         expression = SplitOperators('42', function_dict)
+        expression.brackets = '('
         expression._simple_operator_bracket_parser(')')
         self.assertEqual([')'], expression.parsing_list)
 
