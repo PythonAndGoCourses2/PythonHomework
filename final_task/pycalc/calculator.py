@@ -20,9 +20,11 @@ def calculate(expr):
                 if count_args(token) == 2 and len(stack) >= 2:
                     op2, op1 = stack.pop(), stack.pop()
                     stack.append(library.FUNCTIONS[token](op1, op2))
-                else:
+                elif count_args(token) == 1 or len(stack) >= 1:
                     operator = stack.pop()
                     stack.append(library.FUNCTIONS[token](operator))
+                else:
+                    stack.append(library.FUNCTIONS[token]())
             else:
                 stack.append(float(token))
         except IndexError:
