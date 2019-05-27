@@ -86,7 +86,7 @@ def function_check(function_name, function_dict):
     elif function_name in function_dict.keys():
         if isinstance(function_dict[function_name]['operator'], int) \
                 or isinstance(function_dict[function_name]['operator'], float):
-             return function_dict[function_name]['operator']
+            return function_dict[function_name]['operator']
         return function_name
     else:
         raise SyntaxError(
