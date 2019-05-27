@@ -11,19 +11,19 @@ class CheckAndChange():
     def do_all_changes(self, expr, module):
         self.add_args(module)
 
-        if not re.search(r'[0-9]+', expr) :
-            const=re.search(r'[A-ZAa-z]+', expr)
+        if not re.search(r'[0-9]+', expr):
+            const = re.search(r'[A-ZAa-z]+', expr)
             if not const:
                 raise Exception("No Numbers in expression")
             else:
-                if const[0] not in difcalc.ComplexCalc.const and const[0] not in  difcalc.ComplexCalc.math_functions:
-                    raise Exception("Check your const or function") 
+                if const[0] not in difcalc.ComplexCalc.const and const[0] not in difcalc.ComplexCalc.math_functions:
+                    raise Exception("Check your const or function")
 
         expr = expr.replace("//", "&")
         self.correct_brackets(expr)
         self.correct_spaces(expr)
         expr = expr.replace(" ", "")
-        
+
         return expr
 
     def add_args(self, modul):
@@ -36,13 +36,13 @@ class CheckAndChange():
             spec.loader.exec_module(module)
 
             new_functions = {
-                attr: getattr(module,attr) for attr in dir(module) if callable(getattr(module,attr))
-                }
+                attr: getattr(module, attr) for attr in dir(module) if callable(getattr(module, attr))
+            }
             difcalc.ComplexCalc.math_functions.update(new_functions)
 
             new_const = {
-                attr: getattr(module,attr) for attr in dir(module)if isinstance(getattr(module,attr), Number)
-                }             
+                attr: getattr(module, attr) for attr in dir(module)if isinstance(getattr(module, attr), Number)
+            }
             difcalc.ComplexCalc.const.update(new_const)
 
     def correct_spaces(self, expr):
