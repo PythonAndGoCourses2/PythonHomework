@@ -1,3 +1,4 @@
-s = input("Enter your name ")
-print('Hello ' + s)
+s = '-15'
+t = int(s) + 14
+print(t)
 
