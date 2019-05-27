@@ -76,9 +76,7 @@ def function_check(function_name, function_dict):
     :param function_dict: dict with all functions {'operator': function, 'priority': 0}
     :return: float or clear function_name as str
     """
-    if function_name == 'e' or function_name == 'pi':
-        return function_dict[function_name]['operator']
-    elif function_name == 'tau':
+    if function_name == 'tau':
         if sys.version_info >= (3, 6):
             return function_dict[function_name]['operator']
         else:

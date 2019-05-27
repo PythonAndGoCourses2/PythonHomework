@@ -101,8 +101,9 @@ class TestCheckManager(unittest.TestCase):
 
     def test_function_check_function_dict(self):
         function_lst = ['abs', 'round']
+        constants = ['e', 'pi', 'tau', 'inf', 'nan']
         for key in math.__dict__.keys():
-            if key.startswith('_') or key == 'e' or key == 'pi' or key == 'tau':
+            if key.startswith('_') or key in constants:
                 continue
             function_lst.append(key)
         for i in range(len(function_lst)):
@@ -113,9 +114,9 @@ class TestCheckManager(unittest.TestCase):
             function_check('log100', function_dict)
 
     def test_fucntion_check_user_constant(self):
-        function_dict['user_constant']['operator'] = 42
+        function_dict['user_constant'] = {'operator': 42, 'priority': 0}
         self.assertEqual(42, function_check('user_constant', function_dict))
 
     def test_fucntion_check_user_function(self):
-        function_dict['user_function']['operator'] = 'user_function'
+        function_dict['user_function'] = {'operator': 'user_function', 'priority': 0}
         self.assertEqual('user_function', function_check('user_function', function_dict))

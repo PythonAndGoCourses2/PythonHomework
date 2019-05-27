@@ -12,7 +12,7 @@ class TestSplitOperators(unittest.TestCase):
     def test_init_class_method(self):
         expression = SplitOperators('1', {'tan': {'operator': math.tan, 'priority': 0}})
         self.assertEqual('1', expression.expression_line)
-        self.assertEqual({'tan': {'operator': math.tan, 'priority': 0}}, expression.fucntion_dict)
+        self.assertEqual({'tan': {'operator': math.tan, 'priority': 0}}, expression.function_dict)
         self.assertEqual([], expression.parsing_list)
         self.assertEqual("", expression.last_number)
         self.assertEqual("", expression.last_letter)
