@@ -97,8 +97,6 @@ class Calculator():
         return expr
 
     def __binary_operation(self, expr, begin, place, end):
-       # вынести ту проверку которая есть в сумме в отдельный файл и добавть в
-       # сюда вместо изменения флот на вот это вот все
         rezult = '{:.15f}'.format(operators.operators[expr[place]](
             self.unary_rezult(expr[begin:place]), self.unary_rezult(expr[place + 1:end])))
 
