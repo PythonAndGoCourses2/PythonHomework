@@ -104,7 +104,7 @@ class SplitOperators:
             self.brackets += symbol
             if self.brackets.count(')') > self.brackets.count('('):
                 raise SyntaxError('Position of brackets is wrong')
-        elif symbol != ' ':
+        if symbol != ' ':
             self.parsing_list.append(symbol)
 
     def split_operators(self):
