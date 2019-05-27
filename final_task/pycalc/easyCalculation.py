@@ -79,7 +79,7 @@ class Calculator():
             rezult = self.__calculation("+" + expr[begin + 1:end])
             expr = expr[:begin] + str(rezult) + expr[end + 1:]
 
-            if rezult < 0:
+            if float(rezult) < 0:
                 end = begin + len(str(rezult)) - 1
                 expr = self._calc_if_power(expr, begin, end)
 

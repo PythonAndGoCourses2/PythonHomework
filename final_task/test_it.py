@@ -139,11 +139,11 @@ class TestFunctions(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
     cheker = CheckAndChange.CheckAndChange()
     calculator = difcalc.ComplexCalc()
 
-    a = "pow(1,2,3,)"
+    a = "122^2"
     try:
 
         if a != "--help":
