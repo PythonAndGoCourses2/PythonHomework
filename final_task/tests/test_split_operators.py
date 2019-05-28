@@ -19,6 +19,9 @@ class TestSplitOperators(unittest.TestCase):
         self.assertEqual("", expression.last_symbol)
         self.assertEqual(False, expression.blank_item)
         self.assertEqual("", expression.brackets)
+        self.assertEqual(False, expression.arguments_needs)
+        self.assertEqual("", expression.function_arguments)
+        self.assertEqual("", expression.brackets_in_arguments)
 
     def test_symbol_append_to_parsing_list(self):
         expression = SplitOperators('', function_dict)
@@ -40,6 +43,7 @@ class TestSplitOperators(unittest.TestCase):
         expression._append_to_parsing_list()
         self.assertEqual(['sin'], expression.parsing_list)
         self.assertEqual('', expression.last_letter)
+        self.assertEqual(True, expression.arguments_needs)
 
     def test_number_parser_with_symbol(self):
         expression = SplitOperators('42', function_dict)
@@ -158,6 +162,13 @@ class TestSplitOperators(unittest.TestCase):
         expression._simple_operator_bracket_parser(' ')
         self.assertEqual([], expression.parsing_list)
 
+    def test_simple_operator_bracket_for_function_argument(self):
+        expression = SplitOperators('42', function_dict)
+        expression.arguments_needs = True
+        expression._simple_operator_bracket_parser('(')
+        self.assertEqual('(', expression.brackets_in_arguments)
+        self.assertEqual(True, expression.arguments_needs)
+
     def test_split_operators_number_and_blank_i(self):
         expression = SplitOperators('42 +', function_dict)
         expression.split_operators()
@@ -211,3 +222,59 @@ class TestSplitOperators(unittest.TestCase):
         expression = SplitOperators('42//', function_dict)
         with self.assertRaises(SyntaxError):
             expression.split_operators()
+
+    def test_split_operators_with_function_arguments(self):
+        expression = SplitOperators('log(2, 2*e)', function_dict)
+        expression.split_operators()
+        self.assertEqual(['log', ('2', '2*e')], expression.parsing_list)
+        self.assertEqual('', expression.last_number)
+        self.assertEqual('', expression.last_letter)
+        self.assertEqual('', expression.last_symbol)
+
+    def test_split_operators_whitespace_in_the_begining(self):
+        expression = SplitOperators(' 42', function_dict)
+        expression.split_operators()
+        self.assertEqual([42], expression.parsing_list)
+        self.assertEqual('', expression.last_number)
+        self.assertEqual('', expression.last_letter)
+        self.assertEqual('', expression.last_symbol)
+
+    def test_collect_function_arguments_first_add_to_arguments(self):
+        expression = SplitOperators('42', function_dict)
+        expression._collect_function_arguments('42')
+        self.assertEqual('42', expression.function_arguments)
+        self.assertEqual(True, expression.arguments_needs)
+
+    def test_collect_function_arguments_add_bracket_to_arguments(self):
+        expression = SplitOperators('42', function_dict)
+        expression._collect_function_arguments('(')
+        self.assertEqual('(', expression.function_arguments)
+        self.assertEqual(True, expression.arguments_needs)
+        self.assertEqual('(', expression.brackets_in_arguments)
+
+    def test_collect_function_arguments_add_last_bracket_to_arguments_with_split(self):
+        expression = SplitOperators('42', function_dict)
+        expression.brackets_in_arguments = '('
+        expression.function_arguments = '42, 8'
+        expression._collect_function_arguments(')')
+        self.assertEqual(('42', '8'), expression.function_arguments)
+        self.assertEqual(False, expression.arguments_needs)
+        self.assertEqual('', expression.brackets_in_arguments)
+
+    def test_collect_function_arguments_add_last_bracket_to_arguments_without_split(self):
+        expression = SplitOperators('42', function_dict)
+        expression.brackets_in_arguments = '('
+        expression.function_arguments = '42'
+        expression._collect_function_arguments(')')
+        self.assertEqual(('42',), expression.function_arguments)
+        self.assertEqual(False, expression.arguments_needs)
+        self.assertEqual('', expression.brackets_in_arguments)
+
+    def test_collect_function_arguments_add_arguments_as_functions(self):
+        expression = SplitOperators('42', function_dict)
+        expression.brackets_in_arguments = '('
+        expression.function_arguments = 'log(42,8)*pi'
+        expression._collect_function_arguments(')')
+        self.assertEqual(('log(42,8)*pi',), expression.function_arguments)
+        self.assertEqual(False, expression.arguments_needs)
+        self.assertEqual('', expression.brackets_in_arguments)
