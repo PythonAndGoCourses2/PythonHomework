@@ -5,17 +5,21 @@ import argparse
 import operator
 from math import pi, e
 
+FUNCTIONS = {'abs': (5, "left", operator.abs), 'round': (5, "left", lambda x: round(x))}
 MATH_FUNCTIONS = {name: (5, "left", getattr(math, name)) for name in dir(math)}
+MATH_FUNCTIONS.update(FUNCTIONS)
+
+FUNCTIONS_NEG = {'-abs': (5, "left", operator.abs), 'round': (5, "-left", lambda x: round(x))}
 MATH_FUNCTIONS_NEG = {"-" + name: (5, "left", getattr(math, name)) for name in dir(math)}
+MATH_FUNCTIONS_NEG.update(FUNCTIONS_NEG)
+
 OPERATORS = {
     '==': (1, "left", operator.eq), '<': (1, "left", operator.lt), '!=': (1, "left", operator.ne),
     '>': (1, "left", operator.gt), '<=': (1, "left", operator.le), '>=': (1, "left", operator.ge),
     '+': (2, "left", operator.add), '^': (4, "right", operator.pow), '-': (2, "left", operator.sub),
     '*': (3, "left", operator.mul), '/': (3, "left", operator.truediv), '//': (3, "left", operator.floordiv),
-    '%': (3, "left", operator.mod), 'abs': (5, "left", operator.abs), '-abs': (5, "left", operator.abs),
-    'round': (5, "left", lambda x: round(x)), '-round': (5, "left", lambda x: round(x))
-}
-OPERATORS_MATH_FUNСTIONS = dict(
+    '%': (3, "left", operator.mod)}
+OPERATORS_MATH_FUNCTIONS = dict(
     list(OPERATORS.items()) + list(MATH_FUNCTIONS.items()) + list(MATH_FUNCTIONS_NEG.items()))
 
 
@@ -91,22 +95,6 @@ def check_entrence(check_expr, mistake=False):
         return calc(shunting_yard(parse(check_expr)))
 
 
-def define_args(tokens_operator):
-    global quantity_arg
-    quantity_arg = 0
-    if tokens_operator.__name__ == '<lambda>':
-        quantity_arg = tokens_operator.__code__.co_argcount
-    else:
-        match = re.search(r'\(.*\)', tokens_operator.__doc__)
-        obj = re.search(r'\,', match.string)
-        if obj is not None:
-            for symbol in obj.group(0):
-                if symbol == ',':
-                    quantity_arg += 1
-        quantity_arg += 1
-    return quantity_arg
-
-
 def parse(expression_string):
     number_re_neg = re.compile('^((-)?[0-9]+([.][0-9]+)?)|(-)?[0-9]*([.][0-9]+)')
     number_re_pos = re.compile('^([0-9]+([.][0-9]+)?)|([0-9]*([.][0-9]+))')
@@ -157,10 +145,10 @@ def shunting_yard(parsed_expression):
     index = 0
     for item in parsed_expression:
         if item == "pi" or item == "e" or item == "tau":
-            out.append(OPERATORS_MATH_FUNСTIONS[item][2])
+            out.append(OPERATORS_MATH_FUNCTIONS[item][2])
         elif item == "-pi" or item == "-e" or item == "-tau":
-            out.append(- + OPERATORS_MATH_FUNСTIONS[item][2])
-        elif item in MATH_FUNCTIONS:
+            out.append(- + OPERATORS_MATH_FUNCTIONS[item][2])
+        elif item in MATH_FUNCTIONS or item in MATH_FUNCTIONS_NEG:
             index += 1
             arg = 1
             arg_count[index] = arg
@@ -170,12 +158,12 @@ def shunting_yard(parsed_expression):
             arg_count[index] = arg
             while stack[-1] != '(':
                 out.append(stack.pop())
-        elif item in OPERATORS_MATH_FUNСTIONS:
+        elif item in OPERATORS_MATH_FUNCTIONS:
             while stack and stack[-1] != '(' and (
-                    (OPERATORS_MATH_FUNСTIONS[item][1] is "left" and OPERATORS_MATH_FUNСTIONS[item][
-                        0] <= OPERATORS_MATH_FUNСTIONS[stack[-1]][0]) or (
-                            OPERATORS_MATH_FUNСTIONS[item][1] is "right" and
-                            OPERATORS_MATH_FUNСTIONS[item][0] < OPERATORS_MATH_FUNСTIONS[stack[-1]][0])):
+                    (OPERATORS_MATH_FUNCTIONS[item][1] is "left" and OPERATORS_MATH_FUNCTIONS[item][
+                        0] <= OPERATORS_MATH_FUNCTIONS[stack[-1]][0]) or (
+                            OPERATORS_MATH_FUNCTIONS[item][1] is "right" and
+                            OPERATORS_MATH_FUNCTIONS[item][0] < OPERATORS_MATH_FUNCTIONS[stack[-1]][0])):
                 out.append(stack.pop())
             stack.append(item)
         elif item == '(':
@@ -185,7 +173,7 @@ def shunting_yard(parsed_expression):
                 x = stack.pop()
                 if x == "(":
                     if stack:
-                        if stack[-1] in MATH_FUNCTIONS:
+                        if stack[-1] in MATH_FUNCTIONS or stack[-1] in MATH_FUNCTIONS_NEG:
                             out.append(str(arg_count.pop(index)) + " - number_args")
                             index -= 1
                     break
@@ -202,38 +190,17 @@ def calc(polish):
     try:
         stack = []
         for token in polish:
-            if token in OPERATORS_MATH_FUNСTIONS:
-                if token == "log" or token == "-log":
-                    args = number_args.pop()
-                    if args == 2:
-                        y, x = stack.pop(), stack.pop()
-                        if token[0] == "-":
-                            stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x, y))
-                        else:
-                            stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x, y))
-                    else:
-                        x = stack.pop()
-                        if token[0] == "-":
-                            stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x))
-                        else:
-                            stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x))
-                elif token == "-":
-                    y, x = stack.pop(), stack.pop()
-                    stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x, y))
+            if token in MATH_FUNCTIONS or token in MATH_FUNCTIONS_NEG:
+                args = number_args.pop()
+                parameters = [stack.pop() for index in range(args)]
+                parameters = parameters[::-1]
+                if token[0] == "-":
+                    stack.append(- + MATH_FUNCTIONS_NEG[token][2](*parameters))
                 else:
-                    define_args(OPERATORS_MATH_FUNСTIONS[token][2])
-                    if quantity_arg == 1:
-                        x = stack.pop()
-                        if token[0] == "-":
-                            stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x))
-                        else:
-                            stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x))
-                    elif quantity_arg == 2:
-                        y, x = stack.pop(), stack.pop()
-                        if token[0] == "-":
-                            stack.append(- + OPERATORS_MATH_FUNСTIONS[token][2](x, y))
-                        else:
-                            stack.append(OPERATORS_MATH_FUNСTIONS[token][2](x, y))
+                    stack.append(MATH_FUNCTIONS[token][2](*parameters))
+            elif token in OPERATORS:
+                op2, op1 = stack.pop(), stack.pop()
+                stack.append(OPERATORS[token][2](op1, op2))
             elif type(token) is str and "number_args" in token:
                 number_args.append(int(token.replace(" - number_args", "")))
             else:
