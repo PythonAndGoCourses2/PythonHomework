@@ -13,5 +13,5 @@ def calc(polish):
             y, x = stack.pop(), stack.pop()
             stack.append(OPERATORS[token](x, y))
         else:
-            stack.append(float(token))
+            stack.append(token)
     return stack[0]

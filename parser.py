@@ -10,28 +10,52 @@ def get_token(input_expression):
         print('ERROR: the number of opening and closing brackets must match')
         sys.exit(1)
     else:
-        token = ['']
+        raw_tokens = ['']
         for i in input_expression:
-            if i.isdigit() and token[-1].isdigit():
-                token[-1] = token[-1]+i
-            elif i == '.' and token[-1].isdigit():
-                token[-1] = token[-1] + i
-            elif i.isdigit() and '.' in token[-1]:
-                token[-1] = token[-1] + i
-            elif i.isalpha() and token[-1].isalpha():
-                token[-1] = token[-1] + i
-            elif i == '/' and token[-1] == '/':
-                token[-1] = token[-1] + i
-            elif i == '=' and token[-1] in '<>!=':
-                token[-1] = token[-1] + i
+            if i.isdigit() and raw_tokens[-1].isdigit():
+                raw_tokens[-1] = raw_tokens[-1]+i
+            elif i == '.' and raw_tokens[-1].isdigit():
+                raw_tokens[-1] = raw_tokens[-1] + i
+            elif i.isdigit() and '.' in raw_tokens[-1]:
+                raw_tokens[-1] = raw_tokens[-1] + i
+            elif i.isalpha() and raw_tokens[-1].isalpha():
+                raw_tokens[-1] = raw_tokens[-1] + i
+            elif i == '/' and raw_tokens[-1] == '/':
+                raw_tokens[-1] = raw_tokens[-1] + i
+            elif i == '=' and raw_tokens[-1] in '<>!=':
+                raw_tokens[-1] = raw_tokens[-1] + i
             else:
-                token.append(i)
+                raw_tokens.append(i)
+    return raw_tokens[1:]
 
-        tokens = token[1:]
+
+def separate_function(raw_tokens):
+    tokens = ['']
+    brackets_counter = 0
+    while raw_tokens:
+        token = raw_tokens[0]
+        raw_tokens = raw_tokens[1:]
+        if token == '(' and tokens[-1].isalpha():
+            brackets_counter += 1
+            tokens.append('[')
+        elif token == '(':
+            brackets_counter += 1
+            tokens.append(token)
+        elif token == ')':
+            brackets_counter -= 1
+            if brackets_counter:
+                tokens.append(token)
+            else:
+                tokens.append(']')
+        else:
+            tokens.append(token)
+    return tokens[1:]
+
+    """
         infix = ['']
-        while tokens:
-            x = tokens[0]
-            tokens = tokens[1:]
+        while raw_tokens:
+            x = raw_tokens[0]
+            raw_tokens = raw_tokens[1:]
             if x in CONSTANTS:
                 infix.append(math.__dict__[x])
             elif x == '-' and (infix[-1] == '' or infix[-1] in OPERATORS):
@@ -43,3 +67,4 @@ def get_token(input_expression):
             else:
                 infix.append(x)
     return infix[1:]
+    """

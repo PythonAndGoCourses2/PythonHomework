@@ -1,9 +1,12 @@
 import math
-from parser import get_token
-from sorter import shunting_yard
+import parser
+#from sorter import shunting_yard
 
 
-s = '1---1'
-f = get_token(s)
-print(shunting_yard(f))
+s = 'sin(pi/(2+10-8^2))+log(1*4+2^2+1,3^2)'
+f = parser.get_token(s)
+print(f)
+t = parser.separate_function(f)
+print(t)
+
 
