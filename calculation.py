@@ -3,7 +3,8 @@ import operator
 OPERATORS = {'+': operator.add, '-': operator.sub,
              '*': operator.mul, '/': operator.truediv,
              '//': operator.floordiv, '%': operator.mod,
-             '^': operator.pow}
+             '^': operator.pow, 'neg': operator.neg(),
+             'pos': operator.pos()}
 
 def calc(polish):
     stack = []

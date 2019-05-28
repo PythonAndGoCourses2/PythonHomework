@@ -2,15 +2,8 @@ import math
 
 
 PRIORITY = {'<': 1, '<=': 1, '==': 1, '!=': 1, '>=': 2, '>': 1,
-            '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3, '^': 4}
-
-MATH_OPERATION = []
-for i in dir(math):
-    if '_' not in i:
-        MATH_OPERATION.append(i)
-
-for operation in MATH_OPERATION:
-    PRIORITY[operation] = 2
+            '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3, '^': 4,
+            'neg': 5, 'pos': 5}
 
 
 def shunting_yard(parsed_formula):
