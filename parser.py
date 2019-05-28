@@ -3,7 +3,8 @@ import math
 
 
 CONSTANTS = ('pi', 'tau', 'e', 'inf', 'nan')
-OPERATORS = ('+', '-', '*', '/', '//', '%', '^', '<', '<=', '==', '!=', '>=', '>', '(', 'neg', 'pos')
+OPERATORS = ('+', '-', '*', '/', '//', '%', '^', '<', '<=', '==', '!=', '>=', '>', '(', 'neg', 'pos', '[')
+
 
 def get_token(input_expression):
     if input_expression.count('(') != input_expression.count(')'):
@@ -51,20 +52,24 @@ def separate_function(raw_tokens):
             tokens.append(token)
     return tokens[1:]
 
-    """
-        infix = ['']
-        while raw_tokens:
-            x = raw_tokens[0]
-            raw_tokens = raw_tokens[1:]
-            if x in CONSTANTS:
-                infix.append(math.__dict__[x])
-            elif x == '-' and (infix[-1] == '' or infix[-1] in OPERATORS):
-                infix.append('neg')
-            elif x == '+' and (infix[-1] == '' or infix[-1] in OPERATORS):
-                infix.append('pos')
-            elif x.isnumeric():
-                infix.append(float(x))
-            else:
-                infix.append(x)
+
+def create_infix(tokens):
+    infix = ['']
+    while tokens:
+        token = tokens[0]
+        tokens = tokens[1:]
+        if token in CONSTANTS:
+            infix.append(math.__dict__[token])
+        elif token == '-' and (infix[-1] == '' or infix[-1] in OPERATORS):
+            infix.append('neg')
+        elif token == '+' and (infix[-1] == '' or infix[-1] in OPERATORS):
+            infix.append('pos')
+        elif token.isnumeric():
+            infix.append(float(token))
+        else:
+            infix.append(token)
     return infix[1:]
-    """
+
+
+def parse_input_expression(input_string):
+    return create_infix(separate_function(get_token(input_string)))
