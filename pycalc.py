@@ -1,6 +1,9 @@
 import math
 from parser import get_token
-import sorter
+from sorter import shunting_yard
 
-s = '(5!=7'
-print(get_token(s))
+
+s = 'sin(pi/2)+(5+5)^2-8'
+f = get_token(s)
+print(shunting_yard(f))
+

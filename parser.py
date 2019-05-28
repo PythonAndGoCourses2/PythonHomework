@@ -1,5 +1,5 @@
 import sys
-
+import math
 
 def get_token(input_expression):
     if input_expression.count('(') != input_expression.count(')'):
@@ -22,5 +22,14 @@ def get_token(input_expression):
                 token[-1] = token[-1] + i
             else:
                 token.append(i)
-        return token[1:]
+
+        infix = []
+        for i in token[1:]:
+            if i in ('pi', 'tau', 'e', 'inf', 'nan'):
+                infix.append(math.__dict__[i])
+            elif i.isnumeric():
+                infix.append(float(i))
+            else:
+                infix.append(i)
+        return infix
 
