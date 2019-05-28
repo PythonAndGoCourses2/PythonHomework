@@ -5,8 +5,10 @@ PRIORITY = {'<': 1, '<=': 1, '==': 1, '!=': 1, '>=': 2, '>': 1,
             '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3, '^': 4,
             'neg': 5, 'pos': 5}
 
+math_functions = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
 
-def shunting_yard(parsed_formula):
+
+def create_polish_notation(parsed_formula):
     stack = []
     polish_notation = []
 
