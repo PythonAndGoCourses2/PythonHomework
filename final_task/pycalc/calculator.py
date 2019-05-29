@@ -16,6 +16,10 @@ class Calculator:
         create an instance of the Converter,
         create a Stack to put all operands,
         create a Stack to put all operations
+        self.current_operator need to check the priority of current_operator
+        and the operator on stack after one calculation
+        self.arg_result_lst need to put calculated arguments and to make a tuple
+        of arguments
         """
         self.expression_line = expression
         self.function_dict = functions
@@ -24,8 +28,8 @@ class Calculator:
         self.current_result = ""
         self.operands = Stack()
         self.function = Stack()
-        self.func_argument = False
         self.current_operator = ""
+        self.arg_result_lst = []
 
     def _calc_on_stack(self):
         """
@@ -38,17 +42,11 @@ class Calculator:
         """
         operator_on_stack = self.function.take_from_stack()
         if operator_on_stack in self.function_dict.values():
-            if self.func_argument:
-                second_operand = self.operands.take_from_stack()
-                first_operand = self.operands.take_from_stack()
-                try:
-                    self.current_result = operator_on_stack['operator'](first_operand, second_operand)
-                    self.func_argument = False
-                except TypeError as err:
-                    raise SyntaxError(err)
-            else:
-                first_operand = self.operands.take_from_stack()
-                self.current_result = operator_on_stack['operator'](first_operand)
+            func_args = self.operands.take_from_stack()
+            try:
+                self.current_result = operator_on_stack['operator'](*func_args)
+            except TypeError as err:
+                raise SyntaxError(err)
         elif operator_on_stack in operator_dict.values() or operator_on_stack in unary_dict.values():
             if len(self.operands.stack) == 1:
                 second_operand = self.operands.take_from_stack()
@@ -57,8 +55,6 @@ class Calculator:
                 second_operand = self.operands.take_from_stack()
                 first_operand = self.operands.take_from_stack()
             self.current_result = operator_on_stack['operator'](first_operand, second_operand)
-        elif operator_on_stack == '(':
-            return self.current_result
         self.operands.put_on_stack(self.current_result)
         if len(self.function.stack) and self.function.top() is not '(':
             if self.current_operator['priority'] >= self.function.top()['priority']:
@@ -69,11 +65,21 @@ class Calculator:
         """
         For each item in converted_list using Reverse Polish notation, method
         check a type and put it on either operands or function stack,
-        and invokes calc_on_stack method to perform calculation itself. Returns result
-        of calculation received from calc_on_stack method
+        and invokes calc_on_stack method to perform calculation itself.
+        If item is tuple (function arguments) generate a new instance of
+        Calculator to calculate it and after that put results as tuple to
+        the operand stack. After calculating current arguments arg_result_lst become
+        an empty list. Returns result of calculation received from calc_on_stack method
         """
         for item in self.converted_list:
-            if isinstance(item, float) or isinstance(item, int):
+            if isinstance(item, tuple):
+                for argument in item:
+                    arg_calculate = Calculator(argument, self.function_dict)
+                    arg_result = arg_calculate.calculate()
+                    self.arg_result_lst.append(arg_result)
+                self.operands.put_on_stack(tuple(self.arg_result_lst))
+                self.arg_result_lst = []
+            elif isinstance(item, float) or isinstance(item, int):
                 self.operands.put_on_stack(item)
             elif item in operator_dict.values() \
                     or item in self.function_dict.values() \
@@ -96,19 +102,11 @@ class Calculator:
                 self.function.take_from_stack()
             else:
                 for i in range(len(self.function.stack)):
-                    if item is ',' and self.function.top() is '(':
-                        if self.func_argument:
-                            raise SyntaxError('This function can have only two arguments')
-                        self.func_argument = True
-                        break
-                    elif self.func_argument:
-                        self._calc_on_stack()
-                    if len(self.function.stack):
-                        self._calc_on_stack()
-                        if item is ')' and len(self.function.stack):
-                            if self.function.top() is '(':
-                                self.function.take_from_stack()
-                                break
+                    self._calc_on_stack()
+                    if item is ')' and not self.function.is_empty():
+                        if self.function.top() is '(':
+                            self.function.take_from_stack()
+                            break
         if self.function.is_empty():
             self.current_result = self.operands.take_from_stack()
         elif len(self.function.stack) == 1:

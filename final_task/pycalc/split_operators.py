@@ -138,23 +138,23 @@ class SplitOperators:
         If the math function have more than one argument it will make
         separations of the arguments by "," and check if this split was correct
         and it should be separated by comma after (at first calculate one by one arguments).
-        If argument is an expression this function will add it like a string,
-        that will be calculated after in recursion way.
+        If argument is an expression with embedded functions and arguments (nesting doll)
+        this function will add it like a string, that will be calculated after in recursion way.
         All arguments are strings in tuple.
         When the last item of the arguments was added it changed self.arguments_need to False,
         returns the self.function_arguments and self.brackets_in_the_arguments to empty stings
+        and last bracket will be added to self.brackets
         :param item: is one by one item from expression_line, when we start
         to collect function_arguments
         """
         if item in '()':
             self.brackets_in_arguments += item
             if self.brackets_in_arguments.count('(') == self.brackets_in_arguments.count(')'):
+                self.brackets += item
                 current_arguments = tuple(self.function_arguments.split(','))
                 need_to_split_arguments = 0
                 for i in current_arguments:
-                    if i.count('(') != i.count(')'):
-                        need_to_split_arguments += 0
-                    else:
+                    if i.count('(') == i.count(')'):
                         need_to_split_arguments += 1
                 if need_to_split_arguments:
                     self.parsing_list.append(tuple(current_arguments))
@@ -180,8 +180,6 @@ class SplitOperators:
         if check_expression(self.expression_line):
             for i in self.expression_line:
                 if i == " ":
-                    if not self.parsing_list:
-                        continue
                     self.blank_item = True
                     self._append_to_parsing_list()
                 elif self.arguments_needs:
