@@ -151,7 +151,7 @@ def shunting_yard_alg(expr_list):
                     output_list.append(stack.pop())
             else:
                 raise SyntaxError('ERROR: the opening parentheses or comma is missed')
-            output_list.append(item)              # comma will indicate the presence of multi parameters for the function
+            output_list.append(item)              # comma will indicate the presence of multi parameters for the func
         elif item in operation_dict:
             if stack and (stack[-1] in operation_dict):
                 while stack and (stack[-1] in operation_dict):
