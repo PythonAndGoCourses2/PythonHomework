@@ -1,14 +1,15 @@
 import unittest
 from math import pi, e, tau, inf, nan
 import check
+import core
 
 
 class TestCheckFunctions(unittest.TestCase):
     def test_brackets_check(self):
-        self.assertEqual(check.brackets_check('()'), True)
-        self.assertEqual(check.brackets_check('(()'), False)
-        self.assertEqual(check.brackets_check(''), True)
-        self.assertEqual(check.brackets_check(')()'), False)
+        self.assertTrue(check.brackets_check('()'))
+        self.assertFalse(check.brackets_check('(()'))
+        self.assertTrue(check.brackets_check(''))
+        self.assertFalse(check.brackets_check(')()'))
         # complete
 
     def test_comparison_check(self):
@@ -18,18 +19,18 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.comparison_check("12>=5+6"), ">=")
         self.assertEqual(check.comparison_check("7+3==8+2"), "==")
         self.assertEqual(check.comparison_check("10!=2+3*5"), "!=")
-        self.assertEqual(check.comparison_check("10+3*(2+1)"), False)
-        self.assertEqual(check.comparison_check("5-2"), False)
+        self.assertFalse(check.comparison_check("10+3*(2+1)"))
+        self.assertFalse(check.comparison_check("5-2"))
         # complete
 
     def test_comparison_calc(self):
-        self.assertEqual(check.comparison_calc("5>2", ">"), True)
-        self.assertEqual(check.comparison_calc("5+2<20+1", "<"), True)
-        self.assertEqual(check.comparison_calc("5^2>=2+2", ">="), True)
-        self.assertEqual(check.comparison_calc("5^3<=2+3*(1+2)", "<="), False)
-        self.assertEqual(check.comparison_calc("5==2", "=="), False)
-        self.assertEqual(check.comparison_calc("8+2!=7+3", "!="), False)
-        # should add tet for exit(-1)
+        self.assertTrue(check.comparison_calc("5>2", ">"))
+        self.assertTrue(check.comparison_calc("5+2<20+1", "<"))
+        self.assertTrue(check.comparison_calc("5^2>=2+2", ">="))
+        self.assertFalse(check.comparison_calc("5^3<=2+3*(1+2)", "<="))
+        self.assertFalse(check.comparison_calc("5==2", "=="))
+        self.assertFalse(check.comparison_calc("8+2!=7+3", "!="))
+        # should add test for exit(-1)
 
     def test_fix_unary(self):
         self.assertEqual(check.fix_unary("-2+3"), "0-2+3")
@@ -64,23 +65,32 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.correct_check("1 + 2 ^  3"), "1 + 2 ^  3")
         self.assertEqual(check.correct_check("5//2"), "5//2")
         self.assertEqual(check.correct_check("1/2*3^4%5"), "1/2*3^4%5")
-        self.assertEqual(check.correct_check("1+2*3+"), False)
-        self.assertEqual(check.correct_check("1+2*3-"), False)
-        self.assertEqual(check.correct_check("1+2*3*"), False)
-        self.assertEqual(check.correct_check("1+2*3/"), False)
-        self.assertEqual(check.correct_check("1+2*3//"), False)
-        self.assertEqual(check.correct_check("1+2*3%"), False)
-        self.assertEqual(check.correct_check("1+2*3^"), False)
-        self.assertEqual(check.correct_check("1 2 "), False)
-        self.assertEqual(check.correct_check("1 ^ ^ 5"), False)
-        self.assertEqual(check.correct_check("1 * * 6"), False)
-        self.assertEqual(check.correct_check("1 / / 7"), False)
-        self.assertEqual(check.correct_check("1 % % 8"), False)
+        self.assertFalse(check.correct_check("1+2*3+"))
+        self.assertFalse(check.correct_check("1+2*3-"))
+        self.assertFalse(check.correct_check("1+2*3*"))
+        self.assertFalse(check.correct_check("1+2*3/"))
+        self.assertFalse(check.correct_check("1+2*3//"))
+        self.assertFalse(check.correct_check("1+2*3%"))
+        self.assertFalse(check.correct_check("1+2*3^"))
+        self.assertFalse(check.correct_check("1 2 "))
+        self.assertFalse(check.correct_check("1 ^ ^ 5"))
+        self.assertFalse(check.correct_check("1 * * 6"))
+        self.assertFalse(check.correct_check("1 / / 7"))
+        self.assertFalse(check.correct_check("1 % % 8"))
         # complete
 
 
 class TestCoreFunctions(unittest.TestCase):
-    pass
+    def test_parse(self):
+        pass
+
+    def test_infix_to_postfix(self):
+        pass
+
+    def test_calc(self):
+        self.assertEqual(core.calc([2, 3, "+"]), 5)
+        self.assertEqual(core.calc([5]), 5)
+        self.assertEqual(core.calc([2, 3, 5, "*", "+"]), 17)
 
 
 if __name__ == '__main__':
