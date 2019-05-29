@@ -82,7 +82,15 @@ class TestCheckFunctions(unittest.TestCase):
 
 class TestCoreFunctions(unittest.TestCase):
     def test_parse(self):
-        pass
+        self.assertEqual(core.parse("1+2"), [1, "+", 2])
+        self.assertEqual(core.parse("1^2^3"), [1, "^", 2, "^", 3])
+        self.assertEqual(core.parse("log2(8)"), [3])
+        self.assertEqual(core.parse("log(16,2)"), [4])
+        self.assertEqual(core.parse("abs(5)"), [5])
+        self.assertEqual(core.parse("log10(2*(52-2))"), [2])
+        self.assertEqual(core.parse("1.0/2.0"), [1.0, "/", 2.0])
+        self.assertEqual(core.parse("10//2"), [10, "//", 2])
+        self.assertEqual(core.parse("log(2,3,4)"), [])
 
     def test_infix_to_postfix(self):
         self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
