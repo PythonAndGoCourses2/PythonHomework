@@ -85,7 +85,10 @@ class TestCoreFunctions(unittest.TestCase):
         pass
 
     def test_infix_to_postfix(self):
-        pass
+        self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
+        self.assertEqual(core.infix_to_postfix([2, "^", 2, "^", 3]), [2, 2, 3, "^", "^"])
+        self.assertEqual(core.infix_to_postfix([2, "*", '(', 3, "+", 2, ")"]), [2, 3, "^"])
+        self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
 
     def test_calc(self):
         self.assertEqual(core.calc([2, 3, "+"]), 5)
