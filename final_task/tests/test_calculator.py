@@ -31,12 +31,10 @@ class TestCalculator(unittest.TestCase):
 
     def test_calc_on_stack_function_with_two_arguments(self):
         calc = Calculator('log(16,4)', function_dict)
-        calc.func_argument = True
         calc.function.put_on_stack({'operator': math.log, 'priority': 0})
         calc.operands.put_on_stack((16, 4))
         calc._calc_on_stack()
         self.assertEqual(2.0, calc.current_result)
-        self.assertEqual(False, calc.func_argument)
 
     def test_calculate_too_many_arguments(self):
         calc = Calculator('sin(pi,42)', function_dict)
