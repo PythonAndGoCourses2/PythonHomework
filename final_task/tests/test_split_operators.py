@@ -251,7 +251,7 @@ class TestSplitOperators(unittest.TestCase):
         expression.brackets_in_arguments = '('
         expression.function_arguments = '42, 8'
         expression._collect_function_arguments(')')
-        self.assertEqual(('42', '8'), expression.parsing_list[-1])
+        self.assertEqual(('42', ' 8'), expression.parsing_list[-1])
         self.assertEqual((''), expression.function_arguments)
         self.assertEqual(False, expression.arguments_needs)
         self.assertEqual('', expression.brackets_in_arguments)
@@ -275,4 +275,3 @@ class TestSplitOperators(unittest.TestCase):
         self.assertEqual('', expression.function_arguments)
         self.assertEqual(False, expression.arguments_needs)
         self.assertEqual('', expression.brackets_in_arguments)
-
