@@ -11,6 +11,7 @@ class TestCalculator(unittest.TestCase):
 
     def test_init_class(self):
         calc = Calculator('42+pi', function_dict)
+        self.assertEqual('42+pi', calc.expression_line)
         self.assertEqual(function_dict, calc.function_dict)
         self.assertEqual([42, '+', math.pi], calc.parser)
         self.assertEqual([42, {'operator': operator.add, 'priority': 4}, math.pi],
@@ -18,13 +19,13 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual("", calc.current_result)
         self.assertTrue(calc.operands.is_empty())
         self.assertTrue(calc.function.is_empty())
-        self.assertEqual(False, calc.func_argument)
         self.assertEqual("", calc.current_operator)
+        self.assertEqual([], calc.arg_result_lst)
 
     def test_calc_on_stack_function_with_one_argument(self):
         calc = Calculator('sin(pi/2)', function_dict)
         calc.function.put_on_stack({'operator': math.sin, 'priority': 0})
-        calc.operands.put_on_stack(math.pi/2)
+        calc.operands.put_on_stack((math.pi/2,))
         calc._calc_on_stack()
         self.assertEqual(1.0, calc.current_result)
 
@@ -32,11 +33,17 @@ class TestCalculator(unittest.TestCase):
         calc = Calculator('log(16,4)', function_dict)
         calc.func_argument = True
         calc.function.put_on_stack({'operator': math.log, 'priority': 0})
-        calc.operands.put_on_stack(16)
-        calc.operands.put_on_stack(4)
+        calc.operands.put_on_stack((16, 4))
         calc._calc_on_stack()
         self.assertEqual(2.0, calc.current_result)
         self.assertEqual(False, calc.func_argument)
+
+    def test_calculate_too_many_arguments(self):
+        calc = Calculator('sin(pi,42)', function_dict)
+        calc.function.put_on_stack({'operator': math.sin, 'priority': 0})
+        calc.operands.put_on_stack((math.pi, 42))
+        with self.assertRaises(SyntaxError):
+            calc.calculate()
 
     def test_calc_on_stack_operator_with_two_operands(self):
         calc = Calculator('42/7', function_dict)
@@ -59,13 +66,6 @@ class TestCalculator(unittest.TestCase):
         calc.operands.put_on_stack(42)
         calc._calc_on_stack()
         self.assertEqual(-42, calc.current_result)
-
-    def test_calc_on_stack_open_bracket_at_the_top(self):
-        calc = Calculator('42', function_dict)
-        calc.function.put_on_stack('(')
-        calc.operands.put_on_stack(42)
-        calc._calc_on_stack()
-        self.assertEqual("", calc.current_result)
 
     def test_clack_on_stack_recursion_function(self):
         calc = Calculator('3*2^2+1', function_dict)
@@ -119,13 +119,6 @@ class TestCalculator(unittest.TestCase):
         calc.converted_list = [2, {'operator': operator.pow, 'priority': 1}, 4,
                                {'operator': operator.pow, 'priority': 1}, 2]
         self.assertEqual(65536, calc.calculate())
-
-    def test_calculate_too_many_arguments(self):
-        calc = Calculator('sin(pi,45.0)', function_dict)
-        calc.converted_list = [{'operator': math.sin, 'priority': 0}, '(', math.pi, ',',
-                               45.0, ')']
-        with self.assertRaises(SyntaxError):
-            calc.calculate()
 
     def test_calculate_expression_inside_brackets(self):
         calc = Calculator('1+(1-4/2)*3', function_dict)
