@@ -42,7 +42,7 @@ def separate_function(raw_tokens):
         elif token == '(':
             brackets_counter += 1
             tokens.append(token)
-        elif token == ')':
+        elif token == ')' and '[' in tokens:
             brackets_counter -= 1
             if brackets_counter:
                 tokens.append(token)

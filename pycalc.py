@@ -1,7 +1,12 @@
 import math
 import parser
-#from sorter import shunting_yard
+from sorter import create_polish_notation
+from calculation import calc
 
-
-s = 'sin(-pi/(2+10-8^2))+log(1*-4+2^2+1,3^-2)'
-print(parser.parse_input_expression(s))
+s = 'sin(pi/2)*111*6'
+print(s)
+t = parser.parse_input_expression(s)
+print(t)
+f = create_polish_notation(t)
+print(f)
+print(calc(f))
