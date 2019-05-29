@@ -44,11 +44,13 @@ def parse_command_line():
 
 
 def parse_to_list(exprstr):
-    """ Converting the expression from string to list """
+    """ Converting the expression from string to list by moving tokens from the left side of the string
+        with their simultaneous assignment to numbers, operators or functions"""
     temp = ''
     expr_list = []
     while exprstr:
         symbol = exprstr[0]
+        # print(symbol)
         if symbol in operation_dict or (len(exprstr) > 1 and exprstr[:2] in operation_dict):   # if operator
             if exprstr[:2] in operation_dict:               # if two symbol operator
                 symbol = exprstr[:2]
@@ -57,6 +59,7 @@ def parse_to_list(exprstr):
                 continue
             expr_list.append(symbol)
             exprstr = exprstr[1:]
+        
         elif symbol.isdigit() or symbol == '.':             # if digit or start float number
             for i in range(len(exprstr)):
                 symbol = exprstr[i]
@@ -67,14 +70,14 @@ def parse_to_list(exprstr):
             if '.' in temp:
                 try:
                     expr_list.append(float(temp))
-                except ValueError:                          # if impossible to convert to float
+                except ValueError:                          # if impossible to convert to float - raise Error
                     raise ValueError('ERROR: error in input number')
             else:
                 expr_list.append(int(temp))
             exprstr = exprstr[len(temp):]
             temp = ''
-        elif symbol.isalpha():                              # if character is alphabetic, then cheking for function
-            for i in range(len(exprstr)):
+        elif symbol.isalpha():                              # if character is alphabetic
+            for i in range(len(exprstr)):                   # check the next symbols to find func or constant
                 symbol = exprstr[i]
                 if symbol.isalpha() or symbol.isdigit():    # if alphabetic or digit (for funcs with digit in name)
                     temp += symbol
@@ -82,23 +85,29 @@ def parse_to_list(exprstr):
                         expr_list.append(temp)
                         break
                     elif temp in function_dict:
-                        if exprstr[i+1] == '(':
-                            expr_list.append(temp)
-                            break
-                        else:
-                            continue
+                        try:
+                            if exprstr[i+1] == '(':
+                                expr_list.append(temp)
+                                break
+                            else:
+                                continue
+                        except IndexError:
+                            raise IndexError('ERROR: missed argument(s) for function {0}'.format(temp))
                 else:
                     if symbol == '(' and temp not in (constants or function_dict):
                         raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
                     break
+            else:
+                if temp not in (constants or function_dict):
+                    raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
             exprstr = exprstr[len(temp):]
             temp = ''
-        elif symbol in ('(', ')', ','):                     # if bracket or comma
+        elif symbol in ('(', ')', ','):                     # if bracket or comma - move to list
             expr_list.append(symbol)
             exprstr = exprstr[1:]
-        elif symbol == ' ':
+        elif symbol == ' ':                
             exprstr = exprstr[1:]
-        else:                                               # if different symbol
+        else:                                               # if different symbol - raise Error
             raise SyntaxError('ERROR: unsupported symbol "{0}" in expression'.format(symbol))
     # print(expr_list)
     return expr_list
@@ -112,7 +121,7 @@ def unary_operator_check(expr_list):
     if expr_list[0] in ('-', '+'):
         expr_list[0] += 'u'
     for index in range(1, len(expr_list)):
-        if expr_list[index] in ('-', '+') and (expr_list[index - 1] in ('(', ',') or\
+        if expr_list[index] in ('-', '+') and (expr_list[index - 1] in ('(', ',') or
                                                expr_list[index-1] in operation_dict):
             expr_list[index] += 'u'
 
@@ -261,8 +270,8 @@ def calculation_from_rpn(rev_pol_not_list):
         raise Exception('ERROR: insufficient amount of operators or function or too many operands/arguments')
 
 
-def checking_empty_operators(exprstr):
-    """ Checking for empty string or string containing only operators """
+def check_empty_operators(exprstr):
+    """ Checking expression for empty string or string containing only operators or parentheses """
     if len(exprstr) == 0 or\
        set(exprstr).issubset(set(operators)) or\
        set(exprstr).issubset({'(', ')', ' '}):
@@ -288,7 +297,7 @@ def calculation(exprstr):
     """
     Calculation of string type argument from command line
     """
-    if (not checking_empty_operators(exprstr)) and brackets_check(exprstr):
+    if (not check_empty_operators(exprstr)) and brackets_check(exprstr):
         expr_list = parse_to_list(exprstr)
         # print(expr_list)
         unary_operator_check(expr_list)
