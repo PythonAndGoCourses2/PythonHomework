@@ -112,8 +112,8 @@ def unary_operator_check(expr_list):
     if expr_list[0] in ('-', '+'):
         expr_list[0] += 'u'
     for index in range(1, len(expr_list)):
-        if expr_list[index] in ('-', '+') and\
-        (expr_list[index - 1] in ('(', ',') or expr_list[index-1] in operation_dict):
+        if expr_list[index] in ('-', '+') and (expr_list[index - 1] in ('(', ',') or\
+                                               expr_list[index-1] in operation_dict):
             expr_list[index] += 'u'
 
 
