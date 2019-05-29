@@ -7,7 +7,6 @@ setuptools.setup(
     author="Tatsiana Kavalchuk",
     author_email="p4elopuh@gmail.com",
     description="Pure-python command-line calculator",
-    #url="https://github.com//PythonAndGoCourses2/PythonHomework",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
