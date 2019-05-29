@@ -9,6 +9,8 @@ def main():
     """Call of all needed methods and return result"""
     try:
         infix_string = parser.parse_arguments()
+        if isinstance(infix_string, tuple):
+            infix_string = infix_string[1]
         tokens = tokenizer.tokenize(infix_string)
         postfix_string = translator.get_postfix(tokens)
         res = calculator.calculate(postfix_string)
