@@ -14,7 +14,9 @@ def create_polish_notation(parsed_formula):
     polish_notation = []
 
     for token in parsed_formula:
-        if token in PRIORITY:
+        if type(token) is float:
+            polish_notation.append(token)
+        elif token in PRIORITY:
             while stack_operation and stack_operation[-1] != '(' and PRIORITY[token] <= PRIORITY[stack_operation[-1]]:
                 polish_notation.append(stack_operation.pop())
             stack_operation.append(token)
@@ -34,8 +36,7 @@ def create_polish_notation(parsed_formula):
             while stack_operation:
                 polish_notation.append(stack_operation.pop())
             polish_notation.append(stack_function.pop())
-        else:
-            polish_notation.append(token)
+
     while stack_operation:
         polish_notation.append(stack_operation.pop())
 
