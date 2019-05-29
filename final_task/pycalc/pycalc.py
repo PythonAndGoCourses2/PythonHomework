@@ -59,7 +59,6 @@ def parse_to_list(exprstr):
                 continue
             expr_list.append(symbol)
             exprstr = exprstr[1:]
-        
         elif symbol.isdigit() or symbol == '.':             # if digit or start float number
             for i in range(len(exprstr)):
                 symbol = exprstr[i]
@@ -105,7 +104,7 @@ def parse_to_list(exprstr):
         elif symbol in ('(', ')', ','):                     # if bracket or comma - move to list
             expr_list.append(symbol)
             exprstr = exprstr[1:]
-        elif symbol == ' ':                
+        elif symbol == ' ':
             exprstr = exprstr[1:]
         else:                                               # if different symbol - raise Error
             raise SyntaxError('ERROR: unsupported symbol "{0}" in expression'.format(symbol))
