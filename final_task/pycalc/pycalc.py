@@ -96,9 +96,9 @@ def parse_to_list(exprstr):
         elif symbol in ('(', ')', ','):                     # if bracket or comma
             expr_list.append(symbol)
             exprstr = exprstr[1:]
-        elif symbol == ' ':                
+        elif symbol == ' ':
             exprstr = exprstr[1:]
-        else:                                               # if different symbol 
+        else:                                               # if different symbol
             raise SyntaxError('ERROR: unsupported symbol "{0}" in expression'.format(symbol))
     # print(expr_list)
     return expr_list
@@ -113,7 +113,7 @@ def unary_operator_check(expr_list):
         expr_list[0] += 'u'
     for index in range(1, len(expr_list)):
         if expr_list[index] in ('-', '+') and\
-            (expr_list[index - 1] in ('(', ',') or expr_list[index-1] in operation_dict):
+        (expr_list[index - 1] in ('(', ',') or expr_list[index-1] in operation_dict):
             expr_list[index] += 'u'
 
 
@@ -134,7 +134,7 @@ def shunting_yard_alg(expr_list):
     Operators are added according their precedence. No parentheses are needed.
     Resulting notation is ready for calculation (from left to right).
     """
-    output_list = []                                        
+    output_list = []
     stack = []
     while expr_list:
         item = expr_list[0]
@@ -181,7 +181,6 @@ def shunting_yard_alg(expr_list):
             if stack[-1] == '(':
                 raise SyntaxError('ERROR: closing parentheses is missed')
             output_list.append(stack.pop())
-            
     return output_list                                      # returning reverse_polish_notation
 
 
