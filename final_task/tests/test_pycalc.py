@@ -1,4 +1,5 @@
 import unittest
+from pycalc.pycalc import main
 from pycalc.calculator import Calculator
 from pycalc.operator_manager import create_func_dict
 
