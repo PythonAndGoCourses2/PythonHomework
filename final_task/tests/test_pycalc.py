@@ -1,4 +1,5 @@
 import unittest
+from mock import patch
 from pycalc.pycalc import main
 from pycalc.calculator import Calculator
 from pycalc.operator_manager import create_func_dict
@@ -41,3 +42,10 @@ class TestPycalc(unittest.TestCase):
         calc = Calculator(test_expression, function_dict)
         with self.assertRaises(OverflowError):
             calc.calculate()
+
+    @patch('.argument_parser.arg_parser')
+    def test_arg_parser_called(self, mock):
+        main()
+        self.assertTrue(mock.called)
+
+
