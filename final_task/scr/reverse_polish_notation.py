@@ -103,7 +103,7 @@ def convert_to_RPN(listed_expression):
             output.append(token)
         elif isconstant(token):
             output.append(str(st.math_constants_dict[token]))
-        elif token == ',':
+        elif token == st.sep:
             temp_token = stack.pop()
             while not isopenbracket(temp_token):
                 output.append(temp_token)
