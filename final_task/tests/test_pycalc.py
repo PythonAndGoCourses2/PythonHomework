@@ -43,7 +43,7 @@ class TestPycalc(unittest.TestCase):
         with self.assertRaises(OverflowError):
             calc.calculate()
 
-    @patch('.argument_parser.arg_parser')
+    @patch('pycalc.argument_parser.arg_parser')
     def test_arg_parser_called(self, mock):
         main()
         self.assertTrue(mock.called)
