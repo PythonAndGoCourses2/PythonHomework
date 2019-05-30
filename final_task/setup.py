@@ -7,7 +7,7 @@ setup(
    author='Aliaksandr Serada',
    author_email='alsereda1992.com',
    packages=find_packages(),
-   py_modules=['pycalc'],
+   py_modules=['final_task'],
    entry_points={'console_scripts': ['pycalc = pycalc:main', ], },
    platforms='any',
 )
