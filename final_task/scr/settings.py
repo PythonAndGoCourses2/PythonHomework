@@ -10,8 +10,6 @@ dot = '.'
 comparison = '><=!'
 data_set = [numbers + letters + dot, pointing, comparison]
 
-whitespace = string.whitespace
-
 postfix_func = ['!']
 binary_operators = ['+', '-', '*', '/', '//', '%', '^', '==', '>', '<', '<=', '>=', '!=', '&', 'is', 'is not', '<<',
                     '@', '>>']
