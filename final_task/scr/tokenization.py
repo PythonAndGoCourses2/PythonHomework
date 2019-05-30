@@ -2,7 +2,6 @@ from . import settings as st
 
 
 def tokenize(expression):
-    # expression = delete_whitespaces(expression)
     lexeme = ''
     tokenized_expression = []
     data_category = ''

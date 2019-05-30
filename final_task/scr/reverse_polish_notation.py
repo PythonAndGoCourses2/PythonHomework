@@ -134,6 +134,9 @@ def convert_to_RPN(listed_expression):
                 if temp_token:
                     stack.append(temp_token)
             stack.append(token)
+        else:
+            raise Exception("Invalid token")
+            break
     if stack:
         while stack:
             temp_token = stack.pop()
