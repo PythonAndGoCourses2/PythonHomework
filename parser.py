@@ -1,10 +1,5 @@
+import constants
 import sys
-import math
-
-
-CONSTANTS = ('pi', 'tau', 'e', 'inf', 'nan')
-OPERATORS = ('+', '-', '*', '/', '//', '%', '^', '<', '<=', '==', '!=', '>=', '>', '(', 'neg', 'pos', '[')
-
 
 def get_token(input_expression):
     """Getting a tokens from input string"""
@@ -50,7 +45,7 @@ def separate_function(raw_tokens):
                 tokens.append(token)
                 stack.append(token)
         elif token == ')':
-            x = stack.pop() 
+            x = stack.pop()
             if x == '[':  # Define a closing bracket or end of function
                 tokens.append(']')
             else:
@@ -66,11 +61,11 @@ def create_infix(tokens):
     while tokens:
         token = tokens[0]
         tokens = tokens[1:]
-        if token in CONSTANTS:
-            infix.append(math.__dict__[token])
-        elif token == '-' and (infix[-1] == '' or infix[-1] in OPERATORS):
+        if token in constants.CONSTANTS:
+            infix.append(constants.CONSTANTS[token])
+        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS):
             infix.append('neg')
-        elif token == '+' and (infix[-1] == '' or infix[-1] in OPERATORS):
+        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS):
             infix.append('pos')
         elif token.isnumeric():
             infix.append(float(token))

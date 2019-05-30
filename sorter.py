@@ -1,11 +1,4 @@
-import math
-
-
-PRIORITY = {'<': 1, '<=': 1, '==': 1, '!=': 1, '>=': 2, '>': 1,
-            '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3, '^': 4,
-            'neg': 5, 'pos': 5}
-
-math_functions = dir(math)
+import constants
 
 
 def create_polish_notation(parsed_formula):
@@ -16,8 +9,9 @@ def create_polish_notation(parsed_formula):
     for token in parsed_formula:
         if type(token) is float:
             polish_notation.append(token)
-        elif token in PRIORITY:
-            while stack_operation and stack_operation[-1] != '(' and PRIORITY[token] <= PRIORITY[stack_operation[-1]]:
+        elif token in constants.OPERATION_PRIORITY:
+            while stack_operation and stack_operation[-1] != '(' \
+                    and constants.OPERATION_PRIORITY[token] <= constants.OPERATION_PRIORITY[stack_operation[-1]]:
                 polish_notation.append(stack_operation.pop())
             stack_operation.append(token)
         elif token == ')':
@@ -28,7 +22,7 @@ def create_polish_notation(parsed_formula):
                 polish_notation.append(x)
         elif token == '(':
             stack_operation.append(token)
-        elif token in math_functions:
+        elif token in constants.FUNCTIONS:
             stack_function.append(token)
         elif token == '[':
             continue
