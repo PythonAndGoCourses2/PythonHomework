@@ -1,4 +1,4 @@
-import settings as st
+from . import settings as st
 
 
 def tokenize(expression):

@@ -1,6 +1,6 @@
-import settings as st
-from function_encoder import decode_func_attr_count, is_func_name_encoded
-from reverse_polish_notation import is_float
+from . import settings as st
+from .function_encoder import decode_func_attr_count, is_func_name_encoded
+from .reverse_polish_notation import is_float
 
 
 def is_operand(token):

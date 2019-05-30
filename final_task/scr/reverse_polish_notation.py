@@ -1,5 +1,5 @@
-import settings as st
-from function_encoder import is_func_name_encoded, decode_func_attr_count
+from . import settings as st
+from .function_encoder import is_func_name_encoded, decode_func_attr_count
 
 
 def ispostfix_func(token):

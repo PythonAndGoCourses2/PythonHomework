@@ -1,8 +1,8 @@
-from tokenization import tokenize
-from reverse_polish_notation import convert_to_RPN
-from evaluate import calculate
-from command_line_parser import create_parser
-from expression_backend_script import define_funcs_in_expression
+from .tokenization import tokenize
+from .reverse_polish_notation import convert_to_RPN
+from .evaluate import calculate
+from .command_line_parser import create_parser
+from .expression_backend_script import define_funcs_in_expression
 
 
 def main():

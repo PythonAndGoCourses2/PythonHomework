@@ -1,6 +1,6 @@
-from reverse_polish_notation import isopenbracket, isclosebracket
-from function_encoder import encode_func_attr_count
-import settings as st
+from .reverse_polish_notation import isopenbracket, isclosebracket
+from .function_encoder import encode_func_attr_count
+from . import settings as st
 
 
 def find_open_and_close_brackets(expression):
