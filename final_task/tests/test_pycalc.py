@@ -1,10 +1,6 @@
 import unittest
-from unittest.mock import patch, MagicMock
-from argparse import Namespace
-from pycalc.pycalc import main
 from pycalc.calculator import Calculator
 from pycalc.operator_manager import create_func_dict
-from pycalc import argument_parser
 
 function_dict = create_func_dict()
 
@@ -44,10 +40,3 @@ class TestPycalc(unittest.TestCase):
         calc = Calculator(test_expression, function_dict)
         with self.assertRaises(OverflowError):
             calc.calculate()
-
-    @patch('pycalc.argument_parser.arg_parser')
-    def test_arg_parser_called(self, mock):
-        test_expression = Namespace(EXPRESSION='42*8')
-        argument_parser.arg_parser = MagicMock(return_value=test_expression)
-        main()
-        self.assertTrue(mock.called)
