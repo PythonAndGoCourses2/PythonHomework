@@ -1,6 +1,6 @@
-from PythonHomework.final_task import scr as st
-from PythonHomework.final_task.scr import decode_func_attr_count, is_func_name_encoded
-from PythonHomework.final_task.scr import is_float
+import settings as st
+from function_encoder import decode_func_attr_count, is_func_name_encoded
+from reverse_polish_notation import is_float
 
 
 def is_operand(token):

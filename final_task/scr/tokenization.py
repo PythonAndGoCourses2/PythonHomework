@@ -1,4 +1,4 @@
-from PythonHomework.final_task import scr as st
+import settings as st
 
 
 def tokenize(expression):

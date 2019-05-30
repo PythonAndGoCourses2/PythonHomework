@@ -1,8 +1,8 @@
-from PythonHomework.final_task.scr import tokenize
-from PythonHomework.final_task.scr import convert_to_RPN
-from PythonHomework.final_task.scr import calculate
-from PythonHomework.final_task.scr import create_parser
-from PythonHomework.final_task.scr import define_funcs_in_expression
+from tokenization import tokenize
+from reverse_polish_notation import convert_to_RPN
+from evaluate import calculate
+from command_line_parser import create_parser
+from expression_backend_script import define_funcs_in_expression
 
 
 def main():

@@ -1,5 +1,6 @@
-from PythonHomework.final_task.scr import isopenbracket, isclosebracket
-from PythonHomework.final_task import scr as st
+from reverse_polish_notation import isopenbracket, isclosebracket
+from function_encoder import encode_func_attr_count
+import settings as st
 
 
 def find_open_and_close_brackets(expression):
