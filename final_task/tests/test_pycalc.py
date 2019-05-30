@@ -47,5 +47,3 @@ class TestPycalc(unittest.TestCase):
     def test_arg_parser_called(self, mock):
         main()
         self.assertTrue(mock.called)
-
-

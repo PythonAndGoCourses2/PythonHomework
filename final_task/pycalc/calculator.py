@@ -48,9 +48,10 @@ class Calculator:
             try:
                 self.current_result = operator_on_stack['operator'](*func_args)
             except TypeError:
-                self.current_result = operator_on_stack['operator'](func_args)
-            except TypeError as err:
-                raise SyntaxError(err)
+                try:
+                    self.current_result = operator_on_stack['operator'](func_args)
+                except TypeError as err:
+                    raise SyntaxError(err)
         elif operator_on_stack in operator_dict.values() or operator_on_stack in unary_dict.values():
             if len(self.operands.stack) == 1:
                 second_operand = self.operands.take_from_stack()
