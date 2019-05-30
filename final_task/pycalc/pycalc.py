@@ -91,7 +91,6 @@ def parse_to_list(exprstr):
                     raise IndexError('ERROR: missed argument(s) for function {0}'.format(temp))
             else:                                           # if temp not in constants or function_dict
                 raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
-                    
             exprstr = exprstr[len(temp):]
             temp = ''
         elif symbol in ('(', ')', ','):                     # if bracket or comma - move to list
