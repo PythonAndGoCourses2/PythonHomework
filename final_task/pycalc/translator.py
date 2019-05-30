@@ -33,6 +33,7 @@ def get_postfix(infix_notation: list) -> list:
 
 def process_func_delimiter(stack: list, output_string: list):
     """function to make func delimiter branch"""
+    output_string += ','
     while stack[-1] != lib.OPEN_BRACKET:
         output_string += [stack.pop()]
         if not stack:
