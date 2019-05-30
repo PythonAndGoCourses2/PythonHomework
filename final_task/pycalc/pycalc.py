@@ -5,7 +5,6 @@ import operator
 import math
 
 operators = '+-*/^%<>=! ()'
-# comparisons = ['<', '<=', '==', '!=', '>=', '>']
 constants = {'pi': math.pi, 'e': math.e, 'tau': math.tau}
 operation_dict = {
     '+': (operator.add, 3),
@@ -25,10 +24,11 @@ operation_dict = {
     '+u': (lambda x: x, 5)
     }
 
-function_dict = math.__dict__
+# function_dict = math.__dict__
+function_dict = {func_name: func for (func_name, func) in zip(dir(math),
+                                                              [getattr(math, attr, None) for attr in dir(math)])}
 function_dict['abs'] = abs
 function_dict['round'] = round
-# print(functions_dict)
 
 
 def parse_command_line():
@@ -50,7 +50,6 @@ def parse_to_list(exprstr):
     expr_list = []
     while exprstr:
         symbol = exprstr[0]
-        # print(symbol)
         if symbol in operation_dict or (len(exprstr) > 1 and exprstr[:2] in operation_dict):   # if operator
             if exprstr[:2] in operation_dict:               # if two symbol operator
                 symbol = exprstr[:2]
@@ -60,45 +59,39 @@ def parse_to_list(exprstr):
             expr_list.append(symbol)
             exprstr = exprstr[1:]
         elif symbol.isdigit() or symbol == '.':             # if digit or start float number
-            for i in range(len(exprstr)):
-                symbol = exprstr[i]
-                if symbol.isdigit() or symbol == '.':       # if float
-                    temp += symbol
+            for symbol_temp in exprstr:                     # check next symbols to find whole number
+                if symbol_temp.isdigit() or symbol_temp == '.':       # if float
+                    temp += symbol_temp
                 else:
                     break
             if '.' in temp:
                 try:
                     expr_list.append(float(temp))
-                except ValueError:                          # if impossible to convert to float - raise Error
-                    raise ValueError('ERROR: error in input number')
+                except ValueError:                          # if impossible to convert to float
+                    raise ValueError('ERROR: error in input number {0}'.format(temp))
             else:
                 expr_list.append(int(temp))
             exprstr = exprstr[len(temp):]
             temp = ''
         elif symbol.isalpha():                              # if character is alphabetic
-            for i in range(len(exprstr)):                   # check the next symbols to find func or constant
-                symbol = exprstr[i]
-                if symbol.isalpha() or symbol.isdigit():    # if alphabetic or digit (for funcs with digit in name)
-                    temp += symbol
-                    if temp in constants:
-                        expr_list.append(temp)
-                        break
-                    elif temp in function_dict:
-                        try:
-                            if exprstr[i+1] == '(':
-                                expr_list.append(temp)
-                                break
-                            else:
-                                continue
-                        except IndexError:
-                            raise IndexError('ERROR: missed argument(s) for function {0}'.format(temp))
+            for symbol_temp in exprstr:                     # check the next symbols to find func or constant
+                if symbol_temp.isalpha() or symbol_temp.isdigit():
+                    temp += symbol_temp                     # if alphabetic or digit (for funcs with digit in name)
                 else:
-                    if symbol == '(' and temp not in (constants or function_dict):
-                        raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
-                    break
-            else:
-                if temp not in (constants or function_dict):
-                    raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
+                    break                                   # function name must contain only letters and digits
+            if temp in constants:
+                expr_list.append(temp)
+            elif temp in function_dict:
+                try:
+                    if exprstr[len(temp)] == '(':
+                        expr_list.append(temp)
+                    else:
+                        raise SyntaxError('ERROR: missed argument(s) for function {0}'.format(temp))
+                except IndexError:
+                    raise IndexError('ERROR: missed argument(s) for function {0}'.format(temp))
+            else:                                           # if temp not in constants or function_dict
+                raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
+                    
             exprstr = exprstr[len(temp):]
             temp = ''
         elif symbol in ('(', ')', ','):                     # if bracket or comma - move to list
@@ -108,7 +101,6 @@ def parse_to_list(exprstr):
             exprstr = exprstr[1:]
         else:                                               # if different symbol - raise Error
             raise SyntaxError('ERROR: unsupported symbol "{0}" in expression'.format(symbol))
-    # print(expr_list)
     return expr_list
 
 
@@ -271,10 +263,10 @@ def calculation_from_rpn(rev_pol_not_list):
 
 def check_empty_operators(exprstr):
     """ Checking expression for empty string or string containing only operators or parentheses """
-    if len(exprstr) == 0 or\
-       set(exprstr).issubset(set(operators)) or\
-       set(exprstr).issubset({'(', ')', ' '}):
-        raise SyntaxError('ERROR: no digits and/or functions in expression')
+    if len(exprstr) == 0:
+        raise SyntaxError('ERROR: empty expression')
+    elif set(exprstr).issubset(set(operators)):
+        raise SyntaxError('ERROR: no digits, constants or functions in expression')
     else:
         return False
 
@@ -298,11 +290,8 @@ def calculation(exprstr):
     """
     if (not check_empty_operators(exprstr)) and brackets_check(exprstr):
         expr_list = parse_to_list(exprstr)
-        # print(expr_list)
         unary_operator_check(expr_list)
-        # print(expr_list)
         rev_pol_not_list = shunting_yard_alg(expr_list)
-        # print(rev_pol_not_list)
         result = calculation_from_rpn(rev_pol_not_list)
         return result
 
