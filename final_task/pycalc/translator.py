@@ -37,6 +37,7 @@ def process_func_delimiter(stack: list, output_string: list):
         output_string += [stack.pop()]
         if not stack:
             raise exeptions.BracketsError('brackets are not balanced')
+    output_string += ','
 
 
 def process_operator(token: str, stack: list, output_string: list):
