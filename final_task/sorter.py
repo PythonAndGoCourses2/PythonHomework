@@ -36,6 +36,3 @@ def create_polish_notation(parsed_formula):
         polish_notation.append(stack_operation.pop())
 
     return polish_notation
-
-
-print(create_polish_notation(['neg', 'neg', 'neg', 'neg', 'neg', 13]))
