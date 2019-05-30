@@ -1,12 +1,29 @@
-import math
-import parser
+import argparse
+from parser import parse_input_expression
 from sorter import create_polish_notation
-from calculation import calc
+from calculation import calculate
 
-s = '-+---+-1'
-print(s)
-t = parser.parse_input_expression(s)
-print(t)
-f = create_polish_notation(t)
-print(f)
-print(calc(f))
+
+def create_parser():
+    parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
+    parser.add_argument('EXPRESSION', help='expression string to evaluate',)
+    args = parser.parse_args()
+    expression = args.EXPRESSION
+    return expression
+
+
+def main():
+    try:
+        expression = create_parser()
+        if expression:
+            tokens_in_infix = parse_input_expression(expression)
+            tokens_in_polish = create_polish_notation(tokens_in_infix)
+            print(calculate(tokens_in_polish))
+        else:
+            raise Exception('EXPRESSION is empty')
+    except Exception as error:
+        print("ERROR: " + str(error))
+
+
+if __name__ == '__main__':
+    main()

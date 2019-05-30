@@ -1,7 +1,7 @@
 import constants
 
 
-def calc(polish):
+def calculate(polish):
     stack = []
     for token in polish:
         if token == 'neg' or token == 'pos':
