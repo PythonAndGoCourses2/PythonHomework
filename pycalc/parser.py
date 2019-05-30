@@ -8,25 +8,25 @@ def get_token(input_expression):
         sys.exit(1)
     else:
         raw_tokens = ['']
-        for i in input_expression:
-            if i.isdigit() and raw_tokens[-1].isdigit():
-                raw_tokens[-1] = raw_tokens[-1]+i
-            elif i == '.' and raw_tokens[-1].isdigit():
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i.isdigit() and '.' in raw_tokens[-1]:
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i.isalpha() and raw_tokens[-1].isalnum():
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i.isdigit() and raw_tokens[-1].isalpha():
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i.isdigit() and raw_tokens[-1].isalnum():
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i == '/' and raw_tokens[-1] == '/':
-                raw_tokens[-1] = raw_tokens[-1] + i
-            elif i == '=' and raw_tokens[-1] in '<>!=':
-                raw_tokens[-1] = raw_tokens[-1] + i
+        for char in input_expression:
+            if char.isdigit() and raw_tokens[-1].isdigit():
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char == '.' and raw_tokens[-1].isdigit():
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char.isdigit() and '.' in raw_tokens[-1]:
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char.isalpha() and raw_tokens[-1].isalnum():
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char.isdigit() and raw_tokens[-1].isalpha():
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char.isdigit() and raw_tokens[-1].isalnum():
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char == '/' and raw_tokens[-1] == '/':
+                raw_tokens[-1] = raw_tokens[-1] + char
+            elif char == '=' and raw_tokens[-1] in '<>!=':
+                raw_tokens[-1] = raw_tokens[-1] + char
             else:
-                raw_tokens.append(i)
+                raw_tokens.append(char)
     return raw_tokens[1:]
 
 
