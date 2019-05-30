@@ -1,7 +1,16 @@
 from . import settings as st
 
 
+def delete_whitespaces(expression):
+    clean_expression = ""
+    for token in expression:
+        if token != st.whitespace:
+            clean_expression += token
+    return clean_expression
+
+
 def tokenize(expression):
+    expression = delete_whitespaces(expression)
     lexeme = ''
     tokenized_expression = []
     data_category = ''

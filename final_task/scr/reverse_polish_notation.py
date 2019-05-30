@@ -58,6 +58,8 @@ def priority(token):
 
 
 def isleft_associative(token):
+    if token == '^':
+        return False
     return True
 
 
@@ -121,8 +123,8 @@ def convert_to_RPN(listed_expression):
             if stack:
                 temp_token = stack.pop()
                 while isprefix_func(temp_token) or priority(temp_token) > priority(token) or \
-                                    isleft_associative(temp_token) and \
-                                    priority(temp_token) == priority(token):
+                        isleft_associative(temp_token) and \
+                        priority(temp_token) == priority(token):
                     output.append(temp_token)
                     temp_token = None
                     if stack:
