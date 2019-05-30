@@ -83,7 +83,8 @@ def is_allowed(token):
     if token.isdigit() or is_float(token):
         flag = True
     else:
-        dataset = [st.math_functions_dict, st.prefix_func, st.ops, st.math_constants_dict, st.operators_priority]
+        dataset = [st.math_functions_dict, st.prefix_func,
+                   st.ops, st.math_constants_dict, st.operators_priority, [',']]
         dataset.extend(st.data_set)
         for data in dataset:
             if token in data:
@@ -92,24 +93,22 @@ def is_allowed(token):
     return flag
 
 
-def is_ignored(token):
-    if token in [',']:
-        return True
-    return False
-
-
 def convert_to_RPN(listed_expression):
     stack = []
     output = []
     for token in listed_expression:
-        if is_ignored(token):
-            continue
         if not is_allowed(token):
             raise Exception("unknown token " + token)
         if token.isdigit() or ispostfix_func(token) or is_float(token):
             output.append(token)
         elif isconstant(token):
             output.append(str(st.math_constants_dict[token]))
+        elif token == ',':
+            temp_token = stack.pop()
+            while not isopenbracket(temp_token):
+                output.append(temp_token)
+                temp_token = stack.pop()
+            stack.append(temp_token)
         elif isprefix_func(token):
             stack.append(token)
         elif isopenbracket(token):
