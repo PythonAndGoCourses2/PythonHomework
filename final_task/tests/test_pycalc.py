@@ -1,5 +1,5 @@
 import unittest
-from mock import patch
+from unittest.mock import patch
 from pycalc.pycalc import main
 from pycalc.calculator import Calculator
 from pycalc.operator_manager import create_func_dict

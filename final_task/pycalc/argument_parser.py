@@ -14,7 +14,7 @@ def arg_parser():
     """
     parser = argparse.ArgumentParser(
                                     description='Pure-python command-line calculator.',
-                                    prog='pycalc_not_my'
+                                    prog='pycalc'
                                     )
     parser.add_argument(
                         '-m',

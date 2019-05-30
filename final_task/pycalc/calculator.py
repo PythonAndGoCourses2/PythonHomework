@@ -36,15 +36,19 @@ class Calculator:
         Encapsulate function
         Takes an item from function_stack and operands from the operands_stack
         and performs calculation.
+        Try to send arguments to math function as variables,
+        or if it impossible send an iterable (e.g. for math.fsum),
+        or Raise an Exception if there is two many arguments for current function
         If it possible to make next calculation - make recursion
         Returns result of calculation to the current_result.
-        Raise an exception if there is two many arguments for current function
         """
         operator_on_stack = self.function.take_from_stack()
         if operator_on_stack in self.function_dict.values():
             func_args = self.operands.take_from_stack()
             try:
                 self.current_result = operator_on_stack['operator'](*func_args)
+            except TypeError:
+                self.current_result = operator_on_stack['operator'](func_args)
             except TypeError as err:
                 raise SyntaxError(err)
         elif operator_on_stack in operator_dict.values() or operator_on_stack in unary_dict.values():
