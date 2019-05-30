@@ -20,12 +20,11 @@ math_functions_dict = {attr: getattr(math, attr) for attr in dir(math) if callab
 math_functions_dict['abs'] = abs
 math_functions_dict['round'] = round
 math_constants_dict = {attr: getattr(math, attr) for attr in dir(math) if not callable(getattr(math, attr))}
-# print(math_functions_dict)
 prefix_func = list(math_functions_dict.keys())
-prefix_func.remove('__loader__')
 constants = list(math_constants_dict.keys())
 
 sep = ','
+
 
 def operator_plus(*args):
     param_count = len(args)
@@ -34,12 +33,14 @@ def operator_plus(*args):
         return args[0]
     return args[0] + args[1]
 
+
 def operator_minus(*args):
     param_count = len(args)
     assert 0 < param_count < 3,  "operator_minus got more than 2 parameters"
     if param_count == 1:
         return -args[0]
     return args[0] - args[1]
+
 
 ops_ex = {
     '+': operator_plus,

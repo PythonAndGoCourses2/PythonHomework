@@ -81,7 +81,7 @@ def is_allowed(token):
     if token.isdigit() or is_float(token):
         flag = True
     else:
-        dataset = [st.math_functions_dict, st.prefix_func, st.ops , st.math_constants_dict, st.operators_priority]
+        dataset = [st.math_functions_dict, st.prefix_func, st.ops, st.math_constants_dict, st.operators_priority]
         dataset.extend(st.data_set)
         for data in dataset:
             if token in data:
@@ -103,7 +103,7 @@ def convert_to_RPN(listed_expression):
         if is_ignored(token):
             continue
         if not is_allowed(token):
-            raise Exception ("unknown token " + token)
+            raise Exception("unknown token " + token)
         if token.isdigit() or ispostfix_func(token) or is_float(token):
             output.append(token)
         elif isconstant(token):
@@ -123,19 +123,19 @@ def convert_to_RPN(listed_expression):
                 while isprefix_func(temp_token) or priority(temp_token) > priority(token) or \
                                     isleft_associative(temp_token) and \
                                     priority(temp_token) == priority(token):
-                        output.append(temp_token)
-                        temp_token = None
-                        if stack:
-                            temp_token = stack.pop()
-                        else:
-                            break
+                    output.append(temp_token)
+                    temp_token = None
+                    if stack:
+                        temp_token = stack.pop()
+                    else:
+                        break
                 if temp_token:
                     stack.append(temp_token)
             stack.append(token)
     if stack:
         while stack:
             temp_token = stack.pop()
-            if isopenbracket(temp_token) or isclosebracket(temp_token) :
+            if isopenbracket(temp_token) or isclosebracket(temp_token):
                 raise Exception("Parentheses mismatched")
                 break
             else:

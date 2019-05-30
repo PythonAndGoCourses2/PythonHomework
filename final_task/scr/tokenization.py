@@ -26,4 +26,3 @@ def tokenize(expression):
             lexeme += token
     tokenized_expression.append(lexeme)
     return tokenized_expression
-

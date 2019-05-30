@@ -5,7 +5,8 @@ from . import settings as st
 
 def find_open_and_close_brackets(expression):
     stack = []
-    # check_ind_dict is a dictionary where key is index of open bracket and value is index of corresponding close bracket.
+    # check_ind_dict is a dictionary where key is index of open bracket
+    # and value is index of corresponding close bracket.
     check_ind_dict = {}
     open_bracket_indexes = []
     for token_ind in range(len(expression)):
@@ -67,5 +68,3 @@ def define_funcs_in_expression(tokenized_expression):
                 token = encode_func_attr_count(token, 2)
         processed_tokenized_expression.append(token)
     return processed_tokenized_expression
-
-
