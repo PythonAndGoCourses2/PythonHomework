@@ -1,1 +1,0 @@
-Pure-python command-line calculator.
