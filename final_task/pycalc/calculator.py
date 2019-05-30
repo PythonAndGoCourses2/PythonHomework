@@ -1,31 +1,31 @@
 """Module to calculate result"""
-from pycalc import library
+from pycalc.library import Library as lib
 from pycalc import exeptions
 
 
 def calculate(expr):
     """Calculate postfix string on stack"""
     stack = []
-    unary_operators = (library.UNARY_PLUS, library.UNARY_MINUS)
+    unary_operators = (lib.UNARY_PLUS, lib.UNARY_MINUS)
     for token in expr:
         try:
-            if token == library.FUNC_DELIMITER:
+            if token == lib.FUNC_DELIMITER:
                 stack.append(token)
-            elif token in library.OPERATORS:
+            elif token in lib.OPERATORS:
                 if token in unary_operators:
                     operator = stack.pop()
-                    stack.append(library.OPERATORS[token].function(operator))
+                    stack.append(lib.OPERATORS[token].function(operator))
                     continue
                 op2, op1 = stack.pop(), stack.pop()
-                stack.append(library.OPERATORS[token].function(op1, op2))
-            elif token in library.FUNCTIONS:
+                stack.append(lib.OPERATORS[token].function(op1, op2))
+            elif token in lib.FUNCTIONS:
                 operators = []
-                while len(stack) >= 2 and stack[-2] == library.FUNC_DELIMITER:
+                while len(stack) >= 2 and stack[-2] == lib.FUNC_DELIMITER:
                     operators.append(stack.pop())
                     stack.pop()
                 operators.append(stack.pop())
                 operators.reverse()
-                stack.append(float(library.FUNCTIONS[token](*operators)))
+                stack.append(float(lib.FUNCTIONS[token](*operators)))
             else:
                 stack.append(float(token))
         except IndexError:
