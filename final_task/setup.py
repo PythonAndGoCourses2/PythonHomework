@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 setup(name='pycalc',
@@ -9,7 +9,9 @@ setup(name='pycalc',
       author='Mariya Polyakova',
       author_email='polyakova.maria.bs@gmail.com',
       license='free',
-      packages=find_packages(),
+      packages=['scr'],
       zip_safe=False,
       entry_points={
-        'console_scripts': ['pycalc=pycalc:main'], },)
+        'console_scripts': ['pycalc=scr.pycalc:main']
+      }
+      )
