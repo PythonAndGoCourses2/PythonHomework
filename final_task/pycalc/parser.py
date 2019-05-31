@@ -3,11 +3,11 @@ from . import constants
 
 def get_token(input_expression):
     """Getting a tokens from input string"""
+    raw_tokens = ['']
     try:
         if input_expression.count('(') != input_expression.count(')'):
             raise Exception
         else:
-            raw_tokens = ['']
             for char in input_expression:
                 if char.isdigit() and raw_tokens[-1].isdigit():
                     raw_tokens[-1] = raw_tokens[-1] + char
@@ -21,15 +21,18 @@ def get_token(input_expression):
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isdigit() and raw_tokens[-1].isalnum():
                     raw_tokens[-1] = raw_tokens[-1] + char
-                elif char == '/' and raw_tokens[-1] == '/':
-                    raw_tokens[-1] = raw_tokens[-1] + char
-                elif char == '=' and raw_tokens[-1] in '<>!=':
-                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char in '+-/*%^=<>!':
+                    if raw_tokens[-1] == '/':
+                        raw_tokens[-1] = raw_tokens[-1] + char
+                    elif raw_tokens[-1] in '<>!=':
+                        raw_tokens[-1] = raw_tokens[-1] + char
+                    else:
+                        raw_tokens[-1] = raw_tokens[-1] + char
                 else:
                     raw_tokens.append(char)
     except:
         print('ERROR: Something went wrong')
-    return raw_tokens[1:]
+    return raw_tokens
 
 
 def separate_function(raw_tokens):
