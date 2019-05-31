@@ -6,7 +6,7 @@ CONSTANTS = {'pi': math.pi, 'tau': math.tau, 'e': math.e, 'inf': math.inf, 'nan'
 
 RIGHT_ASSOCIATIVITY_OPERATORS = {'^': 4, 'neg': 5, 'pos': 5}
 
-LEFT_ASSOCIATIVITY_OPERATORS = {'<': 1, '<=': 1, '==': 1, '!=': 1, '>=': 2, '>': 1,
+LEFT_ASSOCIATIVITY_OPERATORS = {'<': 0, '<=': 0, '==': 0, '!=': 0, '>=': 0, '>': 0,
                                  '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3}
 
 OPERATORS_PRIORITY = {**RIGHT_ASSOCIATIVITY_OPERATORS, ** LEFT_ASSOCIATIVITY_OPERATORS}
