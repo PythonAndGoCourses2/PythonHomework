@@ -32,12 +32,9 @@ def create_polish_notation(parsed_formula):
         elif token in constants.FUNCTIONS:
             stack_function.append(token)
             keeper_operation_counter.append(operation_counter)
-            print(keeper_operation_counter)
         elif token == '[':
             continue
         elif token == ']':
-            print(operation_counter)
-            print(stack_operation)
             for i in range(keeper_operation_counter[-1]-keeper_operation_counter[-2]):
                 polish_notation.append(stack_operation.pop())
                 operation_counter -= 1
