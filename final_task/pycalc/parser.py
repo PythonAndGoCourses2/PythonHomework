@@ -75,11 +75,11 @@ def create_infix(tokens):
         elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '('):
             infix.append('pos')
         elif token.isnumeric():
-            try:
-                if infix[-1].isnumeric():
-                    raise Exception
-            except:
-                print('ERROR: Something went wrong')
+            #try:
+                #if infix[-1].isnumeric():
+                    #raise Exception
+            #except:
+                #print('ERROR: Something went wrong')
             infix.append(float(token))
         else:
             infix.append(token)
