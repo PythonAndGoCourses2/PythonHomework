@@ -3,30 +3,32 @@ import sys
 
 def get_token(input_expression):
     """Getting a tokens from input string"""
-    if input_expression.count('(') != input_expression.count(')'):
-        print('ERROR: the number of opening and closing brackets must match')
-        sys.exit(1)
-    else:
-        raw_tokens = ['']
-        for char in input_expression:
-            if char.isdigit() and raw_tokens[-1].isdigit():
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char == '.' and raw_tokens[-1].isdigit():
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char.isdigit() and '.' in raw_tokens[-1]:
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char.isalpha() and raw_tokens[-1].isalnum():
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char.isdigit() and raw_tokens[-1].isalpha():
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char.isdigit() and raw_tokens[-1].isalnum():
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char == '/' and raw_tokens[-1] == '/':
-                raw_tokens[-1] = raw_tokens[-1] + char
-            elif char == '=' and raw_tokens[-1] in '<>!=':
-                raw_tokens[-1] = raw_tokens[-1] + char
-            else:
-                raw_tokens.append(char)
+    try:
+        if input_expression.count('(') != input_expression.count(')'):
+            raise Exception
+        else:
+            raw_tokens = ['']
+            for char in input_expression:
+                if char.isdigit() and raw_tokens[-1].isdigit():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char == '.' and raw_tokens[-1].isdigit():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and '.' in raw_tokens[-1]:
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isalpha() and raw_tokens[-1].isalnum():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and raw_tokens[-1].isalpha():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and raw_tokens[-1].isalnum():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char == '/' and raw_tokens[-1] == '/':
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char == '=' and raw_tokens[-1] in '<>!=':
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                else:
+                    raw_tokens.append(char)
+    except:
+        print('ERROR: Something went wrong')
     return raw_tokens[1:]
 
 
