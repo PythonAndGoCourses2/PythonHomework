@@ -60,11 +60,6 @@ def separate_function(raw_tokens):
 def create_infix(tokens):
     """Adding unary operations, constants and converting strings to numbers"""
     infix = ['']
-    try:
-        if tokens[0] in constants.OPERATORS and (tokens[0] != '-' or tokens[0] != '+'):
-            raise Exception
-    except:
-        print('ERROR: Something went wrong')
     while tokens:
         token = tokens[0]
         tokens = tokens[1:]
@@ -75,11 +70,6 @@ def create_infix(tokens):
         elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '('):
             infix.append('pos')
         elif token.isnumeric():
-            #try:
-                #if infix[-1].isnumeric():
-                    #raise Exception
-            #except:
-                #print('ERROR: Something went wrong')
             infix.append(float(token))
         else:
             infix.append(token)
