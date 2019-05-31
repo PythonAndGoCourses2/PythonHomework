@@ -5,17 +5,17 @@ from numbers import Number
 
 
 class ComplexCalc(easyCalculation.Calculator):
-
-    const = {
-        **{attr: getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), Number)},
-        **{"True": 1, "False": 0}
-    }
-    math_functions = {
-        **{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
-        **{"abs": lambda a: abs(a),
-           "round": lambda a: round(a),
-           "pow": lambda a, b: pow(a, b)}
-    }
+    def __init__(self):
+        ComplexCalc.const = {
+            **{attr: getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), Number)},
+            **{"True": 1, "False": 0}
+        }
+        ComplexCalc.math_functions = {
+            **{attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))},
+            **{"abs": lambda a: abs(a),
+               "round": lambda a: round(a),
+               "pow": lambda a, b: pow(a, b)}
+        }
 
     def expression_search(self, expr):
 
