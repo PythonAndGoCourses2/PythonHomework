@@ -64,7 +64,7 @@ def separate_function(raw_tokens):
 
 def create_infix(tokens):
     """Adding unary operations, constants and converting strings to numbers"""
-    infix = []
+    infix = ['']
     while tokens:
         token = tokens[0]
         tokens = tokens[1:]
@@ -78,7 +78,7 @@ def create_infix(tokens):
             infix.append(float(token))
         else:
             infix.append(token)
-    return infix
+    return infix[1:]
 
 
 def parse_input_expression(input_string):

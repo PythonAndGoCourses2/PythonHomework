@@ -20,7 +20,7 @@ def main():
             tokens_in_polish = create_polish_notation(tokens_in_infix)
             print(calculate(tokens_in_polish))
         else:
-            raise Exception('ERROR: Something went wrong')
+            raise Exception
     except:
         print('ERROR: Something went wrong')
 
