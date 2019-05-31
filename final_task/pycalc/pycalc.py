@@ -1,7 +1,7 @@
 import argparse
-from . import parse_input_expression
-from . import create_polish_notation
-from . import calculate
+from .parser import parse_input_expression
+from .sorter import create_polish_notation
+from .calculation import calculate
 
 
 def create_parser():
