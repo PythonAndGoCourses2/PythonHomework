@@ -74,10 +74,12 @@ def create_infix(tokens):
             infix.append('neg')
         elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '('):
             infix.append('pos')
-        elif token.isnumeric():
-            infix.append(float(token))
-        else:
+        elif token.isalpha() or token in '()[]':
             infix.append(token)
+        elif token.startswith('.'):
+            infix.append(float('0' + token))
+        else:
+            infix.append(float(token))
     return infix[1:]
 
 
