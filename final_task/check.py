@@ -1,15 +1,8 @@
 """This module checks the correctness of the entered expression."""
 
 import re
-import operator
 import core
-
-COMPARISON_OPERATORS = {'>=': operator.ge,
-                        '<=': operator.le,
-                        '!=': operator.ne,
-                        '==': operator.eq,
-                        '>': operator.gt,
-                        '<': operator.lt}
+from constants import *
 
 
 def brackets_check(expr):
@@ -79,13 +72,21 @@ def replace_plus_minus(expr):
 
 def replace_whitespace_and_const(expr):
     expr = expr.replace(" ", "")
-    for constant in core.MATH_CONST.keys():
-        expr = expr.replace(constant, str(core.MATH_CONST[constant]))
+    for constant in MATH_CONST.keys():
+        expr = expr.replace(constant, str(MATH_CONST[constant]))
     return expr
 
 
-def correct_check(expr):
-    for operation in core.OPERATORS:  # Если последний символ строки операция
+def common_check(expr):
+    regexp = re.compile(r"(?P<function>[-a-zA-Z]+)")
+    search_function = regexp.finditer(expr)
+    for item in search_function:
+        func = item.group("function")
+        if func not in MATH_FUNC and func not in MATH_CONST:
+            print("Unknowm function '{}'".format(func))
+            return False
+
+    for operation in OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
             return False
     expr_list = expr.split()

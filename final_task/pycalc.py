@@ -12,10 +12,10 @@ def create_parser():
 
 
 def main():
-    try:  # WIP(Обрабатывает не все типы исключений)
+    try:
         expression = create_parser().expr
-        comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
-        expression = check.correct_check(expression)  # Если всё нормально - возвращает строку
+        comparison = check.comparison_check(expression)
+        expression = check.common_check(expression)
         expression = check.replace_whitespace_and_const(expression)
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)

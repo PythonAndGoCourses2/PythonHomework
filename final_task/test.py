@@ -61,22 +61,23 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.replace_whitespace_and_const("2+inf-nan"), "2+{0}-{1}".format(inf, nan))
         # complete
 
-    def test_correct_check(self):
-        self.assertEqual(check.correct_check("1 + 2 ^  3"), "1 + 2 ^  3")
-        self.assertEqual(check.correct_check("5//2"), "5//2")
-        self.assertEqual(check.correct_check("1/2*3^4%5"), "1/2*3^4%5")
-        self.assertFalse(check.correct_check("1+2*3+"))
-        self.assertFalse(check.correct_check("1+2*3-"))
-        self.assertFalse(check.correct_check("1+2*3*"))
-        self.assertFalse(check.correct_check("1+2*3/"))
-        self.assertFalse(check.correct_check("1+2*3//"))
-        self.assertFalse(check.correct_check("1+2*3%"))
-        self.assertFalse(check.correct_check("1+2*3^"))
-        self.assertFalse(check.correct_check("1 2 "))
-        self.assertFalse(check.correct_check("1 ^ ^ 5"))
-        self.assertFalse(check.correct_check("1 * * 6"))
-        self.assertFalse(check.correct_check("1 / / 7"))
-        self.assertFalse(check.correct_check("1 % % 8"))
+    def test_common_check(self):
+        self.assertFalse(check.common_check("2+logarithm(4)"))
+        self.assertEqual(check.common_check("1 + 2 ^  3"), "1 + 2 ^  3")
+        self.assertEqual(check.common_check("5//2"), "5//2")
+        self.assertEqual(check.common_check("1/2*3^4%5"), "1/2*3^4%5")
+        self.assertFalse(check.common_check("1+2*3+"))
+        self.assertFalse(check.common_check("1+2*3-"))
+        self.assertFalse(check.common_check("1+2*3*"))
+        self.assertFalse(check.common_check("1+2*3/"))
+        self.assertFalse(check.common_check("1+2*3//"))
+        self.assertFalse(check.common_check("1+2*3%"))
+        self.assertFalse(check.common_check("1+2*3^"))
+        self.assertFalse(check.common_check("1 2 "))
+        self.assertFalse(check.common_check("1 ^ ^ 5"))
+        self.assertFalse(check.common_check("1 * * 6"))
+        self.assertFalse(check.common_check("1 / / 7"))
+        self.assertFalse(check.common_check("1 % % 8"))
         # complete
 
 

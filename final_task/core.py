@@ -1,21 +1,4 @@
-import operator
-import math
-
-OPERATORS = {'+': (1, operator.add),
-             '-': (1, operator.sub),
-             '*': (2, operator.mul),
-             '/': (2, operator.truediv),
-             '//': (2, operator.floordiv),
-             '%': (2, operator.mod),
-             '^': (3, operator.pow)}
-MATH_FUNC, MATH_CONST = {}, {}
-MATH_FUNC["abs"], MATH_FUNC["round"] = abs, round
-for attr in dir(math):
-    if type(getattr(math, attr)) != float:
-        if callable(getattr(math, attr)):
-            MATH_FUNC[attr] = getattr(math, attr)
-    else:
-        MATH_CONST[attr] = getattr(math, attr)
+from constants import *
 
 
 def parse(expression):
@@ -28,7 +11,7 @@ def parse(expression):
         symbol = expression[i]
         if symbol.isalpha():
             func += symbol
-        elif func in MATH_FUNC:  # Если является мат. функцией
+        elif func in MATH_FUNC:
             while expression[i] != '(':  # Для таких функций как log10,log2 и т.д.
                 func += expression[i]
                 i += 1
