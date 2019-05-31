@@ -61,7 +61,7 @@ def create_infix(tokens):
     """Adding unary operations, constants and converting strings to numbers"""
     infix = ['']
     try:
-        if tokens[0] in constants.OPERATORS and (tokens[0] == '-' or tokens[0] == '+'):
+        if tokens[0] in constants.OPERATORS and (tokens[0] != '-' or tokens[0] != '+'):
             raise Exception
     except:
         print('ERROR: Something went wrong')
