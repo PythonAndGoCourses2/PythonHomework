@@ -12,7 +12,7 @@ def create_parser():
 
 
 def main():
-  #  try:  # WIP(Обрабатывает не все типы исключений)
+    try:  # WIP(Обрабатывает не все типы исключений)
         expression = create_parser().expr
         comparison = check.comparison_check(expression)  # Определяем подаётся ли# строка на сравнение
         expression = check.correct_check(expression)  # Если всё нормально - возвращает строку
@@ -27,12 +27,12 @@ def main():
                 print(check.comparison_calc(expression, comparison))
         else:
             print("ERROR: no symbols to calculate")
-    # except OverflowError:
-    #     print("ERROR: numerical result out of range")
-    # except ZeroDivisionError:
-    #     print("ERROR: division by zero")
-    # except Exception:
-    #     print("ERROR: incorrect expression")
+    except OverflowError:
+        print("ERROR: numerical result out of range")
+    except ZeroDivisionError:
+        print("ERROR: division by zero")
+    except Exception:
+        print("ERROR: incorrect expression")
 
 
 if __name__ == '__main__':
