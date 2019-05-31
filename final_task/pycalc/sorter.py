@@ -1,4 +1,4 @@
-import constants
+from . import constants
 
 
 def create_polish_notation(parsed_formula):

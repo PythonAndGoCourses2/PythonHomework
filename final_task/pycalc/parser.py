@@ -1,4 +1,4 @@
-import constants
+from . import constants
 import sys
 
 def get_token(input_expression):
