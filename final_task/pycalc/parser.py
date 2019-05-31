@@ -27,9 +27,11 @@ def get_token(input_expression):
                     elif raw_tokens[-1] in '<>!=':
                         raw_tokens[-1] = raw_tokens[-1] + char
                     else:
-                        raw_tokens[-1] = raw_tokens[-1] + char
+                        raw_tokens.append(char)
                 else:
                     raw_tokens.append(char)
+        if '' in raw_tokens:
+            raw_tokens = raw_tokens[1:]
     except:
         print('ERROR: Something went wrong')
     return raw_tokens
