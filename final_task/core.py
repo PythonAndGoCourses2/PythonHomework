@@ -83,11 +83,7 @@ def parse(expression):
             number = ''
 
         if symbol in OPERATORS:
-            if not op or symbol == '/':
-                op += symbol
-            else:
-                number += symbol
-                func += symbol
+            op += symbol
         elif op:
             parsed_formula.append(op)
             op = ''
@@ -97,8 +93,6 @@ def parse(expression):
         i += 1
     if number:
         parsed_formula.append(float(number))
-    elif func in MATH_CONST:
-        parsed_formula.append(MATH_CONST[func])
     return parsed_formula
 
 

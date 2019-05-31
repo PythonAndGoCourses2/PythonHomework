@@ -43,10 +43,20 @@ def comparison_calc(expr, item):
 
 
 def fix_unary(expr):
-    """Replace unary operations"""
-    if expr.startswith("-"):
-        expr = "0" + expr
-    elif expr.startswith("+"):
+    """Replace unary operations.For example:
+    -1+2 -> 0-1+2
+    1*-2 -> 1*(0-2)
+    1*(-2) -> 1*(0-2)
+    """
+    regexp = re.compile(r"(?P<op>(\*|\/|\^))"
+                        r"(?P<operation>(\+|-))"
+                        r"(?P<digits>([\d\.]+))"
+                        )
+    search_result = regexp.finditer(expr)
+    for item in search_result:
+        temp = item.group("operation") + item.group("digits")
+        expr = re.sub(temp, "(0" + temp + ")", expr)
+    if expr.startswith("-") or expr.startswith("+"):
         expr = "0" + expr
     expr = re.sub(r'\(\-', '(0-', expr)
     expr = re.sub(r'\(\+', '(0+', expr)
