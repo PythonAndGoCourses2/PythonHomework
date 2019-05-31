@@ -1,5 +1,5 @@
 from . import constants
-import sys
+
 
 def get_token(input_expression):
     """Getting a tokens from input string"""
@@ -65,9 +65,9 @@ def create_infix(tokens):
         tokens = tokens[1:]
         if token in constants.CONSTANTS:
             infix.append(constants.CONSTANTS[token])
-        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS):
+        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '('):
             infix.append('neg')
-        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS):
+        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '('):
             infix.append('pos')
         elif token.isnumeric():
             infix.append(float(token))

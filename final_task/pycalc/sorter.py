@@ -6,12 +6,15 @@ def create_polish_notation(parsed_formula):
     stack_function = []
     polish_notation = []
 
-    for token in parsed_formula:
-        if type(token) is float:
-            polish_notation.append(token)
-        elif token in constants.OPERATION_PRIORITY:
-            while stack_operation and stack_operation[-1] != '(' \
-                    and constants.OPERATION_PRIORITY[token] <= constants.OPERATION_PRIORITY[stack_operation[-1]]:
+    while parsed_formula:
+        token = parsed_formula[0]
+        parsed_formula = parsed_formula[1:]
+        if token in constants.OPERATORS:
+            while stack_operation and stack_operation[-1] != '(' and \
+                    ((token in constants.LEFT_ASSOCIATIVITY_OPERATORS and constants.OPERATORS_PRIORITY[token] <=
+                        constants.OPERATORS_PRIORITY[stack_operation[-1]]) or
+                        (token in constants.RIGHT_ASSOCIATIVITY_OPERATORS and constants.OPERATORS_PRIORITY[token] <
+                            constants.OPERATORS_PRIORITY[stack_operation[-1]])):
                 polish_notation.append(stack_operation.pop())
             stack_operation.append(token)
         elif token == ')':
