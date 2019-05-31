@@ -78,6 +78,8 @@ def create_infix(tokens):
             infix.append(token)
         elif token.startswith('.'):
             infix.append(float('0' + token))
+        elif token in constants.OPERATORS:
+            infix.append(token)
         else:
             infix.append(float(token))
     return infix[1:]
