@@ -9,7 +9,9 @@ RIGHT_ASSOCIATIVITY_OPERATORS = {'^': 4, 'neg': 5, 'pos': 5}
 LEFT_ASSOCIATIVITY_OPERATORS = {'<': 0, '<=': 0, '==': 0, '!=': 0, '>=': 0, '>': 0,
                                  '+': 2, '-': 2, '*': 3, '/': 3, '//': 3, '%': 3}
 
-OPERATORS_PRIORITY = {**RIGHT_ASSOCIATIVITY_OPERATORS, ** LEFT_ASSOCIATIVITY_OPERATORS}
+FUNCTIONS_PRIORITY = {x: 6 for x in dir(math)}
+
+PRIORITY = {**RIGHT_ASSOCIATIVITY_OPERATORS, ** LEFT_ASSOCIATIVITY_OPERATORS, **FUNCTIONS_PRIORITY}
 
 
 OPERATORS = {'<': operator.lt, '<=': operator.le, '==': operator.eq, '!=': operator.ne, '>=': operator.ge,
