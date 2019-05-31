@@ -76,7 +76,7 @@ def create_infix(tokens):
             infix.append('pos')
         elif token.isnumeric():
             try:
-                if tokens[0].isnumeric():
+                if infix[0].isnumeric():
                     raise Exception
             except:
                 print('ERROR: Something went wrong')
