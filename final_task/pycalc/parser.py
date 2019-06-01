@@ -62,9 +62,7 @@ def separate_function(raw_tokens):
 def create_infix_expression(tokens):
     """Adding unary operations and converting strings to numbers"""
     infix_expression = ['']
-    while tokens:
-        token = tokens[0]
-        tokens = tokens[1:]
+    for token in tokens:
         if token in constants.CONSTANTS:
             infix_expression.append(token)
         elif token == '-' and (infix_expression[-1] == '' or infix_expression[-1] in constants.OPERATORS or

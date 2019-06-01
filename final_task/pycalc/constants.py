@@ -17,6 +17,6 @@ OPERATORS = {'<': operator.lt, '<=': operator.le, '==': operator.eq, '!=': opera
              '//': operator.floordiv, '%': operator.mod, '^': operator.pow, 'neg': operator.neg,
              'pos': operator.pos}
 
-FUNCTIONS = math.__dict__
+FUNCTIONS = dict([(attr, getattr(math, attr)) for attr in dir(math) if callable(getattr(math, attr))])
 FUNCTIONS['abs'] = abs
 FUNCTIONS['round'] = round
