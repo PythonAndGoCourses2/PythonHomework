@@ -7,7 +7,6 @@ def get_result(polish_notation):
         if token == 'neg' or token == 'pos':
             x = stack.pop()
             stack.append(constants.OPERATORS[token](x))
-            print(stack)
         elif token in constants.OPERATORS:
             y, x = stack.pop(), stack.pop()
             stack.append(constants.OPERATORS[token](x, y))
