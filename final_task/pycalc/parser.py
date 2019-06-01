@@ -9,15 +9,14 @@ def get_token(input_string):
             raise Exception
         else:
             for char in input_string:
-                if char.isdigit():
-                    if raw_tokens[-1].isdigit():
-                        raw_tokens[-1] = raw_tokens[-1] + char
-                    elif '.' in raw_tokens[-1]:
-                        raw_tokens[-1] = raw_tokens[-1] + char
-                    elif raw_tokens[-1].isalpha():
-                        raw_tokens[-1] = raw_tokens[-1] + char
-                    elif raw_tokens[-1].isalnum():
-                        raw_tokens[-1] = raw_tokens[-1] + char
+                if char.isdigit() and raw_tokens[-1].isdigit():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and '.' in raw_tokens[-1]:
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and raw_tokens[-1].isalpha():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isdigit() and raw_tokens[-1].isalnum():
+                    raw_tokens[-1] = raw_tokens[-1] + char
                 elif char == '.' and raw_tokens[-1].isdigit():
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isalpha() and raw_tokens[-1].isalnum():
