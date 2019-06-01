@@ -44,15 +44,15 @@ class PyCalcProcessing(object):
         """
         # проверка, что формула не пустая строка
         if not isinstance(formula_string, str) or not formula_string:
-            raise ValueError('Formula should be not empty string!')
+            print('Formula should be not empty string!')
         # проверяем, что в формуле нет более одного разделителя подряд
         # в текущей реализации удобнее сделать это здесь, чтобы упростить дальнейший парсинг на токены
         if '..' in formula_string:
-            raise ValueError('Number can not contain more than one delimiter "." !')
+            print('Number can not contain more than one delimiter "." !')
         # проверка на разрешённые элементы
         for el in formula_string.strip():
             if el not in ALLOWED_TOKENS:
-                raise ValueError('Formula contains incorrect symbol "{}"'.format(el))
+                print('Formula contains incorrect symbol "{}"'.format(el))
 
     @staticmethod
     def parse(formula_string):
@@ -129,9 +129,9 @@ class PyCalcProcessing(object):
 
     def validate_parsed_list(self, parsed_list):
         if parsed_list[-1] in OPERATORS:
-            raise ValueError('Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
+            print('Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
         if parsed_list[0] in BINARY_OPERATORS:
-            raise ValueError('Formula can not start with binary operator "{}"'.format(parsed_list[0]))
+            print('Formula can not start with binary operator "{}"'.format(parsed_list[0]))
 
         counter = 0  # counter for parentheses
 
@@ -142,44 +142,44 @@ class PyCalcProcessing(object):
             message = 'After {} element {} is forbidden!'.format(str(previous_el), str(el))
 
             if el == '.':
-                raise ValueError('Single delimiter is prohibited in formula!')
+                print('Single delimiter is prohibited in formula!')
 
             if isinstance(el, str) and el[0] in LETTERS:
                 if el.lower() not in ALL_FUNCTIONS_AND_CONSTS:
-                    raise ValueError('Function or constant {} is not supported by calculator'.format(el))
+                    print('Function or constant {} is not supported by calculator'.format(el))
 
             if previous_el == '(':
                 if el in ((')', ',',) + tuple(BINARY_OPERATORS.keys())):
-                    raise ValueError(message)
+                    print(message)
 
             if previous_el == ')':
                 if el in (('(',) + ALL_FUNCTIONS_AND_CONSTS) or isinstance(el, float):
-                    raise ValueError(message)
+                    print(message)
 
             if previous_el == ',':
                 if el in (')', ',', '.'):
-                    raise ValueError(message)
+                    print(message)
 
             if previous_el in UNARY_OPERATORS:
                 if el in ((')', ',',) + tuple(BINARY_OPERATORS.keys())):
-                    raise ValueError(message)
+                    print(message)
 
             if previous_el in BINARY_OPERATORS:
                 if el in ((')', ',',) + tuple(BINARY_OPERATORS.keys())):
-                    raise ValueError(message)
+                    print(message)
 
             if previous_el in ALL_FUNCTIONS:
                 if el != '(':
-                    raise ValueError(message)
+                    print(message)
 
             if isinstance(previous_el, float) or previous_el in MATH_CONSTS:
                 if el in (('(',) + ALL_FUNCTIONS_AND_CONSTS) or isinstance(el, float):
-                    raise ValueError(message)
+                    print(message)
 
             previous_el = el
 
         if counter != 0:
-            raise ValueError('Wrong number of opened or closed parentheses in formula!')
+            print('Wrong number of opened or closed parentheses in formula!')
 
         return 'Formula was validated! Errors were not found.'
 
@@ -258,12 +258,18 @@ class PyCalcProcessing(object):
         while stack:
             yield stack.pop()
 
-    # TODO gcd only integer input
-    # TODO ldexp float + integer input
-    # TODO 1 arg, 2 args, 4 args - seems is working
     @staticmethod
-    def calc(polish_list):
+    def _get_num_args(func):
+        if inspect.isfunction(func):
+            return len(inspect.getfullargspec(func).args)
+        else:
+            spec = func.__doc__.split('\n')[0]
+            args = spec[spec.find('(') + 1:spec.find(')')]
+        return args.count(',') + 1 if args else 0
+
+    def calc(self, polish_list):
         stack = []
+        function_result = None
 
         for token in polish_list:
             if token in MATH_FUNCTIONS:
@@ -272,7 +278,7 @@ class PyCalcProcessing(object):
 
                 #  TODO пока костыль с log
                 if func_name != math.log:
-                    number_of_args = len(inspect.getfullargspec(func_name).args)
+                    number_of_args = self._get_num_args(func_name)
                     for i in range(number_of_args):
                         if stack:
                             arguments.insert(0, stack.pop())
@@ -296,7 +302,7 @@ class PyCalcProcessing(object):
                 try:
                     function_result = func_name(*tuple(arguments))
                 except TypeError:
-                    raise ValueError('Formula contains incorrect number of arguments in function.')
+                    print('Formula contains incorrect number of arguments in function.')
 
                 stack.append(function_result)  # вычисляем оператор, возвращаем в стек
                 arguments = []
@@ -317,7 +323,7 @@ class PyCalcProcessing(object):
                 stack.append(token)
 
         if len(stack) > 1:
-            raise ValueError('Formula contains incorrect number of arguments in function.')
+            print('Formula contains incorrect number of arguments in function.')
 
         return stack[0]  # результат вычисления - единственный элемент в стеке
 
