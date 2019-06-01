@@ -1,25 +1,25 @@
 from . import constants
 
 
-def get_token(input_expression):
-    """Getting a tokens from input string"""
+def get_token(input_string):
+    """Getting a raw tokens from input string"""
     raw_tokens = ['']
     try:
-        if input_expression.count('(') != input_expression.count(')'):
+        if input_string.count('(') != input_string.count(')'):
             raise Exception
         else:
-            for char in input_expression:
+            for char in input_string:
                 if char.isdigit() and raw_tokens[-1].isdigit():
                     raw_tokens[-1] = raw_tokens[-1] + char
-                elif char == '.' and raw_tokens[-1].isdigit():
-                    raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isdigit() and '.' in raw_tokens[-1]:
-                    raw_tokens[-1] = raw_tokens[-1] + char
-                elif char.isalpha() and raw_tokens[-1].isalnum():
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isdigit() and raw_tokens[-1].isalpha():
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isdigit() and raw_tokens[-1].isalnum():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char == '.' and raw_tokens[-1].isdigit():
+                    raw_tokens[-1] = raw_tokens[-1] + char
+                elif char.isalpha() and raw_tokens[-1].isalnum():
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char in '+-/*%^=<>!':
                     if raw_tokens[-1] == '/':
@@ -41,9 +41,7 @@ def separate_function(raw_tokens):
     """Selecting function arguments"""
     tokens = ['']
     stack = []  # To define a closing bracket or end of function
-    while raw_tokens:
-        token = raw_tokens[0]
-        raw_tokens = raw_tokens[1:]
+    for token in raw_tokens:
         if token == '(':
             if tokens[-1].isalnum():  # Selection start of function
                 tokens.append('[')
