@@ -19,6 +19,7 @@ class Library:
         'e': math.e,
         'tau': math.tau
     }
+    user_constants = dict()
 
     Operator = namedtuple("Operator", ("priority", "function"))
     UNARY_MINUS = '~'
@@ -60,6 +61,11 @@ class Library:
     CLOSE_BRACKET = ')'
 
     def read_user_module(self, module_name):
+        """'Read' user module: make functions and constants"""
         module = importlib.import_module(module_name)
-        functions = [getattr(module, attr) for attr in dir(module) if callable(getattr(module, attr))]
+        functions = [getattr(module, attr)
+                     for attr in dir(module) if callable(getattr(module, attr))]
+        constants = {k: v for (k, v) in module.__dict__.items() if not k.startswith('_')
+                     and not callable(getattr(module, k))}
         Library.user_functions = {**make_functions(functions)}
+        Library.user_constants = constants

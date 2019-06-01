@@ -13,6 +13,8 @@ def get_postfix(infix_notation: list) -> list:
     for token in infix_notation:
         if is_number(token):
             output_string.append(float(token))
+        elif token in lib.user_constants:
+            output_string.append(lib.user_constants[token])
         elif token in lib.CONSTANTS:
             output_string.append(lib.CONSTANTS[token])
         elif token in (*lib.FUNCTIONS, *lib.user_functions):
