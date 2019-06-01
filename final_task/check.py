@@ -78,13 +78,13 @@ def replace_whitespace_and_const(expr):
 
 
 def common_check(expr):
-    regexp = re.compile(r"(?P<function>[-a-zA-Z]+)")
-    search_function = regexp.finditer(expr)
-    for item in search_function:
-        func = item.group("function")
-        if func not in MATH_FUNC and func not in MATH_CONST:
-            print("Unknowm function '{}'".format(func))
-            return False
+    # regexp = re.compile(r"(?P<function>[-a-zA-Z]+)")
+    # search_function = regexp.finditer(expr)
+    # for item in search_function:
+    #     func = item.group("function")
+    #     if func not in MATH_FUNC and func not in MATH_CONST:
+    #         print("Unknowm function '{}'".format(func))
+    #         return False
     for operation in OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
             return False

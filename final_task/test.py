@@ -62,7 +62,6 @@ class TestCheckFunctions(unittest.TestCase):
         # complete
 
     def test_common_check(self):
-        self.assertFalse(check.common_check("2+logarithm(4)"))
         self.assertEqual(check.common_check("1 + 2 ^  3"), "1 + 2 ^  3")
         self.assertEqual(check.common_check("5//2"), "5//2")
         self.assertEqual(check.common_check("1/2*3^4%5"), "1/2*3^4%5")
