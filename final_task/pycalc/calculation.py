@@ -27,7 +27,7 @@ def get_result(polish_notation):
                     raise Exception
                 else:
                     arg1 = stack.pop()
-            except:
+            except Exception:
                 print('ERROR: Something went wrong')
                 break
         else:
@@ -37,5 +37,5 @@ def get_result(polish_notation):
             raise Exception
         else:
             return stack[0]
-    except:
+    except Exception:
         print('ERROR: Something went wrong')

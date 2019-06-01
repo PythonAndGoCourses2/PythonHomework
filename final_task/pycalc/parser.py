@@ -32,7 +32,7 @@ def get_token(input_expression):
                     raw_tokens.append(char)
         if '' in raw_tokens:
             raw_tokens = raw_tokens[1:]
-    except:
+    except Exception:
         print('ERROR: Something went wrong')
     return raw_tokens
 

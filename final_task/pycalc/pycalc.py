@@ -21,7 +21,7 @@ def main():
             print(get_result(tokens_in_polish))
         else:
             raise Exception
-    except:
+    except Exception:
         print('ERROR: Something went wrong')
 
 
