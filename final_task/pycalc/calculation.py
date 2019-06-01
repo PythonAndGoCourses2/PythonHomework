@@ -24,5 +24,4 @@ def get_result(polish_notation):
             arg1 = stack.pop()
         else:
             stack.append(token)
-        print(stack)
     return stack[0]
