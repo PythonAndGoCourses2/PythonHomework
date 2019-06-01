@@ -1,5 +1,5 @@
 """Module contains functions to translate infix notation into postfix"""
-from pycalc import library as lib
+from pycalc.library import Library as lib
 from pycalc import exeptions
 
 
