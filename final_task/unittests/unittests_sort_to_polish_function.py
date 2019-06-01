@@ -221,7 +221,7 @@ class TestSorting(unittest.TestCase):
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 1.0, '*', 4.0, '+', 2.0, '^', 2.0, '+', 1.0, ',', 3.0, '^', 2.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [1.0, 4.0, '*', 2.0, 2.0, '^', '+', 1.0, '+', ',', 3.0, 2.0, '^', 'log'])
+        self.assertEqual(list_, [1.0, 4.0, '*', 2.0, 2.0, '^', '+', 1.0, '+', 3.0, 2.0, '^', 'log'])
 
     # TODO: problem, when unary operations go after binary without parentheses as -5/ -0.1
     def test35(self):  # 10*e^0*log10(.4 -5/ -0.1-10)+abs(-53/10)-5
@@ -257,7 +257,7 @@ class TestSorting(unittest.TestCase):
                                   '(', 23.0, ')', ',', 45.0, ')', '+', 'cos', '(', 3.0, '+', 'log10',
                                   '(', 'e', '^', '-', 'e', ')', ')', ')']):
             list_.append(el)
-        self.assertEqual(list_, ['e', 'e', 'e', 23.0, 'sin', '^', '^', ',', 45.0, 'log', '^', 3.0, 'e', 0.0,
+        self.assertEqual(list_, ['e', 'e', 'e', 23.0, 'sin', '^', '^', 45.0, 'log', '^', 3.0, 'e', 0.0,
                                  'e', '-', '^', 'log10', '+', 'cos', '+', 'sin'])
 
     # Self-made cases
@@ -314,7 +314,7 @@ class TestSorting(unittest.TestCase):
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 8.0, ',', 2.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [8.0, ',', 2.0, 'log'])
+        self.assertEqual(list_, [8.0, 2.0, 'log'])
 
     def test62(self):
         list_ = []
@@ -326,39 +326,39 @@ class TestSorting(unittest.TestCase):
         list_ = []
         for el in calc_obj.sort_to_polish(['(', 'log', '(', 8.0, ',', 2.0, ')', '-', 1.0, ')', '-', 2.0]):
             list_.append(el)
-        self.assertEqual(list_, [8.0, ',', 2.0, 'log', 1.0, '-', 2.0, '-'])
+        self.assertEqual(list_, [8.0, 2.0, 'log', 1.0, '-', 2.0, '-'])
 
     def test64(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['-', 'log', '(', 8.0, ',', 2.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [0.0, 8.0, ',', 2.0, 'log', '-'])
+        self.assertEqual(list_, [0.0, 8.0, 2.0, 'log', '-'])
 
     def test65(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 8.0, ',', 2.0, ')', '-', 1.0]):
             list_.append(el)
-        self.assertEqual(list_, [8.0, ',', 2.0, 'log', 1.0, '-'])
+        self.assertEqual(list_, [8.0, 2.0, 'log', 1.0, '-'])
 
     def test66(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 8.0, ',', 2.0, ')', '*', 'log', '(', 16.0, ',', 2.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [8.0, ',', 2.0, 'log', 16.0, ',', 2.0, 'log', '*'])
+        self.assertEqual(list_, [8.0, 2.0, 'log', 16.0, 2.0, 'log', '*'])
 
     def test67(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['sin', '(', 'log', '(', 8.0, ',', 2.0, ')', '*',
                                   'log', '(', 16.0, ',', 2.0, ')', ')']):
             list_.append(el)
-        self.assertEqual(list_, [8.0, ',', 2.0, 'log', 16.0, ',', 2.0, 'log', '*', 'sin'])
+        self.assertEqual(list_, [8.0, 2.0, 'log', 16.0, 2.0, 'log', '*', 'sin'])
 
     # TODO: fixed
     def test68(self):  # log(8+20-1,2+1)
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 8.0, '+', 20.0, '-', 1.0, ',', 2.0, '+', 1.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [8.0, 20.0, '+', 1.0, '-', ',', 2.0,  1.0, '+', 'log'])
+        self.assertEqual(list_, [8.0, 20.0, '+', 1.0, '-', 2.0,  1.0, '+', 'log'])
 
     def test69(self):
         list_ = []
@@ -370,7 +370,7 @@ class TestSorting(unittest.TestCase):
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 100.0, ',', 10.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [100.0, ',', 10.0, 'log'])
+        self.assertEqual(list_, [100.0, 10.0, 'log'])
 
     def test71(self):
         list_ = []
@@ -413,44 +413,44 @@ class TestSorting(unittest.TestCase):
         list_ = []
         for el in calc_obj.sort_to_polish(['pow', '(', 2.0, ',', 4.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [2.0, ',', 4.0, 'pow'])
+        self.assertEqual(list_, [2.0, 4.0, 'pow'])
 
     # TODO: process log correctly (if we put here first argument of log in (), everything will be done correctly)
     def test78(self):  # log(pow(10,2),10)
         list_ = []
         for el in calc_obj.sort_to_polish(['log', '(', 'pow', '(', 10.0, ',', 2.0, ')', ',', 10.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [10.0, ',', 2.0, 'pow', ',', 10.0, 'log'])
+        self.assertEqual(list_, [10.0, 2.0, 'pow', 10.0, 'log'])
 
     def test79(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['(', 'pow', '(', 2.0, ',', 4.0, ')', '-', 1.0, ')', '-', 2.0]):
             list_.append(el)
-        self.assertEqual(list_, [2.0, ',', 4.0, 'pow', 1.0, '-', 2.0, '-'])
+        self.assertEqual(list_, [2.0, 4.0, 'pow', 1.0, '-', 2.0, '-'])
 
     def test80(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['-', 'pow', '(', 2.0, ',', 4.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [0.0, 2.0, ',', 4.0, 'pow', '-'])
+        self.assertEqual(list_, [0.0, 2.0, 4.0, 'pow', '-'])
 
     def test81(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['pow', '(', 2.0, ',', 4.0, ')', '-', 1.0]):
             list_.append(el)
-        self.assertEqual(list_, [2.0, ',', 4.0, 'pow', 1.0, '-'])
+        self.assertEqual(list_, [2.0, 4.0, 'pow', 1.0, '-'])
 
     def test82(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['pow', '(', 2.0, ',', 4.0, ')', '*', 'pow', '(', 2.0, ',', 3.0, ')']):
             list_.append(el)
-        self.assertEqual(list_, [2.0, ',', 4.0, 'pow', 2.0, ',', 3.0, 'pow', '*'])
+        self.assertEqual(list_, [2.0, 4.0, 'pow', 2.0, 3.0, 'pow', '*'])
 
     def test83(self):
         list_ = []
         for el in calc_obj.sort_to_polish(['sin', '(', 'pow', '(', 2.0, ',', 4.0, ')', '*', 'pow', '(', 2.0, ',', 3.0, ')', ')']):
             list_.append(el)
-        self.assertEqual(list_, [2.0, ',', 4.0, 'pow', 2.0, ',', 3.0, 'pow', '*', 'sin'])
+        self.assertEqual(list_, [2.0, 4.0, 'pow', 2.0, 3.0, 'pow', '*', 'sin'])
 
     # TODO: process pow correctly (if we put arguments of pow in (), everything will be done correctly)
     def test84(self):  # pow(2.0^(2.0^2.0*2.0^2.0),sin(log10(100)*log10(1000)))
@@ -458,7 +458,7 @@ class TestSorting(unittest.TestCase):
         for el in calc_obj.sort_to_polish(['pow', '(', 2.0, '^', '(', 2.0, '^', 2.0, '*', 2.0, '^', 2.0, ')', ',', 'sin', '(',
                                  'log10', '(', 100.0, ')', '*', 'log10', '(', 1000.0, ')', ')', ')']):
             list_.append(el)
-        self.assertEqual(list_, [2.0, 2.0, 2.0, '^', 2.0, 2.0, '^', '*', '^', ',', 100.0, 'log10', 1000.0, 'log10', '*',
+        self.assertEqual(list_, [2.0, 2.0, 2.0, '^', 2.0, 2.0, '^', '*', '^', 100.0, 'log10', 1000.0, 'log10', '*',
                                  'sin', 'pow'])
 
     # unary_operations

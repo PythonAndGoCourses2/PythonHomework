@@ -44,15 +44,15 @@ class PyCalcProcessing(object):
         """
         # проверка, что формула не пустая строка
         if not isinstance(formula_string, str) or not formula_string:
-            print('Formula should be not empty string!')
+            print('ERROR: Formula should be not empty string!')
         # проверяем, что в формуле нет более одного разделителя подряд
         # в текущей реализации удобнее сделать это здесь, чтобы упростить дальнейший парсинг на токены
         if '..' in formula_string:
-            print('Number can not contain more than one delimiter "." !')
+            print('ERROR: Number can not contain more than one delimiter "." !')
         # проверка на разрешённые элементы
         for el in formula_string.strip():
             if el not in ALLOWED_TOKENS:
-                print('Formula contains incorrect symbol "{}"'.format(el))
+                print('ERROR: Formula contains incorrect symbol "{}"'.format(el))
 
     @staticmethod
     def parse(formula_string):
@@ -129,9 +129,9 @@ class PyCalcProcessing(object):
 
     def validate_parsed_list(self, parsed_list):
         if parsed_list[-1] in OPERATORS:
-            print('Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
+            print('ERROR: Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
         if parsed_list[0] in BINARY_OPERATORS:
-            print('Formula can not start with binary operator "{}"'.format(parsed_list[0]))
+            print('ERROR: Formula can not start with binary operator "{}"'.format(parsed_list[0]))
 
         counter = 0  # counter for parentheses
 
@@ -139,10 +139,10 @@ class PyCalcProcessing(object):
         for el in parsed_list:
             counter = self._matched_parentheses(el, counter)
 
-            message = 'After {} element {} is forbidden!'.format(str(previous_el), str(el))
+            message = 'ERROR: After {} element {} is forbidden!'.format(str(previous_el), str(el))
 
             if el == '.':
-                print('Single delimiter is prohibited in formula!')
+                print('ERROR: Single delimiter is prohibited in formula!')
 
             if isinstance(el, str) and el[0] in LETTERS:
                 if el.lower() not in ALL_FUNCTIONS_AND_CONSTS:
@@ -179,7 +179,7 @@ class PyCalcProcessing(object):
             previous_el = el
 
         if counter != 0:
-            print('Wrong number of opened or closed parentheses in formula!')
+            print('ERROR: Wrong number of opened or closed parentheses in formula!')
 
         return 'Formula was validated! Errors were not found.'
 
@@ -250,7 +250,6 @@ class PyCalcProcessing(object):
                 # выдаём все операторы из стека до открывающей скобки
                 while stack and stack[-1] != "(":
                     yield stack.pop()
-                yield token
             else:
                 # если элемент - число или константа, отправим его сразу на выход
                 yield token
@@ -302,7 +301,7 @@ class PyCalcProcessing(object):
                 try:
                     function_result = func_name(*tuple(arguments))
                 except TypeError:
-                    print('Formula contains incorrect number of arguments in function.')
+                    print('ERROR: Formula contains incorrect number of arguments in function.')
 
                 stack.append(function_result)  # вычисляем оператор, возвращаем в стек
                 arguments = []
@@ -323,7 +322,7 @@ class PyCalcProcessing(object):
                 stack.append(token)
 
         if len(stack) > 1:
-            print('Formula contains incorrect number of arguments in function.')
+            print('ERROR: Formula contains incorrect number of arguments in function.')
 
         return stack[0]  # результат вычисления - единственный элемент в стеке
 
