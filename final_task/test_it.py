@@ -41,6 +41,8 @@ class TestFunctions(unittest.TestCase):
             self.cheker.add_args("module.py")
 
     def calculate_simple_expression(self, expr):
+        expr = expr.replace("^", "**")
+        expr = expr.replace("&", "//")
         return eval(expr)
 
     def test_comparison(self):
@@ -93,13 +95,13 @@ class TestFunctions(unittest.TestCase):
                         "1")),
                 math.sin(3))
 
-    """def test_operators(self):
+    '''def test_operators(self):
         self.assertAlmostEqual(float(self.calculator.calculate("12^2")), 144.0)
         self.assertAlmostEqual(float(self.calculator.calculate("12/2")), 6.0)
         with self.assertRaises(Exception):
             self.calculator.calculate("12^`2")
             self.calculator.calculate("`12*2")
-            self.calculator.calculate("12/*2")"""
+            self.calculator.calculate("12/*2")'''
 
     def test_unary_operators(self):
         self.assertEqual(float(self.calculator. unary_rezult("12")), 12.0)
@@ -134,8 +136,10 @@ class TestFunctions(unittest.TestCase):
             with self.assertRaises(Exception):
                 self.calculator.sum("12+*12")
 
-    def test_brekets_parsers(self):
-        pass
+    def test_search_brakets(self):
+        with patch('pycalc.difcalc.ComplexCalc._calculation', new=self.calculate_simple_expression):
+            self.assertEqual(
+                self.calculator.search_brakets("1+(12*2)+(14+1)"), 40)
 
 
 if __name__ == '__main__':

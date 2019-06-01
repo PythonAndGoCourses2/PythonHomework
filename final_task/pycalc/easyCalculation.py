@@ -4,7 +4,7 @@ import pycalc.operators as operators
 
 class Calculator():
 
-    def __calculation(self, expr):
+    def _calculation(self, expr):
 
         place = expr.rfind("^")
 
@@ -77,14 +77,14 @@ class Calculator():
                     and expr[begin - 1] != '-' and expr[begin - 1] != '+':
                 raise Exception("no operators before brackets")
 
-            rezult = self.__calculation("+" + expr[begin + 1:end])
+            rezult = self._calculation("+" + expr[begin + 1:end])
             expr = expr[:begin] + str(rezult) + expr[end + 1:]
 
             if rezult < 0:
                 end = begin + len(str(rezult)) - 1
                 expr = self._calc_if_power(expr, begin, end)
 
-        rezult = self.__calculation("+" + expr)
+        rezult = self._calculation("+" + expr)
 
         return rezult
 
