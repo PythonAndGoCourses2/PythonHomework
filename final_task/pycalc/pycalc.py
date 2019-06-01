@@ -6,7 +6,7 @@ from .calculation import get_result
 
 def create_parser():
     parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
-    parser.add_argument('EXPRESSION', help='expression string to evaluate',)
+    parser.add_argument('EXPRESSION', help='Input string to evaluate',)
     args = parser.parse_args()
     input_string = args.EXPRESSION
     return input_string
