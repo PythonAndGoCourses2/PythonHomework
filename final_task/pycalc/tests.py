@@ -1,5 +1,6 @@
 import unittest
 from . import parser
+from . import sorter
 
 
 class TestParser(unittest.TestCase):
@@ -22,6 +23,15 @@ class TestParser(unittest.TestCase):
 
     def test_parse_input_string(self):
         self.assertEqual(parser.parse_input_string('sin(pi/2)'), ['sin', '[', 'pi', '/', 2.0, ']'])
+
+
+class TestSorter(unittest.TestCase):
+    def test_create_polish_notation(self):
+        self.assertEqual(sorter.create_polish_notation([666.0]), [666.0])
+        self.assertEqual(sorter.create_polish_notation(['neg', 13.0]), [13.0, 'neg'])
+        self.assertEqual(sorter.create_polish_notation([1.0, '+', 2.0]), [1.0, 2.0, '+'])
+        self.assertEqual(sorter.create_polish_notation(['sin', '[', 'pi', '/', 2.0, ']']), ['[', 'pi', 2.0, '/', ']',
+                                                                                            'sin'])
 
 
 if __name__ == '__main__':
