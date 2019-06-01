@@ -2,21 +2,22 @@ from . import constants
 
 
 def get_token(input_string):
-    """Getting a raw tokens from input string"""
+    """Separation of tokens from the input string"""
     raw_tokens = ['']
     try:
         if input_string.count('(') != input_string.count(')'):
             raise Exception
         else:
             for char in input_string:
-                if char.isdigit() and raw_tokens[-1].isdigit():
-                    raw_tokens[-1] = raw_tokens[-1] + char
-                elif char.isdigit() and '.' in raw_tokens[-1]:
-                    raw_tokens[-1] = raw_tokens[-1] + char
-                elif char.isdigit() and raw_tokens[-1].isalpha():
-                    raw_tokens[-1] = raw_tokens[-1] + char
-                elif char.isdigit() and raw_tokens[-1].isalnum():
-                    raw_tokens[-1] = raw_tokens[-1] + char
+                if char.isdigit():
+                    if raw_tokens[-1].isdigit():
+                        raw_tokens[-1] = raw_tokens[-1] + char
+                    elif '.' in raw_tokens[-1]:
+                        raw_tokens[-1] = raw_tokens[-1] + char
+                    elif raw_tokens[-1].isalpha():
+                        raw_tokens[-1] = raw_tokens[-1] + char
+                    elif raw_tokens[-1].isalnum():
+                        raw_tokens[-1] = raw_tokens[-1] + char
                 elif char == '.' and raw_tokens[-1].isdigit():
                     raw_tokens[-1] = raw_tokens[-1] + char
                 elif char.isalpha() and raw_tokens[-1].isalnum():
@@ -38,20 +39,19 @@ def get_token(input_string):
 
 
 def separate_function(raw_tokens):
-    """Selecting function arguments"""
+    """Selecting function arguments from a set of tokens"""
     tokens = ['']
-    stack = []  # To define a closing bracket or end of function
+    bracket_stack = []  # To define a closing bracket or end of function
     for token in raw_tokens:
         if token == '(':
             if tokens[-1].isalnum():  # Selection start of function
                 tokens.append('[')
-                stack.append('[')
+                bracket_stack.append('[')
             else:
                 tokens.append(token)
-                stack.append(token)
+                bracket_stack.append(token)
         elif token == ')':
-            x = stack.pop()
-            if x == '[':  # Define a closing bracket or end of function
+            if bracket_stack.pop() == '[':  # Define a closing bracket or end of function
                 tokens.append(']')
             else:
                 tokens.append(token)
@@ -60,36 +60,36 @@ def separate_function(raw_tokens):
     return tokens[1:]
 
 
-def create_infix(tokens):
-    """Adding unary operations, constants and converting strings to numbers"""
-    infix = ['']
+def create_infix_expression(tokens):
+    """Adding unary operations and converting strings to numbers"""
+    infix_expression = ['']
     while tokens:
         token = tokens[0]
         tokens = tokens[1:]
         if token in constants.CONSTANTS:
-            infix.append(token)
-        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or
-                               infix[-1] == '['):
-            infix.append('neg')
-        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or
-                               infix[-1] == '['):
-            infix.append('pos')
+            infix_expression.append(token)
+        elif token == '-' and (infix_expression[-1] == '' or infix_expression[-1] in constants.OPERATORS or
+                               infix_expression[-1] == '(' or infix_expression[-1] == '['):
+            infix_expression.append('neg')
+        elif token == '+' and (infix_expression[-1] == '' or infix_expression[-1] in constants.OPERATORS or
+                               infix_expression[-1] == '(' or infix_expression[-1] == '['):
+            infix_expression.append('pos')
         elif token.isdigit():
-            infix.append(float(token))
+            infix_expression.append(float(token))
         elif token.isalnum() or token in '()[],':
-            infix.append(token)
+            infix_expression.append(token)
         elif token.startswith('.'):
-            infix.append(float('0' + token))
+            infix_expression.append(float('0' + token))
         elif token in constants.OPERATORS:
-            infix.append(token)
+            infix_expression.append(token)
         elif token == ' ':
             continue
         else:
-            infix.append(float(token))
-    return infix[1:]
+            infix_expression.append(float(token))
+    return infix_expression[1:]
 
 
-def parse_input_expression(input_string):
+def parse_input_string(input_string):
     """Issuing tokens"""
-    infix_notation = create_infix(separate_function(get_token(input_string)))
-    return infix_notation
+    infix_notation_expression = create_infix_expression(separate_function(get_token(input_string)))
+    return infix_notation_expression

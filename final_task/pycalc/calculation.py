@@ -1,10 +1,10 @@
 from . import constants
 
 
-def get_result(polish_notation):
+def get_result(polish_notation_expression):
     stack = []
-    arg1 = ''
-    for token in polish_notation:
+    arg1 = ''  # For functions with two arguments
+    for token in polish_notation_expression:
         if token == 'neg' or token == 'pos':
             x = stack.pop()
             stack.append(constants.OPERATORS[token](x))
