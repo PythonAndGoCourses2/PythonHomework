@@ -1,7 +1,7 @@
 import argparse
 from .parser import parse_input_expression
 from .sorter import create_polish_notation
-from .calculation import calculate
+from .calculation import get_result
 
 
 def create_parser():
@@ -18,7 +18,7 @@ def main():
         if expression:
             tokens_in_infix = parse_input_expression(expression)
             tokens_in_polish = create_polish_notation(tokens_in_infix)
-            print(calculate(tokens_in_polish))
+            print(get_result(tokens_in_polish))
         else:
             raise Exception
     except:
