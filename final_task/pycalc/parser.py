@@ -70,9 +70,11 @@ def create_infix(tokens):
         tokens = tokens[1:]
         if token in constants.CONSTANTS:
             infix.append(token)
-        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or infix[-1] == '['):
+        elif token == '-' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or
+                               infix[-1] == '['):
             infix.append('neg')
-        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or infix[-1] == '['):
+        elif token == '+' and (infix[-1] == '' or infix[-1] in constants.OPERATORS or infix[-1] == '(' or
+                               infix[-1] == '['):
             infix.append('pos')
         elif token.isdigit():
             infix.append(float(token))
