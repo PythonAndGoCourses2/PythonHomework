@@ -25,4 +25,10 @@ def get_result(polish_notation):
             arg1 = stack.pop()
         else:
             stack.append(token)
-    return stack[0]
+    try:
+        if len(stack) > 1:
+            raise Exception
+        else:
+            return stack[0]
+    except:
+        print('ERROR: Something went wrong')
