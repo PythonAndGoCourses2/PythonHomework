@@ -12,35 +12,38 @@ import operator
 
 
 __C_REGEXP_BRACKETS = re.compile(r"[(]|[)]")
-__C_REGEXP_BRACKET_UNARY_PLUSMINUS = re.compile(r"\([+\-]")
+__C_REGEXP_BRACKET_UNARY_PLUSMINUS = re.compile(r"[*%^(,][+\-]|[/=!<>]+[+\-]")
 __C_REGEXP_DOUBLED_PLUSMINUS = re.compile(r"[+\-]{2,}")
 __C_REGEXP_OPERATOR_THEN_PLUSMINUS = re.compile(r"[*%^][+\-]|[/=!<>]{1,2}[+\-]")
 __C_REGEXP_BEFORE_BRACKET = re.compile(r"[a-zA-Z]*[\d]*(?=[(])")
 __C_REGEXP_AFTER_BRACKET = re.compile(r"(?<=[)])[a-zA-Z]*[\d]*")
 __C_REGEXP_EXPONENTIATION = re.compile(r"[\^]")
-__C_REGEXP_TOKENS = re.compile(r"[+\-*%^()]|[/=!<>]+|[a-zA-Z]+[\d]*|[\d]*[.][\d]+|[\d]+|[,]")
+__C_REGEXP_TOKENS = re.compile(r"[\-+][#]|[+\-*%^()]|[/=!<>]+|[a-zA-Z]+[\d]*|[\d]*[.][\d]+|[\d]+|[,]")
 
 
-__operator_func_priority = namedtuple("Operator", ["function", "priority"])
+__operator_func_priority = namedtuple("Operator", ["function", "args", "priority"])
 __OPERATORS = {
-    "==": __operator_func_priority(operator.eq, 0),
-    "!=": __operator_func_priority(operator.ne, 0),
-    "<>": __operator_func_priority(operator.ne, 0),
+    "==": __operator_func_priority(operator.eq, 2, 0),
+    "!=": __operator_func_priority(operator.ne, 2, 0),
+    "<>": __operator_func_priority(operator.ne, 2, 0),
 
-    "<=": __operator_func_priority(operator.le, 0),
-    "<": __operator_func_priority(operator.lt, 0),
-    ">": __operator_func_priority(operator.gt, 0),
-    ">=": __operator_func_priority(operator.ge, 0),
+    "<=": __operator_func_priority(operator.le, 2, 0),
+    "<": __operator_func_priority(operator.lt, 2, 0),
+    ">": __operator_func_priority(operator.gt, 2, 0),
+    ">=": __operator_func_priority(operator.ge, 2, 0),
 
-    "+": __operator_func_priority(operator.add, 1),
-    "-": __operator_func_priority(operator.sub, 1),
+    "+": __operator_func_priority(operator.add, 2, 1),
+    "-": __operator_func_priority(operator.sub, 2, 1),
 
-    "*": __operator_func_priority(operator.mul, 2),
-    "/": __operator_func_priority(operator.truediv, 2),
-    "//": __operator_func_priority(operator.floordiv, 2),
-    "%": __operator_func_priority(operator.mod, 2),
+    "*": __operator_func_priority(operator.mul, 2, 2),
+    "/": __operator_func_priority(operator.truediv, 2, 2),
+    "//": __operator_func_priority(operator.floordiv, 2, 2),
+    "%": __operator_func_priority(operator.mod, 2, 2),
 
-    "^": __operator_func_priority(operator.pow, 3)
+    "+#": __operator_func_priority(operator.pos, 1, 3),
+    "-#": __operator_func_priority(operator.neg, 1, 3),
+
+    "^": __operator_func_priority(operator.pow, 2, 4)
 }
 
 math_funcs = {}
@@ -205,97 +208,26 @@ def _squash_doubled_plusminus(expression: str):
     return "".join(expression_chars)
 
 
-def _bracket_unary_plusminus_wrapper(expression: str):
+def _differentiate_unary_plusminus(expression: str):
     """
-    Add brackets around value with unary plus/minus before.
+    Find unary plus/minus operators and differentiate them from binary plus/minus operators.
     Take:  expression: str.
     Return:  expression: str.
-    Example: "1^-1" -> "1^(-1)".
-    """
-    expression_chars = list(expression)
-
-    shift = 0
-    delayed_shift_indexes = set()
-    delayed_shift_indexes_to_remove = set()
-
-    if expression[0] in "-+":
-        expression_chars.insert(0, "(")
-        shift += 1
-        expression_chars.append(")")
-
-    operator_then_plusminus_matches = __C_REGEXP_OPERATOR_THEN_PLUSMINUS.finditer(expression)
-    for plus_minus_match in operator_then_plusminus_matches:
-        plus_minus_index = plus_minus_match.end() - 1
-
-        for delayed_shift_index in delayed_shift_indexes:
-            if plus_minus_index >= delayed_shift_index:
-                shift += 1
-                delayed_shift_indexes_to_remove.add(delayed_shift_index)
-        delayed_shift_indexes.difference_update(delayed_shift_indexes_to_remove)
-        delayed_shift_indexes_to_remove.clear()
-
-        expression_chars.insert(plus_minus_index+shift, "(")
-        shift += 1
-
-        next_token = __C_REGEXP_TOKENS.match(expression, plus_minus_index+1)
-        next_token_string = next_token.group()
-
-        if _is_number(next_token_string) or next_token_string in math_consts:
-            token_index = next_token.end()
-
-        elif next_token_string == "(":
-            opened_brackets = 1
-            following_tokens = __C_REGEXP_TOKENS.finditer(expression, next_token.end())
-            for following_token in following_tokens:
-                token_index = following_token.start()
-                token_string = following_token.group()
-
-                if token_string == "(":
-                    opened_brackets += 1
-                elif token_string == ")":
-                    opened_brackets -= 1
-                if not opened_brackets:
-                    break
-
-        elif next_token_string in math_funcs:
-            opened_brackets = 0
-
-            following_tokens = __C_REGEXP_TOKENS.finditer(expression, next_token.end())
-            for following_token in following_tokens:
-                token_index = following_token.start()
-                token_string = following_token.group()
-
-                if token_string == "(":
-                    opened_brackets += 1
-                elif token_string == ")":
-                    opened_brackets -= 1
-                if not opened_brackets:
-                    break
-            else:
-                token_index = following_token.end()
-
-        expression_chars.insert(token_index+shift, ")")
-        delayed_shift_indexes.add(token_index)
-
-    return "".join(expression_chars)
-
-
-def _substitute_bracket_unary_plusminus(expression: str):
-    """
-    Change unary plus/minus in brackets to binary plus/minus operation.
-    Take:  expression: str.
-    Return:  expression: str.
-    Example: "sin(-3) -> "sin(0.0-3)".
+    Example: "-3*-pow(1+1,-2-1)" -> -#3-#pow(1+1,-#2-1).
     """
     expression_chars = list(expression)
     bracket_unary_plusminus_matches = __C_REGEXP_BRACKET_UNARY_PLUSMINUS.finditer(expression)
 
     shift = 0
-    for match in bracket_unary_plusminus_matches:
-        end_index = match.end()
-        expression_chars.insert((end_index-1)+shift, "0.0")
+
+    if expression_chars[0] in {"+", "-"}:
+        expression_chars.insert(1, "#")
         shift += 1
 
+    for match in bracket_unary_plusminus_matches:
+        end_index = match.end()
+        expression_chars.insert(end_index+shift, "#")
+        shift += 1
     return "".join(expression_chars)
 
 
@@ -305,48 +237,62 @@ def _bracket_exponentiation_wrapper(expression: str):
     (Exponentiation operator is the only right-to-left associativity operator).
     Take:  expression: str.
     Return:  expression: str.
-    Example: "2^2^2^2^2" -> "2^(2^(2^(2^(2))))".
+    Example:
+        "2^2^2^2^2" -> "2^(2^(2^(2^(2))))".
+        "2^-#2^-#2" -> "2^(-#2^(-#2))".
     """
     expression_chars = list(expression)
 
-    breaking_chars = set(__OPERATORS.keys())
-    breaking_chars.remove("^")
-    breaking_chars.add(",")
+    breaking_tokens = set(__OPERATORS.keys())
+    breaking_tokens.add(",")
+    breaking_tokens.difference_update({"^", "-#", "+#"})
+    unary_tokens = {"^+#", "^-#"}
 
     shift = 0
-    delayed_shift_indexes = set()
-    delayed_shift_indexes_to_remove = set()
+    delayed_shift_indexes = list()
+    delayed_shift_indexes_to_remove = list()
 
-    for exponentiation in __C_REGEXP_EXPONENTIATION.finditer(expression):
+    exponentiation_matches = __C_REGEXP_EXPONENTIATION.finditer(expression)
+    for exponentiation_match in exponentiation_matches:
         opened_brackets = 0
-        exponentiation_end_index = exponentiation.end()
+        exponentiation_end_index = exponentiation_match.end()
+        exponentiation_string = exponentiation_match.group()
 
         for delayed_shift_index in delayed_shift_indexes:
             if exponentiation_end_index >= delayed_shift_index:
                 shift += 1
-                delayed_shift_indexes_to_remove.add(delayed_shift_index)
-        delayed_shift_indexes.difference_update(delayed_shift_indexes_to_remove)
+                delayed_shift_indexes_to_remove.append(delayed_shift_index)
+        for delayed_shift_index_to_remove in delayed_shift_indexes_to_remove:
+            delayed_shift_indexes.remove(delayed_shift_index_to_remove)
         delayed_shift_indexes_to_remove.clear()
 
+        if exponentiation_string in unary_tokens:
+            expression_chars.insert(exponentiation_end_index+shift-2, "(")
+            shift += 1
         expression_chars.insert(exponentiation_end_index+shift, "(")
         shift += 1
 
-        for token in __C_REGEXP_TOKENS.finditer(expression, exponentiation_end_index):
-            token_index = token.start()
-            token_string = token.group()
+        token_matches = __C_REGEXP_TOKENS.finditer(expression, exponentiation_end_index)
+        for token_match in token_matches:
+            token_index = token_match.start()
+            token_string = token_match.group()
 
             if token_string == "(":
                 opened_brackets += 1
             elif token_string == ")":
                 opened_brackets -= 1
 
-            if opened_brackets < 0 or (not opened_brackets and token_string in breaking_chars):
+            if opened_brackets < 0 or (not opened_brackets and token_string in breaking_tokens):
                 break
         else:
-            token_index = token.end()
+            token_index = token_match.end()
 
         expression_chars.insert(token_index+shift, ")")
-        delayed_shift_indexes.add(token_index)
+        delayed_shift_indexes.append(token_index)
+
+        if exponentiation_string in unary_tokens:
+            expression_chars.insert(token_index+shift+1, ")")
+            delayed_shift_indexes.append(token_index+1)
 
     return "".join(expression_chars)
 
@@ -477,8 +423,12 @@ def _polish_notation_calculate(polish_notation: iter):
     stack = []
     for token in polish_notation:
         if token in __OPERATORS:
-            b, a = stack.pop(), stack.pop()
-            stack.append(__OPERATORS[token].function(a, b))
+            if __OPERATORS[token].args == 1:
+                a = stack.pop()
+                stack.append(__OPERATORS[token].function(a))
+            elif __OPERATORS[token].args == 2:
+                b, a = stack.pop(), stack.pop()
+                stack.append(__OPERATORS[token].function(a, b))
         else:
             stack.append(token)
     return stack[0]
@@ -502,8 +452,7 @@ def calculate(expression: str):
         raise ExpressionParserError(
             "an operator near brackets is missed or expression contains unknown function")
     expression = _squash_doubled_plusminus(expression)
-    expression = _bracket_unary_plusminus_wrapper(expression)
-    expression = _substitute_bracket_unary_plusminus(expression)
+    expression = _differentiate_unary_plusminus(expression)
     expression = _bracket_exponentiation_wrapper(expression)
 
     try:
