@@ -14,10 +14,10 @@ def create_polish_notation(parsed_formula):
                     ((token in constants.LEFT_ASSOCIATIVITY_OPERATORS and constants.PRIORITY[token] <=
                         constants.PRIORITY[stack_operation[-1]]) or
                         (token in constants.RIGHT_ASSOCIATIVITY_OPERATORS and constants.PRIORITY[token] <
-                            constants.PRIORITY[stack_operation[-1]])) and not stack_function:
+                            constants.PRIORITY[stack_operation[-1]])):
                 raw_polish_notation.append(stack_operation.pop())
             stack_operation.append(token)
-
+            print(stack_operation)
         elif token == ')':
             while stack_operation:
                 x = stack_operation.pop()
@@ -31,6 +31,8 @@ def create_polish_notation(parsed_formula):
 
         elif token == '(':
             stack_operation.append(token)
+        elif token in constants.CONSTANTS:
+            raw_polish_notation.append(token)
         elif token in constants.FUNCTIONS:
             stack_function.append(token)
         elif token == '[':

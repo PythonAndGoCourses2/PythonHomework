@@ -11,6 +11,8 @@ def get_result(polish_notation):
         elif token in constants.OPERATORS:
             y, x = stack.pop(), stack.pop()
             stack.append(constants.OPERATORS[token](x, y))
+        elif token in constants.CONSTANTS:
+            stack.append(constants.CONSTANTS[token])
         elif token in constants.FUNCTIONS:
             if arg1:
                 stack.append(constants.FUNCTIONS[token](arg1, stack.pop()))
@@ -22,4 +24,5 @@ def get_result(polish_notation):
             arg1 = stack.pop()
         else:
             stack.append(token)
+        print(stack)
     return stack[0]
