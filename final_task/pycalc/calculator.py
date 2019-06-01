@@ -18,14 +18,10 @@ def calculate(expr):
                     continue
                 op2, op1 = stack.pop(), stack.pop()
                 stack.append(lib.OPERATORS[token].function(op1, op2))
+            elif token in lib.user_functions:
+                calculate_function(lib.user_functions, token, stack)
             elif token in lib.FUNCTIONS:
-                operators = []
-                while len(stack) >= 2 and stack[-2] == lib.FUNC_DELIMITER:
-                    operators.append(stack.pop())
-                    stack.pop()
-                operators.append(stack.pop())
-                operators.reverse()
-                stack.append(float(lib.FUNCTIONS[token](*operators)))
+                calculate_function(lib.FUNCTIONS, token, stack)
             else:
                 stack.append(float(token))
         except IndexError:
@@ -33,3 +29,13 @@ def calculate(expr):
     if len(stack) != 1:
         raise exeptions.InvalidStringError('not balanced operators and operands')
     return stack.pop()
+
+
+def calculate_function(functions, token, stack):
+    operators = []
+    while len(stack) >= 2 and stack[-2] == lib.FUNC_DELIMITER:
+        operators.append(stack.pop())
+        stack.pop()
+    operators.append(stack.pop())
+    operators.reverse()
+    stack.append(float(functions[token](*operators)))

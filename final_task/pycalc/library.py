@@ -1,10 +1,11 @@
 """Custom library for all handled operators, constants functions"""
+import importlib
 import math
-from collections import namedtuple
 import operator
+from collections import namedtuple
 
 
-def make_math_functions(math_functions):
+def make_functions(math_functions):
     """Make dictionary name : func from math_functions"""
     functions = dict()
     for func in math_functions:
@@ -51,8 +52,14 @@ class Library:
         'lgTwo': math.log2,
         'logOneP': math.log1p
     }
-    FUNCTIONS = {**make_math_functions(MATH_FUNCTIONS), **OTHER_FUNCTIONS}
+    user_functions = dict()
+    FUNCTIONS = {**make_functions(MATH_FUNCTIONS), **OTHER_FUNCTIONS}
     FUNC_DELIMITER = ','
 
     OPEN_BRACKET = '('
     CLOSE_BRACKET = ')'
+
+    def read_user_module(self, module_name):
+        module = importlib.import_module(module_name)
+        functions = [getattr(module, attr) for attr in dir(module) if callable(getattr(module, attr))]
+        Library.user_functions = {**make_functions(functions)}
