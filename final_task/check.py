@@ -85,7 +85,6 @@ def common_check(expr):
         if func not in MATH_FUNC and func not in MATH_CONST:
             print("Unknowm function '{}'".format(func))
             return False
-
     for operation in OPERATORS:  # Если последний символ строки операция
         if expr.endswith(operation):
             return False
