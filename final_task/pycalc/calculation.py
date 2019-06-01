@@ -22,7 +22,14 @@ def get_result(polish_notation):
         elif token == '[' or token == ']':
             continue
         elif token == ',':
-            arg1 = stack.pop()
+            try:
+                if arg1 != '':
+                    raise Exception
+                else:
+                    arg1 = stack.pop()
+            except:
+                print('ERROR: Something went wrong')
+                break
         else:
             stack.append(token)
     try:
