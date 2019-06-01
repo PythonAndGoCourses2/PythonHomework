@@ -13,9 +13,11 @@ def get_postfix(infix_notation: list) -> list:
     for token in infix_notation:
         if is_number(token):
             output_string.append(float(token))
+        elif token in lib.user_constants:
+            output_string.append(lib.user_constants[token])
         elif token in lib.CONSTANTS:
             output_string.append(lib.CONSTANTS[token])
-        elif token in lib.FUNCTIONS:
+        elif token in (*lib.FUNCTIONS, *lib.user_functions):
             stack.append(token)
         elif token == lib.FUNC_DELIMITER:
             process_func_delimiter(stack, output_string)
@@ -63,7 +65,7 @@ def process_close_bracket(stack: list, output_string: list):
         if not stack:
             raise exeptions.BracketsError('brackets are not balanced')
     stack.pop()
-    if stack[-1] in lib.FUNCTIONS:
+    if stack[-1] in lib.FUNCTIONS or stack[-1] in lib.user_functions:
         output_string += [stack.pop()]
 
 
@@ -121,6 +123,7 @@ def is_unary(tokens, index):
         token = tokens[index - 2]
     return (token in lib.OPERATORS or
             token in lib.FUNCTIONS or
+            token in lib.user_functions or
             token == lib.FUNC_DELIMITER or
             not index or
             token == lib.OPEN_BRACKET)
@@ -129,7 +132,7 @@ def is_unary(tokens, index):
 def chek_invalid_func(tokens):
     """Check for all func tokens valid"""
     for index, token in enumerate(tokens):
-        if token in lib.FUNCTIONS:
+        if token in (*lib.FUNCTIONS, *lib.user_functions):
             if len(tokens) <= 1:
                 raise exeptions.InvalidStringError('invalid string')
             if is_number(tokens[index + 1]):
