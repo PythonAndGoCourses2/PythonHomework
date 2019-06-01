@@ -338,4 +338,4 @@ class PyCalcProcessing(object):
         # print('Tokens were sorted to polish list!')
         result = self.calc(polish_list)
         # print('Result of calculating of {} is {}'.format(self.formula_string, result))
-        return result
+        print(result)
