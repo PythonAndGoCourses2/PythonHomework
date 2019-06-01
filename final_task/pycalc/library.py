@@ -56,3 +56,5 @@ FUNC_DELIMITER = ','
 OPEN_BRACKET = '('
 CLOSE_BRACKET = ')'
 NOT_SUPPORTED = '[]{}'
+
+FILLER = 'no args'  # Constant to fill no ars functions

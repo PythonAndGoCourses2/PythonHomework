@@ -23,6 +23,8 @@ def get_postfix(infix_notation: list) -> list:
             process_operator(token, stack, output_string)
         elif token == lib.OPEN_BRACKET:
             stack.append(token)
+            if infix_notation[infix_notation.index(token) + 1] == lib.CLOSE_BRACKET:
+                stack.append(lib.FILLER)
         elif token == lib.CLOSE_BRACKET:
             process_close_bracket(stack, output_string)
         elif token in lib.NOT_SUPPORTED:

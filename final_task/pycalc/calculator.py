@@ -19,6 +19,9 @@ def calculate(expr):
                 op2, op1 = stack.pop(), stack.pop()
                 stack.append(library.OPERATORS[token].function(op1, op2))
             elif token in library.FUNCTIONS:
+                if stack[-1] == library.FILLER:
+                    stack.append(float(library.FUNCTIONS[token]()))
+                    continue
                 operators = []
                 while len(stack) >= 2 and stack[-2] == library.FUNC_DELIMITER:
                     operators.append(stack.pop())
