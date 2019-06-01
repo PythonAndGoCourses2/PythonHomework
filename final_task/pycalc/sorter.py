@@ -6,9 +6,7 @@ def create_polish_notation(parsed_formula):
     stack_function = []
     raw_polish_notation = []
 
-    while parsed_formula:
-        token = parsed_formula[0]
-        parsed_formula = parsed_formula[1:]
+    for token in parsed_formula:
         if token in constants.OPERATORS:
             while stack_operation and stack_operation[-1] != '(' and stack_operation[-1] != '[' and \
                     ((token in constants.LEFT_ASSOCIATIVITY_OPERATORS and constants.PRIORITY[token] <=
