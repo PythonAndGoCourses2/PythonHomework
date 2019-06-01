@@ -323,18 +323,19 @@ class PyCalcProcessing(object):
 
     def launch_processing(self):
         self.pre_validate(self.formula_string)
-        print('Prevalidation was done!')
+        # print('Prevalidation was done!')
         parsed_list = []
         for el in self.parse(self.formula_string):
             parsed_list.append(el)
-        print('Formula was parsed to tokens.')
+        # print('Formula was parsed to tokens.')
         print(self.validate_parsed_list(parsed_list))
-        print('Validation was done!')
+        # print('Validation was done!')
         parsed_list = self.process_unary_operations(parsed_list)
-        print('Redundant unary operations were deleted!')
+        # print('Redundant unary operations were deleted!')
         polish_list = []
         for el in self.sort_to_polish(parsed_list):
             polish_list.append(el)
-        print('Tokens were sorted to polish list!')
+        # print('Tokens were sorted to polish list!')
         result = self.calc(polish_list)
-        print('Result of calculating of {} is {}'.format(self.formula_string, result))
+        # print('Result of calculating of {} is {}'.format(self.formula_string, result))
+        return result
