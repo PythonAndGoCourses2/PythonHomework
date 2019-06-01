@@ -94,8 +94,11 @@ def check(infix):
     while infix:
         stack.append(infix[0])
         infix = infix[1:]
-        if type(stack[-1]) == float and type(infix[0]) == float:
-            raise Exception('ERROR: Something went wrong')
+        try:
+            if type(stack[-1]) == float and type(infix[0]) == float:
+                raise Exception
+        except:
+            print('ERROR: Something went wrong')
     return stack
 
 
