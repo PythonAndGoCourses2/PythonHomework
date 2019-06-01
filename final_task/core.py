@@ -25,6 +25,7 @@ def parse(expression):
                 func_expr += expression[i]
                 i += 1
             parsed_formula.append(float(math_function_calculating(MATH_FUNC[func], func_expr)))
+            func = ""
             continue  # Because changed i value
         if expression[i].isdigit() or expression[i] == '.':
             number += symbol
