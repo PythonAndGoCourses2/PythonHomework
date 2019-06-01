@@ -16,6 +16,7 @@ def get_result(polish_notation):
         elif token in constants.FUNCTIONS:
             if arg1:
                 stack.append(constants.FUNCTIONS[token](arg1, stack.pop()))
+                arg1 = ''
             else:
                 stack.append(constants.FUNCTIONS[token](stack.pop()))
         elif token == '[' or token == ']':
