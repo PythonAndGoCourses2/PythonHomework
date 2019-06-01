@@ -17,7 +17,6 @@ def create_polish_notation(parsed_formula):
                             constants.PRIORITY[stack_operation[-1]])):
                 raw_polish_notation.append(stack_operation.pop())
             stack_operation.append(token)
-            print(stack_operation)
         elif token == ')':
             while stack_operation:
                 x = stack_operation.pop()
