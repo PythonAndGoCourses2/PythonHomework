@@ -328,7 +328,7 @@ class PyCalcProcessing(object):
         for el in self.parse(self.formula_string):
             parsed_list.append(el)
         # print('Formula was parsed to tokens.')
-        print(self.validate_parsed_list(parsed_list))
+        self.validate_parsed_list(parsed_list)
         # print('Validation was done!')
         parsed_list = self.process_unary_operations(parsed_list)
         # print('Redundant unary operations were deleted!')
