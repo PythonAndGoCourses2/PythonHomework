@@ -1,6 +1,6 @@
 import unittest
 
-from py_calc import PyCalcProcessing
+from final_task.pycalc_proc import PyCalcProcessing
 
 
 calc_obj = PyCalcProcessing('1')

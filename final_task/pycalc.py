@@ -1,7 +1,7 @@
 import argparse
 from sys import argv
 
-from py_calc import PyCalcProcessing
+from pycalc_proc import PyCalcProcessing
 
 
 def create_parser():
@@ -14,8 +14,12 @@ def create_parser():
     return parser_
 
 
-if __name__ == '__main__':
+def main():
     parser = create_parser()
     namespace = parser.parse_args(argv[1:])
     py_calc_obj = PyCalcProcessing(namespace.EXPRESSION)
     py_calc_obj.launch_processing()
+
+
+if __name__ == '__main__':
+    main()
