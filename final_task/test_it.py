@@ -140,6 +140,13 @@ class TestFunctions(unittest.TestCase):
         with patch('pycalc.difcalc.ComplexCalc._calculation', new=self.calculate_simple_expression):
             self.assertEqual(
                 self.calculator.search_brakets("1+(12*2)+(14+1)"), 40)
+            self.assertEqual(
+                self.calculator.search_brakets("1+2"), 3)
+            self.assertEqual(
+                self.calculator.search_brakets("(12+3)"), 15)
+            with self.assertRaises(Exception):
+                self.calculator.search_brakets("12+()")
+                self.calculator.search_brakets("12(12+1)")
 
 
 if __name__ == '__main__':
