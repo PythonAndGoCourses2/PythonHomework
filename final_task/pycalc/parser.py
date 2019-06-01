@@ -89,6 +89,16 @@ def create_infix(tokens):
     return infix[1:]
 
 
+def check(infix):
+    stack = []
+    while infix:
+        stack.append(infix[0])
+        infix = infix[1:]
+        if type(stack[-1]) == float and type(infix[0]):
+            raise Exception('ERROR: Something went wrong')
+    return stack
+
+
 def parse_input_expression(input_string):
     """Issuing tokens"""
-    return create_infix(separate_function(get_token(input_string)))
+    return create_infix(check(separate_function(get_token(input_string))))
