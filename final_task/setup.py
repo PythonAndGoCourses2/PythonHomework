@@ -6,7 +6,7 @@ setup(
     author='Pavel Karshakevich',
     author_email='pashakorsh@gmail.com',
     packages=find_packages(),
-    entry_points={'console_scripts': ['pycalc = pycalc.pycalc:main']},
+    entry_points={'console_scripts': ['pycalc = pycalc.cli:main']},
     description='Pure-python command-line calculator.',
     py_modules=['pycalc']
 )
