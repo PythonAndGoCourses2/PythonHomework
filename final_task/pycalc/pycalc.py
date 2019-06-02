@@ -5,17 +5,17 @@ import calculator
 def create_parser():
     parser = argparse.ArgumentParser(
         description="Pure-python command-line calculator.")
-    parser.add_argument('EXPRESSION', help='iExpr string to evaluate',)
+    parser.add_argument('EXPRESSION', help='string to evaluate',)
     args = parser.parse_args()
     iExpr = args.EXPRESSION
     return iExpr
 
 
 def main():
+    calc = calculator.Calculator()
     try:
         iExpr = create_parser()
         if iExpr:
-            calc = calculator.Calculator()
             print(calc.calculate(iExpr))
         else:
             raise Exception('empty expression')
