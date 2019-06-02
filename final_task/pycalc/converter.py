@@ -88,7 +88,7 @@ class Converter:
             elif iExpr[pos] == ",":
                 if operatorStack:
                     top = operatorStack.popleft()
-                    if op.match(top) and "(" in operatorStack:
+                    if (op.match(top) or func.match(top)) and "(" in operatorStack:
                         while operatorStack:
                             outputStack.append(top)
                             top = operatorStack.popleft()
