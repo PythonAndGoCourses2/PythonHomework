@@ -3,7 +3,6 @@ from .calculator import Calculator
 import math
 
 
-
 class TestCalculate(unittest.TestCase):
     def setUp(self):
         self.calculator = calculator.Calculator()
@@ -105,13 +104,7 @@ class TestCalculate(unittest.TestCase):
             self.calculator.calculate(iExpr),
             eval("10*math.e**0*math.log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5"),
         )
-        #iExpr = r"sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)"
-        #self.assertEqual(
-        #    self.calculator.calculate(iExpr),
-        #    eval(
-        #        "math.sin(-math.cos(-math.sin(3.0)-math.cos(-math.sin(3.0*5.0)-math.sin(math.cos(math.log10(43.0))))+math.cos(math.sin(math.sin(34.0-2.0**2.0))))--math.cos(1.0)--math.cos(0.0)**3.0)"
-        #    ),
-        #)
+
         iExpr = r"2.0^(2.0^2.0*2.0^2.0)"
         self.assertEqual(
             self.calculator.calculate(iExpr), eval("2.0**(2.0**2.0*2.0**2.0)")

@@ -7,7 +7,7 @@ class ConvertError(Exception):
     """class for error"""
 
     def __str__(self):
-        return "cannot convert input expression to RPN due to mismatched parentheses"
+        return "cannot convert expression to RPN due to mismatched parentheses"
 
 
 class Converter:
@@ -35,6 +35,7 @@ class Converter:
                 ]
             )
         )
+
     def convert(self, iExpr):
         """
         function for converting parsed expression in RPN
@@ -42,14 +43,13 @@ class Converter:
         func = self.func
         num = self.num
         op = self.op
-        
+
         pos = 0
         operatorStack = deque()
         outputStack = deque()
         prev = None
         posbrcl = 0
 
-        # br = deque()
         while pos < len(iExpr):
             if num.match(iExpr, pos):
                 numM = num.match(iExpr, pos)
@@ -58,15 +58,9 @@ class Converter:
                 else:
                     outputStack.append(int(numM.group()))
                 pos = numM.end()
-                #print("num")
-                #print(outputStack)
-                #print(operatorStack)
             elif iExpr[pos] == "(":
                 operatorStack.appendleft("(")
                 pos += 1
-                #print("lb")
-                #print(outputStack)
-                #print(operatorStack)
             elif iExpr[pos] == ")":
                 if len(operatorStack) == 0:
                     raise ConvertError()
@@ -76,28 +70,23 @@ class Converter:
                     top = operatorStack.popleft()
                 if top != "(":
                     raise ConvertError()
-
                 pos += 1
-                #print("lb")
-                #print(outputStack)
-                #print(operatorStack)
+
             elif func.match(iExpr, pos):
                 funcM = func.match(iExpr, pos)
                 flag = False
                 try:
-                    a = iExpr[funcM.end()+1]!="("
+                    a = iExpr[funcM.end()+1] != "("
                 except IndexError:
                     flag = True
-                
+
                 if not flag and iExpr[funcM.end()] != "(":
                     raise ValueError("unknown function")
                 if flag:
                     raise ValueError("no argument in function")
                 operatorStack.appendleft(funcM.group())
                 pos = funcM.end()
-                #print("func")
-                #print(outputStack)
-                #print(operatorStack)
+
             elif iExpr[pos] == ",":
                 if operatorStack:
                     top = operatorStack.popleft()
@@ -105,16 +94,14 @@ class Converter:
                         while operatorStack:
                             outputStack.append(top)
                             top = operatorStack.popleft()
-                            if top =="(":
+                            if top == "(":
                                 operatorStack.appendleft(top)
                                 break
                     else:
                         raise ConvertError()
                     outputStack.append(",")
                 pos += 1
-                #print("comma")
-                #print(outputStack)
-                #print(operatorStack)
+
             elif op.match(iExpr, pos):
                 match = op.match(iExpr, pos)
                 if len(operatorStack) != 0:
@@ -179,16 +166,11 @@ class Converter:
 
                     operatorStack.appendleft(match.group())
                     pos = pos + len(match.group())
-                #print("op")
-                #print(outputStack)
-                #print(operatorStack)
 
         while len(operatorStack) != 0:
             outputStack.append(operatorStack.popleft())
-        #print(outputStack)
-        if "("  in outputStack or ")" in outputStack:
+        # print(outputStack)
+        if "(" in outputStack or ")" in outputStack:
             raise ConvertError()
 
         return outputStack
-    
-

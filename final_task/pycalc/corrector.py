@@ -3,9 +3,6 @@ import math
 import definitions
 
 
-
-
-
 class Corrector:
 
     """base class for correct input string for parsing """
@@ -208,7 +205,4 @@ class Corrector:
         self.plusMinusReduce()
         self.unaryPlusReduce()
         self.unaryMinusReduce()
-        
-
-
         return self._expr

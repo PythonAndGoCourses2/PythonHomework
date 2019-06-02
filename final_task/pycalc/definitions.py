@@ -14,19 +14,19 @@ _functions["abs"] = abs
 _functions["round"] = round
 _number = r"\d*[\.]?\d+"
 _operators = {
-    "^": Operator(LAssos=False, priority=4, func=lambda x,y: x ** y),
-    "*": Operator(LAssos=True, priority=3, func=lambda x,y: x * y),
-    "/": Operator(LAssos=True, priority=3, func=lambda x,y: x / y),
-    "//": Operator(LAssos=True, priority=3, func=lambda x,y: x // y),
-    "%": Operator(LAssos=True, priority=3, func=lambda x,y: x % y),
-    "+": Operator(LAssos=True, priority=2, func=lambda x,y: x + y),
-    "-": Operator(LAssos=True, priority=2, func=lambda x,y: x - y),
-    "==": Operator(LAssos=True, priority=1, func=lambda x,y: x == y),
-    "<=": Operator(LAssos=True, priority=1, func=lambda x,y: x <= y),
-    ">=": Operator(LAssos=True, priority=1, func=lambda x,y: x >= y),
-    "<": Operator(LAssos=True, priority=1, func=lambda x,y: x < y),
-    ">": Operator(LAssos=True, priority=1, func=lambda x,y: x > y),
-    "!=": Operator(LAssos=True, priority=1, func=lambda x,y: x != y),
+    "^": Operator(LAssos=False, priority=4, func=lambda x, y: x ** y),
+    "*": Operator(LAssos=True, priority=3, func=lambda x, y: x * y),
+    "/": Operator(LAssos=True, priority=3, func=lambda x, y: x / y),
+    "//": Operator(LAssos=True, priority=3, func=lambda x, y: x // y),
+    "%": Operator(LAssos=True, priority=3, func=lambda x, y: x % y),
+    "+": Operator(LAssos=True, priority=2, func=lambda x, y: x + y),
+    "-": Operator(LAssos=True, priority=2, func=lambda x, y: x - y),
+    "==": Operator(LAssos=True, priority=1, func=lambda x, y: x == y),
+    "<=": Operator(LAssos=True, priority=1, func=lambda x, y: x <= y),
+    ">=": Operator(LAssos=True, priority=1, func=lambda x, y: x >= y),
+    "<": Operator(LAssos=True, priority=1, func=lambda x, y: x < y),
+    ">": Operator(LAssos=True, priority=1, func=lambda x, y: x > y),
+    "!=": Operator(LAssos=True, priority=1, func=lambda x, y: x != y),
 }
 
 _constants = {
