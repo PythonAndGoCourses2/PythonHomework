@@ -1,4 +1,5 @@
-from constants import*
+from constants import *
+import re
 
 
 def parse(expression):
@@ -51,13 +52,29 @@ def math_function_calculating(function, func_expr):
     """Take function and string expression under function."""
     list_of_arg = []
     argument, start_pos = 0, 0
-    while argument != -1:
+    k = arg_count(function) - 1
+    while k > 0:
         argument = func_expr.find(",", start_pos)
         temp = func_expr[start_pos:argument]
         temp = calculating(temp)
         list_of_arg.append(temp)
         start_pos = argument + 1
+        k -= 1
+    if argument != -1:
+        temp = func_expr[start_pos:]
+        temp = calculating(temp)
+        list_of_arg.append(temp)
     return function(*list_of_arg)
+
+
+def arg_count(function):
+    doc_string = function.__doc__
+    count = 0
+    for symbol in doc_string[:doc_string.find("\n")]:
+        if symbol == ",":
+            count += 1
+
+    return count + 1
 
 
 def infix_to_postfix(parsed_formula):
