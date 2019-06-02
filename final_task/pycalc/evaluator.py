@@ -38,21 +38,16 @@ class Evaluator(object):
         lenexpr = len(iExpr)
         for token in iExpr:
             if num.match(str(token)):
-                lenexpr=-1
                 outputStack.append(token)
             elif op.match(token):
-                lenexpr=-1
                 operand2 = outputStack.pop()
                 operand1 = outputStack.pop()
                 outputStack.append(
                     definitions._operators[token].func(operand1, operand2)
                 )
             elif token == ",":
-                lenexpr=-1
                 outputStack.append(",")
             elif func.match(token):
-                lenexpr=-1
-
                 if (
                     "," in outputStack
                     and num.match(str(outputStack[-3]))
@@ -70,7 +65,7 @@ class Evaluator(object):
                     outputStack.append(definitions._functions[token](operand))
         if len(outputStack) == 0:
             raise ValueError("empty expression")
-        if lenexpr!=0:
+        if len(outputStack) != 1:
             raise ValueError("not right nummer of operand")
 
         return outputStack[0]
