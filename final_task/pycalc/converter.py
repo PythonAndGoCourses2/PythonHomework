@@ -43,12 +43,10 @@ class Converter:
         func = self.func
         num = self.num
         op = self.op
-
         pos = 0
         operatorStack = deque()
         outputStack = deque()
-        prev = None
-        posbrcl = 0
+        
 
         while pos < len(iExpr):
             if num.match(iExpr, pos):
@@ -90,13 +88,15 @@ class Converter:
             elif iExpr[pos] == ",":
                 if operatorStack:
                     top = operatorStack.popleft()
-                    if "(" in operatorStack:
+                    if op.match(top) and "(" in operatorStack:
                         while operatorStack:
                             outputStack.append(top)
                             top = operatorStack.popleft()
                             if top == "(":
                                 operatorStack.appendleft(top)
                                 break
+                    elif not op.match(top):
+                        break
                     else:
                         raise ConvertError()
                     outputStack.append(",")
