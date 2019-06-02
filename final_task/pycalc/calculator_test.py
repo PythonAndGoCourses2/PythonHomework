@@ -109,7 +109,6 @@ class TestCalculate(unittest.TestCase):
         self.assertEqual(
             self.calculator.calculate(iExpr), eval("2.0**(2.0**2.0*2.0**2.0)")
         )
-        
 
     """def testError(self):
         iExpr = r"((1+2)"
