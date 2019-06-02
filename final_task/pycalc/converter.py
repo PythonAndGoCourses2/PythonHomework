@@ -46,7 +46,6 @@ class Converter:
         pos = 0
         operatorStack = deque()
         outputStack = deque()
-        
 
         while pos < len(iExpr):
             if num.match(iExpr, pos):
@@ -74,7 +73,7 @@ class Converter:
                 funcM = func.match(iExpr, pos)
                 flag = False
                 try:
-                    a = iExpr[funcM.end()+1] != "("
+                    a = iExpr[funcM.end() + 1] != "("
                 except IndexError:
                     flag = True
 

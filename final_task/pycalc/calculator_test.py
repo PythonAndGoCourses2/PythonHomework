@@ -109,13 +109,7 @@ class TestCalculate(unittest.TestCase):
         self.assertEqual(
             self.calculator.calculate(iExpr), eval("2.0**(2.0**2.0*2.0**2.0)")
         )
-        iExpr = r"sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))"
-        self.assertEqual(
-            self.calculator.calculate(iExpr),
-            eval(
-                "math.sin(math.e**math.log(math.e**math.e**math.sin(23.0),45.0) + math.cos(3.0+math.log10(math.e**-math.e)))"
-            ),
-        )
+        
 
     """def testError(self):
         iExpr = r"((1+2)"
