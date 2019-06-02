@@ -51,6 +51,8 @@ class PyCalcProcessing(object):
         # ???????? ?? ?????? ? ??????? ??????????
         if re.search('/ /|< =|> =|= =|! =', formula_string):
             print('ERROR: space is not allowed in operators: //, <=, >=, ==, !=.')
+        if re.search('\d\s\d', formula_string):
+            print('ERROR: space is not allowed between digits!')
         # ???????? ?? ??????????? ????????
         for el in formula_string.strip():
             if el not in ALLOWED_TOKENS:
@@ -204,8 +206,8 @@ class PyCalcProcessing(object):
             if el in UNARY_OPERATORS:
                 stack_str += el
             else:
-                is_unary_plus = ((processed_list and processed_list[-1] in (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or
-                                 not processed_list)
+                is_unary_plus = ((processed_list and processed_list[-1] in (('(', ',') + tuple(BINARY_OPERATORS.keys())))
+                                 or not processed_list)
                 if stack_str:
                     if '-' in stack_str:
                         if stack_str.count('-') % 2 == 0:  # ??????? ???-?? -, ??????? ?? + ???? ?? -
@@ -240,8 +242,8 @@ class PyCalcProcessing(object):
                     stack.append(token)
                 else:
                     while (stack and stack[-1] != "(" and
-                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0] and
-                           token != '^'):
+                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0]
+                           and token != '^'):
                         yield stack.pop()
                     stack.append(token)
             elif token == ")":

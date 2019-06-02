@@ -131,9 +131,7 @@ class TestCalcing(unittest.TestCase):
                                         '-', 'log10', '*', 0.0, 53.0, 10.0, '/', '-', 'abs', '+', 5.0, '-']))
 
     def test36(self):
-        self.assertEqual(math.sin(-math.cos(-math.sin(3.0)-math.cos(-math.sin(-3.0*5.0)-math.sin(math.cos
-                        (math.log10(43.0))))+math.cos(math.sin(math.sin(34.0-2.0**2.0))))--math.cos(1.0)--
-                        math.cos(0.0)**3.0),
+        self.assertEqual(math.sin(-math.cos(-math.sin(3.0)-math.cos(-math.sin(-3.0*5.0)-math.sin(math.cos(math.log10(43.0))))+math.cos(math.sin(math.sin(34.0-2.0**2.0))))--math.cos(1.0)--math.cos(0.0)**3.0),
                          calc_obj.calc([0.0, 0.0, 3.0, 'sin', '-', 0.0, 0.0, 3.0, 5.0, '*', '-', 'sin', '-', 43.0,
                                         'log10', 'cos', 'sin', '-', 'cos', '-', 34.0, 2.0, 2.0, '^', '-', 'sin', 'sin',
                                         'cos', '+', 'cos', '-', 1.0, 'cos', '+', 0.0, 3.0, '^', 'cos', '+', 'sin']))
