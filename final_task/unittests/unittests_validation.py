@@ -210,6 +210,9 @@ class ExpectedFailureTestCase(unittest.TestCase):
         self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', '(', 1.0,
                                                                              '+', ')', 1.0, ')']))
 
+    def test64(self):
+        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['abs']))
+
 
 class ExpectedSuccessTestCase(unittest.TestCase):
     def test1(self):

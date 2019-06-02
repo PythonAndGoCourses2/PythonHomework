@@ -2,7 +2,7 @@
 import sys
 import inspect
 
-from config import *
+from final_task.config import *
 
 
 # т. к. ValueError пишет в лог traceback, переопределим функцию в sys, чтобы в лог писалось только сообщение
@@ -134,6 +134,7 @@ class PyCalcProcessing(object):
             print('ERROR: Formula can not start with binary operator "{}"'.format(parsed_list[0]))
 
         counter = 0  # counter for parentheses
+        was_number = False
 
         previous_el = ''
         for el in parsed_list:
@@ -173,6 +174,7 @@ class PyCalcProcessing(object):
                     print(message)
 
             if isinstance(previous_el, float) or previous_el in MATH_CONSTS:
+                was_number = True
                 if el in (('(',) + ALL_FUNCTIONS_AND_CONSTS) or isinstance(el, float):
                     print(message)
 
@@ -180,6 +182,9 @@ class PyCalcProcessing(object):
 
         if counter != 0:
             print('ERROR: Wrong number of opened or closed parentheses in formula!')
+
+        if not was_number:
+            print('Formula does not contain numbers!')
 
         return 'Formula was validated! Errors were not found.'
 
@@ -328,19 +333,17 @@ class PyCalcProcessing(object):
 
     def launch_processing(self):
         self.pre_validate(self.formula_string)
-        # print('Prevalidation was done!')
         parsed_list = []
         for el in self.parse(self.formula_string):
             parsed_list.append(el)
-        # print('Formula was parsed to tokens.')
         self.validate_parsed_list(parsed_list)
-        # print('Validation was done!')
         parsed_list = self.process_unary_operations(parsed_list)
-        # print('Redundant unary operations were deleted!')
         polish_list = []
         for el in self.sort_to_polish(parsed_list):
             polish_list.append(el)
-        # print('Tokens were sorted to polish list!')
         result = self.calc(polish_list)
-        # print('Result of calculating of {} is {}'.format(self.formula_string, result))
         print(result)
+
+
+obj = PyCalcProcessing('abs')
+obj.launch_processing()
