@@ -121,10 +121,10 @@ def is_unary(tokens, index):
     token = tokens[index - 1]
     if token == ' ':
         token = tokens[index - 2]
-    return (token in lib.OPERATORS or
-            token in lib.FUNCTIONS or
-            token in lib.user_functions or
-            token == lib.FUNC_DELIMITER or
+    return (token in (*lib.OPERATORS,
+                      *lib.FUNCTIONS,
+                      *lib.user_functions,
+                      *lib.FUNC_DELIMITER) or
             not index or
             token == lib.OPEN_BRACKET)
 
