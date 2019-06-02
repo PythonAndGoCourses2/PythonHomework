@@ -5,14 +5,6 @@ import operator
 from collections import namedtuple
 
 
-def make_functions(math_functions):
-    """Make dictionary name : func from math_functions"""
-    functions = dict()
-    for func in math_functions:
-        functions[func.__name__] = func
-    return functions
-
-
 class Library:
     CONSTANTS = {
         'pi': math.pi,
@@ -45,7 +37,8 @@ class Library:
     }
     OPERATORS = {**LEFT_ASSOCIATIVITY, **RIGHT_ASSOCIATIVITY}
 
-    MATH_FUNCTIONS = [getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))]
+    MATH_FUNCTIONS = {k: v for (k, v) in math.__dict__.items() if not k.startswith('_')
+                      and callable(getattr(math, k))}
     OTHER_FUNCTIONS = {
         'abs': abs,
         'round': round,
@@ -54,7 +47,7 @@ class Library:
         'logOneP': math.log1p
     }
     user_functions = dict()
-    FUNCTIONS = {**make_functions(MATH_FUNCTIONS), **OTHER_FUNCTIONS}
+    FUNCTIONS = {**MATH_FUNCTIONS, **OTHER_FUNCTIONS}
     FUNC_DELIMITER = ','
 
     OPEN_BRACKET = '('
@@ -66,9 +59,9 @@ class Library:
     def read_user_module(self, module_name):
         """'Read' user module: make functions and constants"""
         module = importlib.import_module(module_name)
-        functions = [getattr(module, attr)
-                     for attr in dir(module) if callable(getattr(module, attr))]
+        functions = {k: v for (k, v) in module.__dict__.items() if not k.startswith('_')
+                     and callable(getattr(module, k))}
         constants = {k: v for (k, v) in module.__dict__.items() if not k.startswith('_')
                      and not callable(getattr(module, k))}
-        Library.user_functions = {**make_functions(functions)}
+        Library.user_functions = functions
         Library.user_constants = constants

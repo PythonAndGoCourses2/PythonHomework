@@ -11,6 +11,8 @@ def calculate(expr):
         try:
             if token == lib.FUNC_DELIMITER:
                 stack.append(token)
+            elif token == lib.FILLER:
+                stack.append(token)
             elif token in lib.OPERATORS:
                 if token in unary_operators:
                     operator = stack.pop()
@@ -33,9 +35,13 @@ def calculate(expr):
 
 def calculate_function(functions, token, stack):
     operators = []
-    while len(stack) >= 2 and stack[-2] == lib.FUNC_DELIMITER:
-        operators.append(stack.pop())
+    if stack[-1] == lib.FILLER:
         stack.pop()
-    operators.append(stack.pop())
-    operators.reverse()
-    stack.append(float(functions[token](*operators)))
+        stack.append(float(functions[token]()))
+    else:
+        while len(stack) >= 2 and stack[-2] == lib.FUNC_DELIMITER:
+            operators.append(stack.pop())
+            stack.pop()
+        operators.append(stack.pop())
+        operators.reverse()
+        stack.append(float(functions[token](*operators)))
