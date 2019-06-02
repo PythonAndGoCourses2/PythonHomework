@@ -19,6 +19,7 @@ def main():
         expression = check.replace_whitespace_and_const(expression)
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
+        expression = check.check_arg_function(expression)
         if expression:
             if not comparison:
                 if check.brackets_check(expression):
@@ -26,7 +27,7 @@ def main():
             else:
                 print(check.comparison_calc(expression, comparison))
         else:
-            print("ERROR: no symbols to calculate")
+            print("ERROR: incorrect expression")
     except OverflowError:
         print("ERROR: numerical result out of range")
     except ZeroDivisionError:

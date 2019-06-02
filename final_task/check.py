@@ -3,6 +3,7 @@
 import re
 import core
 from constants import *
+from core import comma_count
 
 
 def brackets_check(expr):
@@ -96,4 +97,27 @@ def common_check(expr):
         if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
             return False
         i += 1
+    return expr
+
+
+def check_arg_function(expr):
+    print("expr= ", expr)
+    func = ""
+    count, count_comma, i = 0, 0, 0
+    while i < len(expr):
+        if expr[i].isalpha():
+            func += expr[i]
+        elif func in MATH_FUNC:
+            while expr[i] != "(":  # For such function as log2, log10, etc
+                func += expr[i]
+                i += 1
+            i += 1
+            count += comma_count(MATH_FUNC[func])
+            func = ""
+        i += 1
+    for symbol in expr:
+        if symbol == ',':
+            count_comma += 1
+    if count != count_comma:
+        return False
     return expr

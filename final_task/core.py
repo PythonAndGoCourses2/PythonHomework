@@ -1,5 +1,4 @@
 from constants import *
-import re
 
 
 def parse(expression):
@@ -8,9 +7,8 @@ def parse(expression):
     parsed_formula = []
     i = 0  # Символ строки
     while i < len(expression):
-        symbol = expression[i]
         if expression[i].isalpha():
-            func += symbol
+            func += expression[i]
         elif func in MATH_FUNC:
             while expression[i] != "(":  # For such function as log2, log10, etc
                 func += expression[i]
@@ -29,7 +27,7 @@ def parse(expression):
             func = ""
             continue  # Because changed i value
         if expression[i].isdigit() or expression[i] == '.':
-            number += symbol
+            number += expression[i]
         elif number:
             parsed_formula.append(float(number))
             number = ''
@@ -52,7 +50,7 @@ def math_function_calculating(function, func_expr):
     """Take function and string expression under function."""
     list_of_arg = []
     argument, start_pos = 0, 0
-    k = arg_count(function) - 1
+    k = comma_count(function)
     while k > 0:
         argument = func_expr.find(",", start_pos)
         temp = func_expr[start_pos:argument]
@@ -67,14 +65,13 @@ def math_function_calculating(function, func_expr):
     return function(*list_of_arg)
 
 
-def arg_count(function):
+def comma_count(function):
     doc_string = function.__doc__
     count = 0
     for symbol in doc_string[:doc_string.find("\n")]:
         if symbol == ",":
             count += 1
-
-    return count + 1
+    return count
 
 
 def infix_to_postfix(parsed_formula):
