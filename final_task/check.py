@@ -101,7 +101,6 @@ def common_check(expr):
 
 
 def check_arg_function(expr):
-    print("expr= ", expr)
     func = ""
     count, count_comma, i = 0, 0, 0
     while i < len(expr):
@@ -119,5 +118,6 @@ def check_arg_function(expr):
         if symbol == ',':
             count_comma += 1
     if count != count_comma:
+        print("Function takes {0} arguments, but {1} was given.".format(count+1, count_comma+1))
         return False
     return expr
