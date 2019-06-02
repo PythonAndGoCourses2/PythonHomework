@@ -192,7 +192,7 @@ class PyCalcProcessing(object):
         if was_number is False:
             print('ERROR: Formula does not contain numbers!')
 
-        return 'ERROR: Formula was validated! Errors were not found.'
+        return 'Formula was validated! Errors were not found.'
 
     @staticmethod
     def process_unary_operations(validated_list):
@@ -206,8 +206,8 @@ class PyCalcProcessing(object):
             if el in UNARY_OPERATORS:
                 stack_str += el
             else:
-                is_unary_plus = ((processed_list and processed_list[-1] in (('(', ',') + tuple(BINARY_OPERATORS.keys())))
-                                 or not processed_list)
+                is_unary_plus = ((processed_list and processed_list[-1] in
+                                  (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or not processed_list)
                 if stack_str:
                     if '-' in stack_str:
                         if stack_str.count('-') % 2 == 0:  # ??????? ???-?? -, ??????? ?? + ???? ?? -
