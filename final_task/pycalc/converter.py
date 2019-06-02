@@ -96,7 +96,7 @@ class Converter:
                                 operatorStack.appendleft(top)
                                 break
                     elif not op.match(top):
-                        break
+                        operatorStack.appendleft(top)
                     else:
                         raise ConvertError()
                     outputStack.append(",")
