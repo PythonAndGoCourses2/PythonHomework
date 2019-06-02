@@ -1,6 +1,6 @@
 import re
 import math
-import definitions
+from . import definitions
 
 
 class Corrector:

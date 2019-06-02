@@ -1,5 +1,5 @@
 import argparse
-import calculator
+from . import calculator
 
 
 def create_parser():

@@ -1,4 +1,4 @@
-import definitions
+from . import definitions
 import re
 from collections import deque
 

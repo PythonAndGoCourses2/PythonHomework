@@ -1,6 +1,6 @@
-import corrector
-import converter
-import evaluator
+from . import corrector
+from . import converter
+from . import evaluator
 
 
 class Calculator(object):

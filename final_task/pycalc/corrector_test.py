@@ -1,5 +1,5 @@
 import unittest
-import corrector
+from . import corrector
 
 
 class TestCorrector(unittest.TestCase):
