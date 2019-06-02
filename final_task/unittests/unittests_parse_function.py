@@ -214,14 +214,14 @@ class TestParsingPositiveCases(unittest.TestCase):
         self.assertEqual(list_, ['(', 2.0, '^', '(', 'pi', '/', 'pi', '+', 'e', '/', 'e', '+', 2.0, '^', 0.0,
                                  ')', ')', '^', '(', 1.0, '/', 3.0, ')'])
 
-    # def test34(self):  # how to process comma in log
-    #     list_ = []
-    #     for el in calc_obj.parse('sin(pi/2^1) + log(1*4+2^2+1, 3^2)'):
-    #         list_.append(el)
-    #     self.assertEqual(list_, ['sin', '(', 'pi', '/', 2.0, '^', 1.0, ')', '+', 'log', '(', 1.0, '*', 4.0, '+',
-    #                              2.0, '^', 2.0, '+', 1.0, ',', 3.0, '^', 2.0, ')'])
+    def test34(self):
+        list_ = []
+        for el in calc_obj.parse('sin(pi/2^1) + log(1*4+2^2+1, 3^2)'):
+            list_.append(el)
+        self.assertEqual(list_, ['sin', '(', 'pi', '/', 2.0, '^', 1.0, ')', '+', 'log', '(', 1.0, '*', 4.0, '+',
+                                 2.0, '^', 2.0, '+', 1.0, ',', 3.0, '^', 2.0, ')'])
 
-    def test35(self):  # why there are no parentheses after division in log
+    def test35(self):
         list_ = []
         for el in calc_obj.parse('10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5'):
             list_.append(el)
@@ -231,7 +231,7 @@ class TestParsingPositiveCases(unittest.TestCase):
     def test36(self):
         list_ = []
         for el in calc_obj.parse('sin(-cos(-sin(3.0)-cos(-sin(-3.0*5.0)-sin(cos(log10(43.0))))+'
-                        'cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)'):
+                                 'cos(sin(sin(34.0-2.0^2.0))))--cos(1.0)--cos(0.0)^3.0)'):
             list_.append(el)
         self.assertEqual(list_, ['sin', '(', '-', 'cos', '(', '-', 'sin', '(', 3.0, ')', '-', 'cos',
                                  '(', '-', 'sin', '(', '-', 3.0, '*', 5.0, ')', '-', 'sin', '(', 'cos', '(',

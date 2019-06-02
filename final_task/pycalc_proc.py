@@ -195,8 +195,8 @@ class PyCalcProcessing(object):
             if el in UNARY_OPERATORS:
                 stack_str += el
             else:
-                is_unary_plus = ((processed_list and processed_list[-1] in (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or
-                                 not processed_list)
+                is_unary_plus = ((processed_list and processed_list[-1] in
+                                  (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or not processed_list)
                 if stack_str:
                     if '-' in stack_str:
                         if stack_str.count('-') % 2 == 0:  # считаем кол-во -, замен€€ на + либо на -
@@ -231,8 +231,8 @@ class PyCalcProcessing(object):
                     stack.append(token)
                 else:
                     while (stack and stack[-1] != "(" and
-                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0] and
-                           token != '^'):
+                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0]
+                           and token != '^'):
                         yield stack.pop()
                     stack.append(token)
             elif token == ")":

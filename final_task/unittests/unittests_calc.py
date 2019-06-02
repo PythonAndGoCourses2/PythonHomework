@@ -54,7 +54,8 @@ class TestCalcing(unittest.TestCase):
         self.assertEqual(math.log10(100.0), calc_obj.calc([100.0, 'log10']))
 
     def test15(self):
-        self.assertEqual(math.sin(math.pi / 2.0) * 111 * 6, calc_obj.calc(['pi', 2.0, '/', 'sin', 111.0, '*', 6.0, '*']))
+        self.assertEqual(math.sin(math.pi / 2.0) * 111 * 6,
+                         calc_obj.calc(['pi', 2.0, '/', 'sin', 111.0, '*', 6.0, '*']))
 
     def test16(self):
         self.assertEqual(2.0 * math.sin(math.pi / 2.0), calc_obj.calc([2.0, 'pi', 2.0, '/', 'sin', '*']))
@@ -77,16 +78,17 @@ class TestCalcing(unittest.TestCase):
 
     # Comparison operators
     def test22(self):
-        self.assertEqual(1.0 + 2.0 * 3.0 == 1.0 + 2.0 * 3.0, calc_obj.calc([1.0, 2.0, 3.0, '*', '+',
-                                                                   1.0, 2.0, 3.0, '*', '+', '==']))
+        self.assertEqual(1.0 + 2.0 * 3.0 == 1.0 + 2.0 * 3.0,
+                         calc_obj.calc([1.0, 2.0, 3.0, '*', '+', 1.0, 2.0, 3.0, '*', '+', '==']))
 
     def test23(self):
-        self.assertEqual(math.e ** 5.0 >= math.e ** 5.0 + 1.0, calc_obj.calc(['e', 5.0, '^', 'e', 5.0, '^', 1.0, '+', '>=']))
+        self.assertEqual(math.e ** 5.0 >= math.e ** 5.0 + 1.0,
+                         calc_obj.calc(['e', 5.0, '^', 'e', 5.0, '^', 1.0, '+', '>=']))
 
     def test24(self):
         self.assertEqual(1.0 + 2.0 * 4.0 / 3.0 + 1.0 != 1.0 + 2.0 * 4.0 / 3.0 + 2.0,
-                         calc_obj.calc([1.0, 2.0, 4.0, '*', 3.0, '/', '+', 1.0, '+', 1.0, 2.0, 4.0, '*',
-                               3.0, '/', '+', 2.0, '+', '!=']))
+                         calc_obj.calc([1.0, 2.0, 4.0, '*', 3.0, '/', '+', 1.0, '+', 1.0, 2.0, 4.0, '*', 3.0, '/', '+',
+                                        2.0, '+', '!=']))
 
     # Common tests
     def test25(self):
@@ -111,31 +113,30 @@ class TestCalcing(unittest.TestCase):
         self.assertEqual(math.e ** 34.0, calc_obj.calc(['e', 34.0, '^']))
 
     def test32(self):
-        self.assertEqual((2.0 ** (math.pi/math.pi+math.e/math.e+2.0**0.0)), calc_obj.calc([2.0, 'pi', 'pi', '/', 'e', 'e', '/',
-                                                                                  '+', 2.0, 0.0, '^', '+', '^']))
+        self.assertEqual((2.0 ** (math.pi/math.pi+math.e/math.e+2.0**0.0)),
+                         calc_obj.calc([2.0, 'pi', 'pi', '/', 'e', 'e', '/', '+', 2.0, 0.0, '^', '+', '^']))
 
     def test33(self):
         self.assertEqual((2.0**(math.pi/math.pi+math.e/math.e+2.0**0.0))**(1.0/3.0), calc_obj.calc(
                         [2.0, 'pi', 'pi', '/', 'e', 'e', '/', '+', 2.0, 0.0, '^', '+', '^', 1.0, 3.0, '/', '^']))
 
     def test34(self):
-        self.assertEqual(math.sin(math.pi/2.0**1.0) + math.log(1*4+2**2+1, 3**2), calc_obj.calc(['pi', 2.0, 1.0, '^', '/', 'sin',
-                                                                                    1.0, 4.0, '*', 2.0, 2.0, '^', '+',
-                                                                                    1.0, '+',  3.0, 2.0, '^',
-                                                                                    'log', '+']))
+        self.assertEqual(math.sin(math.pi/2.0**1.0) + math.log(1*4+2**2+1, 3**2),
+                         calc_obj.calc(['pi', 2.0, 1.0, '^', '/', 'sin', 1.0, 4.0, '*', 2.0, 2.0, '^',
+                                        '+', 1.0, '+',  3.0, 2.0, '^', 'log', '+']))
 
     def test35(self):
         self.assertEqual(10.0*math.e**0.0*math.log10(.4 -5.0/ -0.1-10.0) - -abs(-53.0/10.0) + -5.0,
-                         calc_obj.calc([10.0, 'e', 0.0, '^', '*', 0.4, 5.0, 0.0, 0.1, '-', '/', '-', 10.0, '-', 'log10', '*',
-                               0.0, 53.0, 10.0, '/', '-', 'abs', '+', 5.0, '-']))
+                         calc_obj.calc([10.0, 'e', 0.0, '^', '*', 0.4, 5.0, 0.0, 0.1, '-', '/', '-', 10.0,
+                                        '-', 'log10', '*', 0.0, 53.0, 10.0, '/', '-', 'abs', '+', 5.0, '-']))
 
     def test36(self):
         self.assertEqual(math.sin(-math.cos(-math.sin(3.0)-math.cos(-math.sin(-3.0*5.0)-math.sin(math.cos
                         (math.log10(43.0))))+math.cos(math.sin(math.sin(34.0-2.0**2.0))))--math.cos(1.0)--
-                        math.cos(0.0)**3.0), calc_obj.calc([0.0, 0.0, 3.0, 'sin', '-', 0.0, 0.0, 3.0, 5.0, '*', '-', 'sin', '-',
-                                                   43.0, 'log10', 'cos', 'sin', '-', 'cos', '-', 34.0, 2.0, 2.0, '^',
-                                                   '-', 'sin', 'sin', 'cos', '+', 'cos', '-', 1.0, 'cos', '+', 0.0, 3.0,
-                                                   '^', 'cos', '+', 'sin']))
+                        math.cos(0.0)**3.0),
+                         calc_obj.calc([0.0, 0.0, 3.0, 'sin', '-', 0.0, 0.0, 3.0, 5.0, '*', '-', 'sin', '-', 43.0,
+                                        'log10', 'cos', 'sin', '-', 'cos', '-', 34.0, 2.0, 2.0, '^', '-', 'sin', 'sin',
+                                        'cos', '+', 'cos', '-', 1.0, 'cos', '+', 0.0, 3.0, '^', 'cos', '+', 'sin']))
 
     def test37(self):
         self.assertEqual(2.0**(2.0**2.0*2.0**2.0), calc_obj.calc([2.0, 2.0, 2.0, '^', 2.0, 2.0, '^', '*', '^']))
@@ -143,8 +144,8 @@ class TestCalcing(unittest.TestCase):
     def test38(self):
         self.assertEqual(math.sin(math.e**math.log(math.e**math.e**math.sin(23.0), 45.0) +
                                   math.cos(3.0+math.log10(math.e**-math.e))),
-                         calc_obj.calc(['e', 'e', 'e', 23.0, 'sin', '^', '^',  45.0, 'log', '^', 3.0, 'e', 0.0, 'e', '-',
-                               '^', 'log10', '+', 'cos', '+', 'sin']))
+                         calc_obj.calc(['e', 'e', 'e', 23.0, 'sin', '^', '^',  45.0, 'log', '^', 3.0, 'e', 0.0,
+                                        'e', '-', '^', 'log10', '+', 'cos', '+', 'sin']))
 
     # Self-made cases
     def test52(self):
@@ -197,7 +198,8 @@ class TestCalcing(unittest.TestCase):
                          calc_obj.calc([8.0, 2.0, 'log', 16.0, 2.0, 'log', '*', 'sin']))
 
     def test68(self):
-        self.assertEqual(math.log(8.0+20.0-1.0, 2.0+1.0), calc_obj.calc([8.0, 20.0, '+', 1.0, '-', 2.0,  1.0, '+', 'log']))
+        self.assertEqual(math.log(8.0+20.0-1.0, 2.0+1.0),
+                         calc_obj.calc([8.0, 20.0, '+', 1.0, '-', 2.0,  1.0, '+', 'log']))
 
     def test69(self):
         self.assertEqual(math.log10(100.0), calc_obj.calc([100.0, 'log10']))
@@ -244,13 +246,13 @@ class TestCalcing(unittest.TestCase):
         self.assertEqual(math.pow(2.0, 4.0)*math.pow(2.0, 3.0), calc_obj.calc([2.0, 4.0, 'pow', 2.0, 3.0, 'pow', '*']))
 
     def test83(self):
-        self.assertEqual(math.sin(math.pow(2.0, 4.0)*math.pow(2.0, 3.0)), calc_obj.calc([2.0, 4.0, 'pow', 2.0, 3.0,
-                                                                                'pow', '*', 'sin']))
+        self.assertEqual(math.sin(math.pow(2.0, 4.0)*math.pow(2.0, 3.0)),
+                         calc_obj.calc([2.0, 4.0, 'pow', 2.0, 3.0, 'pow', '*', 'sin']))
 
     def test84(self):
         self.assertEqual(math.pow(2.0**(2.0**2.0*2.0**2.0), math.log10(100.0)*math.log10(1000.0)),
-                         calc_obj.calc([2.0, 2.0, 2.0, '^', 2.0, 2.0, '^', '*', '^', 100.0, 'log10', 1000.0, 'log10', '*',
-                               'pow']))
+                         calc_obj.calc([2.0, 2.0, 2.0, '^', 2.0, 2.0, '^', '*', '^',
+                                        100.0, 'log10', 1000.0, 'log10', '*', 'pow']))
 
     def test85(self):
         self.assertEqual(13.0, calc_obj.calc([13.0]))
