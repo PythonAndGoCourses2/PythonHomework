@@ -71,16 +71,13 @@ class TestFunctions(unittest.TestCase):
                 math.sin(4) + 1)
             self.assertAlmostEqual(
                 float(
-                    self.calculator.expression_search("pow(2,1)+13+sin(4)")), math.pow(
-                    2, 1) + 13 + math.sin(4))
+                    self.calculator.expression_search("pow(2,1)+13+sin(4)")), math.pow(2, 1) + 13 + math.sin(4))
             with self.assertRaises(Exception):
                 self.calculator.expression_search("sin(+1")
                 self.calculator.expression_search("sin()+1")
                 self.calculator.expression_search("pow(1)+11")
                 self.assertAlmostEqual(
-                    float(
-                        self.calculator.expression_search("e")),
-                    math.e)
+                    float(self.calculator.expression_search("e")), math.e)
 
     def test_function_calculator(self):
         with patch('pycalc.difcalc.ComplexCalc._commasplit') as splitted,\
@@ -94,14 +91,6 @@ class TestFunctions(unittest.TestCase):
                         "sin",
                         "1")),
                 math.sin(3))
-
-    '''def test_operators(self):
-        self.assertAlmostEqual(float(self.calculator.calculate("12^2")), 144.0)
-        self.assertAlmostEqual(float(self.calculator.calculate("12/2")), 6.0)
-        with self.assertRaises(Exception):
-            self.calculator.calculate("12^`2")
-            self.calculator.calculate("`12*2")
-            self.calculator.calculate("12/*2")'''
 
     def test_unary_operators(self):
         self.assertEqual(float(self.calculator. unary_rezult("12")), 12.0)
@@ -147,25 +136,8 @@ class TestFunctions(unittest.TestCase):
             with self.assertRaises(Exception):
                 self.calculator.search_brakets("12+()")
                 self.calculator.search_brakets("12(12+1)")
+                self.calculator.search_brakets("12+(12+1)12")
 
 
 if __name__ == '__main__':
     unittest.main()
-    """cheker = CheckAndChange.CheckAndChange()
-    calculator = difcalc.ComplexCalc()
-
-    a = "1^2"
-    try:
-
-        if a != "--help":
-
-            a = cheker.do_all_changes(a, None)
-            a = calculator.calculate(a)
-
-        else:
-            print("help yourself")
-
-    except Exception as e:
-        print("ERROR:  " + str(e))
-    else:
-        print(a)"""
