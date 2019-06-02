@@ -1,5 +1,5 @@
 import unittest
-from .calculator import Calculator
+import calculator
 import math
 
 
