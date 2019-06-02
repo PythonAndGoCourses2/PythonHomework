@@ -1,5 +1,5 @@
 import unittest
-from math import pi, e, tau, inf, nan
+import math
 import check
 import core
 
@@ -10,7 +10,6 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertFalse(check.brackets_check('(()'))
         self.assertTrue(check.brackets_check(''))
         self.assertFalse(check.brackets_check(')()'))
-        # complete
 
     def test_comparison_check(self):
         self.assertEqual(check.comparison_check("5>2"), ">")
@@ -21,7 +20,6 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.comparison_check("10!=2+3*5"), "!=")
         self.assertFalse(check.comparison_check("10+3*(2+1)"))
         self.assertFalse(check.comparison_check("5-2"))
-        # complete
 
     def test_comparison_calc(self):
         self.assertTrue(check.comparison_calc("5>2", ">"))
@@ -38,7 +36,6 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.fix_unary("2+3*(-1+2)"), "2+3*(0-1+2)")
         self.assertEqual(check.fix_unary("2+30*(+1+2)"), "2+30*(0+1+2)")
         self.assertEqual(check.fix_unary("2+3*(4+5)"), "2+3*(4+5)")
-        # complete
 
     def test_replace_plus_minus(self):
         self.assertEqual(check.replace_plus_minus("2+++3"), "2+3")
@@ -50,16 +47,14 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.replace_plus_minus("2-+++--+9"), "2-9")
         self.assertEqual(check.replace_plus_minus("--+-2.0-+--10"), "-2.0-10")
         self.assertEqual(check.replace_plus_minus("2*2/3"), "2*2/3")
-        # complete
 
     def test_replace_whitespace_and_const(self):
         self.assertEqual(check.replace_whitespace_and_const("3 +  4"), "3+4")
         self.assertEqual(check.replace_whitespace_and_const("3+ 4 *    (5 + 2 / 10 ) "), "3+4*(5+2/10)")
-        self.assertEqual(check.replace_whitespace_and_const("e+1"), "{}+1".format(e))
-        self.assertEqual(check.replace_whitespace_and_const("2+e/pi"), "2+{0}/{1}".format(e, pi))
-        self.assertEqual(check.replace_whitespace_and_const("10*tau+e^e"), "10*{tau}+{e}^{e}".format(tau=tau, e=e))
-        self.assertEqual(check.replace_whitespace_and_const("2+inf-nan"), "2+{0}-{1}".format(inf, nan))
-        # complete
+        self.assertEqual(check.replace_whitespace_and_const("e+1"), "{}+1".format(math.e))
+        self.assertEqual(check.replace_whitespace_and_const("2+e/pi"), "2+{0}/{1}".format(math.e, math.pi))
+        self.assertEqual(check.replace_whitespace_and_const("2*tau^e"), "2*{tau}^{e}".format(tau=math.tau, e=math.e))
+        self.assertEqual(check.replace_whitespace_and_const("2+inf-nan"), "2+{0}-{1}".format(math.inf, math.nan))
 
     def test_common_check(self):
         self.assertEqual(check.common_check("1 + 2 ^  3"), "1 + 2 ^  3")
@@ -77,7 +72,11 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertFalse(check.common_check("1 * * 6"))
         self.assertFalse(check.common_check("1 / / 7"))
         self.assertFalse(check.common_check("1 % % 8"))
-        # complete
+
+    def test_check_arg_function(self):
+        self.assertEqual(check.check_arg_function("log(8,2)+sin(3)"), "log(8,2)+sin(3)")
+        self.assertFalse(check.check_arg_function("sin(2,3,4)"))
+        self.assertEqual(check.check_arg_function("2+2"), "2+2")
 
 
 class TestCoreFunctions(unittest.TestCase):
@@ -92,10 +91,14 @@ class TestCoreFunctions(unittest.TestCase):
         self.assertEqual(core.parse("10//2"), [10, "//", 2])
 
     def test_math_function_calculating(self):
-        pass
+        self.assertEqual(core.math_function_calculating(math.log, "8,2"), 3)
+        self.assertEqual(core.math_function_calculating(math.sin, "2"), math.sin(2))
 
     def test_comma_count(self):
-        pass
+        self.assertEqual(core.comma_count(math.log), 1)
+        self.assertEqual(core.comma_count(math.sin), 0)
+        self.assertEqual(core.comma_count(round), 1)
+        self.assertEqual(core.comma_count(abs), 0)
 
     def test_infix_to_postfix(self):
         self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
