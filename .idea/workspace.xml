@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3fa95c7-d832-4c2a-ac27-d33d9d11355d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/final_task/config.py" afterPath="$PROJECT_DIR$/final_task/config.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/final_task/pycalc.py" afterPath="$PROJECT_DIR$/final_task/pycalc.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/final_task/pycalc_proc.py" afterPath="$PROJECT_DIR$/final_task/pycalc_proc.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +19,8 @@
       <file leaf-file-name="pycalc_proc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/final_task/pycalc_proc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state relative-caret-position="587">
+              <caret line="343" column="0" lean-forward="true" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
               <folding>
                 <element signature="e#31#41#0" expanded="true" />
               </folding>
@@ -25,11 +28,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/final_task/config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="pycalc.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/final_task/pycalc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -52,11 +65,21 @@
       <file leaf-file-name="unittests_sort_to_polish_function.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_sort_to_polish_function.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="238">
+              <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="unittest_process_unary_operations.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/final_task/unittests/unittest_process_unary_operations.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="18" column="38" lean-forward="false" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,13 +103,13 @@
       <list>
         <option value="$PROJECT_DIR$/final_task/unittests/unittest_process_unary_operations.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py" />
-        <option value="$PROJECT_DIR$/final_task/pycalc.py" />
         <option value="$PROJECT_DIR$/final_task/setup.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_calc.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_parse_function.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_sort_to_polish_function.py" />
-        <option value="$PROJECT_DIR$/final_task/config.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_validation.py" />
+        <option value="$PROJECT_DIR$/final_task/config.py" />
+        <option value="$PROJECT_DIR$/final_task/pycalc.py" />
         <option value="$PROJECT_DIR$/final_task/pycalc_proc.py" />
       </list>
     </option>
@@ -156,8 +179,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for unittests_validation.ExpectedSuccessTestCase.test1">
-    <configuration name="Unittests for unittests_parse_function.TestParsingPositiveCases" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Unittests for unittests_sort_to_polish_function.TestSorting.test2">
+    <configuration name="Unittests for unittest_process_unary_operations.TestProcessUnaryOperations.test3" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -168,10 +191,10 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PythonHomework" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;unittests_parse_function.TestParsingPositiveCases&quot;" />
+      <option name="_new_target" value="&quot;unittest_process_unary_operations.TestProcessUnaryOperations.test3&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
-    <configuration name="Unittests for unittests_parse_function.TestParsingPositiveCases.test53" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for unittests_sort_to_polish_function.TestSorting.test1" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -182,7 +205,21 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PythonHomework" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;unittests_parse_function.TestParsingPositiveCases.test53&quot;" />
+      <option name="_new_target" value="&quot;unittests_sort_to_polish_function.TestSorting.test1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
+    <configuration name="Unittests for unittests_sort_to_polish_function.TestSorting.test2" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/final_task/unittests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="PythonHomework" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;unittests_sort_to_polish_function.TestSorting.test2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
     <configuration name="Unittests for unittests_validation.ExpectedSuccessTestCase.test1" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
@@ -199,20 +236,6 @@
       <option name="_new_target" value="&quot;unittests_validation.ExpectedSuccessTestCase.test1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
-    <configuration name="Unittests in unittests_sort_to_polish_function.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/final_task/unittests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PythonHomework" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/final_task/unittests/unittests_sort_to_polish_function.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-    </configuration>
     <configuration name="Unittests in unittests_validation.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -228,19 +251,19 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_parse_function.TestParsingPositiveCases.test53" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_parse_function.TestParsingPositiveCases" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_sort_to_polish_function.py" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_validation.py" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_validation.ExpectedSuccessTestCase.test1" />
+      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_validation.py" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_validation.ExpectedSuccessTestCase.test1" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_sort_to_polish_function.TestSorting.test1" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for unittest_process_unary_operations.TestProcessUnaryOperations.test3" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_sort_to_polish_function.TestSorting.test2" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_validation.ExpectedSuccessTestCase.test1" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_validation.py" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_sort_to_polish_function.py" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_parse_function.TestParsingPositiveCases" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_parse_function.TestParsingPositiveCases.test53" />
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_sort_to_polish_function.TestSorting.test2" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for unittest_process_unary_operations.TestProcessUnaryOperations.test3" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_sort_to_polish_function.TestSorting.test1" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for unittests_validation.ExpectedSuccessTestCase.test1" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in unittests_validation.py" />
       </list>
     </recent_temporary>
   </component>
@@ -258,17 +281,17 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_unittests_parse_function_TestParsingPositiveCases - 2019.06.02 at 07h 56m 44s.xml">
-      <configuration name="Unittests for unittests_parse_function.TestParsingPositiveCases" configurationId="tests" />
+    <history-entry file="Unittests_for_unittest_process_unary_operations_TestProcessUnaryOperations_test3 - 2019.06.02 at 08h 50m 54s.xml">
+      <configuration name="Unittests for unittest_process_unary_operations.TestProcessUnaryOperations.test3" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_unittests_parse_function_TestParsingPositiveCases_test53 - 2019.06.02 at 07h 55m 58s.xml">
-      <configuration name="Unittests for unittests_parse_function.TestParsingPositiveCases.test53" configurationId="tests" />
+    <history-entry file="Unittests_for_unittests_sort_to_polish_function_TestSorting_test1 - 2019.06.02 at 08h 50m 34s.xml">
+      <configuration name="Unittests for unittests_sort_to_polish_function.TestSorting.test1" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_unittests_sort_to_polish_function_TestSorting_test2 - 2019.06.02 at 08h 51m 45s.xml">
+      <configuration name="Unittests for unittests_sort_to_polish_function.TestSorting.test2" configurationId="tests" />
     </history-entry>
     <history-entry file="Unittests_for_unittests_validation_ExpectedSuccessTestCase_test1 - 2019.06.02 at 08h 34m 03s.xml">
       <configuration name="Unittests for unittests_validation.ExpectedSuccessTestCase.test1" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_unittests_sort_to_polish_function_py - 2019.06.02 at 07h 59m 16s.xml">
-      <configuration name="Unittests in unittests_sort_to_polish_function.py" configurationId="tests" />
     </history-entry>
     <history-entry file="Unittests_in_unittests_validation_py - 2019.06.02 at 07h 59m 31s.xml">
       <configuration name="Unittests in unittests_validation.py" configurationId="tests" />
@@ -339,14 +362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/final_task/unittests/unittest_process_unary_operations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_calc.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4233">
@@ -373,21 +388,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/final_task/config.py">
+    <entry file="file://$PROJECT_DIR$/final_task/pycalc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="627">
-          <caret line="48" column="22" lean-forward="false" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_sort_to_polish_function.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/final_task/unittests/unittest_process_unary_operations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="18" column="38" lean-forward="false" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -401,20 +416,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/final_task/pycalc.py">
+    <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_sort_to_polish_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="238">
+          <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/final_task/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/final_task/pycalc_proc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state relative-caret-position="587">
+          <caret line="343" column="0" lean-forward="true" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
           <folding>
             <element signature="e#31#41#0" expanded="true" />
           </folding>
