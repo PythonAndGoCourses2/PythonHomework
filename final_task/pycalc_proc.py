@@ -1,6 +1,7 @@
 # -*- coding: Windows-1251 -*-
 import sys
 import inspect
+import re
 
 from config import *
 
@@ -16,7 +17,7 @@ sys.excepthook = excepthook
 class PyCalcProcessing(object):
 
     def __init__(self, formula_string):
-        self.formula_string = formula_string
+        self.formula_string = re.sub(' +', ' ', formula_string)
 
     @staticmethod
     def _matched_parentheses(el, count):
@@ -47,6 +48,9 @@ class PyCalcProcessing(object):
         # ? ??????? ?????????? ??????? ??????? ??? ?????, ????? ????????? ?????????? ??????? ?? ??????
         if '..' in formula_string:
             print('ERROR: Number can not contain more than one delimiter "." !')
+        # ???????? ?? ?????? ? ??????? ??????????
+        if re.search('/ /|< =|> =|= =|! =', formula_string):
+            print('ERROR: space is not allowed in operators: //, <=, >=, ==, !=.')
         # ???????? ?? ??????????? ????????
         for el in formula_string.strip():
             if el not in ALLOWED_TOKENS:
@@ -140,6 +144,9 @@ class PyCalcProcessing(object):
 
             message = 'ERROR: After {} element {} is forbidden!'.format(str(previous_el), str(el))
 
+            if isinstance(el, float) or el in MATH_CONSTS and was_number is False:
+                was_number = True
+
             if el == '.':
                 print('ERROR: Single delimiter is prohibited in formula!')
 
@@ -172,7 +179,6 @@ class PyCalcProcessing(object):
                     print(message)
 
             if isinstance(previous_el, float) or previous_el in MATH_CONSTS:
-                was_number = True
                 if el in (('(',) + ALL_FUNCTIONS_AND_CONSTS) or isinstance(el, float):
                     print(message)
 
@@ -181,7 +187,7 @@ class PyCalcProcessing(object):
         if counter != 0:
             print('ERROR: Wrong number of opened or closed parentheses in formula!')
 
-        if not was_number:
+        if was_number is False:
             print('ERROR: Formula does not contain numbers!')
 
         return 'ERROR: Formula was validated! Errors were not found.'
