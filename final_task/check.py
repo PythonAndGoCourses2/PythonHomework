@@ -117,7 +117,6 @@ def check_arg_function(expr):
     for symbol in expr:
         if symbol == ',':
             count_comma += 1
-    if count != count_comma:
-        print("Function takes {0} arguments, but {1} was given.".format(count+1, count_comma+1))
+    if count != count_comma and "log" not in expr and "round" not in expr:
         return False
     return expr
