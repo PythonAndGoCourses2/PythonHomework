@@ -2,7 +2,7 @@
 import sys
 import inspect
 
-from final_task.config import *
+from config import *
 
 
 # т. к. ValueError пишет в лог traceback, переопределим функцию в sys, чтобы в лог писалось только сообщение
