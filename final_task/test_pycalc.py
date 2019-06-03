@@ -1,4 +1,5 @@
 import unittest
+import string
 from pycalc import tokenizer
 from pycalc import translator
 from pycalc import calculator
@@ -13,6 +14,23 @@ class TestTokenizer(unittest.TestCase):
     def test_tokenize(self):
         self.assertEqual(['lg', '(', '10', ')'], tokenizer.tokenize('log10(10)'))
         self.assertEqual(['sin', '(', '15', '/', 'e', ')', '*', '100', '^', '3'], tokenizer.tokenize('sin(15/e)*100^3'))
+
+    def test_choose_category(self):
+        self.assertEqual(string.whitespace, tokenizer.choose_category(' '))
+        self.assertEqual(string.ascii_letters + '_', tokenizer.choose_category('t'))
+        self.assertEqual(string.ascii_letters + '_', tokenizer.choose_category('_'))
+        self.assertEqual(string.digits + '.', tokenizer.choose_category('5'))
+        self.assertEqual(string.digits + '.', tokenizer.choose_category('.'))
+        self.assertEqual('!"#$%&\'*+,-/:;<=>?@\\^`|~', tokenizer.choose_category('*'))
+        self.assertEqual('!"#$%&\'*+,-/:;<=>?@\\^`|~', tokenizer.choose_category('+'))
+        self.assertEqual('!"#$%&\'*+,-/:;<=>?@\\^`|~', tokenizer.choose_category('\''))
+        self.assertEqual('(){}[]', tokenizer.choose_category('('))
+        self.assertEqual('(){}[]', tokenizer.choose_category(')'))
+
+    def test_prepare_string(self):
+        self.assertEqual('15 + 12^2/lg(15)', tokenizer.prepare_string('15 + 12^2/log10(15)'))
+        self.assertEqual('sin(pi) + 12^2/logOneP(e)', tokenizer.prepare_string('sin(pi) + 12^2/log1p(e)'))
+        self.assertEqual('lgTwo(pi) - 17*lg(e)', tokenizer.prepare_string('log2(pi) - 17*log10(e)'))
 
 
 class TestTranslator(unittest.TestCase):
