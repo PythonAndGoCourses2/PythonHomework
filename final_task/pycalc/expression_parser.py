@@ -14,10 +14,9 @@ import operator
 __C_REGEXP_BRACKETS = re.compile(r"[(]|[)]")
 __C_REGEXP_BRACKET_UNARY_PLUSMINUS = re.compile(r"[*%^(,][+\-]|[/=!<>]+[+\-]")
 __C_REGEXP_DOUBLED_PLUSMINUS = re.compile(r"[+\-]{2,}")
-__C_REGEXP_OPERATOR_THEN_PLUSMINUS = re.compile(r"[*%^][+\-]|[/=!<>]{1,2}[+\-]")
 __C_REGEXP_BEFORE_BRACKET = re.compile(r"[a-zA-Z]*[\d]*(?=[(])")
 __C_REGEXP_AFTER_BRACKET = re.compile(r"(?<=[)])[a-zA-Z]*[\d]*")
-__C_REGEXP_EXPONENTIATION = re.compile(r"[\^]")
+__C_REGEXP_EXPONENTIATION = re.compile(r"[\^][-+][#]|[\^]")
 __C_REGEXP_TOKENS = re.compile(r"[\-+][#]|[+\-*%^()]|[/=!<>]+|[a-zA-Z]+[\d]*|[\d]*[.][\d]+|[\d]+|[,]")
 
 
