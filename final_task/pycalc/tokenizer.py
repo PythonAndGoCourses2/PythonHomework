@@ -2,10 +2,10 @@
 import string
 
 NUMERIC = string.digits + '.'
-PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^_`|~'
+PUNCTUATION = '!"#$%&\'*+,-/:;<=>?@\\^`|~'
 BRACKETS = '(){}[]'
 CATEGORIES = [
-    string.ascii_lowercase,
+    string.ascii_letters + '_',
     NUMERIC,
     string.whitespace,
     PUNCTUATION,
