@@ -144,62 +144,85 @@ def polish_notation(parsed_information):
     stack = []
     reverse_polish_notation = ''
     separator = ' '
-    for token in parsed_information:
+
+    def type_number(token):
+        """Wtite positive and negative numbers according to RPN
+            For example: '5-2' -> '5 0 2 -' """
+        nonlocal reverse_polish_notation
         if re.fullmatch(NUMBERS, token) and float(token) >= 0:
             reverse_polish_notation += token + separator
         elif re.fullmatch(NUMBERS, token) and float(token) < 0:
             reverse_polish_notation += '0' + separator + token[1:] + separator + token[0] + separator
-        elif token == ')':
-            for element in stack[::-1]:
-                if element == '(':
-                    break
-                reverse_polish_notation += stack.pop() + separator
+
+    def add_token():
+        """Add token between brackets"""
+        nonlocal reverse_polish_notation
+        for element in stack[::-1]:
+            if element == '(':
+                break
+            reverse_polish_notation += stack.pop() + separator
+
+    def check_stack(token):
+        """Checking information if stack"""
+        nonlocal reverse_polish_notation
+        if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
+            reverse_polish_notation += stack.pop() + separator
+            stack.append(token)
+        elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
+            stack.append(token)
+
+    def add_operators(token):
+        """Function that add operators adccording to RPN"""
+        nonlocal reverse_polish_notation
+        if not stack:
+            stack.append(token)
+        elif token == stack[-1] and token == '^':
+            stack.append(token)
+        elif stack[-1] == '(':
+            stack.append(token)
+        elif stack[-1] in FUNCTIONS:
+            reverse_polish_notation += stack.pop() + separator
+            if not stack:
+                stack.append(token)
+            elif stack[-1] in OPERATORS:
+                if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
+                    reverse_polish_notation += stack.pop() + separator
+                    stack.append(token)
+                elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
+                    stack.append(token)
+        elif token == '-' and parsed_information[parsed_information.index(token) - 1] in '/*^%//':
+            if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
+                stack.append(token)
+                reverse_polish_notation += '0' + separator
+        elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
+            reverse_polish_notation += stack.pop() + separator
+            if stack:
+                if stack[-1] == '(':
+                    stack.append(token)
+                elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
+                    reverse_polish_notation += stack.pop() + separator
+                    stack.append(token)
+                elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
+                    stack.append(token)
+            elif not stack:
+                stack.append(token)
+        else:
+            stack.append(token)
+
+    for token in parsed_information:
+        type_number(token)
+        if token == ')':
+            add_token()
             stack.pop()
         elif token == ',':
-            for element in stack[::-1]:
-                if element == '(':
-                    break
-                reverse_polish_notation += stack.pop() + separator
+            add_token()
             reverse_polish_notation += token + separator
         elif token == '(':
             stack.append(token)
         elif token in FUNCTIONS:
             stack.append(token)
         elif token in OPERATORS:
-            if not stack:
-                stack.append(token)
-            elif token == stack[-1] and token == '^':
-                stack.append(token)
-            elif stack[-1] == '(':
-                stack.append(token)
-            elif stack[-1] in FUNCTIONS:
-                reverse_polish_notation += stack.pop() + separator
-                if not stack:
-                    stack.append(token)
-                elif stack[-1] in OPERATORS:
-                    if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                        reverse_polish_notation += stack.pop() + separator
-                        stack.append(token)
-                    elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                        stack.append(token)
-            elif token == '-' and parsed_information[parsed_information.index(token) - 1] in '/*^%//':
-                if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                    stack.append(token)
-                    reverse_polish_notation += '0' + separator
-            elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                reverse_polish_notation += stack.pop() + separator
-                if stack:
-                    if stack[-1] == '(':
-                        stack.append(token)
-                    elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                        reverse_polish_notation += stack.pop() + separator
-                        stack.append(token)
-                    elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                        stack.append(token)
-                elif not stack:
-                    stack.append(token)
-            else:
-                stack.append(token)
+            add_operators(token)
         elif token in CONSTANTS:
             reverse_polish_notation += token + separator
         elif token in ('True', 'False'):
@@ -248,7 +271,7 @@ def calculate(info_string):
         elif token in CONSTANTS:
             stack.append(CONSTANTS[token])
         elif token in ('True', 'False'):
-            stack.append(loads(token.lower()))
+            stack.append(token.lower())
         elif token.isdigit() or token.replace('.', '', 1).isdigit() or token.replace('-', '', 1).isdigit():
             stack.append(float(token))
     if isinstance(stack[-1], bool):
