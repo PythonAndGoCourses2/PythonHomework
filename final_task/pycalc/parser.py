@@ -19,7 +19,7 @@ def get_token(input_string):
                 elif char == '.' and separated_input_string[-1].isdigit():
                     separated_input_string[-1] = separated_input_string[-1] + char
                 elif char in constants.PUNCTUATION:
-                    if separated_input_string[-1] in '<!/*=>':
+                    if separated_input_string[-1] in '</=>':
                         separated_input_string[-1] = separated_input_string[-1] + char
                     else:
                         separated_input_string.append(char)
