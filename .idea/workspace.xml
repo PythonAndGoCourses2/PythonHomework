@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3fa95c7-d832-4c2a-ac27-d33d9d11355d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/final_task/pycalc_proc.py" afterPath="$PROJECT_DIR$/final_task/pycalc_proc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py" afterPath="$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pycalc_proc.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pycalc_proc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/final_task/pycalc_proc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="511">
-              <caret line="350" column="37" lean-forward="false" selection-start-line="350" selection-start-column="37" selection-end-line="350" selection-end-column="37" />
+            <state relative-caret-position="617">
+              <caret line="347" column="0" lean-forward="true" selection-start-line="347" selection-start-column="0" selection-end-line="347" selection-end-column="0" />
               <folding>
                 <element signature="e#31#45#0" expanded="true" />
               </folding>
@@ -26,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unittests_prevalidation.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="unittests_prevalidation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="572">
@@ -65,14 +64,14 @@
         <option value="$PROJECT_DIR$/final_task/config.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_validation.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_calc.py" />
-        <option value="$PROJECT_DIR$/final_task/pycalc_proc.py" />
         <option value="$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py" />
+        <option value="$PROJECT_DIR$/final_task/pycalc_proc.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="759" />
-    <option name="y" value="8" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="701" />
+    <option name="y" value="22" />
     <option name="width" value="780" />
     <option name="height" value="920" />
   </component>
@@ -269,7 +268,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="759" y="8" width="780" height="920" extended-state="0" />
+    <frame x="701" y="22" width="780" height="920" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -331,7 +330,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -349,7 +348,7 @@
         <state relative-caret-position="238">
           <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -359,7 +358,7 @@
         <state relative-caret-position="554">
           <caret line="48" column="27" lean-forward="false" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -369,7 +368,7 @@
         <state relative-caret-position="220">
           <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -382,21 +381,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/final_task/pycalc_proc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="511">
-          <caret line="350" column="37" lean-forward="false" selection-start-line="350" selection-start-column="37" selection-end-line="350" selection-end-column="37" />
-          <folding>
-            <element signature="e#31#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_prevalidation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
           <caret line="92" column="65" lean-forward="true" selection-start-line="92" selection-start-column="65" selection-end-line="92" selection-end-column="65" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/final_task/pycalc_proc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="617">
+          <caret line="347" column="0" lean-forward="true" selection-start-line="347" selection-start-column="0" selection-end-line="347" selection-end-column="0" />
+          <folding>
+            <element signature="e#31#45#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

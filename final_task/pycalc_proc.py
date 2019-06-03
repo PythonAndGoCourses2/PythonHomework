@@ -345,7 +345,3 @@ class PyCalcProcessing(object):
                 polish_list.append(el)
             result = self.calc(polish_list)
             print(result)
-
-
-            # obj = PyCalcProcessing('12+3')
-            # obj.launch_processing()
