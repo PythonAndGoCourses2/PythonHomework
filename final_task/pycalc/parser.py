@@ -9,7 +9,7 @@ def parse_arguments():
     parser.add_argument('EXPRESSION', help='expression string to evaluate')
     parser.add_argument('-m', '--use_modules', nargs='*', metavar='MODULE', help='additional modules to use')
     if parser.parse_args().EXPRESSION:
-        if parser.parse_args().module:
+        if parser.parse_args().use_modules:
             return parser.parse_args().module, parser.parse_args().EXPRESSION
         return parser.parse_args().EXPRESSION
     raise exeptions.GeneralError('empty string')
