@@ -1,4 +1,5 @@
 """Custom library for all handled operators, constants functions"""
+import sys, os
 import importlib
 import math
 import operator
@@ -58,6 +59,7 @@ class Library:
 
     def read_user_module(self, module_name):
         """'Read' user module: make functions and constants"""
+        sys.path.insert(0, os.getcwd())
         module = importlib.import_module(module_name)
         functions = {k: v for (k, v) in module.__dict__.items() if not k.startswith('_')
                      and callable(getattr(module, k))}
