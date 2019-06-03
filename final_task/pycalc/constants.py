@@ -1,6 +1,11 @@
 import math
 import operator
+import string
 
+
+PUNCTUATION = string.punctuation
+
+LETTERS_NUMBERS = string.ascii_lowercase + string.digits + '.'
 
 CONSTANTS = {'pi': math.pi, 'tau': math.tau, 'e': math.e, 'inf': math.inf, 'nan': math.nan}
 

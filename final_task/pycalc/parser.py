@@ -9,22 +9,17 @@ def get_token(input_string):
             raise Exception
         else:
             for char in input_string:
-                if char.isdigit() and separated_input_string[-1].isdigit():
-                    separated_input_string[-1] = separated_input_string[-1] + char
-                elif char.isdigit() and '.' in separated_input_string[-1]:
-                    separated_input_string[-1] = separated_input_string[-1] + char
-                elif char.isdigit() and separated_input_string[-1].isalpha():
-                    separated_input_string[-1] = separated_input_string[-1] + char
-                elif char.isdigit() and separated_input_string[-1].isalnum():
-                    separated_input_string[-1] = separated_input_string[-1] + char
+                if char in constants.LETTERS_NUMBERS:
+                    if separated_input_string[-1].isalnum():
+                        separated_input_string[-1] = separated_input_string[-1] + char
+                    elif '.' in separated_input_string[-1]:
+                        separated_input_string[-1] = separated_input_string[-1] + char
+                    else:
+                        separated_input_string.append(char)
                 elif char == '.' and separated_input_string[-1].isdigit():
                     separated_input_string[-1] = separated_input_string[-1] + char
-                elif char.isalpha() and separated_input_string[-1].isalnum():
-                    separated_input_string[-1] = separated_input_string[-1] + char
-                elif char in '+-/*%^=<>!':
-                    if separated_input_string[-1] == '/':
-                        separated_input_string[-1] = separated_input_string[-1] + char
-                    elif separated_input_string[-1] in '<>!=':
+                elif char in constants.PUNCTUATION:
+                    if separated_input_string[-1] in '<!/*=>':
                         separated_input_string[-1] = separated_input_string[-1] + char
                     else:
                         separated_input_string.append(char)
