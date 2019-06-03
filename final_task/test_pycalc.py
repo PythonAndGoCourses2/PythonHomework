@@ -34,6 +34,16 @@ class TestTokenizer(unittest.TestCase):
 
 
 class TestTranslator(unittest.TestCase):
+    def test_process_all_left(self):
+        self.assertRaises(exeptions.BracketsError, translator.process_all_left, ['('], [])
+        self.assertRaises(exeptions.BracketsError, translator.process_all_left, ['(', '*', '/'], [])
+        self.assertRaises(exeptions.BracketsError, translator.process_all_left, ['-', '^', '(', '*'], [])
+
+    def test_process_func_delimiter(self):
+        self.assertRaises(exeptions.BracketsError, translator.process_func_delimiter, ['105', 'sin', '+'], [])
+        self.assertRaises(exeptions.BracketsError, translator.process_func_delimiter, ['-', ')', 'pow'], [])
+        self.assertEqual(None, translator.process_close_bracket(['sin', '('], []))
+
     def test_process_close_bracket(self):
         self.assertRaises(exeptions.BracketsError, translator.process_close_bracket, ['5', ',', '10'], [])
         self.assertRaises(exeptions.BracketsError, translator.process_close_bracket, ['45', '+', ')'], [])
