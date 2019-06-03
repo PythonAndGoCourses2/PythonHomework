@@ -15,6 +15,7 @@ class PyCalcProcessing(object):
     def _matched_parentheses(el, count):
         """
         Counter for '(', ')'.
+
         :param el (str): opening or closing parentheses
         :param count (int): counter of parentheses
         :return: count (int)
@@ -30,18 +31,19 @@ class PyCalcProcessing(object):
         """
         Need to apply pre-validation of some errors before parsing to tokens fo more convenient
         parsing in current version of implementation.
+
         :param formula_string: input formula as text
         :return: None
         """
         was_error = False
         # ????????, ??? ??????? ?? ?????? ??????
         if not isinstance(formula_string, str) or not formula_string:
-            print('ERROR: Formula should be not empty string!')
+            print('Formula should be not empty string!')
             return True
         # ?????????, ??? ? ??????? ??? ????? ?????? ??????????? ??????
         # ? ??????? ?????????? ??????? ??????? ??? ?????, ????? ????????? ?????????? ??????? ?? ??????
         if '..' in formula_string:
-            print('ERROR: Number can not contain more than one delimiter "." !')
+            print('Number can not contain more than one delimiter "." !')
             was_error = True
         # ???????? ?? ?????? ? ??????? ??????????
         if re.search('/ /|< =|> =|= =|! =', formula_string):
@@ -53,7 +55,7 @@ class PyCalcProcessing(object):
         # ???????? ?? ??????????? ????????
         for el in formula_string.strip():
             if el not in ALLOWED_TOKENS:
-                print('ERROR: Formula contains incorrect symbol "{}"'.format(el))
+                print('Formula contains incorrect symbol "{}"'.format(el))
                 was_error = True
         return was_error
 
@@ -136,27 +138,27 @@ class PyCalcProcessing(object):
         previous_el = ''
 
         if parsed_list[-1] in OPERATORS:
-            print('ERROR: Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
+            print('Operator at the end of the formula: "{}" '.format(parsed_list[-1]))
             was_error = True
         if parsed_list[0] in BINARY_OPERATORS:
-            print('ERROR: Formula can not start with binary operator "{}"'.format(parsed_list[0]))
+            print('Formula can not start with binary operator "{}"'.format(parsed_list[0]))
             was_error = True
 
         for el in parsed_list:
             counter = self._matched_parentheses(el, counter)
 
-            message = 'ERROR: After {} element {} is forbidden!'.format(str(previous_el), str(el))
+            message = 'After {} element {} is forbidden!'.format(str(previous_el), str(el))
 
             if isinstance(el, float) or el in MATH_CONSTS and was_number is False:
                 was_number = True
 
             if el == '.':
-                print('ERROR: Single delimiter is prohibited in formula!')
+                print('Single delimiter is prohibited in formula!')
                 was_error = True
 
             if isinstance(el, str) and el[0] in LETTERS:
                 if el.lower() not in ALL_FUNCTIONS_AND_CONSTS:
-                    print('ERROR: Function or constant {} is not supported by calculator'.format(el))
+                    print('Function or constant {} is not supported by calculator'.format(el))
                     was_error = True
 
             if previous_el == '(':
@@ -196,11 +198,11 @@ class PyCalcProcessing(object):
             previous_el = el
 
         if counter != 0:
-            print('ERROR: Wrong number of opened or closed parentheses in formula!')
+            print('Wrong number of opened or closed parentheses in formula!')
             was_error = True
 
         if was_number is False:
-            print('ERROR: Formula does not contain numbers!')
+            print('Formula does not contain numbers!')
             was_error = True
 
         return was_error
@@ -217,8 +219,8 @@ class PyCalcProcessing(object):
             if el in UNARY_OPERATORS:
                 stack_str += el
             else:
-                is_unary_plus = ((processed_list and processed_list[-1] in
-                                  (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or not processed_list)
+                is_unary_plus = ((processed_list and processed_list[-1] in (('(', ',') + tuple(BINARY_OPERATORS.keys()))) or
+                                 not processed_list)
                 if stack_str:
                     if '-' in stack_str:
                         if stack_str.count('-') % 2 == 0:  # ??????? ???-?? -, ??????? ?? + ???? ?? -
@@ -253,8 +255,8 @@ class PyCalcProcessing(object):
                     stack.append(token)
                 else:
                     while (stack and stack[-1] != "(" and
-                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0]
-                           and token != '^'):
+                           ALL_FUNCTIONS_AND_OPERATORS_DICT[token][0] <= ALL_FUNCTIONS_AND_OPERATORS_DICT[stack[-1]][0] and
+                           token != '^'):
                         yield stack.pop()
                     stack.append(token)
             elif token == ")":
@@ -322,7 +324,7 @@ class PyCalcProcessing(object):
                 try:
                     function_result = func_name(*tuple(arguments))
                 except TypeError:
-                    print('ERROR: Formula contains incorrect number of arguments in function.')
+                    print('Formula contains incorrect number of arguments in function.')
 
                 stack.append(function_result)  # ????????? ????????, ?????????? ? ????
                 arguments = []
@@ -340,7 +342,7 @@ class PyCalcProcessing(object):
                 stack.append(token)
 
         if len(stack) > 1:
-            print('ERROR: Formula contains incorrect number of arguments in function.')
+            print('Formula contains incorrect number of arguments in function.')
 
         return stack[0]  # ????????? ?????????? - ???????????? ??????? ? ?????
 
@@ -350,11 +352,11 @@ class PyCalcProcessing(object):
             parsed_list = []
             for el in self.parse(self.formula_string):
                 parsed_list.append(el)
-        was_error = self.validate_parsed_list(parsed_list)
-        if not was_error:
-            parsed_list = self.process_unary_operations(parsed_list)
-            polish_list = []
-            for el in self.sort_to_polish(parsed_list):
-                polish_list.append(el)
-            result = self.calc(polish_list)
-            print(result)
+            was_error = self.validate_parsed_list(parsed_list)
+            if not was_error:
+                parsed_list = self.process_unary_operations(parsed_list)
+                polish_list = []
+                for el in self.sort_to_polish(parsed_list):
+                    polish_list.append(el)
+                result = self.calc(polish_list)
+                print(result)
