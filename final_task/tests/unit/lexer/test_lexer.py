@@ -1,26 +1,30 @@
+"""
+Test a lexer.
+"""
+
 import unittest
 
 from pycalc.lexer.lexer import Lexer
 
 
-class InitTestCase(unittest.TestCase):
+class LexerTestCase(unittest.TestCase):
+    """"""
 
     def test_class_init(self):
-        '''Test class __init__() method'''
+        """Test the class init method"""
 
         matchers = ['1']
-        source = 'some_source'
-        lexer = Lexer(matchers, source)
+        lexer = Lexer(matchers)
 
-        self.assertEqual(lexer.source, source)
         self.assertEqual(lexer.matchers, matchers)
+        self.assertEqual(lexer.source, '')
         self.assertEqual(lexer.pos, 0)
-        self.assertEqual(lexer.length, len(source))
+        self.assertEqual(lexer.prev_pos, 0)
+        self.assertEqual(lexer.length, 0)
 
     def test_is_source_exhausted(self):
         """"""
 
-        lexer = Lexer([], '')
         test_cases = (
             (0, 0, True),
             (3, 3, True),
@@ -33,7 +37,7 @@ class InitTestCase(unittest.TestCase):
                               length=length,
                               expected_result=expected_result
                               ):
-                lexer = Lexer([], '')
+                lexer = Lexer([])
                 lexer.pos = pos
                 lexer.length = length
                 self.assertEqual(lexer.is_source_exhausted(),
@@ -71,7 +75,8 @@ class InitTestCase(unittest.TestCase):
             with self.subTest(source=source,
                               pos=pos,
                               expected_pos=expected_pos):
-                lexer = Lexer([], source)
+                lexer = Lexer([])
+                lexer.init(source)
                 lexer.pos = pos
                 lexer._skip_whitespaces()
                 self.assertEqual(lexer.pos, expected_pos)
@@ -83,7 +88,7 @@ class InitTestCase(unittest.TestCase):
         pos = 10
         expected_pos = pos + len(lexeme)
 
-        lexer = Lexer([], '')
+        lexer = Lexer([])
         lexer.pos = pos
 
         lexer._advance_pos_by_lexeme(lexeme)
