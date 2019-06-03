@@ -65,7 +65,7 @@ def process_close_bracket(stack: list, output_string: list):
         if not stack:
             raise exeptions.BracketsError('brackets are not balanced')
     stack.pop()
-    if stack[-1] in lib.FUNCTIONS or stack[-1] in lib.user_functions:
+    if stack[-1] in (*lib.FUNCTIONS, *lib.user_functions):
         output_string += [stack.pop()]
 
 

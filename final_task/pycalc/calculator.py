@@ -34,6 +34,7 @@ def calculate(expr):
 
 
 def calculate_function(functions, token, stack):
+    """Calculate token as one of functions function"""
     operators = []
     if stack[-1] == lib.FILLER:
         stack.pop()

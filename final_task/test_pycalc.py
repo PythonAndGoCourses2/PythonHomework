@@ -34,6 +34,11 @@ class TestTokenizer(unittest.TestCase):
 
 
 class TestTranslator(unittest.TestCase):
+    def test_process_close_bracket(self):
+        self.assertRaises(exeptions.BracketsError, translator.process_close_bracket, ['5', ',', '10'], [])
+        self.assertRaises(exeptions.BracketsError, translator.process_close_bracket, ['45', '+', ')'], [])
+        self.assertEqual(None, translator.process_close_bracket(['(', '500', '('], []))
+
     def test_dell_spaces(self):
         self.assertEqual(['+', '19', '-', '2'], translator.dell_spaces(['+', ' ', '19', ' ', '-', '2']))
         self.assertEqual(['15', '*', '4', '^', '3'], translator.dell_spaces(['15', '*', '4', '^', '3']))
