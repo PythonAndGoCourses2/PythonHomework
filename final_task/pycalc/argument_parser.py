@@ -9,7 +9,7 @@ def arg_parser():
     """
     This function gather positional arguments from users,
     create a function_dict with users and built_in math functions if there is users_modules,
-    esle create a function_dict only with built_in math functions
+    otherwise create a function_dict only with built_in math functions
     :return: line as namedtuple(expression, function_dict)
     """
     parser = argparse.ArgumentParser(

@@ -11,6 +11,9 @@ class Converter:
         Generates an instance of the Converter class,
         take an parsing_list as list from instance of SplitOperators class
         create an empty list to put the result of converting
+        self.last_item is a place to put all successive "+" and "-"
+        and after appending any other element into self.converted_list
+        self.last_item become an empty str
         """
         self.parsing_list = parsing_list
         self.function_dict = functions
@@ -20,8 +23,8 @@ class Converter:
     def _clean_add_sub_operators(self):
         """
         Encapsulate function
-        Take all the successive of "+" and "-" and
-        :return "-" if count("-") is odd or "+" if count is even
+        Take all the successive of "+" and "-" (self.last)item)
+         and return "-" if count("-") is odd or "+" if count is even
         """
         if self.last_item.count('-') % 2 == 0:
             if self.converted_list[-1] == '(':
@@ -34,7 +37,7 @@ class Converter:
     def _append_to_converted_list(self, *args):
         """
         Encapsulate function
-        Append all converted elements into converted_list
+        Append all converted elements into self.converted_list
         and update successive of "+" and "-" to empty value
         """
         [self.converted_list.append(i) for i in args]
@@ -43,9 +46,10 @@ class Converter:
     def _number_converter(self, number):
         """
         Encapsulate function
-        Add unary operator if number is the first element in the parsing_list,
-        add "-" to number if last_symbol is "-",
-        otherwise add "+"
+        Add unary operator if number is the first element in the self.parsing_list,
+        add "-" to number if self.last_symbol is "-", otherwise add "+"
+        And if there is no self.last_symbol
+        :param number: is int or float object from self.parsing_list
         """
         if self.last_item == '-':
             if self.converted_list[-1] == 0:
@@ -63,6 +67,7 @@ class Converter:
         Encapsulate function
         Convert math operator symbol into dictionary with built-in math operator
         Raise an exception if there is no operand between two math operators
+        :param operator_str: is one math symbol from self.parsing_list
         """
         if operator_str == '-' or operator_str == '+':
             self.last_item += operator_str
@@ -78,6 +83,7 @@ class Converter:
         Encapsulate function
         Convert math function name into dictionary with built-in math function
         Check necessary of "-" before the math function
+        :param function_str: is math function name from self.parsing_list
         """
         if self.last_item:
             if self.last_item == '-' and self.converted_list[-1] != '(':
@@ -105,7 +111,7 @@ class Converter:
         :return: converted_list
         """
         check_parsing_list(self.parsing_list, self.function_dict)
-        if self.parsing_list[0] in operator_dict.keys():
+        if self.parsing_list[0] in operator_dict.keys():  # parsing_list[0] == '+' or '-'
             self.converted_list.append(0)
         for i in self.parsing_list:
             if i == " ":

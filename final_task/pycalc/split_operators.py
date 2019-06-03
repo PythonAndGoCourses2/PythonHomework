@@ -113,7 +113,7 @@ class SplitOperators:
         """
         Encapsulate function
         At fist call function to put data into self.parsing_list if it necessary.
-        After put current symbol to the self.parsing_list.
+        After this it put current symbol to the self.parsing_list.
         If the first bracket is closed Raise an Exception.
         If we need to collect function arguments it add bracket to the self.brackets_in_arguments
         :param symbol: is one math symbol from expression_line or bracket or comma
@@ -137,7 +137,7 @@ class SplitOperators:
         Collect all the arguments for last function in the parsing list.
         If the math function have more than one argument it will make
         separations of the arguments by "," and check if this split was correct
-        and it should be separated by comma after (at first calculate one by one arguments).
+        or it should be separated by comma after (at first calculate one by one arguments).
         If argument is an expression with embedded functions and arguments (nesting doll)
         this function will add it like a string, that will be calculated after in recursion way.
         All arguments are strings in tuple.

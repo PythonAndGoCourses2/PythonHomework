@@ -28,7 +28,7 @@ def find_user_functions(module):
     """
     Create a dict of functions and constants from user module,
     if user module and pycaclc is located in the one package
-    :param module: name of the user module (optional argument)
+    :param module: name of the user module (optional argument in argparser)
     :return: dict {function_name: function}
     """
     try:

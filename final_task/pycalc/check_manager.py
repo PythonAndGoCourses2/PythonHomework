@@ -71,7 +71,8 @@ def function_check(function_name, function_dict):
     """
     Check if function_name is a key in function_dict.
     Check the python version to add constant "tau".
-    If function_name is "pi", "e" or "tau" convert it into float
+    If function_name is "pi", "e", "tau", "inf" or "nan" convert it into float
+    If there is no such name in function_dict Raise an Exception
     :param function_name: str from instance of SplitOperators class
     :param function_dict: dict with all functions {'operator': function, 'priority': 0}
     :return: float or clear function_name as str
