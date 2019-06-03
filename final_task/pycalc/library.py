@@ -66,5 +66,5 @@ class Library:
                      and callable(getattr(module, k))}
         constants = {k: v for (k, v) in module.__dict__.items() if not k.startswith('_')
                      and not callable(getattr(module, k))}
-        Library.user_functions = functions
-        Library.user_constants = constants
+        Library.user_functions.update(functions)
+        Library.user_constants.update(constants)
