@@ -8,210 +8,210 @@ calc_obj = PyCalcProcessing('1')
 class ExpectedFailureTestCase(unittest.TestCase):
     # Error cases
     def test1(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['+', '+']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['+', '+']))
 
     def test2(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['+']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['+']))
 
     def test3(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([1.0, '-']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([1.0, '-']))
 
     def test4(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['ee']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['ee']))
 
     def test5(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['==', 7.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['==', 7.0]))
 
     def test6(self):
-        self.assertRaises(ValueError,
+        self.assertEqual(True,
                           lambda: calc_obj.validate_parsed_list([1.0, '+', 2.0, '(', 3.0, '*', 4.0, ')', ')']))
 
     def test7(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '(', 1.0, '+', 2.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '(', 1.0, '+', 2.0, ')']))
 
     def test8(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ')']))
 
     def test9(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['log10', 0.0, '(', 100.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['log10', 0.0, '(', 100.0, ')']))
 
     def test10(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['-', '-', '-', '-', '-', '-']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['-', '-', '-', '-', '-', '-']))
 
     def test11(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ')']))
 
     def test12(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([6.0, '*', '*', 6.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([6.0, '*', '*', 6.0]))
 
     def test13(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ')']))
 
     def test14(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '(', '(', '(', '(', ]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '(', '(', '(', '(', ]))
 
     def test15(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([77.0, '==', '==', 77.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([77.0, '==', '==', 77.0]))
 
     def test16(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['_', '+', 'son']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['_', '+', 'son']))
 
     def test17(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '+', 2.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '+', 2.0]))
 
     def test18(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', '+', 2.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', '+', 2.0]))
 
     def test19(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0, ')', '+', 2.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0, ')', '+', 2.0]))
 
     def test20(self):
-        self.assertRaises(ValueError,
+        self.assertEqual(True,
                           lambda: calc_obj.validate_parsed_list(['(', 1.0, '+', 5.0, ')', '(', 1.0, '+', 5.0, ')']))
 
     def test21(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '.', 2.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '.', 2.0]))
 
     def test22(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', ',', 2.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', ',', 2.0]))
 
     def test23(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0, ')',
                                                                              'sin', '(', 2.0, ')']))
 
     def test24(self):
-        self.assertRaises(ValueError,
+        self.assertEqual(True,
                           lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', 2.0, '+', 1.0]))
 
     def test25(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', 'e']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', 'e']))
 
     def test26(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0,
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '//', 77.0, '-', 4.0,
                                                                              ')', 'sin', '(', 2.0, ')']))
 
     def test27(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
                                                                              '.', '(', 2.0, '+', '1']))
 
     def test28(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-',
 
                                                                              4.0, '.', '.', ')']))
 
     def test29(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
                                                                              '.', '(', 2.0, '+', '1']))
 
     def test30(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
                                                                              '.', ',', 2.0, '+', '1']))
 
     def test31(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
                                                                              '.', '-', 2.0, '+', '1']))
 
     def test32(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')',
                                                                              '.', 'sin', '(', 2.0, ')']))
 
     def test33(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '.', 'e']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', '.', 'e']))
 
     def test34(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['-', ')', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['-', ')', 4.0]))
 
     def test35(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['-', '.', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['-', '.', 4.0]))
 
     def test36(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['-', ',', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['-', ',', 4.0]))
 
     def test37(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['-', '//', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['-', '//', 4.0]))
 
     def test38(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([26.0, '//', ')', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([26.0, '//', ')', 4.0]))
 
     def test39(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([26.0, '//', '.', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([26.0, '//', '.', 4.0]))
 
     def test40(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([26.0, '//', ',', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([26.0, '//', ',', 4.0]))
 
     def test41(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([26.0, '//', '%', 4.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([26.0, '//', '%', 4.0]))
 
     def test42(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', ')', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', ')', 4.0, ')']))
 
     def test43(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', '.', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', '.', 4.0, ')']))
 
     def test44(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', ',', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', ',', 4.0, ')']))
 
     def test45(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', '-', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', '-', 4.0, ')']))
 
     def test46(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', '//', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', '//', 4.0, ')']))
 
     def test47(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', 'cos', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', 'cos', 4.0, ')']))
 
     def test48(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', 4.0, ')']))
 
     def test49(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['cos', 'e', 4.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['cos', 'e', 4.0, ')']))
 
     def test50(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([4.0, '(', '+', 5.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([4.0, '(', '+', 5.0, ')']))
 
     def test51(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([4.0, '.', '+', 5.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([4.0, '.', '+', 5.0]))
 
     def test52(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([4.0, 'sin', '(', 5.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([4.0, 'sin', '(', 5.0, ')']))
 
     def test53(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([4.0, 3.0, '+', 5.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([4.0, 3.0, '+', 5.0]))
 
     def test54(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([4.0, 'e', '+', 5.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([4.0, 'e', '+', 5.0, ')']))
 
     def test55(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['e', '(', '+', 'pi']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['e', '(', '+', 'pi']))
 
     def test56(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['e', '.', '+', 'pi']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['e', '.', '+', 'pi']))
 
     def test57(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['e', 'sin', '(', 3.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['e', 'sin', '(', 3.0, ')']))
 
     def test58(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['e', 3.0, '+', 'pi']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['e', 3.0, '+', 'pi']))
 
     # matched parentheses
     def test59(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', '(', 25.0, '+', 1.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([15.0, '*', '(', 25.0, '+', 1.0]))
 
     def test60(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', 1.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', 1.0, ')']))
 
     def test61(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', ')', 25.0, '+', 1.0, ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([15.0, '*', ')', 25.0, '+', 1.0, ')']))
 
     def test62(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', 1.0, '(', ')']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', 1.0, '(', ')']))
 
     def test63(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', '(', 1.0,
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list([15.0, '*', 25.0, '+', '(', 1.0,
                                                                              '+', ')', 1.0, ')']))
 
     def test64(self):
-        self.assertRaises(ValueError, lambda: calc_obj.validate_parsed_list(['abs']))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['abs']))
 
 
 class ExpectedSuccessTestCase(unittest.TestCase):
