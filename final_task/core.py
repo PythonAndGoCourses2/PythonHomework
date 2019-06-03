@@ -66,6 +66,7 @@ def math_function_calculating(function, func_expr):
 
 
 def comma_count(function):
+    """Get function and return number of arguments - 1."""
     doc_string = function.__doc__
     count = 0
     for symbol in doc_string[:doc_string.find("\n")]:

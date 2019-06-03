@@ -6,7 +6,7 @@ from constants import *
 from core import comma_count
 
 
-def brackets_check(expr):
+def check_brackets(expr):
     """Check brackets balance"""
     if expr.count('(') != expr.count(')'):
         print("ERROR: brackets are not balanced")
@@ -14,7 +14,7 @@ def brackets_check(expr):
     return True
 
 
-def comparison_check(expr):
+def check_comparison(expr):
     """return True if the operation type is a comparison"""
     for key in COMPARISON_OPERATORS.keys():
         if key in expr:
@@ -78,17 +78,18 @@ def replace_whitespace_and_const(expr):
     return expr
 
 
-def common_check(expr):
-    # regexp = re.compile(r"(?P<function>[-a-zA-Z]+)")
-    # search_function = regexp.finditer(expr)
-    # for item in search_function:
-    #     func = item.group("function")
-    #     if func not in MATH_FUNC and func not in MATH_CONST:
-    #         print("Unknowm function '{}'".format(func))
-    #         return False
-    for operation in OPERATORS:  # Если последний символ строки операция
-        if expr.endswith(operation):
+def check_unknown_func(expr):
+    regexp = re.compile(r"(?P<function>[a-zA-Z]+)")
+    search_function = regexp.finditer(expr)
+    for item in search_function:
+        func = item.group("function")
+        if func not in MATH_FUNC and func not in MATH_CONST:
+            print("ERROR: unknown function '{}'".format(func))
             return False
+    return True
+
+
+def check_correct_whitespace(expr):
     expr_list = expr.split()
     i = 0
     while i < len(expr_list) - 1:
@@ -97,12 +98,19 @@ def common_check(expr):
         if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
             return False
         i += 1
-    return expr
+    for operation in OPERATORS:
+        if expr.endswith(operation):  # Check last symbol in expression
+            return False
+    return True
 
 
 def check_arg_function(expr):
+    """Get expression and compare the number of functions arguments in expression with
+    the number of arguments that functions should take.
+
+    """
     func = ""
-    count, count_comma, i = 0, 0, 0
+    count, count_in_expr, i = 0, 0, 0
     while i < len(expr):
         if expr[i].isalpha():
             func += expr[i]
@@ -116,7 +124,9 @@ def check_arg_function(expr):
         i += 1
     for symbol in expr:
         if symbol == ',':
-            count_comma += 1
-    if count != count_comma and "log" not in expr and "round" not in expr:
+            count_in_expr += 1
+    if ("log" in expr or "round" in expr) and count - count_in_expr == 1:
+        return expr
+    elif count != count_in_expr:  # 'log' and 'round' take 1(or 2) arg
         return False
-    return expr
+    return True

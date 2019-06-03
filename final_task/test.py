@@ -5,21 +5,21 @@ import core
 
 
 class TestCheckFunctions(unittest.TestCase):
-    def test_brackets_check(self):
-        self.assertTrue(check.brackets_check('()'))
-        self.assertFalse(check.brackets_check('(()'))
-        self.assertTrue(check.brackets_check(''))
-        self.assertFalse(check.brackets_check(')()'))
+    def test_check_brackets(self):
+        self.assertTrue(check.check_brackets('()'))
+        self.assertFalse(check.check_brackets('(()'))
+        self.assertTrue(check.check_brackets(''))
+        self.assertFalse(check.check_brackets(')()'))
 
-    def test_comparison_check(self):
-        self.assertEqual(check.comparison_check("5>2"), ">")
-        self.assertEqual(check.comparison_check("10<12"), "<")
-        self.assertEqual(check.comparison_check("2+2<=5+6"), "<=")
-        self.assertEqual(check.comparison_check("12>=5+6"), ">=")
-        self.assertEqual(check.comparison_check("7+3==8+2"), "==")
-        self.assertEqual(check.comparison_check("10!=2+3*5"), "!=")
-        self.assertFalse(check.comparison_check("10+3*(2+1)"))
-        self.assertFalse(check.comparison_check("5-2"))
+    def test_check_comparison(self):
+        self.assertEqual(check.check_comparison("5>2"), ">")
+        self.assertEqual(check.check_comparison("10<12"), "<")
+        self.assertEqual(check.check_comparison("2+2<=5+6"), "<=")
+        self.assertEqual(check.check_comparison("12>=5+6"), ">=")
+        self.assertEqual(check.check_comparison("7+3==8+2"), "==")
+        self.assertEqual(check.check_comparison("10!=2+3*5"), "!=")
+        self.assertFalse(check.check_comparison("10+3*(2+1)"))
+        self.assertFalse(check.check_comparison("5-2"))
 
     def test_comparison_calc(self):
         self.assertTrue(check.comparison_calc("5>2", ">"))
@@ -56,27 +56,37 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.replace_whitespace_and_const("2*tau^e"), "2*{tau}^{e}".format(tau=math.tau, e=math.e))
         self.assertEqual(check.replace_whitespace_and_const("2+inf-nan"), "2+{0}-{1}".format(math.inf, math.nan))
 
-    def test_common_check(self):
-        self.assertEqual(check.common_check("1 + 2 ^  3"), "1 + 2 ^  3")
-        self.assertEqual(check.common_check("5//2"), "5//2")
-        self.assertEqual(check.common_check("1/2*3^4%5"), "1/2*3^4%5")
-        self.assertFalse(check.common_check("1+2*3+"))
-        self.assertFalse(check.common_check("1+2*3-"))
-        self.assertFalse(check.common_check("1+2*3*"))
-        self.assertFalse(check.common_check("1+2*3/"))
-        self.assertFalse(check.common_check("1+2*3//"))
-        self.assertFalse(check.common_check("1+2*3%"))
-        self.assertFalse(check.common_check("1+2*3^"))
-        self.assertFalse(check.common_check("1 2 "))
-        self.assertFalse(check.common_check("1 ^ ^ 5"))
-        self.assertFalse(check.common_check("1 * * 6"))
-        self.assertFalse(check.common_check("1 / / 7"))
-        self.assertFalse(check.common_check("1 % % 8"))
+    def test_check_unknown_func(self):
+        self.assertTrue(check.check_unknown_func("2+cosh(5)"))
+        self.assertTrue(check.check_unknown_func("2+pi"))
+        self.assertFalse(check.check_unknown_func("2+logarithm"))
+        self.assertTrue(check.check_unknown_func("2+2"))
+
+    def test_check_correct_whitespace(self):
+        self.assertTrue(check.check_correct_whitespace("1 + 2 ^  3"))
+        self.assertTrue(check.check_correct_whitespace("5//2"))
+        self.assertTrue(check.check_correct_whitespace("1/2*3^4%5"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3+"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3-"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3*"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3/"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3//"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3%"))
+        self.assertFalse(check.check_correct_whitespace("1+2*3^"))
+        self.assertFalse(check.check_correct_whitespace("1 2 "))
+        self.assertFalse(check.check_correct_whitespace("1 ^ ^ 5"))
+        self.assertFalse(check.check_correct_whitespace("1 * * 6"))
+        self.assertFalse(check.check_correct_whitespace("1 / / 7"))
+        self.assertFalse(check.check_correct_whitespace("1 % % 8"))
 
     def test_check_arg_function(self):
-        self.assertEqual(check.check_arg_function("log(8,2)+sin(3)"), "log(8,2)+sin(3)")
+        self.assertTrue(check.check_arg_function("round(123)"))
+        self.assertTrue(check.check_arg_function("log(8)"))
+        self.assertTrue(check.check_arg_function("log(8,2)+sin(3)"))
         self.assertFalse(check.check_arg_function("sin(2,3,4)"))
-        self.assertEqual(check.check_arg_function("2+2"), "2+2")
+        self.assertFalse(check.check_arg_function("log(1,2,3)"))
+        self.assertTrue(check.check_arg_function("2+2"), "2+2")
+        # complete
 
 
 class TestCoreFunctions(unittest.TestCase):

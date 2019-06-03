@@ -14,16 +14,14 @@ def create_parser():
 def main():
     try:
         expression = create_parser().expr
-        comparison = check.comparison_check(expression)
-        expression = check.common_check(expression)
+        comparison = check.check_comparison(expression)
         expression = check.replace_whitespace_and_const(expression)
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
-        expression = check.check_arg_function(expression)
-        if expression:
+        if check.check_brackets(expression) and check.check_unknown_func(expression) and check.check_correct_whitespace(
+                expression) and check.check_arg_function(expression):
             if not comparison:
-                if check.brackets_check(expression):
-                    print(core.calculating(expression))
+                print(core.calculating(expression))
             else:
                 print(check.comparison_calc(expression, comparison))
         else:
