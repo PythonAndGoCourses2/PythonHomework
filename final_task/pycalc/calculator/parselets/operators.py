@@ -13,6 +13,11 @@ class Operator(Base):
         super().__init__(power)
         self.func = func
 
+    def ctx(self, parser):
+        """Get parsing context."""
+
+        return parser.context(previous=True)
+
 
 class UnaryPrefix(Operator):
     """The parselet class for unary prefix operations."""
@@ -20,7 +25,7 @@ class UnaryPrefix(Operator):
     def nud(self, parser, token):
         """"""
 
-        ctx = parser.context(previous=True)
+        ctx = self.ctx(parser)
 
         right = parser.expression(self.power)
         result = call(ctx, self.func, [right])
@@ -34,7 +39,7 @@ class UnaryPostfix(Operator):
     def led(self, parser, token, left):
         """"""
 
-        ctx = parser.context(previous=True)
+        ctx = self.ctx(parser)
 
         result = call(ctx, self.func, [left])
 
@@ -61,7 +66,7 @@ class BinaryInfixRight(Operator):
     def led(self, parser, token, left):
         """"""
 
-        ctx = parser.context(previous=True)
+        ctx = self.ctx(parser)
 
         right = parser.expression(self.power - 1)
         result = call(ctx, self.func, [left, right])
