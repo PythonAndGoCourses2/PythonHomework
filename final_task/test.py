@@ -63,9 +63,9 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertTrue(check.check_unknown_func("2+2"))
 
     def test_check_correct_whitespace(self):
-        self.assertTrue(check.check_correct_whitespace("1 + 2 ^  3"))
-        self.assertTrue(check.check_correct_whitespace("5//2"))
-        self.assertTrue(check.check_correct_whitespace("1/2*3^4%5"))
+        self.assertEqual(check.check_correct_whitespace("1 + 2 ^  3"), "1 + 2 ^  3")
+        self.assertEqual(check.check_correct_whitespace("5//2"), "5//2")
+        self.assertEqual(check.check_correct_whitespace("1/2*3^4%5"), "1/2*3^4%5")
         self.assertFalse(check.check_correct_whitespace("1+2*3+"))
         self.assertFalse(check.check_correct_whitespace("1+2*3-"))
         self.assertFalse(check.check_correct_whitespace("1+2*3*"))

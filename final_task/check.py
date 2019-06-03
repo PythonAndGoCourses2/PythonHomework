@@ -101,7 +101,7 @@ def check_correct_whitespace(expr):
     for operation in OPERATORS:
         if expr.endswith(operation):  # Check last symbol in expression
             return False
-    return True
+    return expr
 
 
 def check_arg_function(expr):

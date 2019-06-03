@@ -15,11 +15,11 @@ def main():
     try:
         expression = create_parser().expr
         comparison = check.check_comparison(expression)
+        expression = check.check_correct_whitespace(expression)
         expression = check.replace_whitespace_and_const(expression)
         expression = check.fix_unary(expression)
         expression = check.replace_plus_minus(expression)
-        if check.check_brackets(expression) and check.check_unknown_func(expression) and check.check_correct_whitespace(
-                expression) and check.check_arg_function(expression):
+        if check.check_brackets(expression) and check.check_unknown_func(expression) and check.check_arg_function(expression):
             if not comparison:
                 print(core.calculating(expression))
             else:
