@@ -28,7 +28,7 @@ class UnaryPrefix(Operator):
         ctx = self.ctx(parser)
 
         right = parser.expression(self.power)
-        result = call(ctx, self.func, [right])
+        result = call(ctx, self.func, (right,))
 
         return result
 
@@ -41,7 +41,7 @@ class UnaryPostfix(Operator):
 
         ctx = self.ctx(parser)
 
-        result = call(ctx, self.func, [left])
+        result = call(ctx, self.func, (left,))
 
         return result
 
@@ -52,10 +52,10 @@ class BinaryInfixLeft(Operator):
     def led(self, parser, token, left):
         """"""
 
-        ctx = parser.context(previous=True)
+        ctx = self.ctx(parser)
 
         right = parser.expression(self.power)
-        result = call(ctx, self.func, [left, right])
+        result = call(ctx, self.func, (left, right))
 
         return result
 
@@ -69,6 +69,6 @@ class BinaryInfixRight(Operator):
         ctx = self.ctx(parser)
 
         right = parser.expression(self.power - 1)
-        result = call(ctx, self.func, [left, right])
+        result = call(ctx, self.func, (left, right))
 
         return result

@@ -28,10 +28,10 @@ MODULE = {
     }
 }
 
-ARGUMENTS = [
+ARGUMENTS = (
     EXPRESSION,
     MODULE,
-]
+)
 
 parser = argparse.ArgumentParser(**PARSER)
 
