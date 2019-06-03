@@ -1,5 +1,6 @@
 """Custom library for all handled operators, constants functions"""
-import sys, os
+import sys
+import os
 import importlib
 import math
 import operator
