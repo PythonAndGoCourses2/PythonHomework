@@ -285,5 +285,19 @@ class TestCalcing(unittest.TestCase):
         self.assertEqual(-(-(-1.0)), calc_obj.calc([0.0, 0.0, 0.0, 1.0, '-', '-', '-']))
 
 
+class TestCalcNegativeCases(unittest.TestCase):
+    def test1(self):
+        self.assertRaises(ValueError, lambda: calc_obj.calc([1.0, 2.0, 'sin']))
+
+    def test2(self):
+        self.assertRaises(ValueError, lambda: calc_obj.calc([1.0, 2.0, 3.0, 'sin']))
+
+    def test3(self):
+        self.assertRaises(ValueError, lambda: calc_obj.calc([1.0, 'pow']))
+
+    def test4(self):
+        self.assertRaises(ValueError, lambda: calc_obj.calc([1.0, 2.0, 3.0, 'pow']))
+
+
 if __name__ == '__main__':
     unittest.main()
