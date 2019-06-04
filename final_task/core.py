@@ -2,7 +2,7 @@ from constants import *
 
 
 def parse(expression):
-    """This function get expression. Return the list of parsed arguments. """
+    """Get expression. Return the list of parsed arguments. """
     number, func, op = '', '', ''
     parsed_formula = []
     i = 0  # Символ строки
@@ -79,11 +79,11 @@ def infix_to_postfix(parsed_formula):
     """This function translate infix form into postfix form."""
     polish_notation, stack = [], []
     for item in parsed_formula:
-        if item == '^':
+        if item == '^':  # '^' right associative
             while stack and stack[-1] != '(' and OPERATORS[item][0] < OPERATORS[stack[-1]][0]:
                 polish_notation.append(stack.pop())
             stack.append(item)
-        elif item in OPERATORS:
+        elif item in OPERATORS:  # For left associative
             while stack and stack[-1] != '(' and OPERATORS[item][0] <= OPERATORS[stack[-1]][0]:
                 polish_notation.append(stack.pop())
             stack.append(item)
@@ -95,7 +95,7 @@ def infix_to_postfix(parsed_formula):
                 polish_notation.append(x)
         elif item == "(":
             stack.append(item)
-        else:  # Если число
+        else:  # If digit
             polish_notation.append(item)
     while stack:
         polish_notation.append(stack.pop())

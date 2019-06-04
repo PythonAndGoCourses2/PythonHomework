@@ -19,6 +19,7 @@ MATH_FUNC["abs"], MATH_FUNC["round"] = abs, round
 
 
 def add_attr_to_dict():
+    """Add all functions and constants from math module to a dictionary."""
     for attr in dir(math):
         if type(getattr(math, attr)) != float:
             if callable(getattr(math, attr)):

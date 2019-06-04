@@ -7,7 +7,7 @@ from core import comma_count
 
 
 def check_brackets(expr):
-    """Check brackets balance"""
+    """Get expression. Check brackets balance"""
     if expr.count('(') != expr.count(')'):
         print("ERROR: brackets are not balanced")
         return False
@@ -15,7 +15,7 @@ def check_brackets(expr):
 
 
 def check_comparison(expr):
-    """return True if the operation type is a comparison"""
+    """Get expression. Check operation type is comparison or not"""
     for key in COMPARISON_OPERATORS.keys():
         if key in expr:
             return key
@@ -24,6 +24,7 @@ def check_comparison(expr):
 
 
 def comparison_calc(expr, item):
+    """Get expression for comparison and return True/False."""
     first_argument = expr[:expr.find(item)]
     if item in '<>':  # For '>', '<'
         second_argument = expr[expr.rfind(item) + 1:]
@@ -37,7 +38,8 @@ def comparison_calc(expr, item):
 
 
 def fix_unary(expr):
-    """Replace unary operations.For example:
+    """Get expression. Replace unary operations.
+    For example:
     -1+2 -> 0-1+2
     1*-2 -> 1*(0-2)
     1*(-2) -> 1*(0-2)
@@ -61,6 +63,13 @@ def fix_unary(expr):
 
 
 def replace_plus_minus(expr):
+    """Get expression and replace all plus and minus.
+    '++' -> '+'
+    '--' -> '-'
+    '+-' -> '-'
+    '-+' -> '-'
+
+    """
     while True:
         if expr.find('++') != -1:
             expr = expr.replace("++", "+")
@@ -75,6 +84,10 @@ def replace_plus_minus(expr):
 
 
 def replace_whitespace_and_const(expr):
+    """Get expression. Delete all whitespaces.
+    Replaces mathematical constants with their numerical value.
+
+    """
     expr = expr.replace(" ", "")
     for constant in MATH_CONST.keys():
         expr = expr.replace(constant, str(MATH_CONST[constant]))
@@ -82,6 +95,10 @@ def replace_whitespace_and_const(expr):
 
 
 def check_unknown_func(expr):
+    """Get expression.
+     Return error message if there are unknown functions in the expression.
+
+     """
     regexp = re.compile(r"(?P<function>[a-zA-Z]+)")
     search_function = regexp.finditer(expr)
     for item in search_function:
@@ -93,6 +110,7 @@ def check_unknown_func(expr):
 
 
 def check_correct_whitespace(expr):
+    """Get expression and check for inappropriate whitespaces."""
     expr_list = expr.split()
     i = 0
     while i < len(expr_list) - 1:
@@ -105,6 +123,7 @@ def check_correct_whitespace(expr):
 
 
 def check_last_symbol(expr):
+    """Get expression. Check last symbol is operation or not."""
     for operation in OPERATORS:
         if expr.endswith(operation):  # Check last symbol in expression
             return False

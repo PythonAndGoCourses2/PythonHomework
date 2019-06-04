@@ -97,9 +97,11 @@ class TestCheckFunctions(unittest.TestCase):
 
 class TestCoreFunctions(unittest.TestCase):
     def test_parse(self):
+        self.assertEqual(core.parse(""), [])
         self.assertEqual(core.parse("1+2"), [1, "+", 2])
         self.assertEqual(core.parse("1^2^3"), [1, "^", 2, "^", 3])
         self.assertEqual(core.parse("log2(8)"), [3])
+        self.assertEqual(core.parse("log(16)"), [math.log(16)])
         self.assertEqual(core.parse("log(16,2)"), [4])
         self.assertEqual(core.parse("abs(5)"), [5])
         self.assertEqual(core.parse("log10(2*(50-1)+2)"), [2])
@@ -118,16 +120,20 @@ class TestCoreFunctions(unittest.TestCase):
         self.assertEqual(core.comma_count(abs), 0)
 
     def test_infix_to_postfix(self):
+        self.assertEqual(core.infix_to_postfix([]), [])
         self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
         self.assertEqual(core.infix_to_postfix([2, "^", 2, "^", 3]), [2, 2, 3, "^", "^"])
         self.assertEqual(core.infix_to_postfix([2, "*", '(', 3, "+", 4, ")"]), [2, 3, 4, "+", "*"])
         self.assertEqual(core.infix_to_postfix([2, "^", "(", 3, "-", 4, ")"]), [2, 3, 4, "-", "^"])
-        self.assertEqual(core.infix_to_postfix([]), [])
+        self.assertEqual(core.infix_to_postfix([2, "^", 3]), [2, 3, "^"])
 
     def test_calc(self):
         self.assertEqual(core.calc([2, 3, "+"]), 5)
         self.assertEqual(core.calc([5]), 5)
         self.assertEqual(core.calc([2, 3, 5, "*", "+"]), 17)
+
+    def test_calculating(self):
+        self.assertEqual(core.calculating("1+2"), 3)
 
 
 if __name__ == '__main__':
