@@ -68,7 +68,7 @@ def parse_to_list(exprstr):
                 try:
                     expr_list.append(float(temp))
                 except ValueError:                          # if impossible to convert to float
-                    raise ValueError('ERROR: error in input number {0}'.format(temp))
+                    raise ValueError('error in input number {0}'.format(temp))
             else:
                 expr_list.append(int(temp))
             exprstr = exprstr[len(temp):]
@@ -86,24 +86,24 @@ def parse_to_list(exprstr):
                     if exprstr[len(temp)] == '(':
                         expr_list.append(temp)
                     else:
-                        raise SyntaxError('ERROR: missed argument(s) for function {0}'.format(temp))
+                        raise SyntaxError('missed argument(s) for function {0}'.format(temp))
                 except IndexError:
-                    raise IndexError('ERROR: missed argument(s) for function {0}'.format(temp))
+                    raise IndexError('missed argument(s) for function {0}'.format(temp))
             else:                                           # if temp not in constants or function_dict
-                raise ValueError('ERROR: unknown function or constant {0}'.format(temp))
+                raise ValueError('unknown function or constant {0}'.format(temp))
             exprstr = exprstr[len(temp):]
             temp = ''
         elif symbol in ('(', ')', ','):                     # if bracket or comma - move to list
             expr_list.append(symbol)
             exprstr = exprstr[1:]
         elif symbol == ' ':
-            exprstr = exprstr[1:]
+            exprstr = exprstr[1:]                           # ignore space
         else:                                               # if different symbol - raise Error
-            raise SyntaxError('ERROR: unsupported symbol "{0}" in expression'.format(symbol))
+            raise SyntaxError('unsupported symbol "{0}" in expression'.format(symbol))
     return expr_list
 
 
-def unary_operator_check(expr_list):
+def check_unary_operator(expr_list):
     """ Checking the '+' and '-' operators for unary conditions and their modifying.
     Conditions for assignment to the unary group - '-' or '+' stay on first position in equation or
     after another arithmetic operator or opening parentheses or comma.
@@ -137,7 +137,7 @@ def shunting_yard_alg(expr_list):
     stack = []
     while expr_list:
         item = expr_list[0]
-        if type(item) == int or type(item) == float or item in constants:
+        if isinstance(item, (int, float)) or item in constants:
             output_list.append(item)
             expr_list = expr_list[1:]
         elif item in function_dict:
@@ -149,8 +149,10 @@ def shunting_yard_alg(expr_list):
                 while stack[-1] != '(':
                     output_list.append(stack.pop())
             else:
-                raise SyntaxError('ERROR: the opening parentheses or comma is missed')
+                raise SyntaxError('the opening parentheses or comma is missed')
             output_list.append(item)              # comma will indicate the presence of multi parameters for the func
+            if expr_list and expr_list[0] == ')':
+                raise SyntaxError('error in the data inside the parentheses')
         elif item in operation_dict:
             if stack and (stack[-1] in operation_dict):
                 while stack and (stack[-1] in operation_dict):
@@ -171,14 +173,14 @@ def shunting_yard_alg(expr_list):
             if stack and stack[-1] == '(':
                 stack.pop()
             elif not stack:
-                raise SyntaxError('ERROR: opening parentheses is missed')
+                raise SyntaxError('opening parentheses is missed')
             if stack and (stack[-1] in function_dict):
                 output_list.append(stack.pop())
             expr_list = expr_list[1:]
     else:
         while stack:
             if stack[-1] == '(':
-                raise SyntaxError('ERROR: closing parentheses is missed')
+                raise SyntaxError('closing parentheses is missed')
             output_list.append(stack.pop())
     return output_list                                      # returning reverse_polish_notation
 
@@ -195,52 +197,63 @@ def perform_unary_operation(operator, operand):
 
 def perform_function(function, *operand):
     """ Perform function with one ore more parameters """
-    return function_dict[function](*operand)
+    try:
+        result = function_dict[function](*operand)
+    except ValueError:
+        raise ValueError('error in entered data for function {0}'.format(function))
+    # except TypeError:
+        # result = function_dict[function](operand)
+        # raise TypeError('unsupported data in function {0} parentheses'.format(function))
+    return result
 
 
 def calculation_from_rpn(rev_pol_not_list):
     """ Sequential calculation from left to right of expression in Reverse Polish Notation.
     Operators and functions are applied to corresponding previous staying operand(s) """
     stack = []
-    # arg_stack = []
+    arg_stack = []
     for item in rev_pol_not_list:
-        # print(item)
         if item in constants:
             stack.append(constants[item])
-        elif type(item) == int or type(item) == float:
+        elif isinstance(item, (int, float)):
             stack.append(item)
         elif item == ',':
-            # arg_stack.append(stack.pop())
-            stack.append(item)                              # indicate presence of two parameters for function
+            arg_stack.append(stack.pop())
+            stack.append(item)
         elif item in function_dict:
             if len(stack) > 1 and stack[-2] == ',':
-                try:
-                    params = []
-                    params.append(stack[-3])
-                    # params.append(arg_stack[-1])
+                commas = 0                                  # cheking the presence of commas and sum all successive ones
+                for index in range(-2, -len(stack)-1, -1):
+                    if stack[index] == ',':
+                        commas += 1
+                    else:
+                        break
+                while commas:
+                    params = arg_stack[-commas:]
                     params.append(stack[-1])
-                    # try to perform func with two parameters
-                    intermediate_result = perform_function(item, *params)
-                    stack.pop()                             # pop 2nd parameter
-                    stack.pop()                             # pop comma
-                    stack.pop()                             # pop 1st parameter
-                    # arg_stack.pop()
-                    stack.append(intermediate_result)       # append intermediate result to stack
-                except TypeError:
                     try:
-                        # try to perform func with one parameter
-                        intermediate_result = perform_function(item, stack.pop())
-                        stack.append(intermediate_result)   # append intermediate result to stack
+                        intermediate_result = perform_function(item, *params)
+                        for index in range(commas + 1):
+                            stack.pop()
+                        for index in range(commas):
+                            arg_stack.pop()
+                        stack.append(intermediate_result)
+                        break
                     except TypeError:
-                        raise TypeError("ERROR: unsupported operand for function")
-                except ValueError:
-                    raise ValueError("ERROR: unsupported operands for function")
+                        commas -= 1
+                        continue
+                else:
+                    try:
+                        intermediate_result = perform_function(item, stack.pop()) # try to perform func with one param
+                        stack.append(intermediate_result)
+                    except TypeError:
+                        raise TypeError("unsupported operand(s)")
             else:
                 try:
                     intermediate_result = perform_function(item, stack.pop())
                     stack.append(intermediate_result)
                 except TypeError:
-                    raise TypeError("ERROR: unsupported operand for function {0}".format(item))
+                    raise TypeError("unsupported operand for function '{0}'".format(item))
         elif item in operation_dict:
             if item in ('-u', '+u'):
                 intermediate_result = perform_unary_operation(item, stack.pop())
@@ -249,36 +262,36 @@ def calculation_from_rpn(rev_pol_not_list):
                     operand_2, operand_1 = stack.pop(), stack.pop()
                     intermediate_result = perform_operation(item, operand_1, operand_2)
                 except ZeroDivisionError:
-                    raise ZeroDivisionError('ERROR: division by zero')
+                    raise ZeroDivisionError('division by zero')
                 except IndexError:
-                    raise IndexError('ERROR: insufficient amount of operands')
+                    raise IndexError('insufficient amount of operands')
             stack.append(intermediate_result)
     if len(stack) == 1:
         result = stack[0]
         return result
     else:
-        raise Exception('ERROR: insufficient amount of operators or function or too many operands/arguments')
+        raise SyntaxError('insufficient amount of operators or function or too many operands/arguments')
 
 
 def check_empty_operators(exprstr):
     """ Checking expression for empty string or string containing only operators or parentheses """
     if len(exprstr) == 0:
-        raise SyntaxError('ERROR: empty expression')
+        raise SyntaxError('empty expression')
     elif set(exprstr).issubset(set(operators)):
-        raise SyntaxError('ERROR: no digits, constants or functions in expression')
+        raise SyntaxError('no digits, constants or functions in expression')
     else:
         return False
 
 
-def brackets_check(exprstr):
+def check_brackets(exprstr):
     """ Checking for brackets balance """
     if ('(' and ')') in exprstr:
         if exprstr.count('(') == exprstr.count(')'):
             if exprstr.index(')') < exprstr.index('('):
-                raise SyntaxError('ERROR: brackets are not balanced')
+                raise SyntaxError('brackets are not balanced')
             return True
         else:
-            raise SyntaxError('ERROR: brackets are not balanced')
+            raise SyntaxError('brackets are not balanced')
     else:
         return True
 
@@ -287,9 +300,9 @@ def calculation(exprstr):
     """
     Calculation of string type argument from command line
     """
-    if (not check_empty_operators(exprstr)) and brackets_check(exprstr):
+    if (not check_empty_operators(exprstr)) and check_brackets(exprstr):
         expr_list = parse_to_list(exprstr)
-        unary_operator_check(expr_list)
+        check_unary_operator(expr_list)
         rev_pol_not_list = shunting_yard_alg(expr_list)
         result = calculation_from_rpn(rev_pol_not_list)
         return result
@@ -300,7 +313,7 @@ def main():
         expression = parse_command_line()
         print(calculation(expression))
     except Exception as err:
-        print(err)
+        print('ERROR: ', err)
 
 
 if __name__ == '__main__':
