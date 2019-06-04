@@ -5,6 +5,7 @@ import string
 import math
 import operator
 import re
+import importlib
 
 FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if callable(getattr(math, attr))}
 FUNCTIONS['abs'], FUNCTIONS['round'], FUNCTIONS['lg'] = abs, round, math.log10
@@ -25,6 +26,13 @@ NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
 def make_input_comfortable(the_input):
     """Make input information more usable for futher processing """
+    the_input = the_input.replace(' ', '')
+    the_input = the_input.replace('log10(', 'lg(')
+    while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
+        the_input = re.sub(r'\+\+', '+', the_input)
+        the_input = re.sub(r'\+-', '-', the_input)
+        the_input = re.sub(r'-\+', '-', the_input)
+        the_input = re.sub(r'--', '+', the_input)
     if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
             or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
             or re.compile(r'^[/*%^=<>!]').findall(the_input) \
@@ -36,13 +44,6 @@ def make_input_comfortable(the_input):
         raise ValueError("Empty field")
     elif the_input.count('(') != the_input.count(')'):
         raise ValueError("Brackets are not balanced")
-    the_input = the_input.replace(' ', '')
-    the_input = the_input.replace('log10(', 'lg(')
-    while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
-        the_input = re.sub(r'\+\+', '+', the_input)
-        the_input = re.sub(r'\+-', '-', the_input)
-        the_input = re.sub(r'-\+', '-', the_input)
-        the_input = re.sub(r'--', '+', the_input)
     return the_input
 
 
@@ -172,7 +173,7 @@ def polish_notation(parsed_information):
             stack.append(token)
 
     def add_operators(token):
-        """Function that add operators adccording to RPN"""
+        """Function which add operators adccording to RPN"""
         nonlocal reverse_polish_notation
         if not stack:
             stack.append(token)
@@ -185,11 +186,7 @@ def polish_notation(parsed_information):
             if not stack:
                 stack.append(token)
             elif stack[-1] in OPERATORS:
-                if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                    reverse_polish_notation += stack.pop() + separator
-                    stack.append(token)
-                elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                    stack.append(token)
+                check_stack(token)
         elif token == '-' and parsed_information[parsed_information.index(token) - 1] in '/*^%//':
             if OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
                 stack.append(token)
@@ -199,11 +196,8 @@ def polish_notation(parsed_information):
             if stack:
                 if stack[-1] == '(':
                     stack.append(token)
-                elif OPERATORS[token][-1] <= OPERATORS[stack[-1]][-1]:
-                    reverse_polish_notation += stack.pop() + separator
-                    stack.append(token)
-                elif OPERATORS[token][-1] > OPERATORS[stack[-1]][-1]:
-                    stack.append(token)
+                elif check_stack(token):
+                    pass
             elif not stack:
                 stack.append(token)
         else:
@@ -252,7 +246,7 @@ def calculate(info_string):
             if arguments(FUNCTIONS[token]) == 1:
                 op = stack.pop()
                 if stack[-1] == ',':
-                    raise ValueError("Invalid number of arguments")
+                    raise ValueError(f'invalid number of arguments')
                 stack.append(FUNCTIONS[token](op))
             elif arguments(FUNCTIONS[token]) == 2:
                 if stack[-2] == ',':
@@ -286,14 +280,26 @@ def calculate(info_string):
         return stack.pop()
 
 
+def add_module(user_module):
+    """Function which add module """
+    module = importlib.import_module(user_module)
+    user_func = {attr: info for (attr, info) in module.__dict__.items() if callable(getattr(module, attr))}
+    user_const = {attr: info for (attr, info) in module.__dict__.items() if not callable(getattr(module, attr))}
+    return FUNCTIONS.update(user_func), CONSTANTS.update(user_const)
+
+
 def main():
     try:
         parser = argparse.ArgumentParser(description="Pure-python command-line calculator.")
         parser.add_argument("EXPRESSION", help="expression string to evaluate", type=str)
-        parser.add_argument("-m", "--use-modules MODULE [MODULE ...]", metavar='MODULE [MODULE ...]',
+        parser.add_argument("-m", "--use-modules MODULE [MODULE ...]", dest='MODULE', metavar='MODULE [MODULE ...]',
                             help="additional modules to use")
         args = parser.parse_args()
-        print(calculate(args.EXPRESSION))
+        if args.MODULE:
+            add_module(args.MODULE)
+            print(calculate(args.EXPRESSION))
+        else:
+            print(calculate(args.EXPRESSION))
     except Exception as exeption:
         print(f'ERROR: {exeption}')
 
