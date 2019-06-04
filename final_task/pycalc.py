@@ -251,7 +251,7 @@ def main():
     if len(expression) == 0:
         expression = str(input('No expression is received as an argument. Please enter an expression to evaluate: '))
     try:
-        print("Mathematical calculation result: ", process(expression))
+        print(process(expression))
     except Exception as ex:
         print("Error: Please check arguments and operators in this expression."
               "\nTo reduce the chance of error please wrap the expression with \" \"."
