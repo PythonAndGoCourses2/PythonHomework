@@ -32,7 +32,7 @@ def get_postfix(infix_notation: list) -> list:
         elif token in lib.NOT_SUPPORTED:
             raise exeptions.InvalidStringError('Calculator doesn\'t support iterable objects(list, set, dict)')
         else:
-            raise exeptions.UnknownFunctionError(f'unknown function \'{token}\'')
+            raise exeptions.UnknownFunctionError(f'unknown function or constant \'{token}\'')
     process_all_left(stack, output_string)
     return output_string
 
