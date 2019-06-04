@@ -37,6 +37,7 @@ FUNCTIONS_AND_CONSTANTS = {
     "pow(2, 3)": pow(2, 3),
     "abs(-5)": abs(-5),
     "round(123.4567890)": round(123.4567890),
+    "fsum([1,2,3,4])": fsum([1,2,3,4]),
 }
 
 ASSOCIATIVE = {
@@ -92,6 +93,7 @@ ERROR_CASES = [
     "2+/3",
     "/2",
     "2***2",
+    "sin)pi(",
 ]
 
 
