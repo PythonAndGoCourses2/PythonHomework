@@ -7,4 +7,10 @@ setup(
     # package_dir={'': 'src'},
     scripts= ['pycalc.py'],
     packages=find_packages(),
+    entry_points={
+              'console_scripts': [
+                  'pycalc = pycalc:start',
+              ],
+      },
+    py_modules=['pycalc']
 )
