@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from .pycalc import pycalc
+from pycalc import pycalc
 
 
 class TestPycalc(unittest.TestCase):
@@ -66,9 +66,9 @@ class TestPycalc(unittest.TestCase):
 
 # class TestCheckUnaryOperator(unittest.TestCase):
 
-    def test_check_unary_operator_first_place(self):
-        self.assertEqual(pycalc.check_unary_operator(['-', 123]), ['-u', 123])
-        self.assertEqual(pycalc.check_unary_operator(['^', '-', 123]), ['^', '-u', 123])
+    # def test_check_unary_operator_first_place(self):
+        # self.assertEqual(pycalc.check_unary_operator(['-', 123]), ['-u', 123])
+        # self.assertEqual(pycalc.check_unary_operator(['^', '-', 123]), ['^', '-u', 123])
 
 # class TestPrecedence(unittest.TestCase):
 
