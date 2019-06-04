@@ -9,4 +9,4 @@ setup(
     description='Pure-python command line calculator.',
     py_modules=['pycalc'],
     entry_points={'console_scripts': ['pycalc=pycalc:main', ], },
-)    
+)
