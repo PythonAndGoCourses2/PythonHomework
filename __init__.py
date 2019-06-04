@@ -1,1 +1,1 @@
-name = "pycalc"
+name = "Pycalc"
