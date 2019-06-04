@@ -33,16 +33,16 @@ def validate_expression(items):
 def validate_items(item1, item2):
     # detects error cases
     if validate_number(item1) and validate_number(item2):
-        print('Error: Two or more numbers in a row. Please make sure all operators are present.')
+        print('ERROR: Two or more numbers in a row. Please make sure all operators are present.')
         exit(1)
     elif item1 == '/' and item2 == '/':
-        print('Error: Please remove the whitespace if you require a floor division.')
+        print('ERROR: Please remove the whitespace if you require a floor division.')
         exit(1)
     elif item1 == '*' and item2 == '*':
-        print('Error: Please use "^" operator for power calculation.')
+        print('ERROR: Please use "^" operator for power calculation.')
         exit(1)
     elif item1 == 'sqrt':
-        print('Error: Please use "^" operator for power calculation. Sqrt would be ^0.5.')
+        print('ERROR: Please use "^" operator for power calculation. Sqrt would be ^0.5.')
         exit(1)
     else:
         return True
@@ -81,19 +81,19 @@ def calculate(operators, operands):
         try:
             operands.append(x / y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "%":
         try:
             operands.append(x % y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "//":
         try:
             operands.append(x // y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "^":
         operands.append(math.pow(x, y))
@@ -135,7 +135,7 @@ def calculate(operators, operands):
             operators.pop(-2)
             operands.append(math.pow(x, y))
         else:
-            print("Error: Cannot accept comma as a delimiter. Please use a dot instead.")
+            print("ERROR: Cannot accept comma as a delimiter. Please use a dot instead.")
             exit(1)
     elif operator == "log10":
         operands.append(math.log10(y))
@@ -162,7 +162,7 @@ def calculate(operators, operands):
         print(bool(x <= y))
         exit(1)
     else:
-        print('Error: Operator or function unknown')
+        print('ERROR: Operator or function unknown')
         exit(1)
 
 
@@ -191,13 +191,13 @@ def pre_format(expression):
     exp = exp.replace("=", " = ").replace("<>", " noneq ").replace(">", " > ").replace("<", " < ").replace("!", " !")
     items = exp.split()
     if len([i for i, x in enumerate(items) if x in ['>', 'eq', 'noneq', 'eqless', 'eqmore', '<']]) > 1:
-        print("Error: Cannot have more than one comparison operator in an expression.")
+        print("ERROR: Cannot have more than one comparison operator in an expression.")
         exit(1)
     if len([i for i, x in enumerate(items) if x in ['(']]) != len([i for i, x in enumerate(items) if x in [')']]):
-        print("Error: Unbalanced parentheses.")
+        print("ERROR: Unbalanced parentheses.")
         exit(1)
     if "=" in items:
-        print("Error: Please use '==', '!=', '>=', '<=', '>', '<' if you require a boolean comparison.")
+        print("ERROR: Please use '==', '!=', '>=', '<=', '>', '<' if you require a boolean comparison.")
         exit(1)
     return items
 
@@ -256,7 +256,7 @@ def main():
     try:
         print(process(expression))
     except Exception as ex:
-        print("Error: Please check arguments and operators in this expression."
+        print("ERROR: Please check arguments and operators in this expression."
               "\nTo reduce the chance of error please wrap the expression with \" \"."
               " Program internal message: {0}".format(str(ex)))
         exit(1)
