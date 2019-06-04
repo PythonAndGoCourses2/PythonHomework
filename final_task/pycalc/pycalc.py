@@ -244,7 +244,7 @@ def calculation_from_rpn(rev_pol_not_list):
                         continue
                 else:
                     try:
-                        intermediate_result = perform_function(item, stack.pop()) # try to perform func with one param
+                        intermediate_result = perform_function(item, stack.pop())
                         stack.append(intermediate_result)
                     except TypeError:
                         raise TypeError("unsupported operand(s)")
