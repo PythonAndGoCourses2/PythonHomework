@@ -24,8 +24,6 @@ def main():
                 print(core.calculating(expression))
             else:
                 print(check.comparison_calc(expression, comparison))
-        else:
-            print("ERROR: incorrect expression")
     except OverflowError:
         print("ERROR: numerical result out of range")
     except ZeroDivisionError:

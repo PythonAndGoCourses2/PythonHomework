@@ -113,9 +113,9 @@ def check_correct_whitespace(expr):
     expr_list = expr.split()
     i = 0
     while i < len(expr_list) - 1:
-        if expr_list[i].isdigit() and expr_list[i + 1].isdigit():
-            return False
-        if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
+        if (expr_list[i].isdigit() and expr_list[i + 1].isdigit()) or \
+                (expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%"):
+            print("ERROR: inappropriate whitespaces ")
             return False
         i += 1
     return expr
@@ -125,6 +125,7 @@ def check_last_symbol(expr):
     """Get expression. Check last symbol is operation or not."""
     for operation in OPERATORS:
         if expr.endswith(operation):  # Check last symbol in expression
+            print("ERROR: expression end with '{0}' ".format(operation))
             return False
     return True
 
@@ -145,12 +146,13 @@ def check_arg_function(expr):
                 i += 1
             count += comma_count(MATH_FUNC[func])
             func = ""
-        i += 1
-    for symbol in expr:
-        if symbol == ',':
+        if expr[i] == ',':
             count_in_expr += 1
+        i += 1
+
     if ("log" in expr or "round" in expr) and count - count_in_expr == 1:
         return expr
     elif count != count_in_expr:  # 'log' and 'round' take 1(or 2) arg
+        print("ERROR: mismatch of function arguments ")
         return False
     return True

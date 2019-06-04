@@ -38,6 +38,11 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertEqual(check.fix_unary("2+30*(+1+2)"), "2+30*(0+1+2)")
         self.assertEqual(check.fix_unary("2+3*(4+5)"), "2+3*(4+5)")
         self.assertEqual(check.fix_unary("1*-2"), "1*(0-2)")
+        self.assertEqual(check.fix_unary("1*+2"), "1*(0+2)")
+        self.assertEqual(check.fix_unary("1/-3"), "1/(0-3)")
+        self.assertEqual(check.fix_unary("1/+3"), "1/(0+3)")
+        self.assertEqual(check.fix_unary("1^-4"), "1^(0-4)")
+        self.assertEqual(check.fix_unary("1^+4"), "1^(0+4)")
 
     def test_replace_plus_minus(self):
         self.assertEqual(check.replace_plus_minus(""), "")
