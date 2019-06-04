@@ -3,6 +3,7 @@
 import unittest
 from pycalc import pycalc
 
+
 class TestPycalc(unittest.TestCase):
 
     def test_parse_to_list_operator(self):
@@ -48,6 +49,7 @@ class TestPycalc(unittest.TestCase):
     def test_precedence_left(self):
         self.assertTrue(pycalc.precedence('-', '*'))
         self.assertFalse(pycalc.precedence('-', '>'))
+
     def test_precedence_right(self):
         self.assertFalse(pycalc.precedence('^', '-u'))
 
