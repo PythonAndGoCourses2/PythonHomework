@@ -61,7 +61,7 @@ class Calculator:
                 first_operand = self.operands.take_from_stack()
             self.current_result = operator_on_stack['operator'](first_operand, second_operand)
         self.operands.put_on_stack(self.current_result)
-        if len(self.function.stack) and self.function.top() is not '(':
+        if self.function.stack and self.function.top() is not '(':
             if self.current_operator['priority'] >= self.function.top()['priority']:
                 self.current_result = self._calc_on_stack()
         return self.current_result
@@ -106,19 +106,13 @@ class Calculator:
             elif item is ')' and self.function.top() == '(':
                 self.function.take_from_stack()
             else:
-                for i in range(len(self.function.stack)):
+                for i in self.function.stack:
                     self._calc_on_stack()
-                    if item is ')' and not self.function.is_empty():
+                    if item is ')' and self.function.stack:
                         if self.function.top() is '(':
                             self.function.take_from_stack()
                             break
-        if self.function.is_empty():
-            self.current_result = self.operands.take_from_stack()
-        elif len(self.function.stack) == 1:
+        while self.function.stack:
             self._calc_on_stack()
-        else:
-            for i in range(len(self.function.stack)):
-                self._calc_on_stack()
-                if self.function.is_empty():
-                    break
+        self.current_result = self.operands.take_from_stack()
         return self.current_result

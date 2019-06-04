@@ -47,7 +47,7 @@ def check_parsing_list(parsing_list, function_dict):
 def operator_check(operator_symbol):
     """
     Check if there is an operator with this symbol in the operators_dict
-    :param operator_symbol: str from instance of SplitOperators class
+    :param operator_symbol: last_symbol (str) from instance of SplitOperators class
     :return: clear operator_symbol as str
     """
     if operator_symbol in operator_dict.keys():
@@ -58,7 +58,7 @@ def operator_check(operator_symbol):
 def number_check(number):
     """
     Check if number is int or float
-    :param number: str from instance of SplitOperators class
+    :param number: last_number (str) from instance of SplitOperators class
     :return: number as int or float
     """
     try:
@@ -73,7 +73,7 @@ def function_check(function_name, function_dict):
     Check the python version to add constant "tau".
     If function_name is "pi", "e", "tau", "inf" or "nan" convert it into float
     If there is no such name in function_dict Raise an Exception
-    :param function_name: str from instance of SplitOperators class
+    :param function_name: last_letter (str) from instance of SplitOperators class
     :param function_dict: dict with all functions {'operator': function, 'priority': 0}
     :return: float or clear function_name as str
     """
