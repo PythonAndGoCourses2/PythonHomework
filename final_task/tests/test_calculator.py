@@ -36,6 +36,13 @@ class TestCalculator(unittest.TestCase):
         calc._calc_on_stack()
         self.assertEqual(2.0, calc.current_result)
 
+    def test_calc_on_stack_function_with_iterable_argument(self):
+        calc = Calculator('fsum([1,2,3,4])', function_dict)
+        calc.function.put_on_stack({'operator': math.fsum, 'priority': 0})
+        calc.operands.put_on_stack([1, 2, 3, 4])
+        calc._calc_on_stack
+        self.assertEqual(10.0, calc.current_result)
+
     def test_calculate_too_many_arguments(self):
         calc = Calculator('sin(pi,42)', function_dict)
         calc.function.put_on_stack({'operator': math.sin, 'priority': 0})
