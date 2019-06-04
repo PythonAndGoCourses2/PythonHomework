@@ -62,6 +62,7 @@ class TestPycalc(unittest.TestCase):
         for expression in expressions:
             pycalc.check_unary_operator(expression[0])
             self.assertEqual(expression[0], expression[1])
+
     def test_check_unary_operator_diff(self):
         expression = ['-', 1, '-', '+', '-', '+', 123]
         result = ['-u', 1, '-', '+u', '-u', '+u', 123]
@@ -101,8 +102,14 @@ class TestPycalc(unittest.TestCase):
     def test_shunting_yard_alg_oper(self):
         self.assertEqual(pycalc.shunting_yard_alg([123, '+', 'pi']), [123, 'pi', '+'])
 
+    def test_shunting_yard_alg_right_prec(self):
+        self.assertEqual(pycalc.shunting_yard_alg([2, '^', 3, '^', 4]), [2, 3, 4, '^', '^'])
+
     def test_shunting_yard_alg_oper2(self):
         self.assertEqual(pycalc.shunting_yard_alg([123, '>', 'pi']), [123, 'pi', '>'])
+
+    def test_perform_operation(self):
+        self.assertEqual(pycalc.perform_operation('+', 123, 3.141592653589793), 126.1415926535898)
 
     def test_calculation_from_rpn_func_two_arg(self):
         self.assertEqual(pycalc.calculation_from_rpn([0.123, ',', 123, 'log']), -0.4354718707462201)
@@ -122,6 +129,9 @@ class TestPycalc(unittest.TestCase):
     def test_calculation_from_rpn_err_numbers(self):
         with self.assertRaises(SyntaxError):
             pycalc.calculation_from_rpn([1, 1, 2, 3, 4, 5, 6, '+'])
+
+    def test_calculation_from_rpn_right_prec(self):
+        self.assertEqual(pycalc.calculation_from_rpn([2, 3, 4, '^', '^']), 2417851639229258349412352)
 
     def test_check_empty_operators_empty(self):
         with self.assertRaises(SyntaxError):
