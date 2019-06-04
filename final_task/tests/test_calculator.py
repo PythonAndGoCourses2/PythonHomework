@@ -40,7 +40,7 @@ class TestCalculator(unittest.TestCase):
         calc = Calculator('fsum([1,2,3,4])', function_dict)
         calc.function.put_on_stack({'operator': math.fsum, 'priority': 0})
         calc.operands.put_on_stack([1, 2, 3, 4])
-        calc._calc_on_stack
+        calc._calc_on_stack()
         self.assertEqual(10.0, calc.current_result)
 
     def test_calculate_too_many_arguments(self):
