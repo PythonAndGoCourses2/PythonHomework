@@ -144,7 +144,6 @@ def check_arg_function(expr):
             while expr[i] != "(":  # For such function as log2, log10, etc
                 func += expr[i]
                 i += 1
-            i += 1
             count += comma_count(MATH_FUNC[func])
             func = ""
         i += 1

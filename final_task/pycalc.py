@@ -7,7 +7,6 @@ def create_parser():
     """Parse command line options"""
     parser = argparse.ArgumentParser(prog='pycalc', description="Pure-python command-line calculator.")
     parser.add_argument('expr', metavar='EXPRESSION', help='expression string to evaluate', default='', type=str)
-    parser.add_argument('-m', '--use-modules', metavar="MODULE[MODULE...]", help='additional modules to use')
     return parser.parse_args()
 
 

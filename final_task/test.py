@@ -91,9 +91,8 @@ class TestCheckFunctions(unittest.TestCase):
         self.assertFalse(check.check_arg_function("sin(2,3,4)"))
         self.assertTrue(check.check_arg_function("log10(100)+pow(2,3)"))
         self.assertFalse(check.check_arg_function("log(1,2,3)"))
-        self.assertTrue(check.check_arg_function("2+2"), "2+2")
-        # complete
-
+        self.assertTrue(check.check_arg_function("sin(log(10,3)"))
+        self.assertTrue(check.check_arg_function("2+2"))
 
 class TestCoreFunctions(unittest.TestCase):
     def test_parse(self):
