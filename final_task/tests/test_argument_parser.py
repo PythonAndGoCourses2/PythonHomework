@@ -6,7 +6,6 @@ from pycalc.argument_parser import arg_parser
 from pycalc.operator_manager import create_func_dict
 
 
-
 class TestArgumentParser(unittest.TestCase):
 
     def setUp(self):
