@@ -4,7 +4,7 @@ import argparse
 import math
 from pycalc.argument_parser import arg_parser
 from pycalc.operator_manager import create_func_dict
-from pycalc.use_module_test import sin, user_function, CONSTANT, pi
+from .use_module_test import sin, user_function, CONSTANT, pi
 
 
 class TestArgumentParser(unittest.TestCase):
