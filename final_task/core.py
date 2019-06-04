@@ -5,7 +5,7 @@ def parse(expression):
     """Get expression. Return the list of parsed arguments. """
     number, func, op = '', '', ''
     parsed_formula = []
-    i = 0  # Символ строки
+    i = 0
     while i < len(expression):
         if expression[i].isalpha():
             func += expression[i]
@@ -76,7 +76,10 @@ def comma_count(function):
 
 
 def infix_to_postfix(parsed_formula):
-    """This function translate infix form into postfix form."""
+    """Get the list of arguments written in the infix form and
+    translate into polish notation.
+
+    """
     polish_notation, stack = [], []
     for item in parsed_formula:
         if item == '^':  # '^' right associative
@@ -118,5 +121,5 @@ def calc(polish_notation):
 
 
 def calculating(expression):
-    """Parse expression and return calculated value."""
+    """Get expression, parse it and return calculated value."""
     return calc(infix_to_postfix(parse(expression)))

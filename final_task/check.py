@@ -31,8 +31,7 @@ def comparison_calc(expr, item):
     else:
         second_argument = expr[expr.rfind(item) + 2:]
     if '=' in second_argument:
-        print("ERROR: incorrect expression.")
-        exit(-1)
+        raise Exception
     x, y = core.calculating(first_argument), core.calculating(second_argument)
     return COMPARISON_OPERATORS[item](x, y)
 
