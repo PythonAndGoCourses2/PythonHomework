@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from final_task.pycalc import pycalc
+from .final_task.pycalc import pycalc
 
 class TestPycalc(unittest.TestCase):
     example = (('123', [123, ]),
