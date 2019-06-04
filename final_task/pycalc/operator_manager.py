@@ -32,7 +32,7 @@ def find_user_functions(module):
     :return: dict {function_name: function}
     """
     try:
-        user_module = importlib.import_module('{}'.format(module))
+        user_module = importlib.import_module('.{}'.format(module))
         item = [i for i in dir(user_module) if not i.startswith('_')]
         user_functions = {i: user_module.__dict__[i] for i in item}
     except ImportError:

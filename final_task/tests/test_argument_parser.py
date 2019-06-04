@@ -13,13 +13,13 @@ class TestArgumentParser(unittest.TestCase):
         self.func_dict = create_func_dict()
 
     @patch('argparse.ArgumentParser.parse_args',
-                return_value=argparse.Namespace(EXPRESSION='2+40', use_modules=""))
+           return_value=argparse.Namespace(EXPRESSION='2+40', use_modules=""))
     def test_expression_parser(self, mock_args):
         test_line = arg_parser()
         self.assertEqual(('2+40', self.func_dict), test_line)
 
     @patch('argparse.ArgumentParser.parse_args',
-                return_value=argparse.Namespace(EXPRESSION='2+40', use_modules="use_module_test"))
+           return_value=argparse.Namespace(EXPRESSION='2+40', use_modules="use_module_test"))
     def test_expression_and_module_parser(self, mock_args):
         user_functions = {
                         'sin': sin,
