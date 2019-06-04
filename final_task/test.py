@@ -81,18 +81,18 @@ class TestPycalc(unittest.TestCase):
 
 # class TestShuntingYardAlg(unittest.TestCase):
 
-    def test_shunting_yard_alg_number(self):
-        self.assertEqual(pycalc.shunting_yard_alg([123]), [123])
-        self.assertEqual(pycalc.shunting_yard_alg([1.23]), [1.23])
-        self.assertEqual(pycalc.shunting_yard_alg(['e']), ['e'])
+    # def test_shunting_yard_alg_number(self):
+        # self.assertEqual(pycalc.shunting_yard_alg([123]), [123])
+        # self.assertEqual(pycalc.shunting_yard_alg([1.23]), [1.23])
+        # self.assertEqual(pycalc.shunting_yard_alg(['e']), ['e'])
 
-    def test_shunting_yard_alg_function(self):
-        self.assertEqual(pycalc.shunting_yard_alg(['sin', '(', pi, ')']), ['pi', 'sin'])
+    # def test_shunting_yard_alg_function(self):
+        # self.assertEqual(pycalc.shunting_yard_alg(['sin', '(', pi, ')']), ['pi', 'sin'])
 
-    def test_shunting_yard_alg_comma(self):
-        self.assertEqual(pycalc.shunting_yard_alg(['log', '(', 123, ',', 1, ')']), [123, ',', 1, 'log'])
-        with self.assertRaises(SyntaxError):
-            pycalc.shunting_yard_alg(['log', '(', 123, ',' ')'])
+    # def test_shunting_yard_alg_comma(self):
+        # self.assertEqual(pycalc.shunting_yard_alg(['log', '(', 123, ',', 1, ')']), [123, ',', 1, 'log'])
+        # with self.assertRaises(SyntaxError):
+            # pycalc.shunting_yard_alg(['log', '(', 123, ',' ')'])
 
 
 if __name__ == '__main__':
