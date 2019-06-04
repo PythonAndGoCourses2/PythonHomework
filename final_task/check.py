@@ -49,7 +49,10 @@ def fix_unary(expr):
     search_result = regexp.finditer(expr)
     for item in search_result:
         temp = item.group("operation") + item.group("digits")
-        expr = re.sub(temp, "(0" + temp + ")", expr)
+        if "-" in temp:
+            expr = re.sub(temp, "(0" + temp + ")", expr)
+        elif "+" in temp:
+            expr = re.sub("\\" + temp, "(0" + temp + ")", expr)
     if expr.startswith("-") or expr.startswith("+"):
         expr = "0" + expr
     expr = re.sub(r'\(\-', '(0-', expr)
@@ -98,10 +101,14 @@ def check_correct_whitespace(expr):
         if expr_list[i] in "/*^%" and expr_list[i + 1] in "/*^%":
             return False
         i += 1
+    return expr
+
+
+def check_last_symbol(expr):
     for operation in OPERATORS:
         if expr.endswith(operation):  # Check last symbol in expression
             return False
-    return expr
+    return True
 
 
 def check_arg_function(expr):

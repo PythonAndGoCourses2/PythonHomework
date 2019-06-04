@@ -16,9 +16,15 @@ COMPARISON_OPERATORS = {'>=': operator.ge,
                         '<': operator.lt}
 MATH_FUNC, MATH_CONST = {}, {}
 MATH_FUNC["abs"], MATH_FUNC["round"] = abs, round
-for attr in dir(math):
-    if type(getattr(math, attr)) != float:
-        if callable(getattr(math, attr)):
-            MATH_FUNC[attr] = getattr(math, attr)
-    else:
-        MATH_CONST[attr] = getattr(math, attr)
+
+
+def add_attr_to_dict():
+    for attr in dir(math):
+        if type(getattr(math, attr)) != float:
+            if callable(getattr(math, attr)):
+                MATH_FUNC[attr] = getattr(math, attr)
+        else:
+            MATH_CONST[attr] = getattr(math, attr)
+
+
+add_attr_to_dict()
