@@ -26,13 +26,6 @@ NUMBERS = re.compile(r'-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?')
 
 def make_input_comfortable(the_input):
     """Make input information more usable for futher processing """
-    the_input = the_input.replace(' ', '')
-    the_input = the_input.replace('log10(', 'lg(')
-    while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
-        the_input = re.sub(r'\+\+', '+', the_input)
-        the_input = re.sub(r'\+-', '-', the_input)
-        the_input = re.sub(r'-\+', '-', the_input)
-        the_input = re.sub(r'--', '+', the_input)
     if re.compile(r'[\d\w()]\s+[.\d\w()]').findall(the_input) \
             or re.compile(r'[+-/*%^=<>]$').findall(the_input) \
             or re.compile(r'^[/*%^=<>!]').findall(the_input) \
@@ -40,10 +33,17 @@ def make_input_comfortable(the_input):
             or re.compile(r'[<>/*=!]\s+[=/*]').findall(the_input) \
             or re.compile(r'\(\)').findall(the_input):
         raise ValueError("Invalid expression")
-    elif not the_input:
-        raise ValueError("Empty field")
     elif the_input.count('(') != the_input.count(')'):
         raise ValueError("Brackets are not balanced")
+    the_input = the_input.replace(' ', '')
+    the_input = the_input.replace('log10(', 'lg(')
+    while '++' in the_input or '--' in the_input or '+-' in the_input or '-+' in the_input:
+        the_input = re.sub(r'\+\+', '+', the_input)
+        the_input = re.sub(r'\+-', '-', the_input)
+        the_input = re.sub(r'-\+', '-', the_input)
+        the_input = re.sub(r'--', '+', the_input)
+    if not the_input:
+        raise ValueError("Empty field")
     return the_input
 
 
