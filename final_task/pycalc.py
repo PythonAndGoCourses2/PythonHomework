@@ -4,7 +4,7 @@ import math
 
 #  establishes precedence for operators
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
-                   '*': 2, '/': 2, '//': 2, '%': 2, '(': 8, ')': 8, '!': 5, '^': 3.9, 'sin': 4, 'cos': 4, 'tan': 4,
+                   '*': 2, '/': 2, '//': 2, '%': 2, '(': 8, ')': 8, '!': 5, '^': 3.9, 'pow': 3.9, 'sin': 4, 'cos': 4, 'tan': 4,
                    'asin': 4, 'acos': 4,  'atan': 4, 'asinh': 4, 'acosh': 4, 'atanh': 4, 'sinh': 4, 'cosh': 4,
                    'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, ',': 0.9, 'abs': 5, 'round': 5}
 #  establishes left-associated operators
@@ -131,6 +131,9 @@ def calculate(operators, operands):
         if operators[-2] == 'log':
             operators.pop(-2)
             operands.append(math.log(x, y))
+        elif operators[-2] == 'pow':
+            operators.pop(-2)
+            operands.append(math.pow(x, y))
         else:
             print("Error: Cannot accept comma as a delimiter. Please use a dot instead.")
             exit(1)
@@ -141,22 +144,22 @@ def calculate(operators, operands):
     elif operator == "round":
         operands.append(round(y))
     elif operator == 'eq':
-        print("Comparison result: ", bool(x == y))
+        print(bool(x == y))
         exit(1)
     elif operator == '>':
-        print("Comparison result: ", bool(x > y))
+        print(bool(x > y))
         exit(1)
     elif operator == '<':
-        print("Comparison result: ", bool(x < y))
+        print(bool(x < y))
         exit(1)
     elif operator == 'noneq':
-        print("Comparison result: ", bool(x != y))
+        print(bool(x != y))
         exit(1)
     elif operator == 'eqmore':
-        print("Comparison result: ", bool(x >= y))
+        print(bool(x >= y))
         exit(1)
     elif operator == 'eqless':
-        print("Comparison result: ", bool(x <= y))
+        print(bool(x <= y))
         exit(1)
     else:
         print('Error: Operator or function unknown')
