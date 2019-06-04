@@ -49,17 +49,16 @@ class TestPycalc(unittest.TestCase):
         self.assertIsInstance(pycalc.parse_to_list('123'), list)
 
     def test_parse_to_list_overall(self):
-        self.assertEqual(pycalc.parse_to_list('sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))'),
-                ['sin', '(', 'e', '^', 'log', '(', 'e', '^', 'e', '^', 'sin', '(', 23.0, ')', ',', 45.0, ')', '+',
-                 'cos', '(', 3.0, '+', 'log10', '(', 'e', '^', '-', 'e', ')', ')', ')'])
+        result = ['sin', '(', 'e', '^', 'log', '(', 'e', '^', 'e', '^', 'sin', '(', 23.0, ')', ',', 45.0, ')', '+',
+                  'cos', '(', 3.0, '+', 'log10', '(', 'e', '^', '-', 'e', ')', ')', ')']
+        self.assertEqual(pycalc.parse_to_list('sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))'), result)
 
     def test_parse_to_list_err_numbers(self):
         self.assertEqual(pycalc.parse_to_list('1 + 1 2 3 4 5 6'), [1, '+', 1, 2, 3, 4, 5, 6])
 
     def test_check_unary_operator_first_place(self):
-        expressions = ((['-', 123], ['-u', 123]),
-                             (['^', '-', 123], ['^', '-u', 123]),
-                             (['(', '+', 123], ['(', '+u', 123]))
+        expressions = ((['-', 123], ['-u', 123]), (['^', '-', 123], ['^', '-u', 123]),
+                       (['(', '+', 123], ['(', '+u', 123]))
         for expression in expressions:
             pycalc.check_unary_operator(expression[0])
             self.assertEqual(expression[0], expression[1])
