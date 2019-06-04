@@ -3,7 +3,6 @@
 import math
 import operator
 import importlib
-import os
 
 
 def create_func_dict(func_name=None):
