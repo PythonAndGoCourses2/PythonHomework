@@ -8,10 +8,10 @@ from pycalc.operator_manager import create_func_dict
 class TestArgumentParser(unittest.TestCase):
 
     def setUp(self):
-        self.fucn_dict = create_func_dict()
+        self.func_dict = create_func_dict()
 
     @mock.patch('argparse.ArgumentParser.parse_args',
                 return_value=argparse.Namespace(EXPRESSION='2+40', use_modules=""))
-    def test_expression_parser(self):
+    def test_expression_parser(self, mock_args):
         test_line = arg_parser()
         self.assertEqual(('2+40', self.func_dict), test_line)
