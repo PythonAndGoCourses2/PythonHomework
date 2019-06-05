@@ -5,38 +5,84 @@ an expression from a command line argument.
 
 import sys
 
-from pycalc.args import args
-from pycalc.calculator import calculator
-from pycalc.calculator.formatters import err_msg_formatter
-from pycalc.calculator.messages import (
-    CALCULATOR_INITIALIZATION_ERROR,
-    MODULES_IMPORT_ERROR
-)
-from pycalc.importer.errors import ModuleImportErrors
+from pycalc.args import get_args
+from pycalc.calculator import calculator, CalculatorError
+
+ERROR_MSG_PREFIX = 'ERROR: '
 
 
-def main():
-    """
-    Initialize a calculator and calculate
-    an expression from a command line argument.
-    """
+class Cli:
+    """Command line interface for a calculator."""
 
-    # initialize a calculator
-    try:
-        calc = calculator(args.modules)
+    def __init__(self):
+        self.args = get_args()
+        self.calculator = None
 
-    except ModuleImportErrors as exc:
-        modules_names = ', '.join(exc.modules_names)
-        err_msg = f'{MODULES_IMPORT_ERROR} {modules_names}'
-        sys.exit(err_msg_formatter(err_msg))
+    def run(self):
+        """Initialize a calculator and make a calculation."""
 
-    except Exception:
-        sys.exit(err_msg_formatter(CALCULATOR_INITIALIZATION_ERROR))
+        modules = self.args.modules
+        self.init_calculator(modules)
 
-    # make a calculation and print a result
-    result = calc.calculate(args.expression)
-    print(result)
+        expression = self.args.expression
+        self.calculate(expression)
+
+    def init_calculator(self, modules):
+        """Initialize a calculator."""
+
+        try:
+            self.calculator = calculator(modules)
+            return
+
+        except CalculatorError as exc:
+            err_msg = exc.err_msg
+            self.on_error(err_msg)
+
+    def calculate(self, expression):
+        """Make a calculation."""
+
+        assert callable(
+            self.calculator.calculate), 'calculate is not a callable'
+
+        try:
+            result = self.calculator.calculate(expression)
+            self.on_success(result)
+            return
+
+        except CalculatorError as exc:
+            err_msg = exc.err_msg
+
+        except Exception as exc:
+            err_msg = str(exc)
+
+        self.on_error(err_msg)
+
+    def on_success(self, result):
+        """Run if a calculation was succesfull."""
+
+        self.exit(result)
+
+    def on_error(self, err_msg):
+        """Run if there were initialization or calculation errors."""
+
+        message = self.prefix_err_msg(err_msg)
+        self.exit(message, is_error=True)
+
+    def exit(self, message, is_error=False):
+        """Print a message and exit."""
+
+        print(message)
+
+        if is_error:
+            sys.exit(1)
+
+        sys.exit()
+
+    def prefix_err_msg(self, msg):
+        """Return an error message with an error prefix."""
+
+        return f'{ERROR_MSG_PREFIX}{msg}'
 
 
 if __name__ == "__main__":
-    main()
+    Cli().run()
