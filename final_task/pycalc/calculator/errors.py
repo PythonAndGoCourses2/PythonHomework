@@ -18,6 +18,22 @@ SYNTAX_ERROR_EXCEPIONS = (
 )
 
 
+class CalculatorError(Exception):
+    """Raise on calculator’s errors."""
+
+    def __init__(self, err_msg):
+        super().__init__()
+        self.err_msg = err_msg
+
+
+class CalculatorInitializationError(CalculatorError):
+    """Raise on calculator’s initialization errors."""
+
+
+class CalculatorCalculationError(CalculatorError):
+    """Raise on calculator’s calculation errors."""
+
+
 def get_err_msg(exc):
     """Return an error message according to an exception type."""
 
