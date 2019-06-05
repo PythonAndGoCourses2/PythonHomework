@@ -2,16 +2,10 @@
 Provides functions for string formatting.
 """
 
-from .messages import ERROR_MSG_PREFIX
-
-
-ERROR_PLACE_INDICATOR = '^'
-
-
-def prefix_err_msg(msg):
-    """Return an error message with an error prefix."""
-
-    return f'{ERROR_MSG_PREFIX}{msg}'
+from .messages import (
+    ERROR_PLACE_INDICATOR,
+    MODULES_IMPORT_ERROR,
+)
 
 
 def ctx_formatter(ctx):
@@ -33,3 +27,11 @@ def err_msg_with_ctx_formatter(msg, ctx):
     ctx_msg = ctx_formatter(ctx)
 
     return f'{msg}\n{ctx_msg}'
+
+
+def err_modules_import_formatter(modules_names):
+    """Return an error message for module imports errors."""
+
+    modules_names = ', '.join(modules_names)
+
+    return f'{MODULES_IMPORT_ERROR} {modules_names}'
