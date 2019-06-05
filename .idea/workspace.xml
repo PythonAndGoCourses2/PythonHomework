@@ -28,11 +28,11 @@
       <file leaf-file-name="unittests_validation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_validation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="562">
-              <caret line="350" column="0" lean-forward="true" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
+            <state relative-caret-position="427">
+              <caret line="81" column="31" lean-forward="false" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
+                <marker date="1559762121492" expanded="true" signature="193:213" ph="..." />
               </folding>
             </state>
           </provider>
@@ -424,7 +424,7 @@
           <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
+            <marker date="1559762121492" expanded="true" signature="193:213" ph="..." />
           </folding>
         </state>
       </provider>
@@ -533,11 +533,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_validation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="350" column="0" lean-forward="true" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
+        <state relative-caret-position="427">
+          <caret line="81" column="31" lean-forward="false" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
+            <marker date="1559762121492" expanded="true" signature="193:213" ph="..." />
           </folding>
         </state>
       </provider>

@@ -79,8 +79,7 @@ class ExpectedFailureTestCase(unittest.TestCase):
                                                                       'sin', '(', 2.0, ')']))
 
     def test24(self):
-        self.assertEqual(True,
-                          lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', 2.0, '+', 1.0]))
+        self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', '.', 77.0, '-', 4.0, ')', 2.0, '+', 1.0]))
 
     def test25(self):
         self.assertEqual(True, lambda: calc_obj.validate_parsed_list(['(', ',', 77.0, '-', 4.0, ')', 'e']))
