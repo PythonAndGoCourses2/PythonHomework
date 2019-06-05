@@ -14,7 +14,7 @@ precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0
 #  establishes left-associated operators
 left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4, 'atan': 4, 'asinh': 4, 'acosh': 4,
                     'atanh': 4, 'sinh': 4, 'cosh': 4, 'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, 'abs': 5, 'round': 5,
-                    'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4,'isnan': 0.2, 'isinf': 0.2,
+                    'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4, 'isnan': 0.2, 'isinf': 0.2,
                     'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4,
                     'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
 
@@ -58,7 +58,7 @@ def validate_precedence(operator1, operator2):
         return False
     else:
         return precedences_dic[operator1] >= precedences_dic[operator2]
-      
+
 
 def fsummer(items):
     # evaluates fsum function and returns the outcome back into the arguments list
@@ -122,7 +122,7 @@ def calculate(operators, operands):
             exit(1)
     elif operator == "^":
         operands.append(math.pow(x, y))
-        elif operator == "!":
+    elif operator == "!":
         try:
             operands.append(math.factorial(x))
         except ValueError:
@@ -154,7 +154,7 @@ def calculate(operators, operands):
         operands.append(math.tanh(y))
     elif operator == "exp":
         operands.append(math.exp(y))
-    
+
     elif operator == "ceil":
         operands.append(math.ceil(y))
     elif operator == "fabs":
@@ -232,7 +232,7 @@ def calculate(operators, operands):
 
         elif operators[-2] == 'copysign':
             operators.pop(-2)
-            operands.append(math.copysign(x,y))
+            operands.append(math.copysign(x, y))
 
         elif operators[-2] == 'fmod':
             operators.pop(-2)
@@ -356,7 +356,7 @@ def process(expression):
             operands.append(math.inf)
         elif unit == 'NaN':
             operands.append(math.nan)
-            
+
         elif unit == '(':
             operators.append(unit)
         elif unit == ')':
@@ -393,7 +393,7 @@ def exp_parser():
 def main():
     expression = exp_parser()
     if len(expression) == 0:
-        # attempt to receive an expression via manual input 
+        # attempt to receive an expression via manual input
         expression = str(input('No expression is received as an argument. Please enter an expression to evaluate: '))
     try:
         print("Mathematical calculation result: ", process(expression))
