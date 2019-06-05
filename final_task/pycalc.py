@@ -480,6 +480,7 @@ def pre_format(expression):
     exp = exp.replace("=", " = ").replace("<>", " noneq ").replace(">", " > ").replace("<", " < ").replace("!", " !")
 
     items = exp.split()
+    # preliminary check for some errors
 
     if len([i for i, x in enumerate(items) if x in ['>', 'eq', 'noneq', 'eqless', 'eqmore', '<']]) > 1:
 
@@ -498,7 +499,9 @@ def pre_format(expression):
         print("ERROR: Please use '==', '!=', '>=', '<=', '>', '<' if you require a boolean comparison.")
 
         exit(1)
-
+        
+        
+    # handles fsum function
     if "fsum" in items:
         items = fsummer(items)
 
