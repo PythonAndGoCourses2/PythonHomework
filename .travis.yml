@@ -10,3 +10,7 @@ script:
   - pycodestyle --max-line-length=120 .
   - python ./../pycalc_checker.py
   - cd -
+  # added
+  - cd final_task
+  - python -m unittest
+  - cd -
