@@ -33,9 +33,15 @@ ARGUMENTS = (
     MODULE,
 )
 
-parser = argparse.ArgumentParser(**PARSER)
 
-for arg in ARGUMENTS:
-    parser.add_argument(*arg['name_or_flags'], **arg['keyword_arguments'])
+def get_args():
+    """Parse command line arguments."""
 
-args = parser.parse_args()
+    parser = argparse.ArgumentParser(**PARSER)
+
+    for arg in ARGUMENTS:
+        parser.add_argument(*arg['name_or_flags'], **arg['keyword_arguments'])
+
+    args = parser.parse_args()
+
+    return args
