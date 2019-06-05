@@ -11,7 +11,7 @@ from pycalc import argument_parser, import_calc_modules, expression_parser
 class TestExpressionParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        math_funcs, math_consts = import_calc_modules.import_modules(("time",))
+        math_funcs, math_consts = import_calc_modules.import_modules(["time"])
         expression_parser.math_funcs.update(math_funcs)
         expression_parser.math_consts.update(math_consts)
 
@@ -167,8 +167,10 @@ class TestExpressionParser(unittest.TestCase):
 
         self.assertAlmostEqual(tested_function((2.0, 2.0, "+")), 2+2)
         self.assertAlmostEqual(tested_function((2.0, 2.0, "-#", "^")), 2**-2)
-        self.assertAlmostEqual(tested_function((2.0, 2.0, "-#", "*", 0.1, math.pi, "*", "+")), 2*-2+.1*math.pi)
-        self.assertAlmostEqual(tested_function((2.0, 1.1, 2.3, "*", "-", 2.876, math.pi, "*", "+")), 2-1.1*2.3+2.876*math.pi)
+        self.assertAlmostEqual(tested_function((2.0, 2.0, "-#", "*", 0.1, math.pi, "*", "+")),
+                               2*-2+.1*math.pi)
+        self.assertAlmostEqual(tested_function((2.0, 1.1, 2.3, "*", "-", 2.876, math.pi, "*", "+")),
+                               2-1.1*2.3+2.876*math.pi)
 
     def test_calculate(self):
         tested_function = expression_parser.calculate
@@ -176,7 +178,7 @@ class TestExpressionParser(unittest.TestCase):
         self.assertAlmostEqual(tested_function("-+-+---+-1"), -+-+---+-1)
         self.assertAlmostEqual(tested_function("2+2"), 2+2)
         self.assertAlmostEqual(tested_function("-2*-10"), -2*-10)
-        self.assertAlmostEqual(tested_function("-2*sin(pi)+log(100,10)-1"), -2*math.sin(math.pi)+math.log(100,10)-1)
+        self.assertAlmostEqual(tested_function("-2*sin(pi)+log(100,10)-1"), -2*math.sin(math.pi)+math.log(100, 10)-1)
 
         self.assertAlmostEqual(tested_function("-3//2"), -3//2)  # -2
         self.assertAlmostEqual(tested_function("0-3//2"), 0-3//2)  # -1
