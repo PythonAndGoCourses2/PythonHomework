@@ -28,11 +28,11 @@
       <file leaf-file-name="unittests_validation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_validation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2515">
-              <caret line="218" column="25" lean-forward="false" selection-start-line="218" selection-start-column="25" selection-end-line="218" selection-end-column="25" />
+            <state relative-caret-position="562">
+              <caret line="350" column="0" lean-forward="true" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1559759184710" expanded="true" signature="193:213" ph="..." />
+                <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
               </folding>
             </state>
           </provider>
@@ -413,7 +413,7 @@
         <state relative-caret-position="153">
           <caret line="9" column="21" lean-forward="true" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -424,7 +424,7 @@
           <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1559759184710" expanded="true" signature="193:213" ph="..." />
+            <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
           </folding>
         </state>
       </provider>
@@ -474,6 +474,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#15#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -530,11 +533,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/final_task/unittests/unittests_validation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2515">
-          <caret line="218" column="25" lean-forward="false" selection-start-line="218" selection-start-column="25" selection-end-line="218" selection-end-column="25" />
+        <state relative-caret-position="562">
+          <caret line="350" column="0" lean-forward="true" selection-start-line="350" selection-start-column="0" selection-end-line="350" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1559759184710" expanded="true" signature="193:213" ph="..." />
+            <marker date="1559761961120" expanded="true" signature="193:213" ph="..." />
           </folding>
         </state>
       </provider>
