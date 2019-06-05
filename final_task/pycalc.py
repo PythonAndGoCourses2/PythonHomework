@@ -40,13 +40,13 @@ def validate_expression(items):
 def validate_items(item1, item2):
     # detects error cases
     if validate_number(item1) and validate_number(item2):
-        print('Error: Two or more numbers in a row. Please make sure all operators are present.')
+        print('ERROR: Two or more numbers in a row. Please make sure all operators are present.')
         exit(1)
     elif item1 == '/' and item2 == '/':
-        print('Error: Please remove the whitespace if you require a floor division.')
+        print('ERROR: Please remove the whitespace if you require a floor division.')
         exit(1)
     elif item1 == '*' and item2 == '*':
-        print('Error: Please use "^" operator for power calculation.')
+        print('ERROR: Please use "^" operator for power calculation.')
         exit(1)
     else:
         return True
@@ -106,19 +106,19 @@ def calculate(operators, operands):
         try:
             operands.append(x / y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "%":
         try:
             operands.append(x % y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "//":
         try:
             operands.append(x // y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "^":
         operands.append(math.pow(x, y))
@@ -275,25 +275,25 @@ def calculate(operators, operands):
     elif operator == "round":
         operands.append(round(y))
     elif operator == 'eq':
-        print("Comparison result: ", bool(x == y))
+        print(bool(x == y))
         exit(1)
     elif operator == '>':
-        print("Comparison result: ", bool(x > y))
+        print(bool(x > y))
         exit(1)
     elif operator == '<':
-        print("Comparison result: ", bool(x < y))
+        print(bool(x < y))
         exit(1)
     elif operator == 'noneq':
-        print("Comparison result: ", bool(x != y))
+        print(bool(x != y))
         exit(1)
     elif operator == 'eqmore':
-        print("Comparison result: ", bool(x >= y))
+        print(bool(x >= y))
         exit(1)
     elif operator == 'eqless':
-        print("Comparison result: ", bool(x <= y))
+        print(bool(x <= y))
         exit(1)
     else:
-        print('Error: Operator or function unknown')
+        print('ERROR: Operator or function unknown')
         exit(1)
 
 
@@ -396,9 +396,9 @@ def main():
         # attempt to receive an expression via manual input
         expression = str(input('No expression is received as an argument. Please enter an expression to evaluate: '))
     try:
-        print("Mathematical calculation result: ", process(expression))
+        print(process(expression))
     except Exception as ex:
-        print("Error: Please check arguments and operators in this expression."
+        print("ERROR: Please check arguments and operators in this expression."
               "\nTo reduce the chance of error please wrap the expression with \" \"."
               " Program internal message: {0}".format(str(ex)))
         exit(1)
