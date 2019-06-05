@@ -24,4 +24,5 @@ math_func = {'abs': abs,
              'round': round}
 [math_func.update({attr: getattr(math, attr)}) for attr in dir(math) if callable(getattr(math, attr))]
 parentheses = {'(': 3, ')': 3}
-list_of_op = list(operators.keys()) + list(parentheses.keys())
+unary_op = ['++', '--']
+list_of_op = unary_op + list(operators.keys()) + list(parentheses.keys())
