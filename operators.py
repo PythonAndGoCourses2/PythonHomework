@@ -1,69 +1,27 @@
 import math
+from collections import namedtuple
 
 
-class Operators:
+Operator = namedtuple('Operator', ("priority", "type", "func"))
+operators = {
+    '+': Operator(3, 'inf', lambda a, b: a + b),
+    '-': Operator(3, 'inf', lambda a, b: a - b),
+    '*': Operator(2, 'inf', lambda a, b: a * b),
+    '/': Operator(2, 'inf', lambda a, b: a / b),
+    '//': Operator(2, 'inf', lambda a, b: a // b),
+    '%': Operator(2, 'inf', lambda a, b: getattr(math, 'fmod')(a, b)),
+    '^': Operator(1, 'inf', lambda a, b: getattr(math, 'pow')(a, b)),
+    '<': Operator(4, 'inf', lambda a, b: a < b),
+    '<=': Operator(4, 'inf', lambda a, b: a <= b),
+    '==': Operator(5, 'inf', lambda a, b: a == b),
+    '!=': Operator(5, 'inf', lambda a, b: a != b),
+    '>=': Operator(4, 'inf', lambda a, b: a >= b),
+    '>': Operator(4, 'inf', lambda a, b: a > b),
+    '!': Operator(5, 'post', lambda a: getattr(math, 'factorial')(a))
+    }
 
-    @staticmethod
-    def sum(a, b):
-        return a + b
-
-    @staticmethod
-    def sub(a, b):
-        return a - b
-
-    @staticmethod
-    def mul(a, b):
-        return a * b
-
-    @staticmethod
-    def div(a, b):
-        return a / b
-
-    @staticmethod
-    def fdiv(a, b):
-        return a // b
-
-    @staticmethod
-    def less(a, b):
-        return a < b
-
-    @staticmethod
-    def less_or_eql(a, b):
-        return a <= b
-
-    @staticmethod
-    def eql(a, b):
-        return a == b
-
-    @staticmethod
-    def not_eql(a, b):
-        return a != b
-
-    @staticmethod
-    def gr_or_eql(a, b):
-        return a >= b
-
-    @staticmethod
-    def greater(a, b):
-        return a > b
-
-
-operators = {'+': Operators.sum, '-': Operators.sub, '*': Operators.mul, '/': Operators.div,
-             '//': Operators.fdiv, '%': getattr(math, 'fmod'), '^': getattr(math, 'pow'), '<': Operators.less,
-             '<=': Operators.less_or_eql, '==': Operators.eql, '!=': Operators.not_eql,
-             '>=': Operators.gr_or_eql, '>': Operators.greater, 'abs': abs, 'round': round}
-
-inf_func = {'^': 1,
-            '*': 2, '/': 2, '//': 2, '%': 2,
-            '+': 3, '-': 3,
-            '<=': 4, '>=': 4, '<': 4, '>': 4,
-            '<>': 5, '==': 5, '!=': 5}
-
-post_func = {'!': 5}
+math_func = {'abs': abs,
+             'round': round}
+[math_func.update({attr: getattr(math, attr)}) for attr in dir(math) if callable(getattr(math, attr))]
 parentheses = {'(': 3, ')': 3}
-list_of_op = list(inf_func.keys()) + list(post_func.keys()) + list(parentheses.keys())
-
-
-
-if __name__ == "__main__":
-    Operators()
+list_of_op = list(operators.keys()) + list(parentheses.keys())
