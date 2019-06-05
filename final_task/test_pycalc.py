@@ -180,3 +180,91 @@ class TestEpamErrorCaseCalculator(unittest.TestCase):
             pycalc.main("sqrt(-1)")
         with self.assertRaises(SystemExit):
             pycalc.main("exp(1000.0)")
+
+
+class TestUnitCaseCalculator(unittest.TestCase):
+
+    def test_remove_space_between_operators(self):
+        func = pycalc.remove_space_between_operators
+        self.assertEqual(func("1 - 2"), '1-2')
+        self.assertEqual(func("1 /2"), '1/2')
+        self.assertEqual(func("1 /2"), '1/2')
+        self.assertEqual(func("e+ 2"), 'e+2')
+        self.assertEqual(func("pi+(2 -3)"), 'pi+(2-3)')
+
+    def test_split_all_comparison_characters(self):
+        func = pycalc.split_all_comparison_characters
+        self.assertEqual(func("1<2"), ['1', '<', '2'])
+        self.assertEqual(func("e^3==4/5"), ['e^3', '==', '4/5'])
+        self.assertEqual(func("e^3>=4/5"), ['e^3', '>=', '4/5'])
+        self.assertEqual(func("1>pi>6"), ['1', '>', 'pi', '>', '6'])
+
+    def test_comparison_calculation(self):
+        func = pycalc.comparison_calculation
+        self.assertEqual(func("1<2"), True)
+        self.assertEqual(func("2<1"), False)
+        self.assertEqual(func("1<=1"), True)
+        self.assertEqual(func("2==1"), False)
+
+    def test_replace_minus_plus_characters(self):
+        func = pycalc.replace_minus_plus_characters
+        self.assertEqual(func("1--1"), "1+1")
+        self.assertEqual(func("1---1"), "1-1")
+        self.assertEqual(func("1--+1"), "1+1")
+        self.assertEqual(func("sin(90)----1"), "sin(90)+1")
+
+    def test_insert_zero_before_point(self):
+        func = pycalc.insert_zero_before_point
+        self.assertEqual(func("-.1"), "-0.1")
+        self.assertEqual(func(".1"), "0.1")
+        self.assertEqual(func("1-.1"), "1-0.1")
+        self.assertEqual(func("sin(.1)"), "sin(0.1)")
+
+    def test_assembly_of_negative_numbers(self):
+        func = pycalc.assembly_of_negative_numbers
+        self.assertEqual(func(['-', '3']), ['-3'])
+        self.assertEqual(func(['2', '-', '3']), ['2', '-', '3'])
+        self.assertEqual(func(['(', '-', '3', ')']), ['(', '-3', ')'])
+        self.assertEqual(func(['sin', '(', '-', '90', ')']), ['sin', '(', '-90', ')'])
+
+    def test_split_all_characters_and_numbers(self):
+        func = pycalc.split_all_characters_and_numbers
+        self.assertEqual(func("1-2"), ['1', '-', '2'])
+        self.assertEqual(func("sin(90)"), ['sin', '(', '90', ')'])
+        self.assertEqual(func("1-e^3"), ['1', '-', 'e', '^', '3'])
+        self.assertEqual(func("log2(10)"), ['log2', '(', '10', ')'])
+        self.assertEqual(func("2+(log2(10)^3)"), ['2', '+', '(', 'log2', '(', '10', ')', '^', '3', ')'])
+
+    def test_constants_switch(self):
+        func = pycalc.constants_switch
+        self.assertEqual(func(['e', '-', '3']), [m.e, '-', '3'])
+        self.assertEqual(func(['pi']), [m.pi])
+        self.assertEqual(func(['tau']), [m.tau])
+        self.assertEqual(func(['2', '+', 'e']), ['2', '+', m.e])
+
+    def test_function_calculation(self):
+        func = pycalc.function_calculation
+        self.assertEqual(func(['sin', '(', '90', ')']), m.sin(90))
+        self.assertEqual(func(['pow', '(', '2', ',', '3', ')']), m.pow(2, 3))
+        self.assertEqual(func(['degrees', '(', '3.14', ')']), m.degrees(3.14))
+        self.assertEqual(func(['fsum', '(', '[3,4,5]', ')']), m.fsum([3, 4, 5]))
+
+    def test_search_for_all_atomic_brackets(self):
+        func = pycalc.search_for_all_atomic_brackets
+        self.assertEqual(func(['(', '2', ')']), [0, 2])
+        self.assertEqual(func(['sin', '(', '90', ')']), [1, 3])
+        self.assertEqual(func(['(', '2', ' +', '(', '2', '+', '2', ')', '+', '2', ')']), [3, 7])
+        self.assertEqual(func(['(', '2', ' +', '2', ')', '+', '(', '2', '+', '2', ')']), [0, 4, 6, 10])
+
+    def test_brackets_calculation(self):
+        func = pycalc.brackets_calculation
+        self.assertEqual(func(['(', '2', ')']), ['2'])
+        self.assertEqual(func(['(', '2', '+', '3', ')']), ['5'])
+        self.assertEqual(func(['(', '2', '^', '3', ')']), ['8'])
+
+    def test_calculation(self):
+        func = pycalc.calculation
+        self.assertEqual(func(['2', '+', '3']), 5)
+        self.assertEqual(func(['2', '^', '3']), 8)
+        self.assertEqual(func(['2', '-', '2', '^', '3']), -6)
+        self.assertEqual(func(['-2', '+', '2', '^', '3']), 6)
