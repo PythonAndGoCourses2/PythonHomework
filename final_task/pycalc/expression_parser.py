@@ -9,6 +9,7 @@ Use expression_parser.calculate(expression: str).
 import re
 from collections import namedtuple
 import operator
+import math
 
 
 __C_REGEXP_BRACKETS = re.compile(r"[(]|[)]")
@@ -42,7 +43,7 @@ __OPERATORS = {
     "+#": __operator_func_priority(operator.pos, 1, 3),
     "-#": __operator_func_priority(operator.neg, 1, 3),
 
-    "^": __operator_func_priority(operator.pow, 2, 4)
+    "^": __operator_func_priority(math.pow, 2, 4)
 }
 
 math_funcs = {}
@@ -379,7 +380,10 @@ def _function_handler(function_expression: str):
         if token in math_funcs:
             func_brackets += 1
             buffer.append(token)
-        elif token == "(" and buffer and buffer[-1] not in math_funcs:
+        elif token == "(" and not buffer:
+            func_brackets += 1
+            buffer.append(token)
+        elif token == "(" and buffer[-1] not in math_funcs:
             func_brackets += 1
             buffer.append(token)
         elif token == ")":
