@@ -2,11 +2,11 @@ import re
 from argparse import ArgumentParser
 import math
 
-#  global variables for tolerance to be used if isclose function is called
+""" global variables for tolerance to be used if isclose function is called """
 r = 1e-09
 a = 0.0
 
-#  establishes precedence for operators
+"""  establishes precedence for operators """
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
                    '*': 2, '/': 2, '//': 2, '%': 2, '(': 8, ')': 8, '!': 5, '^': 3.9, 'pow': 3.9, 'sin': 4,
                    'asin': 4, 'acos': 4,  'atan': 4, 'asinh': 4, 'acosh': 4, 'atanh': 4, 'sinh': 4, 'cosh': 4,
@@ -15,7 +15,7 @@ precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0
                    'copysign': 4, 'fabs': 4,  'floor': 4, 'fmod': 4, 'frexp': 4, 'ldexp': 4, 'modf': 0.2, 'trunc': 4,
                    'expm1': 4, 'log1p': 4, 'gcd': 4, 'sqrt': 4, 'atan2': 4, 'degrees': 4, 'hypot': 4,
                    'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
-#  establishes left-associated operators
+"""  establishes left-associated operators """
 left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4, 'atan': 4, 'asinh': 4, 'acosh': 4,
                     'atanh': 4, 'sinh': 4, 'cosh': 4, 'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, 'abs': 5, 'round': 5,
                     'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4, 'isnan': 0.2, 'isinf': 0.2,
@@ -24,7 +24,7 @@ left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4
 
 
 def validate_number(unit):
-    # evaluates whether unit is a float number
+    """ evaluates whether unit is a float number """
     try:
         float(unit)
         return True
@@ -33,7 +33,7 @@ def validate_number(unit):
 
 
 def validate_expression(items):
-    # checks for inappropriate whitespaces
+    """ checks for inappropriate whitespaces """
     for i in range(len(items)):
         try:
             validate_items(items[i], items[i+1])
@@ -42,7 +42,7 @@ def validate_expression(items):
 
 
 def validate_items(item1, item2):
-    # detects error cases
+    """ detects error cases """
     if validate_number(item1) and validate_number(item2):
         print('ERROR: Two or more numbers in a row. Please make sure all operators are present.')
         exit(1)
@@ -57,7 +57,7 @@ def validate_items(item1, item2):
 
 
 def validate_precedence(operator1, operator2):
-    # defines precedence for operators basing on a dictionary
+    """ defines precedence for operators basing on a dictionary """
     if precedences_dic[operator1] == precedences_dic[operator2] and precedences_dic[operator1] == 3.9:
         return False
     else:
@@ -65,7 +65,7 @@ def validate_precedence(operator1, operator2):
 
 
 def fsum_parser(items):
-    # evaluates fsum function and returns the outcome back into the arguments list
+    """ evaluates fsum function and returns the outcome back into the arguments list """
     fsumlist = []
     for unit in items:
         if validate_number(unit):
@@ -86,7 +86,7 @@ def fsum_parser(items):
 
 
 def isclose_parser(items):
-    # formats isclose function and accepts tolerance values (if any) to two global variables
+    """ formats isclose function and accepts tolerance values (if any) to two global variables """
     if 'rel_tol' in items:
         ri = items.index('rel_tol') + 2
         global r
@@ -106,7 +106,7 @@ def isclose_parser(items):
 
 
 def calculate(operators, operands):
-    # defines operators decision tree and performs basic operations
+    """ defines operators decision tree and performs basic operations """
 
     operator = operators.pop()
     y = None
@@ -187,7 +187,7 @@ def calculate(operators, operands):
         operands.append(math.floor(y))
     elif operator == "frexp":
         operands.append(math.frexp(y))
-
+    # Logical operators exit from calculate, not from main 
     elif operator == "isinf":
         print(math.isinf(y))
         exit(1)
@@ -324,7 +324,7 @@ def calculate(operators, operands):
 
 
 def clear_format(expression):
-    # removes whitespaces
+    """ removes whitespaces """
     exp = expression
     exp = exp.replace(" ", "")
     units = pre_format(exp)
@@ -332,7 +332,7 @@ def clear_format(expression):
 
 
 def pre_format(expression):
-    # formats input expression to acceptable readout
+    """ formats input expression to acceptable readout """
     exp = expression
     if exp[0] == "-":
         exp = '0-'+exp[1:]
@@ -346,7 +346,7 @@ def pre_format(expression):
     exp = exp.replace("==", " eq ").replace("!=", " <> ").replace(">=", " eqmore ").replace("<=", " eqless ")
     exp = exp.replace("=", " = ").replace("<>", " noneq ").replace(">", " > ").replace("<", " < ").replace("!", " !")
     items = exp.split()
-    # preliminary check for some error cases and fsum
+    # preliminary check for some error cases and two functions, fsum and isclose
     if "isclose" and "=" in items:
         items = isclose_parser(items)
     if len([i for i, x in enumerate(items) if x in ['>', 'eq', 'noneq', 'eqless', 'eqmore', '<']]) > 1:
@@ -364,7 +364,7 @@ def pre_format(expression):
 
 
 def process(expression):
-    # checks for validation results and processes the expression
+    """ checks for validation results and processes the expression """
     operands = []
     operators = []
     items = pre_format(expression)
@@ -408,7 +408,7 @@ def process(expression):
 
 
 def exp_parser():
-    # retrieves expression from the command line
+    """ retrieves expression from the command line """
     parser = ArgumentParser('PyCalc', description='Pure-Python command-line calculator',
                             usage='pycalc [-h] EXPRESSION')
     parser.add_argument('--expr', action='store_true',
@@ -419,6 +419,7 @@ def exp_parser():
 
 
 def main():
+    """ receives expression from parser, launches processing and produces output """
     expression = exp_parser()
     if len(expression) == 0:
         # attempt to receive an expression via manual input
