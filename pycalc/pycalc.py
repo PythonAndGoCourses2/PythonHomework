@@ -28,6 +28,7 @@ def is_empty(n):
 def peek(n):
     return n[len(n) - 1]
 
+
 def check_brackets(expr):
     bracket_right = 0
     bracket_left = 0
@@ -88,7 +89,6 @@ def check_minus_plus(input_data):
         value += 1
 
     return result
-# def division_zero
 
 
 def check(expr):
@@ -182,7 +182,6 @@ class Calculator:
         #     if not result[value] in self.all_op_and_func.keys() and not is_number(result[value]):
         #         sys.exit('Error: unknown operation, check expression')
         #     value += 1
-
 
         return result
 
@@ -284,10 +283,4 @@ def myresult(input_data):
 
 
 ca = Calculator()
-# print(myresult('-.1'))
-# print(ca.expr_parts('1---1'))
-# print(ca.polish_notation(check_power(ca.expr_parts('1+2*4/3+1!=1+2*4/3+2'))))
-# print(ca.calc(ca.polish_notation(check_power(ca.expr_parts('(2**3)-9**(1/2)')))))
-# print(ca.calc(ca.polish_notation(check_power(ca.expr_parts('(2**3)-9**(1/2)')))))
-# print(ca.expr_parts('1+3+200'))
-# print(eval('sin(0)'))
+
