@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55aa226e-35e9-4adc-b056-0a8604b6435b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/pycalc/pycalc.py" beforeDir="false" afterPath="$PROJECT_DIR$/pycalc/pycalc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pycalc/main11.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pycalc/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/pycalc/__main__.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +17,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pycalc/pycalc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1322">
+            <state relative-caret-position="-608">
               <caret line="184" selection-start-line="184" selection-end-line="184" />
               <folding>
                 <element signature="e#282#293#0" expanded="true" />
@@ -36,10 +38,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pycalc/main.py">
+        <entry file="file://$PROJECT_DIR$/pycalc/main11.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="30" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
+            <state relative-caret-position="51">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -48,12 +50,17 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pycalc/__init__.py">
+        <entry file="file://$PROJECT_DIR$/pycalc/__main__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
+            <state relative-caret-position="17">
+              <caret line="1" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pycalc/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -114,16 +121,18 @@
         <option value="$PROJECT_DIR$/pycalc_checker.py" />
         <option value="$PROJECT_DIR$/pycalc/tests.py" />
         <option value="$PROJECT_DIR$/pycalc/calculator.py" />
-        <option value="$PROJECT_DIR$/pycalc/main.py" />
-        <option value="$PROJECT_DIR$/pycalc/__init__.py" />
         <option value="$PROJECT_DIR$/pycalc/setup.py" />
         <option value="$PROJECT_DIR$/pycalc/pycalc.py" />
+        <option value="$PROJECT_DIR$/pycalc/__init__.py" />
+        <option value="$PROJECT_DIR$/pycalc/main.py" />
+        <option value="$PROJECT_DIR$/pycalc/main11.py" />
+        <option value="$PROJECT_DIR$/pycalc/__main__.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="172" />
-    <option name="y" value="14" />
+    <option name="x" value="209" />
+    <option name="y" value="119" />
     <option name="width" value="1087" />
     <option name="height" value="695" />
   </component>
@@ -317,11 +326,11 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="172" y="14" width="1087" height="695" extended-state="0" />
+    <frame x="209" y="119" width="1087" height="695" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" weight="0.29747677" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.29742613" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50074404" side_tool="true" weight="0.2782324" />
@@ -329,7 +338,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.32960895" />
       <window_info anchor="bottom" id="Version Control" order="5" sideWeight="0.4985119" weight="0.3289689" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49925596" visible="true" weight="0.33629894" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49925596" visible="true" weight="0.053380784" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.2667758" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -418,13 +427,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pycalc/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pycalc/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -432,9 +434,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Downloads/main.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/pycalc/pycalc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1322">
+        <state relative-caret-position="-608">
           <caret line="184" selection-start-line="184" selection-end-line="184" />
           <folding>
             <element signature="e#282#293#0" expanded="true" />
@@ -453,13 +461,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Downloads/main.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pycalc/main.py">
+    <entry file="file://$PROJECT_DIR$/pycalc/__main__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="30" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/main11.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
