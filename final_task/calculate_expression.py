@@ -29,7 +29,8 @@ def calculate(value):
     for operator in operators:
         format_operator = operator.replace(' ', '')
 
-        if format_operator == '/' or format_operator == '*' or format_operator == '//' or format_operator == '%' or format_operator == '**':
+        if format_operator == '/' or format_operator == '*' or format_operator == '//' or format_operator == '%' \
+                or format_operator == '**':
             first_parameter = digits[counter]
             if check:
                 first_parameter = rest_digits[-1]
