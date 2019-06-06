@@ -84,7 +84,7 @@ def fsum_parser(items):
     k = items.index('fsum')
     m = items.index(']')+2
     kitems = items[:k]
-    kitems.append(math.fsum(fsumlist))
+    kitems.append(fsum(fsumlist))
     mitems = items[m:]
     items = kitems+mitems
     return items
