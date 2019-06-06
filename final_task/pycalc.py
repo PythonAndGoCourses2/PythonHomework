@@ -136,7 +136,7 @@ def calculate(operators, operands):
     if operator in Left_func_names:
         left_function(operator, y, operands)
         return operands
-    if operator not in Left_func_names and operator not in ['isnan', 'isinf', 'isfinite', 'modf', 'neg']:
+    if operator not in Left_func_names and operator not in ['isnan', 'isinf', 'isfinite', 'modf', 'neg', 'log']:
         x = operands.pop()
     if operator == "+":
         operands.append(x + y)
