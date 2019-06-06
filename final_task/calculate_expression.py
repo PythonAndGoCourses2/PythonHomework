@@ -1,6 +1,5 @@
-import arithmetic
+from final_task import arithmetic
 import re
-import math
 
 
 def calculate(value):

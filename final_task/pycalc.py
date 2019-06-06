@@ -1,6 +1,7 @@
 import argparse
 import re
-import pycalc_common
+from final_task import pycalc_common
+
 # from math import *
 
 parser = argparse.ArgumentParser()

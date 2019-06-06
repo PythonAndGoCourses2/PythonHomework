@@ -1,7 +1,5 @@
 import re
-import calculate_math_parameters
-import parse_brackets
-import calculate_expression
+from final_task import calculate_math_parameters, calculate_expression, parse_brackets
 import math
 
 
