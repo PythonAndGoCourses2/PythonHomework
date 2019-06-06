@@ -410,7 +410,7 @@ def process(expression):
 def exp_parser():
     # retrieves expression from the command line
     parser = ArgumentParser('PyCalc', description='Pure-Python command-line calculator',
-                            usage='pycalc [-h] EXPRESSION [-m]	MODULE	[MODULE	...]]')
+                            usage='pycalc [-h] EXPRESSION')
     parser.add_argument('--expr', action='store_true',
                         help='Evaluates an expression string. Please wrap the string with " ".')
     parsed, args = parser.parse_known_args()
