@@ -14,6 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
+    entry_points={'console_scripts': ['pycalc = pycalc:main']},
     py_modules=["pycalc"],
     classifiers=[
         "Programming Language :: Python :: 3.6",
