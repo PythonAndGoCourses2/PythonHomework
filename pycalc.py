@@ -1,8 +1,23 @@
 import math
 import operator
 import sys
+import argparse
+import setuptools
 
 """Module with calculator methods."""
+
+
+def main():
+    try:
+        parser = argparse.ArgumentParser(
+            'pycalc', description="Command-line calculator.",
+            usage='pycalc [-h] EXPRESSION')
+        parser.add_argument('EXPRESSION', type=str, help='Input string to evaluate', )
+        exp = parser.parse_args()
+        exp = exp.EXPRESSION
+        print(myresult(exp))
+    except Exception as exp:
+        print(f'ERROR: {exp}')
 
 
 def is_number(n):
@@ -284,3 +299,23 @@ def myresult(input_data):
 
 ca = Calculator()
 
+
+setuptools.setup(
+    name="pycalc",
+    version="0.1",
+    author="Lizaveta_Savanovich",
+    author_email="liza.savanovich@mail.ru",
+    description="Command-line calculator",
+    long_description_content_type="text/markdown",
+    packages=setuptools.find_packages(),
+    entry_points={'console_scripts': ['pycalc = pycalc:main']},
+    py_modules=['pycalc'],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+)
+
+if __name__ == '__main__':
+    main()

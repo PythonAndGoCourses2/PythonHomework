@@ -2,7 +2,7 @@ import unittest
 import math
 import operator
 
-from pycalc.pycalc import myresult
+from pycalc import myresult
 
 
 class MyTestsForCalc(unittest.TestCase):
@@ -43,11 +43,16 @@ class MyTestsForCalc(unittest.TestCase):
         self.assertEqual(myresult('.1 * 2.0^56.0'), .1 * 2.0**56.0, 'Fail')
         self.assertEqual(myresult('e^34'), math.e**34, 'Fail')
         self.assertEqual(myresult('(2.0^(pi/pi+e/e+2.0^0.0))'),  2.0**(math.pi/math.pi+math.e/math.e+2.0**0.0), 'Fail')
-        self.assertEqual(myresult('(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)'), (2.0**(math.pi/math.pi+math.e/math.e+2.0**0.0))**(1.0/3.0), 'Fail')
-        self.assertEqual(myresult('sin(pi/2^1) + log(1*4+2^2+1, 3^2)'), math.sin(math.pi/2**1) + math.log(1*4+2**2+1, 3**2), 'Fail')
-        # self.assertEqual(myresult('10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5'), 10*math.e**0*math.log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5, 'Fail')
+        self.assertEqual(myresult('(2.0^(pi/pi+e/e+2.0^0.0))^(1.0/3.0)'),
+                         (2.0**(math.pi/math.pi+math.e/math.e+2.0**0.0))**(1.0/3.0), 'Fail')
+        self.assertEqual(myresult('sin(pi/2^1) + log(1*4+2^2+1, 3^2)'),
+                         math.sin(math.pi/2**1) + math.log(1*4+2**2+1, 3**2), 'Fail')
+        # self.assertEqual(myresult('10*e^0*log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5'),
+        # 10*math.e**0*math.log10(.4 -5/ -0.1-10) - -abs(-53/10) + -5, 'Fail')
         self.assertEqual(myresult('2.0^(2.0^2.0*2.0^2.0)'),2.0**(2.0**2.0*2.0**2.0), 'Fail')
-        # self.assertEqual(myresult('sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))', math.sin(math.e**math.log(math.e**math.e**math.sin(23.0),45.0) + math.cos(3.0+math.log10(math.e**(-math.e)))), 'Fail')
+        # self.assertEqual(myresult('sin(e^log(e^e^sin(23.0),45.0) + cos(3.0+log10(e^-e)))',
+        # math.sin(math.e**math.log(math.e**math.e**math.sin(23.0),45.0) + math.cos(3.0+math.log10(math.e**(-math.e)))),
+        # 'Fail')
 
 
 if __name__ == '__main__':
