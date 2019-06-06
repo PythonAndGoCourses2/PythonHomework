@@ -107,73 +107,34 @@ def parse(formula_string):
 def preproc(parsed):
     output = []
     if parsed.count("(") != parsed.count(")"):
-        raise SyntaxError("ERROR: Unbalanced parenthesis")
+        raise SyntaxError("Unbalanced parenthesis")
     if parsed[0] in OPERATORS:
         parsed.insert(0, "(")
         parsed.append(")")
     if parsed[0]=="-":
         parsed.insert(0, 0.0)
+#     pdb.set_trace()
     
     i = 0
-#     pdb.set_trace()
     while i < len(parsed):
-        print("parsed[{}]:".format(i), parsed[i])
-        print("output: ", output)
-                
         if parsed[i] in FUNCTIONS and type(parsed[i+1])==float:
             to_app = str(parsed[i])+str(int(parsed[i+1]))
             if to_app not in FUNCTIONS:
-                raise SyntaxError("ERROR: Wrong function")
-            
+                raise SyntaxError("Wrong function")
             output.append(to_app)
-            i += 2       
-        if (type(parsed[i])==str and 
-                parsed[i] in "<=>=!==/" and 
-                parsed[i+1] in "<=>=!==/"):
-            output.append(parsed[i]+parsed[i+1])
             i += 2
-        if (parsed[i] == "-" and 
-            (parsed[i-1] == "(" or parsed[i-1] in OPERATORS) and 
-             parsed[i+1] in FUNCTIONS and
-             OPERATORS[parsed[i-1]][3]=='left'):
-
+        if parsed[i] == "--":
+            output.append('+')
+            i += 1
+        if parsed[i] == "-" and (parsed[i-1] == "(" or parsed[i-1] in OPERATORS) and (parsed[i+1] in FUNCTIONS):
             output.append(-1.0)
             output.append('*')
             i += 1
-        elif (parsed[i] == "-" and 
-            (parsed[i-1] == "(" or parsed[i-1] in OPERATORS) and 
-             parsed[i+1] in FUNCTIONS and
-             OPERATORS[parsed[i-1]][3]=='right'):
-            output.append(1.0)
-            output.append('/')
-            i += 1
-        if (parsed[i] == "-" and 
-            (parsed[i-1] == "(" or parsed[i-1] in OPERATORS) and 
-            (parsed[i+1] in CONSTANTS)):
-            
-            output.append(-1*CONSTANTS[parsed[i+1]])
+        if parsed[i] == "-" and (parsed[i-1] == "(" or parsed[i-1] in OPERATORS):
+            to_app = parsed[i]+str(parsed[i+1])
+            output.append(float(to_app))
             i += 2
-            continue
-        
-        if (parsed[i] == "-" and 
-            (parsed[i-1] == "(" or parsed[i-1] in OPERATORS)):
-
-            try: 
-                to_app = parsed[i]+str(parsed[i+1])
-                to_app = float(to_app)
-                output.append(to_app)
-                i += 2
-                if i >= len(parsed):
-                    break
-            except ValueError:
-                i += 1
-                print("passed")
-                continue
             
-        if (parsed[i] == "+" and 
-            (output[-1] == "(" or output[-1] in OPERATORS)):
-            i += 1
-            continue
         else: 
             output.append(parsed[i])
             i += 1
@@ -230,8 +191,11 @@ def Main():
     parser.add_argument('to_eval', help='expression to evaluate', type=str, nargs='+')
     args = parser.parse_args()
     sss = "".join(args.to_eval)
-    result = calc(sh(preproc(parse(sss))))
-    print(result)
+    try:
+        result = calc(sh(preproc(parse(sss))))
+        print(result)
+    except Exception as error:
+        print('ERROR: ', error)
 
 
 if __name__=="__main__":
