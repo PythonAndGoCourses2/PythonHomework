@@ -1,4 +1,4 @@
-from final_task import calculate_expression
+import calculate_expression
 
 
 def parse_brackets(value):

@@ -1,7 +1,7 @@
 import math
 import re
 import builtins
-from final_task import calculate_expression, parse_brackets
+import calculate_expression, parse_brackets
 
 math_param = dir(math)
 additional_param = ['abs', 'round']

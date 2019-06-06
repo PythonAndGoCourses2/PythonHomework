@@ -1,8 +1,6 @@
 import argparse
 import re
-from final_task import pycalc_common
-
-from math import *
+from additional_func import pycalc_common
 
 parser = argparse.ArgumentParser()
 parser.add_argument("EXPRESSION", type=str,  help="expression is the string you use here")

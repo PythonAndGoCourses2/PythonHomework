@@ -1,4 +1,4 @@
-from final_task import arithmetic
+import arithmetic
 import re
 
 
