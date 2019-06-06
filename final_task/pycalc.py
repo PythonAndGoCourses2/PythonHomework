@@ -2,6 +2,10 @@ import re
 from argparse import ArgumentParser
 import math
 
+#  global variables for tolerance to be used if isclose function is called
+r = 1e-09
+a = 0.0
+
 #  establishes precedence for operators
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
                    '*': 2, '/': 2, '//': 2, '%': 2, '(': 8, ')': 8, '!': 5, '^': 3.9, 'pow': 3.9, 'sin': 4,
@@ -60,7 +64,7 @@ def validate_precedence(operator1, operator2):
         return precedences_dic[operator1] >= precedences_dic[operator2]
 
 
-def fsummer(items):
+def fsum_parser(items):
     # evaluates fsum function and returns the outcome back into the arguments list
     fsumlist = []
     for unit in items:
@@ -80,9 +84,28 @@ def fsummer(items):
     items = kitems+mitems
     return items
 
+def isclose_parser(items):
+    # formats isclose function and accepts tolerance values (if any) to two global variables
+    if 'rel_tol' in items:
+        ri = items.index('rel_tol') + 2
+        global r
+        r = float(items[ri])
+    if 'abs_tol' in items:
+        ai = items.index('abs_tol') + 2
+        global a
+        a = float(items[ai])
+    if 'rel_tol' in items:
+        cut = items.index('rel_tol') - 1
+        del items[cut:]
+    if 'abs_tol' in items:
+        cut = items.index('abs_tol') - 1
+        del items[cut:]
+    items.append(")")
+    return items
 
+  
 def calculate(operators, operands):
-    # defines operators' decision tree and performs basic operations
+    # defines operators decision tree and performs basic operations
 
     operator = operators.pop()
     y = None
@@ -257,7 +280,9 @@ def calculate(operators, operands):
             operands.append(math.gcd(y, x))
 
         elif operators[-2] == 'isclose':
-            print(math.isclose(x, y))
+            global r
+            global a
+            print(math.isclose(x, y, rel_tol=r, abs_tol=a))
             exit(1)
 
         else:
@@ -321,6 +346,8 @@ def pre_format(expression):
     exp = exp.replace("=", " = ").replace("<>", " noneq ").replace(">", " > ").replace("<", " < ").replace("!", " !")
     items = exp.split()
     # preliminary check for some error cases and fsum
+    if "isclose" and "=" in items:
+        items = isclose_parser(items)
     if len([i for i, x in enumerate(items) if x in ['>', 'eq', 'noneq', 'eqless', 'eqmore', '<']]) > 1:
         print("ERROR: Cannot have more than one comparison operator in an expression.")
         exit(1)
@@ -331,7 +358,7 @@ def pre_format(expression):
         print("ERROR: Please use '==', '!=', '>=', '<=', '>', '<' if you require a boolean comparison.")
         exit(1)
     if "fsum" in items:
-        items = fsummer(items)
+        items = fsum_parser(items)
     return items
 
 
@@ -394,7 +421,7 @@ def main():
     expression = exp_parser()
     if len(expression) == 0:
         # attempt to receive an expression via manual input
-        expression = str(input('No expression is received as an argument. Please enter an expression to evaluate: '))
+        expression = str(input('No expression is received from the command line. Please enter an expression: '))
     try:
         print(process(expression))
     except Exception as ex:
