@@ -6,7 +6,7 @@ import math
 import importlib
 
 OPERATORS = '+-*/^%<>=! ()'
-CONSTANTS = {attr : getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), (int, float))}
+CONSTANTS = {attr: getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), (int, float))}
 OPERATIONS = {
     '+': (operator.add, 3),
     '-': (operator.sub, 3),
@@ -24,7 +24,7 @@ OPERATIONS = {
     '-u': (operator.neg, 5),
     '+u': (lambda x: x, 5),
     }
-FUNCTIONS = {attr : getattr(math, attr) for attr in dir(math) if not attr[0] == '_'}
+FUNCTIONS = {attr: getattr(math, attr) for attr in dir(math) if not attr[0] == '_'}
 FUNCTIONS['abs'] = abs
 FUNCTIONS['round'] = round
 
@@ -317,9 +317,9 @@ def import_new_module(module_name):
     try:
         module = importlib.import_module(module_name)
         try:
-            CONSTANTS.update({attr : getattr(module, attr) for attr in dir(module)
+            CONSTANTS.update({attr: getattr(module, attr) for attr in dir(module)
                               if isinstance(getattr(module, attr), (int, float))})
-            FUNCTIONS.update({attr : getattr(module, attr) for attr in dir(module) if not attr[0] == '_'})
+            FUNCTIONS.update({attr: getattr(module, attr) for attr in dir(module) if not attr[0] == '_'})
         except Exception:
             print(f'Smth bad with new module {module_name}')
             pass
