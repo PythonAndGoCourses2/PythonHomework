@@ -3,10 +3,11 @@
 import argparse
 import operator
 import math
+import importlib
 
-operators = '+-*/^%<>=! ()'
-constants = {'pi': math.pi, 'e': math.e, 'tau': math.tau}
-operation_dict = {
+OPERATORS = '+-*/^%<>=! ()'
+CONSTANTS = {attr : getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), (int, float))}
+OPERATIONS = {
     '+': (operator.add, 3),
     '-': (operator.sub, 3),
     '*': (operator.mul, 4),
@@ -20,38 +21,34 @@ operation_dict = {
     '!=': (operator.ne, 1),
     '>=': (operator.ge, 2),
     '>': (operator.gt, 2),
-    '-u': (operator.neg, 5),   # or lambda x: x * -1
-    '+u': (lambda x: x, 5)
+    '-u': (operator.neg, 5),
+    '+u': (lambda x: x, 5),
     }
-
-# function_dict = math.__dict__
-function_dict = {func_name: func for (func_name, func) in zip(dir(math),
-                                                              [getattr(math, attr, None) for attr in dir(math)])}
-function_dict['abs'] = abs
-function_dict['round'] = round
+FUNCTIONS = {attr : getattr(math, attr) for attr in dir(math) if not attr[0] == '_'}
+FUNCTIONS['abs'] = abs
+FUNCTIONS['round'] = round
 
 
 def parse_command_line():
     parser = argparse.ArgumentParser(description='Pure-python command-line calculator.')
     parser.add_argument("EXPRESSION", type=str, help='expression string to evaluate')
-    # parser.add_argument('-m', '--MODULE', type=str, help='use modules MODULE [MODULE...] additional modules to use')
-
+    parser.add_argument('-m', '--use-modules', nargs='*', dest="MODULE", type=str, help='additional modules to use')
     args = parser.parse_args()
     expression = args.EXPRESSION
-
-    # module = args.MODULE
-    return expression
+    modules = args.MODULE
+    return expression, modules
 
 
 def parse_to_list(exprstr):
     """ Converting the expression from string to list by moving tokens from the left side of the string
-        with their simultaneous assignment to numbers, operators or functions"""
+    with their simultaneous assignment to numbers, operators or functions
+    """
     temp = ''
     expr_list = []
     while exprstr:
         symbol = exprstr[0]
-        if symbol in operation_dict or (len(exprstr) > 1 and exprstr[:2] in operation_dict):   # if operator
-            if exprstr[:2] in operation_dict:               # if two symbol operator
+        if symbol in OPERATIONS or (len(exprstr) > 1 and exprstr[:2] in OPERATIONS):   # if operator
+            if exprstr[:2] in OPERATIONS:               # if two symbol operator
                 symbol = exprstr[:2]
                 expr_list.append(symbol)
                 exprstr = exprstr[2:]
@@ -79,9 +76,9 @@ def parse_to_list(exprstr):
                     temp += symbol_temp                     # if alphabetic or digit (for funcs with digit in name)
                 else:
                     break                                   # function name must contain only letters and digits
-            if temp in constants:
+            if temp in CONSTANTS:
                 expr_list.append(temp)
-            elif temp in function_dict:
+            elif temp in FUNCTIONS:
                 try:
                     if exprstr[len(temp)] == '(':
                         expr_list.append(temp)
@@ -112,7 +109,7 @@ def check_unary_operator(expr_list):
         expr_list[0] += 'u'
     for index in range(1, len(expr_list)):
         if expr_list[index] in ('-', '+') and (expr_list[index - 1] in ('(', ',') or
-                                               expr_list[index-1] in operation_dict):
+                                               expr_list[index-1] in OPERATIONS):
             expr_list[index] += 'u'
 
 
@@ -121,9 +118,9 @@ def precedence(oper1, oper2):
     left_associated = ['+', '-', '*', '//', '/', '%', '<', '<=', '==', '!=', '>=', '>']
     right_associated = ['^', '-u', '+u']
     if oper1 in left_associated:
-        return operation_dict[oper1][1] <= operation_dict[oper2][1]
+        return OPERATIONS[oper1][1] <= OPERATIONS[oper2][1]
     elif oper1 in right_associated:
-        return operation_dict[oper1][1] < operation_dict[oper2][1]
+        return OPERATIONS[oper1][1] < OPERATIONS[oper2][1]
 
 
 def shunting_yard_alg(expr_list):
@@ -137,10 +134,10 @@ def shunting_yard_alg(expr_list):
     stack = []
     while expr_list:
         item = expr_list[0]
-        if isinstance(item, (int, float)) or item in constants:
+        if isinstance(item, (int, float)) or item in CONSTANTS:
             output_list.append(item)
             expr_list = expr_list[1:]
-        elif item in function_dict:
+        elif item in FUNCTIONS:
             stack.append(item)
             expr_list = expr_list[1:]
         elif item == ',':
@@ -153,9 +150,9 @@ def shunting_yard_alg(expr_list):
             output_list.append(item)              # comma will indicate the presence of multi parameters for the func
             if expr_list and expr_list[0] == ')':
                 raise SyntaxError('error in the data inside the parentheses')
-        elif item in operation_dict:
-            if stack and (stack[-1] in operation_dict):
-                while stack and (stack[-1] in operation_dict):
+        elif item in OPERATIONS:
+            if stack and (stack[-1] in OPERATIONS):
+                while stack and (stack[-1] in OPERATIONS):
                     if precedence(item, stack[-1]):
                         output_list.append(stack.pop())
                     else:
@@ -174,7 +171,7 @@ def shunting_yard_alg(expr_list):
                 stack.pop()
             elif not stack:
                 raise SyntaxError('opening parentheses is missed')
-            if stack and (stack[-1] in function_dict):
+            if stack and (stack[-1] in FUNCTIONS):
                 output_list.append(stack.pop())
             expr_list = expr_list[1:]
     else:
@@ -182,23 +179,23 @@ def shunting_yard_alg(expr_list):
             if stack[-1] == '(':
                 raise SyntaxError('closing parentheses is missed')
             output_list.append(stack.pop())
-    return output_list                                      # returning reverse_polish_notation
+    return output_list                                      # returning expression in Reverse Polish Notation
 
 
 def perform_operation(operator, operand_1, operand_2):
     """ Perform binary operator for operands """
-    return operation_dict[operator][0](operand_1, operand_2)
+    return OPERATIONS[operator][0](operand_1, operand_2)
 
 
 def perform_unary_operation(operator, operand):
     """ Perform unary operator for operand """
-    return operation_dict[operator][0](operand)
+    return OPERATIONS[operator][0](operand)
 
 
 def perform_function(function, *operand):
-    """ Perform function with one ore more parameters """
+    """ Perform function with one or more arguments """
     try:
-        result = function_dict[function](*operand)
+        result = FUNCTIONS[function](*operand)
     except ValueError:
         raise ValueError('error in entered data for function {0}'.format(function))
     # except TypeError:
@@ -209,18 +206,19 @@ def perform_function(function, *operand):
 
 def calculation_from_rpn(rev_pol_not_list):
     """ Sequential calculation from left to right of expression in Reverse Polish Notation.
-    Operators and functions are applied to corresponding previous staying operand(s) """
+    Operators and functions are applied to corresponding previous staying operand(s)
+    """
     stack = []
     arg_stack = []
     for item in rev_pol_not_list:
-        if item in constants:
-            stack.append(constants[item])
+        if item in CONSTANTS:
+            stack.append(CONSTANTS[item])
         elif isinstance(item, (int, float)):
             stack.append(item)
         elif item == ',':
             arg_stack.append(stack.pop())
             stack.append(item)
-        elif item in function_dict:
+        elif item in FUNCTIONS:
             if len(stack) > 1 and stack[-2] == ',':
                 commas = 0                                  # cheking the presence of commas and sum all successive ones
                 for index in range(-2, -len(stack)-1, -1):
@@ -254,7 +252,9 @@ def calculation_from_rpn(rev_pol_not_list):
                     stack.append(intermediate_result)
                 except TypeError:
                     raise TypeError("unsupported operand for function '{0}'".format(item))
-        elif item in operation_dict:
+                except OverflowError:
+                    raise OverflowError(f'result of {item} too large to be represented')
+        elif item in OPERATIONS:
             if item in ('-u', '+u'):
                 intermediate_result = perform_unary_operation(item, stack.pop())
             else:
@@ -265,6 +265,8 @@ def calculation_from_rpn(rev_pol_not_list):
                     raise ZeroDivisionError('division by zero')
                 except IndexError:
                     raise IndexError('insufficient amount of operands')
+                except OverflowError:
+                    raise OverflowError(f'result of {item} too large to be represented')
             stack.append(intermediate_result)
     if len(stack) == 1:
         result = stack[0]
@@ -277,7 +279,7 @@ def check_empty_operators(exprstr):
     """ Checking expression for empty string or string containing only operators or parentheses """
     if len(exprstr) == 0:
         raise SyntaxError('empty expression')
-    elif set(exprstr).issubset(set(operators)):
+    elif set(exprstr).issubset(set(OPERATORS)):
         raise SyntaxError('no digits, constants or functions in expression')
     else:
         return False
@@ -297,20 +299,41 @@ def check_brackets(exprstr):
 
 
 def calculation(exprstr):
-    """
-    Calculation of string type argument from command line
-    """
+    """ Calculation of string type argument from command line """
     if (not check_empty_operators(exprstr)) and check_brackets(exprstr):
         expr_list = parse_to_list(exprstr)
         check_unary_operator(expr_list)
-        rev_pol_not_list = shunting_yard_alg(expr_list)
-        result = calculation_from_rpn(rev_pol_not_list)
-        return result
+        return calculation_from_rpn(shunting_yard_alg(expr_list))
+
+
+def import_new_module(module_name):
+    """ Trying to import module provided with -m (--use-modules) flag and
+    updating the constants and functions dictionaries.
+    Functions and constants from user defined modules have higher priority.
+    in case of name conflict then stuff from math module or built-in functions
+    If the module cannot be imported info about this will be printed
+    but calculation will be tried to execute
+    """
+    try:
+        module = importlib.import_module(module_name)
+        try:
+            CONSTANTS.update({attr : getattr(module, attr) for attr in dir(module)
+                              if isinstance(getattr(module, attr), (int, float))})
+            FUNCTIONS.update({attr : getattr(module, attr) for attr in dir(module) if not attr[0] == '_'})
+        except Exception:
+            print(f'Smth bad with new module {module_name}')
+            pass
+            # raise Exception('Smth bad with new module')
+    except ImportError:
+        print(f'Unable to import the module {module_name}')
 
 
 def main():
     try:
-        expression = parse_command_line()
+        expression, modules = parse_command_line()
+        if modules:
+            for module in modules:
+                import_new_module(module)
         print(calculation(expression))
     except Exception as err:
         print('ERROR: ', err)
