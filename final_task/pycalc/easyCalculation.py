@@ -3,8 +3,10 @@ import pycalc.operators as operators
 
 
 class Calculator():
+    """calculator for counting simple expression"""
 
     def _calculation(self, expr):
+        """find all binary operation, "^" work in a different way """
 
         place = expr.rfind("^")
 
@@ -31,6 +33,7 @@ class Calculator():
         return self.sum(expr)
 
     def sum(self, expr):
+        """sum all elements as elements with binary minus"""
 
         if expr[-1] == "+" or expr[-1] == "-":
             raise Exception(
@@ -50,6 +53,7 @@ class Calculator():
         return summing
 
     def unary_rezult(self, number):
+        """just coubt all minuses and define symbol of number"""
         minus = number.count("-")
         plus = number.count("+")
         real_number = number[plus + minus:]
@@ -59,14 +63,15 @@ class Calculator():
             real_number = float(real_number)
         return real_number
 
-    def search_brakets(self, expr):
+    def search_braсkets(self, expr):
+        """search lowest bracket's level"""
         expr = expr.replace(" ", "")
 
         while "(" in expr:
 
             end = expr.find(")")
-            if end != len(expr) - \
-                    1 and expr[end + 1] not in operators.operators:
+            if end != len(expr) - 1\
+                    and expr[end + 1] not in operators.operators:
                 Exception("no operator after brackets")
 
             begin = expr[:end].rfind("(")
@@ -89,6 +94,7 @@ class Calculator():
         return rezult
 
     def _calc_if_power(self, expr, begin, braket):
+        """power doesn't know about unary minus, therefore it's calculate separately"""
         place = braket + 1
         if braket is not len(expr) - 1 and expr[place] is "^":
             findAfter = self.search_number_from_begin(expr[place:])
@@ -97,6 +103,7 @@ class Calculator():
         return expr
 
     def __binary_operation(self, expr, begin, place, end):
+        """calculate binary operation"""
         rezult = '{:.15f}'.format(operators.operators[expr[place]](
             self.unary_rezult(expr[begin:place]), self.unary_rezult(expr[place + 1:end])))
 
@@ -106,7 +113,7 @@ class Calculator():
         return expr
 
     def search_number_from_begin(self, expr):
-
+        """searching number after operatior"""
         number = re.search(
             r'([+-]+)?([0-9]+([.][0-9]*)?|[.][0-9]+)', expr)
 
@@ -117,6 +124,7 @@ class Calculator():
         return number
 
     def search_number_from_end(self, expr):
+        """searching number before operator"""
         number = re.search(
             r'([0-9]+([.][0-9]*)?|[.][0-9]+)([+-]+)?', expr[::-1])
 
@@ -127,5 +135,6 @@ class Calculator():
         return number
 
     def search_simple_number(self, expr):
+        """search number before power"""
         number = re.search(r'([0-9]+([.][0-9]*)?|[.][0-9]+)', expr[::-1])
         return number

@@ -60,7 +60,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_funtions_search(self):
         with patch('pycalc.difcalc.ComplexCalc._find_replacement', new=self.calculate_functions),\
-                patch('pycalc.difcalc.ComplexCalc.search_brakets', new=self.calculate_simple_expression):
+                patch('pycalc.difcalc.ComplexCalc.search_braсkets', new=self.calculate_simple_expression):
             self.assertAlmostEqual(
                 float(
                     self.calculator.expression_search("sin(4)")),
@@ -125,18 +125,18 @@ class TestFunctions(unittest.TestCase):
             with self.assertRaises(Exception):
                 self.calculator.sum("12+*12")
 
-    def test_search_brakets(self):
+    def test_search_braсkets(self):
         with patch('pycalc.difcalc.ComplexCalc._calculation', new=self.calculate_simple_expression):
             self.assertEqual(
-                self.calculator.search_brakets("1+(12*2)+(14+1)"), 40)
+                self.calculator.search_braсkets("1+(12*2)+(14+1)"), 40)
             self.assertEqual(
-                self.calculator.search_brakets("1+2"), 3)
+                self.calculator.search_braсkets("1+2"), 3)
             self.assertEqual(
-                self.calculator.search_brakets("(12+3)"), 15)
+                self.calculator.search_braсkets("(12+3)"), 15)
             with self.assertRaises(Exception):
-                self.calculator.search_brakets("12+()")
-                self.calculator.search_brakets("12(12+1)")
-                self.calculator.search_brakets("12+(12+1)12")
+                self.calculator.search_braсkets("12+()")
+                self.calculator.search_braсkets("12(12+1)")
+                self.calculator.search_braсkets("12+(12+1)12")
 
 
 if __name__ == '__main__':

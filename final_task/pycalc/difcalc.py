@@ -5,7 +5,10 @@ from numbers import Number
 
 
 class ComplexCalc(easyCalculation.Calculator):
+    """more functional calculator than "Calculator" """
+
     def __init__(self):
+        """initializing data from "math" """
         ComplexCalc.const = {
             **{attr: getattr(math, attr) for attr in dir(math) if isinstance(getattr(math, attr), Number)},
             **{"True": 1, "False": 0}
@@ -19,13 +22,14 @@ class ComplexCalc(easyCalculation.Calculator):
         }
 
     def expression_search(self, expr):
+        """search function or constant and calc power if function negative"""
 
         while True:
 
             func = re.search(r'[A-ZAa-z]+1?0?', expr)
 
             if func is None:
-                return self.search_brakets(expr)
+                return self.search_braсkets(expr)
 
             afterExpr = func.end()
             place = func.start()
@@ -63,7 +67,7 @@ class ComplexCalc(easyCalculation.Calculator):
                     expr = self._calc_if_power(expr, place, end)
 
     def _find_replacement(self, func, expr):
-
+        """count all arguments from function"""
         if func in ComplexCalc.math_functions:
             allargs = self._commasplit(expr)
 
@@ -81,6 +85,7 @@ class ComplexCalc(easyCalculation.Calculator):
         return str(rezult)
 
     def _commasplit(self, expr: str):
+        """search arguments for function"""
         breketscounter = 0
         preve = 0
         count = 1
@@ -112,7 +117,7 @@ class ComplexCalc(easyCalculation.Calculator):
     }
 
     def calculate(self, expr):
-        # передалать с меньшим числом иф
+        """begin of calculatoion, search compare"""
         place = re.search(r'(>=)|(>)|(<=)|(<)|(!=)|(==)', expr)
 
         while place:
