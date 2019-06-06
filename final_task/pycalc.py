@@ -1,16 +1,17 @@
 import argparse
 import re
-from . import pycalc_common
+from final_task import pycalc_common
 
 # from math import *
+#
+# parser = argparse.ArgumentParser()
+# parser.add_argument("EXPRESSION", type=str,  help="expression is the string you use here")
+# parser.add_argument("-m", "--use-modules", help="additional modules to use", action="store_true")
+# args = parser.parse_args()
+# if args.EXPRESSION:
+#     print(pycalc_common.pcalc(args.EXPRESSION))
 
-parser = argparse.ArgumentParser()
-parser.add_argument("EXPRESSION", type=str,  help="expression is the string you use here")
-parser.add_argument("-m", "--use-modules", help="additional modules to use", action="store_true")
-args = parser.parse_args()
-if args.EXPRESSION:
-    print(pycalc_common.pcalc(args.EXPRESSION))
-
+print(type(pycalc_common.pcalc('-13')))
 # print(pycalc_common.pcalc('sin(e**log(e**e**sin(23.0),45.0) + cos(3.0+log10(e**-e)))'))
 # def pcalc(value):
 #     left_bracket = re.findall(r'\(', value)
