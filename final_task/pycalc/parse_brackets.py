@@ -1,4 +1,4 @@
-from additional_func import calculate_expression
+from pycalc import calculate_expression
 
 
 def parse_brackets(value):

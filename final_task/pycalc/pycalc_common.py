@@ -1,5 +1,5 @@
 import re
-from additional_func import calculate_math_parameters, calculate_expression, parse_brackets
+from pycalc import calculate_math_parameters, calculate_expression, parse_brackets
 import math
 
 

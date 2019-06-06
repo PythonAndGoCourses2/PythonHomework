@@ -1,4 +1,4 @@
-from additional_func import arithmetic
+from pycalc import arithmetic
 import re
 
 

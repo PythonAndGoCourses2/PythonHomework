@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='pycalc',
-    version='1.0',
+    version='1.28',
 
     author="Maxim Tsyba",
     author_email="maksimtsuba@gmail.com",
@@ -13,8 +13,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
-    packages=setuptools.find_packages(),
-    entry_points={'console_scripts': ['pycalc = pycalc:main']},
+    packages=setuptools.find_packages(include=['pycalc']),
+    entry_points={'console_scripts': ['pycalc = pycalc.pycalc:main']},
     py_modules=["pycalc"],
     classifiers=[
         "Programming Language :: Python :: 3.6",
