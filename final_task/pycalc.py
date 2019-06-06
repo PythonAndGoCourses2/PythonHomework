@@ -108,6 +108,9 @@ def preproc(parsed):
     output = []
     if parsed.count("(") != parsed.count(")"):
         raise SyntaxError("ERROR: Unbalanced parenthesis")
+    if parsed[0] in OPERATORS:
+        parsed.insert(0, "(")
+        parsed.append(")")
     if parsed[0]=="-":
         parsed.insert(0, 0.0)
 #     pdb.set_trace()
