@@ -84,6 +84,7 @@ def fsum_parser(items):
     items = kitems+mitems
     return items
 
+
 def isclose_parser(items):
     # formats isclose function and accepts tolerance values (if any) to two global variables
     if 'rel_tol' in items:
@@ -103,7 +104,7 @@ def isclose_parser(items):
     items.append(")")
     return items
 
-  
+
 def calculate(operators, operands):
     # defines operators decision tree and performs basic operations
 
