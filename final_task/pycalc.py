@@ -190,8 +190,11 @@ def Main():
     parser.add_argument('to_eval', help='expression to evaluate', type=str, nargs='+')
     args = parser.parse_args()
     sss = "".join(args.to_eval)
-    result = calc(sh(preproc(parse(sss))))
-    print(result)
+    try:
+        result = calc(sh(preproc(parse(sss))))
+        print(result)
+    except Exception as error:
+        print('ERROR: ', error)
 
 
 if __name__=="__main__":
