@@ -1,6 +1,6 @@
 import argparse
 import re
-from final_task import pycalc_common
+from . import pycalc_common
 
 # from math import *
 
