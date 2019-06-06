@@ -19,7 +19,7 @@ precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0
 left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4, 'atan': 4, 'asinh': 4, 'acosh': 4,
                     'atanh': 4, 'sinh': 4, 'cosh': 4, 'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, 'abs': 5, 'round': 5,
                     'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4, 'isnan': 0.2, 'isinf': 0.2,
-                    'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4, 'modf': 0.2,
+                    'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4, 'modf': 0.2, 'log2': 4,
                     'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
 
 
