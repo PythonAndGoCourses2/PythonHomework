@@ -2,7 +2,7 @@ import unittest
 import math
 import operator
 
-from pycalc.calculator import myresult
+from pycalc.pycalc import myresult
 
 
 class MyTestsForCalc(unittest.TestCase):

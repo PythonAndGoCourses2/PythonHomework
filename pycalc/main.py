@@ -1,10 +1,12 @@
 import argparse
-from pycalc.calculator import myresult
+from pycalc.pycalc import myresult
 
 
 def main():
     try:
-        parser = argparse.ArgumentParser(description="Command-line calculator.")
+        parser = argparse.ArgumentParser(
+            'pycalc', description="Command-line calculator.",
+            usage='pycalc [-h] EXPRESSION')
         parser.add_argument('EXPRESSION', type=str, help='Input string to evaluate', )
         exp = parser.parse_args()
         exp = exp.EXPRESSION

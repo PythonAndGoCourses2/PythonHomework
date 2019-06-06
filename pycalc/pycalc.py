@@ -28,7 +28,6 @@ def is_empty(n):
 def peek(n):
     return n[len(n) - 1]
 
-
 def check_brackets(expr):
     bracket_right = 0
     bracket_left = 0
