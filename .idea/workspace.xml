@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="55aa226e-35e9-4adc-b056-0a8604b6435b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pycalc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/__main__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/main11.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/pycalc.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/setup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pycalc/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/pycalc/tests.py" afterDir="false" />
-    </list>
+    <list default="true" id="55aa226e-35e9-4adc-b056-0a8604b6435b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,7 +275,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
