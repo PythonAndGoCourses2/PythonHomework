@@ -187,7 +187,7 @@ def calculate(operators, operands):
         operands.append(math.floor(y))
     elif operator == "frexp":
         operands.append(math.frexp(y))
-    # Logical operators exit from calculate, not from main 
+    # Logical operators exit from calculate, not from main
     elif operator == "isinf":
         print(math.isinf(y))
         exit(1)
