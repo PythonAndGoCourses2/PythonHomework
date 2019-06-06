@@ -10,10 +10,14 @@ a = 0.0
 Left_func = [sin, cos, tan, asin, acos, atan, asinh, acosh, atanh, sinh, cosh, tanh, exp, abs, round,
              fabs, floor, frexp, trunc, ceil, expm1, sqrt, degrees, radians, erf, log, log10, log2, log1p,
              erfc, gamma, lgamma]
+
 """  names of left-associated functions from math """
 Left_func_names = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'asinh', 'acosh', 'atanh', 'sinh', 'cosh', 'tanh',
                    'exp', 'abs', 'round', 'erfc', 'gamma', 'lgamma', 'fabs', 'floor', 'frexp', 'trunc', 'ceil',
                    'expm1', 'sqrt', 'degrees', 'radians', 'erf', 'log10', 'log1p', 'log2']
+
+"""  names of left-associated logical operators """
+left_logical = ['isnan', 'isinf', 'isfinite', 'modf', 'neg']
 
 """  establishes precedence for operators """
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
@@ -24,12 +28,6 @@ precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0
                    'copysign': 4, 'fabs': 4,  'floor': 4, 'fmod': 4, 'frexp': 4, 'ldexp': 4, 'modf': 0.2, 'trunc': 4,
                    'expm1': 4, 'log1p': 4, 'gcd': 4, 'sqrt': 4, 'atan2': 4, 'degrees': 4, 'hypot': 4,
                    'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
-"""  left-associated functions and logical operators """
-left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4, 'atan': 4, 'asinh': 4, 'acosh': 4,
-                    'atanh': 4, 'sinh': 4, 'cosh': 4, 'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, 'abs': 5, 'round': 5,
-                    'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4, 'isnan': 0.2, 'isinf': 0.2,
-                    'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4, 'modf': 0.2, 'log2': 4,
-                    'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
 
 
 def validate_number(unit):
@@ -130,7 +128,8 @@ def left_function(operator, value, operands):
 
 def calculate(operators, operands):
     """ defines operators decision tree and performs basic operations """
-
+    
+    # general logic, left functions
     operator = operators.pop()
     y = None
     if operator != "!":
@@ -139,7 +138,7 @@ def calculate(operators, operands):
     if operator in Left_func_names:
         left_function(operator, y, operands)
         return operands
-    if operator not in left_association:
+    if operator not in Left_func_names and operator not in Left_logical:
         x = operands.pop()
     if operator == "+":
         operands.append(x + y)
@@ -186,7 +185,8 @@ def calculate(operators, operands):
         except ValueError:
             print('ERROR: Logarithm impossible to calculate.')
             exit(1)
-
+    
+    # captures two-argument functions, some of them require special logic
     elif operator == ",":
         if operators[-2] == 'log':
             operators.pop(-2)
@@ -324,15 +324,15 @@ def process(expression):
             operands.append(float(unit))
         # handles constants
         elif unit == 'pi':
-            operands.append(math.pi)
+            operands.append(pi)
         elif unit == 'e':
-            operands.append(math.e)
+            operands.append(e)
         elif unit == 'tau':
-            operands.append(math.tau)
+            operands.append(tau)
         elif unit == 'inf':
-            operands.append(math.inf)
+            operands.append(inf)
         elif unit == 'NaN':
-            operands.append(math.nan)
+            operands.append(nan)
 
         elif unit == '(':
             operators.append(unit)
