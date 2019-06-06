@@ -1,4 +1,4 @@
-import arithmetic
+from additional_func import arithmetic
 import re
 
 

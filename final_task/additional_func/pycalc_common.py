@@ -1,5 +1,5 @@
 import re
-import calculate_math_parameters, calculate_expression, parse_brackets
+from additional_func import calculate_math_parameters, calculate_expression, parse_brackets
 import math
 
 
