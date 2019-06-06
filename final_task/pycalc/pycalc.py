@@ -9,7 +9,7 @@ def main():
     parser.add_argument("-m", "--use-modules", help="additional modules to use", action="store_true")
     args = parser.parse_args()
     if args.EXPRESSION:
-        return pcalc(args.EXPRESSION)
+        print(pcalc(args.EXPRESSION))
 
 # print(pcalc('round(123.4567890)'))
 # print(type(pycalc_common.pcalc('-13')))

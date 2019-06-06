@@ -16,4 +16,4 @@ def pcalc(value):
         result = "".join(calculate_math_parameters.calc_math_parameter(value))
     result = parse_brackets.parse_brackets(result)
     result = calculate_expression.calculate(result)
-    return int(result)
+    return float(result)

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='pycalc',
-    version='1.28',
+    version='1.31',
 
     author="Maxim Tsyba",
     author_email="maksimtsuba@gmail.com",
