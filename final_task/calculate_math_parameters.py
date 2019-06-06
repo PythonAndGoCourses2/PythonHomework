@@ -81,4 +81,3 @@ def calc_math_parameter(value):
                     temp = ""
         previous_element = item
     return result
-

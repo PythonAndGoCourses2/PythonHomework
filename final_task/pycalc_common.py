@@ -4,6 +4,7 @@ import parse_brackets
 import calculate_expression
 import math
 
+
 def pcalc(value):
     value = value.replace('pi', str(math.pi)).replace('e', str(math.e))
     left_bracket = re.findall(r'\(', value)
@@ -13,7 +14,7 @@ def pcalc(value):
 
     math_parameters_from_expression = re.findall(r'(\w+)\s*\((.+)\)', value)
     result = value
-    if len( math_parameters_from_expression):
+    if len(math_parameters_from_expression):
         result = "".join(calculate_math_parameters.calc_math_parameter(value))
     result = parse_brackets.parse_brackets(result)
     result = calculate_expression.calculate(result)

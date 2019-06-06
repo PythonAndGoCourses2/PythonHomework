@@ -83,13 +83,5 @@ def calculate(value):
         print(get_second_number)
         print('result:', float(get_first_number) * float(get_second_number))
 
-
     print(operators)
     print(digits)
-
-
-
-# print(calculate('84**7/4**7++-++--+-1 - 4 + 7'))
-# print(calculate('3 + 2 / 3 -2'))
-# print(2 * ---+--3)
-# print(1---++++--1)
