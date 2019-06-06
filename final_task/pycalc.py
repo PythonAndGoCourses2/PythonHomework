@@ -126,7 +126,7 @@ def left_function(operator, value, operands):
 
 def calculate(operators, operands):
     """ defines operators decision tree and performs basic operations """
-    
+
     # general logic, left functions
     operator = operators.pop()
     y = None
@@ -183,7 +183,7 @@ def calculate(operators, operands):
         except ValueError:
             print('ERROR: Logarithm impossible to calculate.')
             exit(1)
-    
+
     # captures two-argument functions, some of them require special logic
     elif operator == ",":
         if operators[-2] == 'log':
