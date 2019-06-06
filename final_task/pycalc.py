@@ -1,8 +1,21 @@
 import re
 from argparse import ArgumentParser
-import math
+from math import *
 
-#  establishes precedence for operators
+""" global variables for tolerance to be used if isclose function is called """
+r = 1e-09
+a = 0.0
+
+"""  left-associated functions from math """
+Left_func = [sin, cos, tan, asin, acos, atan, asinh, acosh, atanh, sinh, cosh, tanh, exp, abs, round,
+            fabs, floor, frexp, trunc, ceil, expm1, sqrt, degrees, radians, erf, log, log10, log2, log1p,
+            erfc, gamma, lgamma]
+"""  names of left-associated functions from math """
+Left_func_names = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'asinh', 'acosh', 'atanh', 'sinh', 'cosh', 'tanh',
+                   'exp', 'abs', 'round', 'erfc', 'gamma', 'lgamma','fabs', 'floor', 'frexp', 'trunc', 'ceil',
+                   'expm1', 'sqrt', 'degrees', 'radians', 'erf', 'log10', 'log1p', 'log2']
+
+"""  establishes precedence for operators """
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
                    '*': 2, '/': 2, '//': 2, '%': 2, '(': 8, ')': 8, '!': 5, '^': 3.9, 'pow': 3.9, 'sin': 4,
                    'asin': 4, 'acos': 4,  'atan': 4, 'asinh': 4, 'acosh': 4, 'atanh': 4, 'sinh': 4, 'cosh': 4,
@@ -11,16 +24,16 @@ precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0
                    'copysign': 4, 'fabs': 4,  'floor': 4, 'fmod': 4, 'frexp': 4, 'ldexp': 4, 'modf': 0.2, 'trunc': 4,
                    'expm1': 4, 'log1p': 4, 'gcd': 4, 'sqrt': 4, 'atan2': 4, 'degrees': 4, 'hypot': 4,
                    'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
-#  establishes left-associated operators
+"""  left-associated functions and logical operators """
 left_association = {'neg': 4, 'sin': 4, 'cos': 4, 'tan': 4, 'asin': 4, 'acos': 4, 'atan': 4, 'asinh': 4, 'acosh': 4,
                     'atanh': 4, 'sinh': 4, 'cosh': 4, 'tanh': 4, 'exp': 4, 'log': 4, 'log10': 4, 'abs': 5, 'round': 5,
-                    'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4,'isnan': 0.2, 'isinf': 0.2,
-                    'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4,
+                    'fabs': 4, 'floor': 4, 'frexp': 4, 'trunc': 4, 'ceil': 4, 'isnan': 0.2, 'isinf': 0.2,
+                    'isfinite': 0.2, 'expm1': 4, 'log1p': 4, 'sqrt': 4, 'degrees': 4, 'modf': 0.2, 'log2': 4,
                     'radians': 4, 'erf': 4, 'erfc': 4, 'gamma': 4, 'lgamma': 4}
 
 
 def validate_number(unit):
-    # evaluates whether unit is a float number
+    """ evaluates whether unit is a float number """
     try:
         float(unit)
         return True
@@ -29,7 +42,7 @@ def validate_number(unit):
 
 
 def validate_expression(items):
-    # checks for inappropriate whitespaces
+    """ checks for inappropriate whitespaces """
     for i in range(len(items)):
         try:
             validate_items(items[i], items[i+1])
@@ -38,30 +51,30 @@ def validate_expression(items):
 
 
 def validate_items(item1, item2):
-    # detects error cases
+    """ detects error cases """
     if validate_number(item1) and validate_number(item2):
-        print('Error: Two or more numbers in a row. Please make sure all operators are present.')
+        print('ERROR: Two or more numbers in a row. Please make sure all operators are present.')
         exit(1)
     elif item1 == '/' and item2 == '/':
-        print('Error: Please remove the whitespace if you require a floor division.')
+        print('ERROR: Please remove the whitespace if you require a floor division.')
         exit(1)
     elif item1 == '*' and item2 == '*':
-        print('Error: Please use "^" operator for power calculation.')
+        print('ERROR: Please use "^" operator for power calculation.')
         exit(1)
     else:
         return True
 
 
 def validate_precedence(operator1, operator2):
-    # defines precedence for operators basing on a dictionary
+    """ defines precedence for operators basing on a dictionary """
     if precedences_dic[operator1] == precedences_dic[operator2] and precedences_dic[operator1] == 3.9:
         return False
     else:
         return precedences_dic[operator1] >= precedences_dic[operator2]
-      
 
-def fsummer(items):
-    # evaluates fsum function and returns the outcome back into the arguments list
+
+def fsum_parser(items):
+    """ evaluates fsum function and returns the outcome back into the arguments list """
     fsumlist = []
     for unit in items:
         if validate_number(unit):
@@ -81,14 +94,51 @@ def fsummer(items):
     return items
 
 
+def isclose_parser(items):
+    """ formats isclose function and accepts tolerance values (if any) to two global variables """
+    if 'rel_tol' in items:
+        ri = items.index('rel_tol') + 2
+        global r
+        r = float(items[ri])
+    if 'abs_tol' in items:
+        ai = items.index('abs_tol') + 2
+        global a
+        a = float(items[ai])
+    if 'rel_tol' in items:
+        cut = items.index('rel_tol') - 1
+        del items[cut:]
+    if 'abs_tol' in items:
+        cut = items.index('abs_tol') - 1
+        del items[cut:]
+    items.append(")")
+    return items
+
+
+def left_function(operator, value, operands):
+  """ calculates left-associated functions """
+    for function in Left_func:
+        if function.__name__ == operator and operator in ['log10', 'log1p', 'log2']:
+            try:
+                operands.append(function(value))
+            except ValueError:
+                print('ERROR: Logarithm impossible to calculate.')
+                exit(1)
+        elif function.__name__ == operator:
+            operands.append(function(value))
+    return operands
+
+
 def calculate(operators, operands):
-    # defines operators' decision tree and performs basic operations
+    """ defines operators decision tree and performs basic operations """
 
     operator = operators.pop()
     y = None
     if operator != "!":
         y = operands.pop()
     x = None
+    if operator in Left_func_names:
+        left_function(operator, y, operands)
+        return operands
     if operator not in left_association:
         x = operands.pop()
     if operator == "+":
@@ -102,117 +152,37 @@ def calculate(operators, operands):
         operands.append(-y)
     elif operator == "*":
         operands.append(x * y)
+
     elif operator == "/":
         try:
             operands.append(x / y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "%":
         try:
             operands.append(x % y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
     elif operator == "//":
         try:
             operands.append(x // y)
         except ZeroDivisionError:
-            print('Error: Cannot divide by zero')
+            print('ERROR: Cannot divide by zero')
             exit(1)
+
     elif operator == "^":
-        operands.append(math.pow(x, y))
-        elif operator == "!":
+        operands.append(pow(x, y))
+    elif operator == "!":
         try:
-            operands.append(math.factorial(x))
+            operands.append(factorial(x))
         except ValueError:
             print('ERROR: Factorial impossible to calculate.')
             exit(1)
-    elif operator == "sin":
-        operands.append(math.sin(y))
-    elif operator == "cos":
-        operands.append(math.cos(y))
-    elif operator == "tan":
-        operands.append(math.tan(y))
-    elif operator == "acos":
-        operands.append(math.acos(y))
-    elif operator == "asin":
-        operands.append(math.asin(y))
-    elif operator == "atan":
-        operands.append(math.atan(y))
-    elif operator == "acosh":
-        operands.append(math.acosh(y))
-    elif operator == "asinh":
-        operands.append(math.asinh(y))
-    elif operator == "atanh":
-        operands.append(math.atanh(y))
-    elif operator == "cosh":
-        operands.append(math.cosh(y))
-    elif operator == "sinh":
-        operands.append(math.sinh(y))
-    elif operator == "tanh":
-        operands.append(math.tanh(y))
-    elif operator == "exp":
-        operands.append(math.exp(y))
-    
-    elif operator == "ceil":
-        operands.append(math.ceil(y))
-    elif operator == "fabs":
-        operands.append(math.fabs(y))
-    elif operator == "floor":
-        operands.append(math.floor(y))
-    elif operator == "frexp":
-        operands.append(math.frexp(y))
-
-    elif operator == "isinf":
-        print(math.isinf(y))
-        exit(1)
-    elif operator == "isnan":
-        print(math.isnan(y))
-        exit(1)
-    elif operator == "modf":
-        print(math.modf(y))
-        exit(1)
-    elif operator == "isfinite":
-        print(math.isfinite(y))
-        exit(1)
-
-    elif operator == "trunc":
-        operands.append(math.trunc(y))
-    elif operator == "expm1":
-        operands.append(math.expm1(y))
-    elif operator == "sqrt":
-        operands.append(math.sqrt(y))
-    elif operator == "degrees":
-        operands.append(math.degrees(y))
-    elif operator == "radians":
-        operands.append(math.radians(y))
-    elif operator == "erf":
-        operands.append(math.erf(y))
-    elif operator == "erfc":
-        operands.append(math.erfc(y))
-    elif operator == "gamma":
-        operands.append(math.gamma(y))
-    elif operator == "lgamma":
-        operands.append(math.lgamma(y))
-
     elif operator == "log":
         try:
-            operands.append(math.log(y))
-        except ValueError:
-            print('ERROR: Logarithm impossible to calculate.')
-            exit(1)
-
-    elif operator == "log2":
-        try:
-            operands.append(math.log2(y))
-        except ValueError:
-            print('ERROR: Logarithm impossible to calculate.')
-            exit(1)
-
-    elif operator == "log1p":
-        try:
-            operands.append(math.log1p(y))
+            operands.append(log(y))
         except ValueError:
             print('ERROR: Logarithm impossible to calculate.')
             exit(1)
@@ -221,84 +191,89 @@ def calculate(operators, operands):
         if operators[-2] == 'log':
             operators.pop(-2)
             try:
-                operands.append(math.log(x, y))
+                operands.append(log(x, y))
             except ValueError:
                 print('ERROR: Logarithm impossible to calculate.')
                 exit(1)
 
         elif operators[-2] == 'pow':
             operators.pop(-2)
-            operands.append(math.pow(x, y))
+            operands.append(pow(x, y))
 
         elif operators[-2] == 'copysign':
             operators.pop(-2)
-            operands.append(math.copysign(x,y))
+            operands.append(copysign(x, y))
 
         elif operators[-2] == 'fmod':
             operators.pop(-2)
-            operands.append(math.fmod(x, y))
+            operands.append(fmod(x, y))
 
         elif operators[-2] == 'ldexp':
             operators.pop(-2)
-            operands.append(math.ldexp(x, y))
+            operands.append(ldexp(x, y))
 
         elif operators[-2] == 'hypot':
             operators.pop(-2)
-            operands.append(math.hypot(x, y))
+            operands.append(hypot(x, y))
 
         elif operators[-2] == 'atan2':
             operators.pop(-2)
-            operands.append(math.atan2(y, x))
+            operands.append(atan2(y, x))
 
         elif operators[-2] == 'gcd':
             y = int(y)
             x = int(x)
             operators.pop(-2)
-            operands.append(math.gcd(y, x))
+            operands.append(gcd(y, x))
 
         elif operators[-2] == 'isclose':
-            print(math.isclose(x, y))
+            global r
+            global a
+            print(isclose(x, y, rel_tol=r, abs_tol=a))
             exit(1)
 
         else:
-            print("ERROR: Cannot accept comma as a delimiter. Please use a dot instead.")
+            print("ERROR: Function unknown. If a comma is used as a delimiter, please use a dot instead.")
             exit(1)
 
-    elif operator == "log10":
-        try:
-            operands.append(math.log10(y))
-        except ValueError:
-            print('ERROR: Logarithm impossible to calculate.')
-            exit(1)
-    elif operator == "abs":
-        operands.append(abs(y))
-    elif operator == "round":
-        operands.append(round(y))
+    # Logical operators produce output and exit from calculate, not from main
+    elif operator == "isinf":
+        print(isinf(y))
+        exit(1)
+    elif operator == "isnan":
+        print(isnan(y))
+        exit(1)
+    elif operator == "modf":
+        print(modf(y))
+        exit(1)
+    elif operator == "isfinite":
+        print(isfinite(y))
+        exit(1)
     elif operator == 'eq':
-        print("Comparison result: ", bool(x == y))
+        print(bool(x == y))
         exit(1)
     elif operator == '>':
-        print("Comparison result: ", bool(x > y))
+        print(bool(x > y))
         exit(1)
     elif operator == '<':
-        print("Comparison result: ", bool(x < y))
+        print(bool(x < y))
         exit(1)
     elif operator == 'noneq':
-        print("Comparison result: ", bool(x != y))
+        print(bool(x != y))
         exit(1)
     elif operator == 'eqmore':
-        print("Comparison result: ", bool(x >= y))
+        print(bool(x >= y))
         exit(1)
     elif operator == 'eqless':
-        print("Comparison result: ", bool(x <= y))
+        print(bool(x <= y))
         exit(1)
     else:
-        print('Error: Operator or function unknown')
+        print('ERROR: Operator or function unknown')
         exit(1)
 
 
 def clear_format(expression):
-    # removes whitespaces
+    """ removes whitespaces """
     exp = expression
     exp = exp.replace(" ", "")
     units = pre_format(exp)
@@ -306,7 +281,7 @@ def clear_format(expression):
 
 
 def pre_format(expression):
-    # formats input expression to acceptable readout
+    """ formats input expression to acceptable readout """
     exp = expression
     if exp[0] == "-":
         exp = '0-'+exp[1:]
@@ -320,7 +295,9 @@ def pre_format(expression):
     exp = exp.replace("==", " eq ").replace("!=", " <> ").replace(">=", " eqmore ").replace("<=", " eqless ")
     exp = exp.replace("=", " = ").replace("<>", " noneq ").replace(">", " > ").replace("<", " < ").replace("!", " !")
     items = exp.split()
-    # preliminary check for some error cases and fsum
+    # preliminary check for some error cases and two functions, fsum and isclose
+    if "isclose" and "=" in items:
+        items = isclose_parser(items)
     if len([i for i, x in enumerate(items) if x in ['>', 'eq', 'noneq', 'eqless', 'eqmore', '<']]) > 1:
         print("ERROR: Cannot have more than one comparison operator in an expression.")
         exit(1)
@@ -331,12 +308,12 @@ def pre_format(expression):
         print("ERROR: Please use '==', '!=', '>=', '<=', '>', '<' if you require a boolean comparison.")
         exit(1)
     if "fsum" in items:
-        items = fsummer(items)
+        items = fsum_parser(items)
     return items
 
 
 def process(expression):
-    # checks for validation results and processes the expression
+    """ checks for validation results and processes the expression """
     operands = []
     operators = []
     items = pre_format(expression)
@@ -356,7 +333,7 @@ def process(expression):
             operands.append(math.inf)
         elif unit == 'NaN':
             operands.append(math.nan)
-            
+
         elif unit == '(':
             operators.append(unit)
         elif unit == ')':
@@ -380,9 +357,9 @@ def process(expression):
 
 
 def exp_parser():
-    # retrieves expression from the command line
+    """ retrieves expression from the command line """
     parser = ArgumentParser('PyCalc', description='Pure-Python command-line calculator',
-                            usage='pycalc [-h] EXPRESSION [-m]	MODULE	[MODULE	...]]')
+                            usage='pycalc [-h] EXPRESSION')
     parser.add_argument('--expr', action='store_true',
                         help='Evaluates an expression string. Please wrap the string with " ".')
     parsed, args = parser.parse_known_args()
@@ -391,14 +368,15 @@ def exp_parser():
 
 
 def main():
+    """ receives expression from parser, launches processing and produces output """
     expression = exp_parser()
     if len(expression) == 0:
-        # attempt to receive an expression via manual input 
-        expression = str(input('No expression is received as an argument. Please enter an expression to evaluate: '))
+        # attempt to receive an expression via manual input
+        expression = str(input('No expression is received from the command line. Please enter an expression: '))
     try:
-        print("Mathematical calculation result: ", process(expression))
+        print(process(expression))
     except Exception as ex:
-        print("Error: Please check arguments and operators in this expression."
+        print("ERROR: Please check arguments and operators in this expression."
               "\nTo reduce the chance of error please wrap the expression with \" \"."
               " Program internal message: {0}".format(str(ex)))
         exit(1)
