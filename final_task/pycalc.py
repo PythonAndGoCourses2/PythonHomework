@@ -33,8 +33,6 @@ def make_input_comfortable(the_input):
             or re.compile(r'[<>/*=!]\s+[=/*]').findall(the_input) \
             or re.compile(r'\(\)').findall(the_input):
         raise ValueError("Invalid expression")
-    # elif not the_input:
-    #     raise ValueError("Empty field")
     elif the_input.count('(') != the_input.count(')'):
         raise ValueError("Brackets are not balanced")
     the_input = the_input.replace(' ', '')
