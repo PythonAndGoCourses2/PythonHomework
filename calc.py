@@ -7,10 +7,10 @@ from split import *
 
 
 def tran_in_pol_not(inp):
-    """Translation of the entered mathematical expression in the reverse Polish notation."""
+    """Перевод введённого математического выражения в обратную польскую нотацию."""
     out_stack = []
     slave_stack = []
-    # expression parsing
+    # парсинг выражения
     split_list = split_string(inp, list_of_op)
     for i, char in enumerate(split_list):
         if char is '(':
@@ -32,7 +32,7 @@ def tran_in_pol_not(inp):
                 print("ERROR: it is essential to have at list one operand")
                 raise ArithmeticError
             if char in unary_op:
-                inf_op = list(split.split_by_prefix(char, ['+', '-']))[0]
+                inf_op = list(split_by_prefix(char, ['+', '-']))[0]
                 if i + 1 != len(split_list) and (i == 0 or is_num(split_list[i + 1])):
                     out_stack.extend([split_list[i + 1], 1])
                     split_list[i + 1] = inf_op
@@ -48,28 +48,28 @@ def tran_in_pol_not(inp):
                             split_list.insert(index + 1, inf_op)
                             break
             elif operators[char].type == 'inf':
-                if len(slave_stack) == 0:
+                '''if len(slave_stack) == 0:
                     slave_stack.append(char)
-                else:
-                    if char == '-':
-                        if i == 0:
+                else:'''
+                if char == '-':
+                    if i == 0:
+                        out_stack.append(0)
+                    elif i + 1 == len(split_list):
+                        print("ERROR: Invalid expression: there is no 2nd operand after -.")
+                        raise ArithmeticError
+                    elif is_num(split_list[i + 1]):
+                        if split_list[i - 1] == '(' and split_list[i + 2] != ')':
                             out_stack.append(0)
-                        elif i + 1 == len(split_list):
-                            print("ERROR: Invalid expression: there is no 2nd operand after -.")
-                            raise ArithmeticError
-                        elif is_num(split_list[i + 1]):
-                            if split_list[i - 1] == '(' and split_list[i + 2] != ')':
-                                out_stack.append(0)
 
-                    while slave_stack:
-                        item = slave_stack.pop()
-                        if item in parentheses or (item in list_of_op and
-                                                   operators[char].priority < operators[item].priority):
-                            slave_stack.append(item)
-                            break
-                        else:
-                            out_stack.append(item)
-                    slave_stack.append(char)
+                while slave_stack:
+                    item = slave_stack.pop()
+                    if item in parentheses or (item in list_of_op and
+                                               operators[char].priority < operators[item].priority):
+                        slave_stack.append(item)
+                        break
+                    else:
+                        out_stack.append(item)
+                slave_stack.append(char)
         else:
             slave_stack.append(char)
 
@@ -82,15 +82,15 @@ def tran_in_pol_not(inp):
 
 
 def pols_not(exp1):
-    """Calculation of the result of the expression for the entered Polish notation."""
+    """Вычисление результата выражения по введённой польской нотации."""
     stack = []
     index = 0
     value = 0
     end = False
     while not end:
         item = exp1[index]
-        # add the read number to the stack,
-        # or the result of the operation
+        # добавить в стек прочитанное число,
+        # или результат операции
         if is_num(item):
             value = float(item)
             stack.append(value)
@@ -113,6 +113,7 @@ def pols_not(exp1):
                         value = foo(op2, op1)
                     else:
                         value = foo(stack.pop())
+                # выполнить операцию по ключу С
                 except ArithmeticError as err:
                     print("Handling run-time error with evaluating a function or taking args: ", err)
                     raise
@@ -123,5 +124,3 @@ def pols_not(exp1):
         if index >= len(exp1):
             end = True
     return value
-
-

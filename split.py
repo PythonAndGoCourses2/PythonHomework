@@ -12,6 +12,7 @@ def is_num(char):
 
 
 def split_string(inp, prefixes=list_of_op):
+    """Разбиение строки по операторам и операндам с помощью регулярных выражений"""
     """String splitting by operators and operands using regular expressions"""
     str_list = re.findall('(?:\d*\.\d+)|(?:\d+\.?)|[a-zA-Z\d]+|\W+', inp)
     new_str = []
@@ -24,7 +25,7 @@ def split_string(inp, prefixes=list_of_op):
 
 
 def split_by_prefix(string, prefixes):
-    """Split strings by prefixes."""
+    """Разбиение строки по префиксам."""
     regex = re.compile('|'.join(map(re.escape, prefixes)))
     while True:
         match = regex.match(string)
@@ -35,5 +36,3 @@ def split_by_prefix(string, prefixes):
         string = string[end:]
     if string:
         yield string
-
-
