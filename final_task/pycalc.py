@@ -7,20 +7,18 @@ import setuptools
 
 
 
-_CONSTANTS = {
+CONSTANTS = {
     'pi' : math.pi,
     'e' : math.e,
-    'phi': (1 + 5 ** .5) / 2
-}
+    'tau': math.tau
+    }
 
 _FUNCTIONS = {
-    'abs': abs,
     'acos': math.acos,
     'asin': math.asin,
     'atan': math.atan,
     'atan2': math.atan2,
     'ceil': math.ceil,
-    'cos': math.cos,
     'cosh': math.cosh,
     'degrees': math.degrees,
     'exp': math.exp,
@@ -30,29 +28,29 @@ _FUNCTIONS = {
     'frexp': math.frexp,
     'hypot': math.hypot,
     'ldexp': math.ldexp,
-    'log': math.log,
-    'log10': math.log10,
     'modf': math.modf,
     'pow': math.pow,
     'radians': math.radians,
-    'sin': math.sin,
     'sinh': math.sinh,
     'sqrt': math.sqrt,
     'tan': math.tan,
     'tanh': math.tanh
 }
 
-OPERATORS = {'+': (1, lambda x, y: x + y, '+'), 
-             '-': (1, lambda x, y: x - y, '-'),
-             '*': (2, lambda x, y: x * y, '*'),
-             '/': (2, lambda x, y: x / y, '/'), 
-             '^': (2, lambda x, y: x ** y, '^'), 
-             '>': (1, lambda x, y: x > y, '>'),
-             '<': (1, lambda x, y: x < y, '<'), 
-             '>=': (1, lambda x, y: x >= y, '>='),
-             '<=': (1, lambda x, y: x <= y, '<='), 
-             '==': (1, lambda x, y: x == y, '=='), 
-             '!=': (1, lambda x, y: x != y, '!='),}
+
+OPERATORS = {'+': (1, lambda x, y: x + y, '+', "left"), 
+             '-': (1, lambda x, y: x - y, '-', "left"),
+             '*': (2, lambda x, y: x * y, '*', "left"),
+             '/': (2, lambda x, y: x / y, '/', "left"), 
+             '//': (2, lambda x, y: x // y, '//', "left"), 
+             '^': (3, lambda x, y: x ** y, '^', "right"), 
+             '>': (0, lambda x, y: x > y, '>', "left"),
+             '<': (0, lambda x, y: x < y, '<', "left"), 
+             '>=': (0, lambda x, y: x >= y, '>=', "left"),
+             '<=': (0, lambda x, y: x <= y, '<=', "left"), 
+             '==': (0, lambda x, y: x == y, '==', "left"), 
+             '!=': (0, lambda x, y: x != y, '!=', "left"),
+             '%': (2, lambda x, y: x % y, '%', "left")}
 
 FUNCTIONS = {'sqrt': (2, math.sqrt), 
              'log': (2, math.log), 
@@ -65,75 +63,94 @@ FUNCTIONS = {'sqrt': (2, math.sqrt),
              'atan': (2, math.atan),
              'log': (2, math.log),
              'round': (2, lambda x: round(x)), 
-             'abs': (2, lambda x: abs(x))}
+             'abs': (2, lambda x: abs(x)), 
+             'log10': (2, math.log10), 
+             'log2': (2, math.log2), }
 
 
-
-
-def evaluate(expression, vars={}):
-    try:
-        p = Parser(expression, vars)
-        value = p.getValue()
-    except ValueError:
-        tb = sys.exc_info()[2]
-#         msg = ex.message
-        raise Exception(tb)
-
-    # Return an integer type if the answer is an integer
-    if int(value) == value:
-        return int(value)
-
-    # If Python made some silly precision error
-    # like x.99999999999996, just return x + 1 as an integer
-    epsilon = 0.0000000001
-    if int(value + epsilon) != int(value):
-        return int(value + epsilon)
-    elif int(value - epsilon) != int(value):
-        return int(value)
-
-    return value
-
+class ERROR(Exception): 
+#     self.with_traceback()
+    pass
 
 def parse(formula_string):
-        number = ''
-        func = []
-        op = ''
-#         pdb.set_trace()
-        for symbol in formula_string:
-            if symbol in '1234567890.': 
-                number += symbol  
-            elif number: 
-                yield float(number) 
-                number = ''
-            if symbol in OPERATORS.get(symbol, '<=>=!=='): 
-                op += symbol
-            elif op:    
-                yield op
-                op = ''
-            if symbol.lower() in "abcdefghijklmnopqrstuvwxyz":
-                func.append(symbol)
-            elif func:
-                var = ''.join(func)
-                yield var
-                var = ''
-                func = []
-            if symbol in "()":
-                yield symbol
-        if number:
-            yield float(number)
+    number = ''
+    func = ''
+    op = ''
+    output = []
+    for symbol in formula_string:
+        if symbol in '1234567890.': 
+            number += symbol  
+        elif number: 
+            output.append(float(number) )
+            number = ''
+        if symbol in OPERATORS.get(symbol, '<=>=!=='):
+            op += symbol
+        elif op:    
+            output.append(op)
+            op = ''
+        if symbol.lower() in "abcdefghijklmnopqrstuvwxyz":
+            func += symbol
+        elif func:
+            output.append(func)
+            func = ''
+        if symbol in "()":
+            output.append(symbol)
+            
+    if number:
+        output.append(float(number))
+    if func:
+        output.append(func)
+    if op:
+        raise SyntaxError("ERROR: operator in the end of expression")
+    return output
 
+def preproc(parsed):
+    output = []
+    if parsed.count("(") != parsed.count(")"):
+        raise SyntaxError("ERROR: Unbalanced parenthesis")
+    if parsed[0]=="-":
+        parsed.insert(0, 0.0)
+#     pdb.set_trace()
+    
+    i = 0
+    while i < len(parsed):
+        if parsed[i] in FUNCTIONS and type(parsed[i+1])==float:
+            to_app = str(parsed[i])+str(int(parsed[i+1]))
+            if to_app not in FUNCTIONS:
+                raise SyntaxError("ERROR: Wrong function")
+            output.append(to_app)
+            i += 2
+        if parsed[i] == "--":
+            output.append('+')
+            i += 1
+        if parsed[i] == "-" and (parsed[i-1] == "(" or parsed[i-1] in OPERATORS) and (parsed[i+1] in FUNCTIONS):
+#             to_app = parsed[i]+str(parsed[i+1])
+            output.append(-1.0)
+            output.append('*')
+#             parsed.remove(parsed[i])
+            i += 1
+        if parsed[i] == "-" and (parsed[i-1] == "(" or parsed[i-1] in OPERATORS):
+            to_app = parsed[i]+str(parsed[i+1])
+            output.append(float(to_app))
+            i += 2
+            
+        else: 
+            output.append(parsed[i])
+            i += 1
+    return output            
 
 def sh(parsed):
     output = []
     stack = []
-#     pdb.set_trace()
     for t in parsed:
         if type(t) == float:
             output.append(t)
         elif t in FUNCTIONS:
             stack.append(t)
+        elif t in CONSTANTS:
+            output.append(CONSTANTS[t])
         elif t in OPERATORS:
-            while stack and (stack[-1] != '(') and ((stack[-1] in FUNCTIONS) or (OPERATORS[stack[-1]][0] >= OPERATORS[t][0])):
+            while stack and (stack[-1] != '(') and ((stack[-1] in FUNCTIONS) or (OPERATORS[t][3] == 'left' and OPERATORS[stack[-1]][0] >= OPERATORS[t][0])):
                 output.append(stack.pop())
             stack.append(t)
         elif t == '(':
@@ -150,9 +167,8 @@ def sh(parsed):
     return output
 
 
-def calculate(polish):
+def calc(polish):
         stack = []
-#         pdb.set_trace()
         for t in polish:
             if t in FUNCTIONS:
                 x = stack.pop()
@@ -163,15 +179,19 @@ def calculate(polish):
                 stack.append(OPERATORS[t][1](x, y))
             else:
                 stack.append(t)
-        return stack[0]
+        if type(stack[0]) == bool:
+            return stack[0]
+        if stack[0]-int(stack[0])==0:
+            return int(stack[0])
+        else: return stack[0]
 
 def Main():
     parser = argparse.ArgumentParser()
     parser.add_argument('to_eval', help='expression to evaluate', type=str, nargs='+')
     args = parser.parse_args()
     sss = "".join(args.to_eval)
-    result = calculate(sh(parse(sss)))
-    print(sss, result)
+    result = calc(sh(preproc(parse(sss))))
+    print(result)
 
 
 if __name__=="__main__":
