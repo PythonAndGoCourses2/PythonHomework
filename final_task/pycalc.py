@@ -8,11 +8,11 @@ a = 0.0
 
 """  left-associated functions from math """
 Left_func = [sin, cos, tan, asin, acos, atan, asinh, acosh, atanh, sinh, cosh, tanh, exp, abs, round,
-            fabs, floor, frexp, trunc, ceil, expm1, sqrt, degrees, radians, erf, log, log10, log2, log1p,
-            erfc, gamma, lgamma]
+             fabs, floor, frexp, trunc, ceil, expm1, sqrt, degrees, radians, erf, log, log10, log2, log1p,
+             erfc, gamma, lgamma]
 """  names of left-associated functions from math """
 Left_func_names = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'asinh', 'acosh', 'atanh', 'sinh', 'cosh', 'tanh',
-                   'exp', 'abs', 'round', 'erfc', 'gamma', 'lgamma','fabs', 'floor', 'frexp', 'trunc', 'ceil',
+                   'exp', 'abs', 'round', 'erfc', 'gamma', 'lgamma', 'fabs', 'floor', 'frexp', 'trunc', 'ceil',
                    'expm1', 'sqrt', 'degrees', 'radians', 'erf', 'log10', 'log1p', 'log2']
 
 """  establishes precedence for operators """
@@ -115,7 +115,7 @@ def isclose_parser(items):
 
 
 def left_function(operator, value, operands):
-  """ calculates left-associated functions """
+    """ calculates left-associated functions """
     for function in Left_func:
         if function.__name__ == operator and operator in ['log10', 'log1p', 'log2']:
             try:
