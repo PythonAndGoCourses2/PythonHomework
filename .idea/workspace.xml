@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="55aa226e-35e9-4adc-b056-0a8604b6435b" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pycalc.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="10" lean-forward="true" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+              <folding>
+                <element signature="e#205#284#0" />
+                <element signature="e#308#326#0" />
+                <element signature="e#346#366#0" />
+                <element signature="e#917#927#0" />
+                <element signature="e#1343#1638#0" />
+                <element signature="e#2470#2833#0" />
+                <element signature="e#2866#3062#0" />
+                <element signature="e#3223#3355#0" />
+                <element signature="e#3382#3468#0" />
+                <element signature="e#3647#3651#0" />
+                <element signature="e#7587#7638#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pycalc/tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="50" lean-forward="true" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+                <marker date="1559852963038" expanded="true" signature="0:3428" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/final_task/__init__.py" />
+        <option value="$PROJECT_DIR$/final_task/myStack.py" />
+        <option value="$PROJECT_DIR$/final_task/proba.py" />
+        <option value="$PROJECT_DIR$/final_task/calculator.py" />
+        <option value="$PROJECT_DIR$/final_task/setup.py" />
+        <option value="$PROJECT_DIR$/../Python_Hom/pycalc/main.py" />
+        <option value="$PROJECT_DIR$/pycalc_checker.py" />
+        <option value="$PROJECT_DIR$/pycalc/calculator.py" />
+        <option value="$PROJECT_DIR$/pycalc/setup.py" />
+        <option value="$PROJECT_DIR$/pycalc/pycalc.py" />
+        <option value="$PROJECT_DIR$/pycalc/main.py" />
+        <option value="$PROJECT_DIR$/pycalc/main11.py" />
+        <option value="$PROJECT_DIR$/pycalc/__main__.py" />
+        <option value="$PROJECT_DIR$/pycalc/__init__.py" />
+        <option value="$PROJECT_DIR$/pycalc/tests.py" />
+        <option value="$PROJECT_DIR$/pycalc.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="209" />
+    <option name="y" value="119" />
+    <option name="width" value="1087" />
+    <option name="height" value="695" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="PythonHomework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PythonHomework" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PythonHomework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PythonHomework" type="462c0819:PsiDirectoryNode" />
+              <item name="pycalc" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.tests">
+    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PythonHomework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pycalc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pycalc/__init__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pycalc (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PythonHomework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pycalc.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pycalc" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PythonHomework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pycalc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pycalc/pycalc.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="setup" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PythonHomework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pycalc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pycalc/setup.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PythonHomework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pycalc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pycalc/tests.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.tests" />
+        <item itemvalue="Python.pycalc (1)" />
+        <item itemvalue="Python.setup" />
+        <item itemvalue="Python.__init__" />
+        <item itemvalue="Python.pycalc" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="55aa226e-35e9-4adc-b056-0a8604b6435b" name="Default Changelist" comment="" />
+      <created>1556893420309</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1556893420309</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="pytest_in_tests_py - 2019.06.06 at 00h 22m 26s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.06 at 00h 25m 12s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.06 at 00h 27m 07s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.06 at 00h 28m 47s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_tests_MyTestForCalculator - 2019.06.06 at 00h 30m 07s.xml">
+      <configuration name="pytest for tests.MyTestForCalculator" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_tests_MyTests - 2019.06.06 at 00h 30m 27s.xml">
+      <configuration name="pytest for tests.MyTests" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.23214285" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="0" weight="0.3289689" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50074404" side_tool="true" weight="0.2782324" />
+      <window_info anchor="bottom" id="Python Console" order="2" weight="0.3289689" />
+      <window_info anchor="bottom" id="Message" order="3" />
+      <window_info anchor="bottom" id="Find" order="4" weight="0.32960895" />
+      <window_info anchor="bottom" id="Version Control" order="5" sideWeight="0.4985119" weight="0.3289689" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.49925596" visible="true" weight="0.3453355" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.2667758" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pycalc/pycalc.py</url>
+          <line>254</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa3720.41052/PostfixToInfix.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa18912.19022/PostfixToInfix.py" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa18912.18659/PostfixToInfix.py" />
+    <entry file="file://$USER_HOME$/Anaconda33/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="309" selection-start-line="309" selection-end-line="309" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/final_task/myStack.py" />
+    <entry file="file://$PROJECT_DIR$/final_task/proba.py" />
+    <entry file="file://$PROJECT_DIR$/../Python_Hom/pycalc_checker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-end-line="185" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Python_Hom/pycalc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Python_Hom/pycalc/calculator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="22" lean-forward="true" selection-end-line="191" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Python_Hom/pycalc/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#328#357#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/main.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/main11.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/__main__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/pycalc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" lean-forward="true" selection-end-line="286" />
+          <folding>
+            <element signature="e#282#293#0" expanded="true" />
+            <element signature="e#475#554#0" />
+            <element signature="e#581#602#0" />
+            <element signature="e#625#651#0" />
+            <element signature="e#1198#1200#0" />
+            <element signature="e#1227#1534#0" />
+            <element signature="e#732#1095#0" />
+            <element signature="e#1128#1324#0" />
+            <element signature="e#1485#1617#0" />
+            <element signature="e#1644#1730#0" />
+            <element signature="e#1909#1913#0" />
+            <element signature="e#5517#5568#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="10" selection-end-line="18" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc_checker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="27" lean-forward="true" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="17" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="10" lean-forward="true" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+          <folding>
+            <element signature="e#205#284#0" />
+            <element signature="e#308#326#0" />
+            <element signature="e#346#366#0" />
+            <element signature="e#917#927#0" />
+            <element signature="e#1343#1638#0" />
+            <element signature="e#2470#2833#0" />
+            <element signature="e#2866#3062#0" />
+            <element signature="e#3223#3355#0" />
+            <element signature="e#3382#3468#0" />
+            <element signature="e#3647#3651#0" />
+            <element signature="e#7587#7638#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pycalc/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="50" lean-forward="true" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1559852963038" expanded="true" signature="0:3428" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
