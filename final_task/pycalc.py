@@ -16,8 +16,6 @@ Left_func_names = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'asinh', 'acosh'
                    'exp', 'abs', 'round', 'erfc', 'gamma', 'lgamma', 'fabs', 'floor', 'frexp', 'trunc', 'ceil',
                    'expm1', 'sqrt', 'degrees', 'radians', 'erf', 'log10', 'log1p', 'log2']
 
-"""  names of left-associated logical operators """
-left_logical = ['isnan', 'isinf', 'isfinite', 'modf', 'neg']
 
 """  establishes precedence for operators """
 precedences_dic = {'eq': 0.2, 'noneq': 0.2, 'eqmore': 0.2, 'eqless': 0.2, '>': 0.2, '<': 0.2, 'neg': 4, '+': 1, '-': 1,
@@ -138,7 +136,7 @@ def calculate(operators, operands):
     if operator in Left_func_names:
         left_function(operator, y, operands)
         return operands
-    if operator not in Left_func_names and operator not in Left_logical:
+    if operator not in Left_func_names and operator not in ['isnan', 'isinf', 'isfinite', 'modf', 'neg']:
         x = operands.pop()
     if operator == "+":
         operands.append(x + y)
