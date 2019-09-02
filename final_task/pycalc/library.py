@@ -58,7 +58,8 @@ class Library:
 
     FILLER = 'no args'  # Constant to fill no ars functions
 
-    def read_user_module(self, module_name):
+    @staticmethod
+    def read_user_module(module_name):
         """'Read' user module: make functions and constants"""
         sys.path.insert(0, os.getcwd())
         module = importlib.import_module(module_name)

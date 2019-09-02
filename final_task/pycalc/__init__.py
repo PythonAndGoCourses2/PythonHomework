@@ -25,7 +25,7 @@ def main():
 def process_modules(module_names):
     '''Read all given modules'''
     for name in module_names:
-        Library().read_user_module(name)
+        Library.read_user_module(name)
 
 
 if __name__ == "__main__":

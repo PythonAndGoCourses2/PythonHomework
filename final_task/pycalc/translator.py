@@ -30,7 +30,7 @@ def get_postfix(infix_notation: list) -> list:
         elif token == lib.CLOSE_BRACKET:
             process_close_bracket(stack, output_string)
         elif token in lib.NOT_SUPPORTED:
-            raise exeptions.InvalidStringError('Calculator doesn\'t support iterable objects(list, set, dict)')
+            raise exeptions.InvalidStringError("Calculator doesn't support iterable objects(list, set, dict)")
         else:
             raise exeptions.UnknownFunctionError(f'unknown function or constant \'{token}\'')
     process_all_left(stack, output_string)
