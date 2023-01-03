@@ -366,7 +366,7 @@ def exp_parser():
 
 
 def main():
-    """ receives expression from parser, launches processing and produces output """
+    """ receives expression from parser, launches processing and produces output  dummy"""
     expression = exp_parser()
     if len(expression) == 0:
         # attempt to receive an expression via manual input
